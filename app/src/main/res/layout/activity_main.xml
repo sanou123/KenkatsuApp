@@ -35,6 +35,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="はじめる!" />
+        android:text="すたーと" />
 
     </RelativeLayout>
