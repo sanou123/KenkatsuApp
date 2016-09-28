@@ -1,0 +1,63 @@
+<resources>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- タイトル -->
+    <string name="app_name">健活アプリ</string>
+    <string name="name_selectsheet_product">ユーザ一覧画面</string>
+    <string name="name_selectsheet_listview">ユーザ選択画面</string>
+    <string name="name_selectsheet_tabel">トレーニングの履歴</string>
+    <string name="name_menu_serect">メニュー一覧</string>
+    <string name="name_main_user">ユーザ登録画面</string>
+    <string name="name_video_serect">コース選択画面</string>
+    <string name="name_update_user">ユーザ情報更新</string>
+
+
+
+
+
+    <!-- ここからactivity_main 01関連 -->
+    <string name="text01_name">名前</string>
+    <string name="text01_age">年齢</string>
+    <string name="text01_height">身長</string>
+    <string name="text01_weight">体重</string>
+    <string name="text01_sex">性別</string>
+    <string name="text01_kome">※</string>
+    <string name="text01_hinttext">全角・半角12文字以内</string>
+    <string name="text01_hintnumber">半角数字</string>
+    <string name="button01_regist">登録</string>
+    <string name="button01_show">表示</string>
+    <string name="button01_cancel">キャンセル</string>
+
+    <!-- 選択用RadioButton -->
+    <string name="radio01_product">ユーザ一覧 (ListView×ArrayAdapter)</string>
+    <string name="radio01_listview">ListView表示 (ListView×BaseAdapter)</string>
+    <string name="radio01_tablelayout">TableLayout表示</string>
+    <!-- ここまで -->
+
+    <!-- ここからselect_sheet_product 02関連 -->
+    <!-- select_sheet_product 02 -->
+    <string name="text02_title_detail">ListViewを表示する為にArrayAdapterを使ってシンプルに品名だけをリスト表示します。</string>
+    <string name="text02_title">ユーザ一覧</string>
+    <string name="button02_alldelete">全削除</string>
+
+    <!-- row_sheet_listview 05 -->
+    <string name="text05_title_age">年齢：</string>
+    <string name="text05_title_sex">性別：</string>
+    <string name="text05_title_height">身長：</string>
+    <string name="text05_title_weight">体重：</string>
+    <!-- ここまで -->
+
+    <!-- select_sheet_listview 03 -->
+    <string name="text03_title_detail">トレーニングするユーザを選んでください。</string>
+
+    <!-- select_sheet_table 04 -->
+    <string name="text04_title_detail">いままでのトレーニングの結果を閲覧できます。</string>
+    <string name="text04_hinttext">ユーザを入力して下さい。</string>
+    <string name="button04_search">検索</string>
+
+    <!-- VideoPlay  -->
+    <string name = "dummy_button">DUMMY BUTTON</string>
+    <string name = "dummy_content">DUMMY\nCONTENT</string>
+
+</resources>

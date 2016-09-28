@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/yama"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/kenkatsu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/title"
+        android:textSize="60sp"
+        android:gravity="center"
+        android:textColor="#FFffff"
+        />
+
+    <TextView
+        android:id="@+id/tap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="スタートボタンをタップしてください"
+        android:layout_below="@+id/kenkatsu"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:background="#00000000"/>
+
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="200px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="スタート" />
+
+    </RelativeLayout>
