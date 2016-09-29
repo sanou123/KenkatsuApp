@@ -74,19 +74,23 @@ public class SelectSheetTable extends AppCompatActivity implements View.OnFocusC
         TableRow rowHeader = new TableRow(this);    // 行を作成
         rowHeader.setPadding(16, 12, 16, 12);       // 行のパディングを指定(左, 上, 右, 下)
 
-        // ヘッダー：産地
+        // ヘッダー：年齢
         TextView headerAge = setTextItem("年齢", GCH);            // TextViewのカスタマイズ処理
-        TableRow.LayoutParams paramsAge = setParams(0.5f);       // LayoutParamsのカスタマイズ処理
-        // ヘッダー：個数
-        TextView headerNumber = setTextItem("身長", GCH);
-        TableRow.LayoutParams paramsNumber = setParams(0.2f);
-        // ヘッダー：単価
-        TextView headerPrice = setTextItem("体重", GCH);
-        TableRow.LayoutParams paramsPrice = setParams(0.3f);
+        TableRow.LayoutParams paramsAge = setParams(0.3f);       // LayoutParamsのカスタマイズ処理
+        // ヘッダー：性別
+        TextView headerSex = setTextItem("性別", GCH);
+        TableRow.LayoutParams paramsSex = setParams(0.3f);
+        // ヘッダー：身長
+        TextView headerHeight = setTextItem("身長", GCH);
+        TableRow.LayoutParams paramsHeight = setParams(0.3f);
+        // ヘッダー：体重
+        TextView headerWeight = setTextItem("体重", GCH);
+        TableRow.LayoutParams paramsWight = setParams(0.3f);
         // rowHeaderにヘッダータイトルを追加
-        rowHeader.addView(headerAge, paramsAge);          // ヘッダー：産地
-        rowHeader.addView(headerNumber, paramsNumber);          // ヘッダー：個数
-        rowHeader.addView(headerPrice, paramsPrice);            // ヘッダー：単価
+        rowHeader.addView(headerAge, paramsAge);          // ヘッダー：年齢
+        rowHeader.addView(headerSex, paramsSex);          // ヘッダー：性別
+        rowHeader.addView(headerHeight, paramsHeight);            // ヘッダー：身長
+        rowHeader.addView(headerWeight, paramsWight);            // ヘッダー：体重
         rowHeader.setBackgroundResource(R.drawable.row_deco1);  // 背景
 
         // TableLayoutにrowHeaderを追加
@@ -104,17 +108,20 @@ public class SelectSheetTable extends AppCompatActivity implements View.OnFocusC
                 TableRow row = new TableRow(this);          // 行を作成
                 row.setPadding(16, 12, 16, 12);             // 行のパディングを指定(左, 上, 右, 下)
 
-                // 産地
-                TextView textMadeIn = setTextItem(c.getString(2), GCH);     // TextViewのカスタマイズ処理
-                // 個数
-                TextView textNumber = setTextItem(c.getString(3), GE);      // TextViewのカスタマイズ処理
-                // 単価
-                TextView textPrice = setTextItem(c.getString(4), GE);      // TextViewのカスタマイズ処理
+                // 年齢
+                TextView textAge = setTextItem(c.getString(2), GCH);     // TextViewのカスタマイズ処理
+                // 性別
+                TextView textSex = setTextItem(c.getString(3), GCH);      // TextViewのカスタマイズ処理
+                // 身長
+                TextView textHeight = setTextItem(c.getString(4), GCH);      //TextViewのカスタマイズ処理
+                // 体重
+                TextView textWeight = setTextItem(c.getString(5), GCH);      // TextViewのカスタマイズ処理
 
                 // rowHeaderに各項目(DBから取得した産地,個数,単価)を追加
-                row.addView(textMadeIn, paramsAge);      // 産地
-                row.addView(textNumber, paramsNumber);      // 個数
-                row.addView(textPrice, paramsPrice);        // 単価
+                row.addView(textAge, paramsAge);      // 年齢
+                row.addView(textSex, paramsSex);      // 性別
+                row.addView(textHeight, paramsHeight);        // 身長
+                row.addView(textWeight, paramsWight);        // 体重
 
                 mTableLayout03List.addView(row);            // TableLayoutにrowHeaderを追加
 
