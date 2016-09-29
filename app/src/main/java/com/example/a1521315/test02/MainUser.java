@@ -194,7 +194,7 @@ public class MainUser extends AppCompatActivity implements
                 mText01Kome02.setText("");      // 空白でない場合は※印を消す
             }
 
-            if (strAge.equals("")) {
+            if (strSex.equals("")) {
                 mText01Kome03.setText("※");     // 性別が空白の場合、※印を表示
             } else {
                 mText01Kome03.setText("");      // 空白でない場合は※印を消す
