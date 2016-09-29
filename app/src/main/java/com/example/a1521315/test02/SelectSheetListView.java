@@ -64,7 +64,7 @@ public class SelectSheetListView extends AppCompatActivity {
                 String listName = myListItem.getName();
                 String columns = listName + "さんが選択されました";
                 Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(SelectSheetListView.this, MenuSerect.class);
+                Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
                 intent.putExtra("SELECTED_DATA",columns);
                 startActivity(intent);
             }
