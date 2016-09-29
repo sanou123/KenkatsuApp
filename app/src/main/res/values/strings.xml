@@ -13,9 +13,6 @@
     <string name="name_update_user">ユーザ情報更新</string>
 
 
-
-
-
     <!-- ここからactivity_main 01関連 -->
     <string name="text01_name">名前</string>
     <string name="text01_age">年齢</string>
@@ -60,7 +57,7 @@
     <string name="button04_search">検索</string>
 
     <!-- VideoPlay  -->
-    <string name = "dummy_button">DUMMY BUTTON</string>
-    <string name = "dummy_content">DUMMY\nCONTENT</string>
+    <string name="dummy_button">DUMMY BUTTON</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

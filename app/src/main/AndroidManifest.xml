@@ -2,54 +2,54 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.a1521315.test02"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="17" />
 
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/kenkatsu"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.a1521315.test02.MainActivity"
-            android:label="@string/app_name" >
+            android:name=".MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--suppress AndroidDomInspection -->
+        <!-- suppress AndroidDomInspection -->
         <activity
             android:name=".MainUser"
-            android:label="@string/name_main_user"/>
+            android:label="@string/name_main_user" />
         <activity
             android:name=".MenuSelect"
             android:label="@string/name_menu_serect" />
-
         <activity
             android:name=".VideoSerect"
             android:label="@string/name_video_serect" />
-
-        <activity
-            android:name=".VideoPlay"></activity>
-        <activity
-            android:name=".SelectSheetProduct" />
+        <activity android:name=".VideoPlay" />
+        <activity android:name=".SelectSheetProduct" />
         <activity
             android:name=".SelectSheetListView"
             android:label="@string/name_selectsheet_listview" />
-        <activity
-            android:name=".SelectSheetTable"></activity>
-        <activity
-            android:name=".MainResult" />
+        <activity android:name=".SelectSheetTable" />
+        <activity android:name=".MainResult" />
         <activity
             android:name=".SelectSheetTable1"
             android:label="@string/name_selectsheet_tabel" />
         <activity
             android:name=".UserUpdate"
             android:label="@string/name_update_user" />
+        <activity android:name=".TrainingSelect"></activity>
     </application>
 
 </manifest>

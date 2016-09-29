@@ -30,7 +30,7 @@ public class MenuSelect extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.VideoSerect");
+                        "com.example.a1521315.test02.TrainingSerect");
                 startActivity(intent);
             }
         });
