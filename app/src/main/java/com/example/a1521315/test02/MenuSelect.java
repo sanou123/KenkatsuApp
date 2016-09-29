@@ -24,13 +24,13 @@ public class MenuSelect extends Activity {
                 //menu_serectのレイアウトを使用
         setContentView(R.layout.menu_select);
 
-        //trainingボタンを押した時VideoSerectへ移動
+        //trainingボタンを押した時TrainingSerectへ移動
         Button btnDisp0 = (Button) findViewById(R.id.training);
         btnDisp0.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.TrainingSerect");
+                        "com.example.a1521315.test02.TrainingSelect");
                 startActivity(intent);
             }
         });
@@ -57,7 +57,7 @@ public class MenuSelect extends Activity {
             }
         });
 
-        //dictionaryボタンを押した時UserSerectへ移動
+        //dictionaryボタンを押した時Dictionaryへ移動
         Button btnDisp3 = (Button) findViewById(R.id.dictionary);
         btnDisp3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

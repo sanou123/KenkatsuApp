@@ -147,11 +147,11 @@
     </LinearLayout>
 
 
-<Button
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="ユーザ選択画面へ"
-        android:id="@+id/user_serect"
-        android:layout_gravity="right" />
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="ユーザ選択画面へ"
+            android:id="@+id/user_serect"
+            android:layout_gravity="right" />
 
 </LinearLayout>

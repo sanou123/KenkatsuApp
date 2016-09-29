@@ -34,7 +34,7 @@
             android:name=".MenuSelect"
             android:label="@string/name_menu_serect" />
         <activity
-            android:name=".VideoSerect"
+            android:name=".VideoSelect"
             android:label="@string/name_video_serect" />
         <activity android:name=".VideoPlay" />
         <activity android:name=".SelectSheetProduct" />
