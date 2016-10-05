@@ -10,7 +10,7 @@ import android.widget.Button;
 /**
  * Created by 1521315 on 2016/07/05.
  */
-public class VideoSerect extends Activity {
+public class VideoSelect extends Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class VideoSerect extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.MenuSelect");
+                        "com.example.a1521315.test02.TrainingSelect");
                 startActivity(intent);
             }
         });

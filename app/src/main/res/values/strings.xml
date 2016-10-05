@@ -18,15 +18,15 @@
 
 
 
-
-
-
     <!-- ここからactivity_main 01関連 -->
     <string name="text01_name">名前</string>
     <string name="text01_age">年齢</string>
     <string name="text01_height">身長</string>
     <string name="text01_weight">体重</string>
     <string name="text01_sex">性別</string>
+    <!-- 選択用RadioButton -->
+    <string name="radioman">男性</string>
+    <string name="radiowoman">女性</string>
     <string name="text01_kome">※</string>
     <string name="text01_hinttext">全角・半角12文字以内</string>
     <string name="text01_hintnumber">半角数字</string>
@@ -62,7 +62,7 @@
     <string name="button04_search">検索</string>
 
     <!-- VideoPlay  -->
-    <string name = "dummy_button">DUMMY BUTTON</string>
-    <string name = "dummy_content">DUMMY\nCONTENT</string>
+    <string name="dummy_button">DUMMY BUTTON</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>
