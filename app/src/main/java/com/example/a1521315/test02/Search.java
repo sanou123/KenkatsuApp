@@ -21,7 +21,7 @@ public class Search extends Activity {
             TextView textView = (TextView)findViewById(R.id.textView);
             textView.setText("ツイッター検索準備中");
 
-            Intent intent = new Intent( this, MenuSerect.class );//kaede_jishoブランチでSelectに変更したらエラー起きたから戻した
+            Intent intent = new Intent( this, MenuSelect.class );//kaede_jishoブランチでSelectに変更したらエラー起きたから戻した
             startActivity( intent );
 
             //Uri uri = Uri.parse("https://twitter.com/intent/tweet?hashtags=けんかつ！APP &text=ぼくはけんこうです！やったー！");

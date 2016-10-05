@@ -61,7 +61,7 @@ public class MainResult extends AppCompatActivity implements
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.MenuSerect");
+                        "com.example.a1521315.test02.MenuSelect");
                 startActivity(intent);
 
                 // キーボードを非表示

@@ -9,7 +9,7 @@ import android.widget.Button;
 
 
 
-public class MenuSerect extends Activity {
+public class MenuSelect extends Activity {
     protected MyListItem myListItem;
 
     /**
@@ -22,7 +22,7 @@ public class MenuSerect extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
                 //menu_serectのレイアウトを使用
-        setContentView(R.layout.menu_serect);
+        setContentView(R.layout.menu_select);
 
         //trainingボタンを押した時VideoSerectへ移動
         Button btnDisp0 = (Button) findViewById(R.id.training);
