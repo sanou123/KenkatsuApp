@@ -50,6 +50,13 @@
         <activity
             android:name=".UserUpdate"
             android:label="@string/name_update_user" />
+        <activity
+        android:name=".Dictionary"
+        android:label="@string/dictionary" />
+
+        <activity
+            android:name=".Search"
+            android:label="@string/search" />
     </application>
 
 </manifest>

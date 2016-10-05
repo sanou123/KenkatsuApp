@@ -80,6 +80,18 @@ public class MenuSerect extends Activity {
                 startActivity(intent);
             }
         });
+
+        //user_serectボタンを押した時UserSerectへ移動
+        Button btnDisp5 = (Button) findViewById(R.id.search);
+        btnDisp5.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Sub 画面を起動
+                Intent intent = new Intent();
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.Search");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
