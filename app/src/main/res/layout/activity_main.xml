@@ -16,17 +16,6 @@
         android:textColor="#FFffff"
         />
 
-    <TextView
-        android:id="@+id/tap"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="haaaaaaaaaa"
-        android:layout_below="@+id/kenkatsu"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:textColor="#ffffff"
-        android:background="#00000000"/>
-
 
     <Button
         android:id="@+id/start_button"
@@ -35,6 +24,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="aiueo700" />
+        android:text="はじめる！" />
 
     </RelativeLayout>
