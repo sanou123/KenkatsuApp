@@ -21,59 +21,93 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!-- タイトル：年齢 -->
+        <!-- タイトル：心拍数 -->
+        <TextView
+            android:id="@+id/text05_Title_Heart_rate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/text05_title_heart_rate"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：心拍数 -->
         <TextView
             android:id="@+id/text05Heart_rate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:text="@string/text05_title_age"
+            android:layout_weight="0.18"
+            android:textColor="#000000"
             android:textSize="14sp" />
 
-        <!-- データ表示用：年齢 -->
+        <!-- タイトル：消費カロリー -->
+        <TextView
+            android:id="@+id/text05Title_Calorie_consumption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text05_title_calorie_consumption"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：消費カロリー -->
         <TextView
             android:id="@+id/text05Calorie_consumption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_weight="0.19"
             android:textColor="#000000"
             android:textSize="14sp" />
 
-        <!-- タイトル：身長 -->
+        <!-- タイトル：体重変化 -->
+        <TextView
+            android:id="@+id/text05Title_Weight_fluctuates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text05_title_weight_fluctuates"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：体重変化 -->
         <TextView
             android:id="@+id/text05Weight_fluctuates"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="@string/text05_title_height"
+            android:textColor="#000000"
             android:textSize="14sp" />
 
-        <!-- データ表示用：身長 -->
+        <!-- タイトル：総走行時間 -->
+        <TextView
+            android:id="@+id/text05title_Total_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/text05_title_total_time"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：総走行時間 -->
         <TextView
             android:id="@+id/text05Total_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_weight="0.2"
             android:textColor="#000000"
             android:textSize="14sp" />
 
-        <!-- タイトル：体重 -->
+        <!-- タイトル：総走行距離 -->
+        <TextView
+            android:id="@+id/text05Title_Total_distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/text05_title_total_total_distance"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：総走行距離 -->
         <TextView
             android:id="@+id/text05Total_distance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="@string/text05_title_weight"
-            android:textSize="14sp" />
-
-        <!-- データ表示用：体重 -->
-        <TextView
-            android:id="@+id/text05Weight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:textColor="#000000"
             android:textSize="14sp" />
 
-        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

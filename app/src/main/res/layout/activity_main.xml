@@ -20,9 +20,9 @@
         android:id="@+id/tap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="haaaaaaaaaa"
+        android:text="タップしてください"
         android:layout_below="@+id/kenkatsu"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:gravity="center"
         android:textColor="#ffffff"
         android:background="#00000000"/>
@@ -35,6 +35,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="000" />
+        android:text="はじめる！！"
+        android:textSize="30sp"
+        />
 
     </RelativeLayout>

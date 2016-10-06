@@ -165,7 +165,7 @@ public class MainResult extends AppCompatActivity implements
                 intent = new Intent(MainResult.this, SelectSheetListView.class);
                 break;
             case R.id.radioButton01TableLayout1:     // TableLayout表示を選択した場合
-                intent = new Intent(MainResult.this, SelectSheetTable.class);
+                intent = new Intent(MainResult.this, SelectSheetTable1.class);
                 break;
         }
     }

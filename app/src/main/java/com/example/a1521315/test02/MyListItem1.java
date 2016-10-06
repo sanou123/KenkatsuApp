@@ -7,7 +7,7 @@ package com.example.a1521315.test02;
  * MyListItem
  */
 public class MyListItem1 {
-    protected int id;           // ID
+    protected String name;           // ID
     protected String heart_rate;   // 品名
     protected String calorie_consumption;    // 産地
     protected String weight_fluctuates;    // 個数
@@ -18,7 +18,7 @@ public class MyListItem1 {
     /**
      * MyListItem()
      *
-     * @param id      int ID
+     * @param name      String 名前
      * @param heart_rate  String 品名
      * @param calorie_consumption String  産地
      * @param weight_fluctuates String 個数
@@ -26,9 +26,9 @@ public class MyListItem1 {
      * @param total_distance  String 単価
      *
      */
-    public MyListItem1(int id, String heart_rate, String calorie_consumption, String weight_fluctuates,
+    public MyListItem1(String name, String heart_rate, String calorie_consumption, String weight_fluctuates,
                        String total_time, String total_distance) {
-        this.id = id;
+        this.name = name;
         this.heart_rate = heart_rate;
         this.calorie_consumption = calorie_consumption;
         this.weight_fluctuates = weight_fluctuates;
@@ -39,13 +39,13 @@ public class MyListItem1 {
 
     /**
      * IDを取得
-     * getId()
+     * getName()
      *
-     * @return id int ID
+     * @return name String 名前
      */
-    public int getId() {
-        Log.d("取得したID：", String.valueOf(id));
-        return id;
+    public String getName() {
+        Log.d("名前：", String.valueOf(name));
+        return name;
     }
 
     /**

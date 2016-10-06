@@ -87,7 +87,7 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
         TextView headerTotal_time = setTextItem("総走行距離", GCH);
         TableRow.LayoutParams paramsTotal_time = setParams(0.4f);
         // ヘッダー：単価
-        TextView headerTotal_distance = setTextItem("総時間", GCH);
+        TextView headerTotal_distance = setTextItem("総走行時間", GCH);
         TableRow.LayoutParams paramsTotal_distance = setParams(0.3f);
         // rowHeaderにヘッダータイトルを追加
         rowHeader.addView(headerHeart_rate, paramsHeart_rate);          // ヘッダー：産地

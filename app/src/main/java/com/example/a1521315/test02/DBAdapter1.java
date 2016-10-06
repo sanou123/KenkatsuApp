@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter1 {
 
-    private final static String DB_NAME = "a.db";      // DB名
+    private final static String DB_NAME = "b.db";      // DB名
     private final static String DB_TABLE = "measurement";       // DBのテーブル名
     private final static int DB_VERSION = 3;                // DBのバージョン
 
@@ -208,7 +208,7 @@ public class DBAdapter1 {
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl = "CREATE TABLE " + DB_TABLE + " ("
-                    + COL_NAME + " INTEGER PRIMARY KEY,"
+                    + COL_NAME + " TEXT  name,"
                     + COL_HEART_RATE + " INTEGER NOT NULL,"
                     + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL,"
                     + COL_WEIGHT_FLUCTUATES + " INTEGER NOT NULL,"
