@@ -128,22 +128,48 @@
             android:textColor="#FF0000"
             android:textSize="14sp" />
 
-        <!-- ellipsize：文字が行に収まりきらない末尾を「...」表示 -->
-        <!-- inputType：表示するキーボードを文字に指定 -->
-        <EditText
-            android:id="@+id/editText01Sex"
+        <!-- 選択用ラジオボタン -->
+        <RadioGroup
+            android:id="@+id/radioGroup01Sex"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:ellipsize="end"
-            android:hint="@string/text01_hinttext"
-            android:inputType="text"
+            android:layout_alignParentStart="false"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentLeft="false"
+            android:orientation="horizontal"
             android:lines="1"
-            android:maxLength="12"
+            android:maxLength="24"
             android:maxLines="1"
             android:minLines="1"
-            android:singleLine="true"
-            android:textSize="16sp" />
+            >
+
+            <RadioButton
+                android:id="@+id/radioButton01Man"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:checked="false"
+                android:text="@string/radio01_man"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radioButton01Woman"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:layout_marginTop="8dp"
+                android:checked="false"
+                android:text="@string/radio01_woman"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </RadioGroup>
+
     </LinearLayout>
 
     <!-- 身長 -->

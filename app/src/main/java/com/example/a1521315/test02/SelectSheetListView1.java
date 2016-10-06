@@ -17,7 +17,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,19 +55,6 @@ public class SelectSheetListView1 extends AppCompatActivity {
 
         loadMyList();   // DBを読み込む＆更新する処理
 
-        //行を押した時の処理
-        mListView04.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long name) {
-                // IDを取得する
-                myListItem1 = items.get(position);
-                String listName = myListItem1.getHeart_rate();
-                String columns = listName + "さんが選択されました";
-                Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(SelectSheetListView1.this, MenuSelect.class);
-                intent.putExtra("SELECTED_DATA",columns);
-                startActivity(intent);
-            }
-        });
 
         // 行を長押しした時の処理
         mListView04.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -87,7 +73,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
 
                         // IDを取得する
                         myListItem1 = items.get(position);
-                        int listId = myListItem1.getId();
+                        String listId = myListItem1.getName();
 
                         dbAdapter1.openDB();     // DBの読み込み(読み書きの方)
                         dbAdapter1.selectDelete(String.valueOf(listId));     // DBから取得したIDが入っているデータを削除する
@@ -116,7 +102,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.MainUser");
+                        "com.example.a1521315.test02.MainResult");
                 startActivity(intent);
             }
         });
@@ -140,7 +126,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
             do {
                 // MyListItemのコンストラクタ呼び出し(myListItemのオブジェクト生成)
                 myListItem1 = new MyListItem1(
-                        c.getInt(0),
+                        c.getString(0),
                         c.getString(1),
                         c.getString(2),
                         c.getString(3),
@@ -148,12 +134,12 @@ public class SelectSheetListView1 extends AppCompatActivity {
                         c.getString(5));
 
 
-                Log.d("取得したCursor(ID):", String.valueOf(c.getInt(0)));
-                Log.d("取得したCursor(名前):", c.getString(1));
-                Log.d("取得したCursor(年齢):", c.getString(2));
-                Log.d("取得したCursor(身長):", c.getString(3));
-                Log.d("取得したCursor(体重):", c.getString(4));
-                Log.d("取得したCursor(体重):", c.getString(5));
+                Log.d("取得したCursor(名前):", String.valueOf(c.getString(0)));
+                Log.d("取得したCursor(心拍数):", c.getString(1));
+                Log.d("取得したCursor(消費カロリー):", c.getString(2));
+                Log.d("取得したCursor(体重変化):", c.getString(3));
+                Log.d("取得したCursor(総走行時間):", c.getString(4));
+                Log.d("取得したCursor(総走行距離):", c.getString(5));
 
 
                 items.add(myListItem1);          // 取得した要素をitemsに追加

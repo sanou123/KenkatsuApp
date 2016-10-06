@@ -25,8 +25,8 @@
     <string name="text01_weight">体重</string>
     <string name="text01_sex">性別</string>
     <!-- 選択用RadioButton -->
-    <string name="radioman">男性</string>
-    <string name="radiowoman">女性</string>
+    <string name="radio01_man">男性</string>
+    <string name="radio01_woman">女性</string>
     <string name="text01_kome">※</string>
     <string name="text01_hinttext">全角・半角12文字以内</string>
     <string name="text01_hintnumber">半角数字</string>
@@ -51,6 +51,12 @@
     <string name="text05_title_sex">性別：</string>
     <string name="text05_title_height">身長：</string>
     <string name="text05_title_weight">体重：</string>
+
+    <string name="text05_title_heart_rate">心拍数：</string>
+    <string name="text05_title_calorie_consumption">消費カロリー：</string>
+    <string name="text05_title_weight_fluctuates">体重変化：</string>
+    <string name="text05_title_total_time">総走行時間：</string>
+    <string name="text05_title_total_total_distance">総走行距離：</string>
     <!-- ここまで -->
 
     <!-- select_sheet_listview 03 -->

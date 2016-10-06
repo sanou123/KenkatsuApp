@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ public class UserUpdate extends AppCompatActivity implements
 
     private EditText mEditText01Name;        // 名前
     private EditText mEditText01Age;         // 年齢
-    private EditText mEditText01Sex;         // 性別
+    private RadioGroup mRadioGroup01Sex;         // 性別
     private EditText mEditText01Height;         // 身長
     private EditText mEditText01Weight;          // 体重
 
@@ -108,7 +109,7 @@ public class UserUpdate extends AppCompatActivity implements
 
         mEditText01Name = (EditText) findViewById(R.id.editText01Name);   // 名前
         mEditText01Age = (EditText) findViewById(R.id.editText01Age);     // 年齢
-        mEditText01Sex = (EditText) findViewById(R.id.editText01Sex);     // 年齢
+        mRadioGroup01Sex = (RadioGroup) findViewById(R.id.radioGroup01Sex);     // 年齢
         mEditText01Height = (EditText) findViewById(R.id.editText01Height);     // 身長
         mEditText01Weight = (EditText) findViewById(R.id.editText01Weight);       // 体重
 
@@ -132,7 +133,6 @@ public class UserUpdate extends AppCompatActivity implements
     private void init() {
         mEditText01Name.setText("");
         mEditText01Age.setText("");
-        mEditText01Sex.setText("");
         mEditText01Height.setText("");
         mEditText01Weight.setText("");
 
@@ -167,10 +167,15 @@ public class UserUpdate extends AppCompatActivity implements
      */
     private void saveList() {
 
+        int checkedId = mRadioGroup01Sex.getCheckedRadioButtonId();
+
+        RadioButton mRadioGroup01Sex = (RadioButton) findViewById(checkedId);// (Fragmentの場合は「getActivity().findViewById」にする)
+
+
         // 各EditTextで入力されたテキストを取得
         String strName = mEditText01Name.getText().toString();
         String strAge = mEditText01Age.getText().toString();
-        String strSex = mEditText01Sex.getText().toString();
+        String strSex = mRadioGroup01Sex.getText().toString();
         String strHeight = mEditText01Height.getText().toString();
         String strWeight = mEditText01Weight.getText().toString();
 
@@ -191,8 +196,8 @@ public class UserUpdate extends AppCompatActivity implements
                 mText01Kome02.setText("");      // 空白でない場合は※印を消す
             }
 
-            if (strAge.equals("")) {
-                mText01Kome03.setText("※");     // 性別が空白の場合、※印を表示
+            if (strSex.equals("")) {
+                mText01Kome03.setText("※");     // 身長が空白の場合、※印を表示
             } else {
                 mText01Kome03.setText("");      // 空白でない場合は※印を消す
             }
