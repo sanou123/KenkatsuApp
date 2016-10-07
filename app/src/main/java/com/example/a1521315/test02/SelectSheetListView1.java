@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,8 @@ public class SelectSheetListView1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //横画面に固定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.select_sheet_listview1);
 
         // DBAdapterのコンストラクタ呼び出し
@@ -164,6 +167,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
 
         // 毎回findViewByIdをする事なく、高速化が出来るようするholderクラス
         private class ViewHolder {
+            TextView text05Name;
             TextView text05Heart_rate;
             TextView text05Calorie_consumption;
             TextView text05Weight_fluctuates;
@@ -221,6 +225,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
 
                 // holderにviewを持たせておく
                 holder = new ViewHolder();
+                holder.text05Name = text05Name;
                 holder.text05Heart_rate = text05Heart_rate;
                 holder.text05Calorie_consumption = text05Calorie_consumption;
                 holder.text05Weight_fluctuates = text05Weight_fluctuates;
@@ -234,6 +239,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
             }
 
             // 取得した各データを各TextViewにセット
+            holder.text05Name.setText(myListItem1.getName());
             holder.text05Heart_rate.setText(myListItem1.getHeart_rate());
             holder.text05Calorie_consumption.setText(myListItem1.getCalorie_consumption());
             holder.text05Weight_fluctuates.setText(myListItem1.getWeight_fluctuates());

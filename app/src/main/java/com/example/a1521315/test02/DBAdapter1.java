@@ -28,7 +28,7 @@ public class DBAdapter1 {
 
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
-    private DBHelper dbHelper1 = null;           // DBHepler
+    private DBHelper dbHelper1 = null;           // DBHelper
     protected Context context;                  // Context
 
     // コンストラクタ

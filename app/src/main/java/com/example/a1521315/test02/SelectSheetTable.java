@@ -1,5 +1,6 @@
 package com.example.a1521315.test02;
 
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ public class SelectSheetTable extends AppCompatActivity implements View.OnFocusC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //横画面に固定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.select_sheet_table);
 
         dbAdapter = new DBAdapter(this);

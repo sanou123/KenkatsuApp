@@ -7,23 +7,23 @@ package com.example.a1521315.test02;
  * MyListItem
  */
 public class MyListItem1 {
-    protected String name;           // ID
-    protected String heart_rate;   // 品名
-    protected String calorie_consumption;    // 産地
-    protected String weight_fluctuates;    // 個数
-    protected String total_time;     // 単価
-    protected String total_distance;     // 単価
+    protected String name;           // 名前
+    protected String heart_rate;   // 心拍数
+    protected String calorie_consumption;    // 消費カロリー
+    protected String weight_fluctuates;    // 体重変化
+    protected String total_time;     // 総走行時間
+    protected String total_distance;     // 総走行距離
 
 
     /**
      * MyListItem()
      *
      * @param name      String 名前
-     * @param heart_rate  String 品名
-     * @param calorie_consumption String  産地
-     * @param weight_fluctuates String 個数
-     * @param total_time  String 単価
-     * @param total_distance  String 単価
+     * @param heart_rate  String 心拍数
+     * @param calorie_consumption String  消費カロリー
+     * @param weight_fluctuates String 体重変化
+     * @param total_time  String 総走行時間
+     * @param total_distance  String 総走行距離
      *
      */
     public MyListItem1(String name, String heart_rate, String calorie_consumption, String weight_fluctuates,
@@ -38,7 +38,7 @@ public class MyListItem1 {
     }
 
     /**
-     * IDを取得
+     * 名前を取得
      * getName()
      *
      * @return name String 名前
@@ -49,50 +49,50 @@ public class MyListItem1 {
     }
 
     /**
-     * 品名を取得
+     * 心拍数を取得
      * getHeart_rate()
      *
-     * @return heart_rate String 品名
+     * @return heart_rate String 心拍数
      */
     public String getHeart_rate() {
         return heart_rate;
     }
 
     /**
-     * 産地を取得
+     * 消費カロリーを取得
      * getMadeIn()
      *
-     * @return calorie_consumption String 産地
+     * @return calorie_consumption String 消費カロリー
      */
     public String getCalorie_consumption() {
         return calorie_consumption;
     }
 
     /**
-     * 個数を取得
+     * 体重変化を取得
      * getNumber()
      *
-     * @return weight_fluctuates String 個数
+     * @return weight_fluctuates String 体重変化
      */
     public String getWeight_fluctuates() {
         return weight_fluctuates;
     }
 
     /**
-     * 単価を取得
+     * 総走行時間を取得
      * getPrice()
      *
-     * @return total_time String 単価
+     * @return total_time String 総走行時間
      */
     public String getTotal_time() {
         return total_time;
     }
 
     /**
-     * 単価を取得
+     * 総走行距離を取得
      * getPrice()
      *
-     * @return price String 単価
+     * @return price String 総走行距離
      */
     public String getTotal_distance() {
         return total_distance;

@@ -32,9 +32,9 @@ public class MainResult extends AppCompatActivity implements
     private TextView mText01Kome01;             // 名前の※印
     private TextView mText01Kome02;             // 心拍数の※印
     private TextView mText01Kome03;             // 消費カロリーの※印
-    private TextView mText01Kome04;             // 単価の※印
-    private TextView mText01Kome05;             // 単価の※印
-    private TextView mText01Kome06;             // 単価の※印
+    private TextView mText01Kome04;             // 体重変化の※印
+    private TextView mText01Kome05;             // 総走行時間の※印
+    private TextView mText01Kome06;             // 総走行距離の※印
 
     private Button mButton01Regist;             // 登録ボタン
     private Button mButton01Show;               // 表示ボタン
@@ -107,19 +107,19 @@ public class MainResult extends AppCompatActivity implements
      */
     private void findViews() {
 
-        mEditText01Name = (EditText) findViewById(R.id.editText01Name);   // 品名
-        mEditText01Heart_rate = (EditText) findViewById(R.id.editText01Heart_rate);   // 品名
-        mEditText01Calorie_consumption = (EditText) findViewById(R.id.editText01Calorie_consumption);     // 産地
-        mEditText01Weight_fluctuates = (EditText) findViewById(R.id.editText01Weight_fluctuates);     // 個数
-        mEditText01Total_time = (EditText) findViewById(R.id.editText01Total_time);       // 単価
-        mEditText01Total_distance = (EditText) findViewById(R.id.editText01Total_distance);       // 単価
+        mEditText01Name = (EditText) findViewById(R.id.editText01Name);   // 名前
+        mEditText01Heart_rate = (EditText) findViewById(R.id.editText01Heart_rate);   // 心拍数
+        mEditText01Calorie_consumption = (EditText) findViewById(R.id.editText01Calorie_consumption);     // 消費カロリー
+        mEditText01Weight_fluctuates = (EditText) findViewById(R.id.editText01Weight_fluctuates);     // 体重変化
+        mEditText01Total_time = (EditText) findViewById(R.id.editText01Total_time);       // 総走行時間
+        mEditText01Total_distance = (EditText) findViewById(R.id.editText01Total_distance);       // 総走行距離
 
-        mText01Kome01 = (TextView) findViewById(R.id.text01Kome01);             // 品名の※印
-        mText01Kome02 = (TextView) findViewById(R.id.text01Kome02);             // 産地※印
-        mText01Kome03 = (TextView) findViewById(R.id.text01Kome03);             // 個数の※印
-        mText01Kome04 = (TextView) findViewById(R.id.text01Kome04);             // 単価の※印
-        mText01Kome05 = (TextView) findViewById(R.id.text01Kome05);             // 単価の※印
-        mText01Kome06 = (TextView) findViewById(R.id.text01Kome06);             // 単価の※印
+        mText01Kome01 = (TextView) findViewById(R.id.text01Kome01);             // 名前の※印
+        mText01Kome02 = (TextView) findViewById(R.id.text01Kome02);             // 心拍数※印
+        mText01Kome03 = (TextView) findViewById(R.id.text01Kome03);             // 消費カロリーの※印
+        mText01Kome04 = (TextView) findViewById(R.id.text01Kome04);             // 体重変化の※印
+        mText01Kome05 = (TextView) findViewById(R.id.text01Kome05);             // 総走行時間の※印
+        mText01Kome06 = (TextView) findViewById(R.id.text01Kome06);             // 総走行距離の※印
 
         mButton01Regist = (Button) findViewById(R.id.button01Regist1);           // 登録ボタン
         mButton01Show = (Button) findViewById(R.id.button01Show);               // 表示ボタン
@@ -158,7 +158,7 @@ public class MainResult extends AppCompatActivity implements
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
-            case R.id.radioButton01Product1:         // 品名一覧(ListView×ArrayAdapter)を選択した場合
+            case R.id.radioButton01Product1:         // 名前一覧(ListView×ArrayAdapter)を選択した場合
                 intent = new Intent(MainResult.this, SelectSheetProduct.class);
                 break;
             case R.id.radioButton01ListView1:        // ListView表示を選択した場合
@@ -190,37 +190,37 @@ public class MainResult extends AppCompatActivity implements
                 || strTotal_time.equals("") || strTotal_distance.equals("")) {
 
             if (strName.equals("")) {
-                mText01Kome01.setText("※");     // 品名が空白の場合、※印を表示
+                mText01Kome01.setText("※");     // 名前が空白の場合、※印を表示
             } else {
                 mText01Kome01.setText("");      // 空白でない場合は※印を消す
             }
 
             if (strHeart_rate.equals("")) {
-                mText01Kome02.setText("※");     // 品名が空白の場合、※印を表示
+                mText01Kome02.setText("※");     // 心拍数が空白の場合、※印を表示
             } else {
                 mText01Kome02.setText("");      // 空白でない場合は※印を消す
             }
 
             if (strCalorie_consumption.equals("")) {
-                mText01Kome03.setText("※");     // 産地が空白の場合、※印を表示
+                mText01Kome03.setText("※");     // 消費カロリーが空白の場合、※印を表示
             } else {
                 mText01Kome03.setText("");      // 空白でない場合は※印を消す
             }
 
             if (strWeight_fluctuates.equals("")) {
-                mText01Kome04.setText("※");     // 個数が空白の場合、※印を表示
+                mText01Kome04.setText("※");     // 体重変化が空白の場合、※印を表示
             } else {
                 mText01Kome04.setText("");      // 空白でない場合は※印を消す
             }
 
             if (strTotal_time.equals("")) {
-                mText01Kome05.setText("※");     // 単価が空白の場合、※印を表示
+                mText01Kome05.setText("※");     // 総走行時間が空白の場合、※印を表示
             } else {
                 mText01Kome05.setText("");      // 空白でない場合は※印を消す
             }
 
             if (strTotal_time.equals("")) {
-                mText01Kome06.setText("※");     // 単価が空白の場合、※印を表示
+                mText01Kome06.setText("※");     // 総走行距離が空白の場合、※印を表示
             } else {
                 mText01Kome06.setText("");      // 空白でない場合は※印を消す
             }
@@ -229,7 +229,7 @@ public class MainResult extends AppCompatActivity implements
 
         } else {        // EditTextが全て入力されている場合
 
-            // 入力された単価と個数は文字列からint型へ変換
+            // 入力されたものを文字列からint型へ変換
             int iHeart_rate = Integer.parseInt(strHeart_rate);
             int iCalorie_consumption = Integer.parseInt(strCalorie_consumption);
             int iWeight_fluctuates = Integer.parseInt(strWeight_fluctuates);
