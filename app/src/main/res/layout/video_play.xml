@@ -1,81 +1,85 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/video_play"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
-    tools:context=".VideoPlay">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.a1521315.test02.VideoPlay">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
-    <FrameLayout
+    <LinearLayout android:id="@+id/controlPanel"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"></LinearLayout>
+
+    <SurfaceView android:id="@+id/videoSurfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_above="@+id/buttonPlus" />
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            >
-
-            <SurfaceView android:id="@+id/surfaceView1" android:layout_width="wrap_content" android:layout_height="wrap_content"></SurfaceView>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/black_overlay"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
-        </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            >
-
-            <TextView
-                android:id="@+id/TextView01"
-                android:layout_width="270dp"
-                android:layout_height="wrap_content"
-                android:textColor="#FF0000"
-                android:text="現在の心拍:86bpm"
-                android:textSize="80px"
-                android:layout_gravity="right" />
-
-            <TextView
-                android:id="@+id/TextView02"
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:textColor="#FF0000"
-                android:text="走行距離:1.2km"
-                android:textSize="80px"
-                android:layout_gravity="right" />
-
-            <ImageView
-                android:orientation="vertical"
-                android:id="@+id/image_view_1"
-                android:scaleType="fitCenter"
-                android:gravity="left"
-                android:layout_width="30dp"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-    </FrameLayout>
-    <TextView
-        android:id="@+id/TextView03"
-        android:layout_width="230dp"
+    <Button
+        android:text="減速"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FF0000"
-        android:text="時速:0.0km/h"
-        android:textSize="80px"
-        android:layout_gravity="right|bottom" />
-</FrameLayout>
+        android:id="@+id/buttonMinus"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/buttonPlus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加速"
+        android:layout_marginEnd="14dp"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/buttonMinus" />
+
+    <Button android:id="@+id/playBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play"
+        android:visibility="visible"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/playBtn"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textSpeed"
+            tools:text="0.0km/h"
+            android:textSize="30sp"
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_marginBottom="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textMileage"
+            tools:text="走行距離0km"
+            android:textSize="30sp"
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_alignBaseline="@+id/textSpeed"
+            android:layout_alignBottom="@+id/textSpeed"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+</RelativeLayout>
