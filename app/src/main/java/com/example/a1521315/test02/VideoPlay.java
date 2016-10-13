@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
@@ -43,8 +44,17 @@ public class VideoPlay extends AppCompatActivity implements SurfaceHolder.Callba
                 //PlaybackParams params = new PlaybackParams();
                 //params.setSpeed((float)0.0);//再生速度変更
                 player.setPlaybackParams(params);
-                player.seekTo(1500);
-                //player.start();
+                player.seekTo(0);
+               // player.start();
+                //ディレイ↓
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        player.pause();//ここにかく
+                    }
+                }, 1000);
+
                 playBtn.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
 
             }
@@ -70,8 +80,8 @@ public class VideoPlay extends AppCompatActivity implements SurfaceHolder.Callba
             @Override
             public void onClick(View v) {
                 cnt = cnt - 0.01;
-                if(cnt < 0.01) {
-                    cnt = 0.01;
+                if(cnt < 0.00) {
+                    cnt = 0.00;
                 }
                  /*動画の再生速度を変えるのに必要なプログラム↓*/
                 //PlaybackParams params = new PlaybackParams();
@@ -123,6 +133,5 @@ public class VideoPlay extends AppCompatActivity implements SurfaceHolder.Callba
         //Intent intent = new Intent(getApplication(),ResultActivity.class);//画面遷移
         //startActivity(intent);
     }
-
 }
 
