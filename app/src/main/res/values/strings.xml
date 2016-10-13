@@ -15,9 +15,6 @@
     <string name="search">検索</string>
 
 
-
-
-
     <!-- ここからactivity_main 01関連 -->
     <string name="text01_name">名前</string>
     <string name="text01_age">年齢</string>

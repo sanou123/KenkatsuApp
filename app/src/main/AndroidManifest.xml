@@ -36,7 +36,6 @@
         <activity
             android:name=".VideoSelect"
             android:label="@string/name_video_serect" />
-        <activity android:name=".VideoPlay" />
         <activity android:name=".SelectSheetProduct" />
         <activity
             android:name=".SelectSheetListView"
@@ -50,13 +49,14 @@
             android:name=".UserUpdate"
             android:label="@string/name_update_user" />
         <activity
-        android:name=".Dictionary"
-        android:label="@string/dictionary" />
-
+            android:name=".Dictionary"
+            android:label="@string/dictionary" />
         <activity
             android:name=".Search"
             android:label="@string/search" />
-        <activity android:name=".TrainingSelect"></activity>
+        <activity android:name=".TrainingSelect" />
+        <activity android:name=".Result" />
+        <activity android:name=".VideoPlay"></activity>
     </application>
 
 </manifest>

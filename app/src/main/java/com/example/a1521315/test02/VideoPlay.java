@@ -1,152 +1,137 @@
 package com.example.a1521315.test02;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.graphics.PixelFormat;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
-import android.os.Build;
+import android.net.Uri;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
 
-public class VideoPlay extends Activity implements SurfaceHolder.Callback{
-    TextView tv1;
-    private static final String TAG = "VideoPlayer";
-    private SurfaceHolder holder;
-    private SurfaceView mPreview;
-    private MediaPlayer mp = null;
+public class VideoPlay extends AppCompatActivity implements SurfaceHolder.Callback,MediaPlayer.OnCompletionListener {
+    double cnt = 0.0;
+    TextView Speed;
+    TextView Mileage;
+    MediaPlayer player = null;
+    SurfaceHolder sh;
+    PlaybackParams params = new PlaybackParams();
 
-    double cnt = 0;
 
-    /** Called when the activity is first created. */
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_play);
 
-        getWindow().setFormat(PixelFormat.TRANSPARENT);
-        mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
-        holder = mPreview.getHolder();
-        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        holder.addCallback(this);
+        Speed = (TextView)findViewById(R.id.textSpeed);
+        Speed.setText(0.00+"km/h");
+        Mileage = (TextView)findViewById(R.id.textMileage);
+        Mileage.setText("走行距離"+0.00+"km");
 
-        tv1 = (TextView)findViewById(R.id.TextView03);
-        tv1.setText("時速:0.0km/h");
+        final Button playBtn = (Button) findViewById(R.id.playBtn);
+        playBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 /*動画の再生速度を変えるのに必要なプログラム↓*/
+                //PlaybackParams params = new PlaybackParams();
+                //params.setSpeed((float)0.0);//再生速度変更
+                player.setPlaybackParams(params);
+                player.seekTo(0);
+               // player.start();
+                //ディレイ↓
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        player.pause();//ここにかく
+                    }
+                }, 1000);
 
-        ImageView imageView1 = (ImageView)findViewById(R.id.image_view_1);
-        imageView1.setImageResource(R.drawable.bar);
+                playBtn.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
 
-
-
-    }
-
-    public boolean onDestroy(MediaPlayer mp, int what, int extra) {
-        if(mp != null){
-            mp.release();
-            mp = null;
-        }
-        return false;
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.M)
-    @Override
-    public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
-        //String filePath = "/data/test/test_x264.mp4";
-        String mediaPath = Environment.getExternalStorageDirectory().getPath()+"/Movies/test_x264.mp4";
-
-
-        try {
-            mp = new MediaPlayer();
-            mp.setDataSource(mediaPath);
-            mp.setDisplay(paramSurfaceHolder);
-            mp.prepare();
-
-        } catch (IllegalArgumentException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        }
-
-
-
-        /*動画の再生速度を変えるのに必要なプログラム↓*/
-        PlaybackParams params = new PlaybackParams();
-        params.setSpeed((float) 0.9);//再生速度変更
-        //params.setSpeed((float) cnt);//再生速度変更
-        //params.setSpeed(1.f);//再生速度変更
-        mp.setPlaybackParams(params);
-
-        mp.seekTo(15000);
-
-
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction()==KeyEvent.ACTION_DOWN) {
-            if(event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
+            }
+        });
+        Button buttonPlus = (Button) findViewById(R.id.buttonPlus);
+        buttonPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 cnt = cnt + 0.01;
-                if(cnt > 5)//意味わからないほど早くされるとクラッシュする対策
-                {
+                if(cnt > 5){//意味わからないほど早くされるとクラッシュする対策
                     cnt = 5;
                 }
-                /*動画の再生速度を変えるのに必要なプログラム↓*/
-                PlaybackParams params = new PlaybackParams();
-                //params.setSpeed((float) 0.9);//再生速度変更
+                 /*動画の再生速度を変えるのに必要なプログラム↓*/
+                //PlaybackParams params = new PlaybackParams();
                 params.setSpeed((float)cnt);//再生速度変更
-                //params.setSpeed(1.f);//再生速度変更
-                mp.setPlaybackParams(params);
-                mp.start();
-                tv1.setText("時速："+(float)(cnt*10)+"km/h");
-                return true;
+                player.setPlaybackParams(params);
+                //player.start();
+                Speed.setText((float)(cnt*10)+"km/h");
             }
-        }
-        if (event.getAction()==KeyEvent.ACTION_DOWN) {
-            if(event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+        });
+        Button buttonMinus = (Button) findViewById(R.id.buttonMinus);
+        buttonMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 cnt = cnt - 0.01;
-                if(cnt < 0.01)
-                {
-                    cnt = 0.01;
+                if(cnt < 0.00) {
+                    cnt = 0.00;
                 }
-                /*動画の再生速度を変えるのに必要なプログラム↓*/
-                PlaybackParams params = new PlaybackParams();
-                //params.setSpeed((float) 0.9);//再生速度変更
+                 /*動画の再生速度を変えるのに必要なプログラム↓*/
+                //PlaybackParams params = new PlaybackParams();
                 params.setSpeed((float)cnt);//再生速度変更
-                //params.setSpeed(1.f);//再生速度変更
-                mp.setPlaybackParams(params);
-                mp.start();
-                tv1.setText("時速："+(float)(cnt*10)+"km/h");
-                return true;
+                player.setPlaybackParams(params);
+                //player.start();
+                Speed.setText((float)(cnt*10)+"km/h");
             }
-            mp.start();
-        }
-        return super.dispatchKeyEvent(event);
+        });
+        SurfaceView view = (SurfaceView) findViewById(R.id.videoSurfaceView);
+        sh = view.getHolder();
+        sh.addCallback(this);
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder paramSurfaceHolder, int paramInt1,
-                               int paramInt2, int paramInt3) {
+    public void surfaceCreated(SurfaceHolder holder) {
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder paramSurfaceHolder) {
-        if(mp != null){
-            mp.release();
-            mp = null;
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        player = new MediaPlayer();
+        String movieUri = "android.resource://" + getPackageName() + "/" + R.raw.test01;
+        try {
+            player.setDataSource(getApplicationContext(), Uri.parse(movieUri));
+            player.setDisplay(sh);
+            player.prepare();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        if(player != null){
+            player.release();
+            player = null;
+
+        }
+    }
+    @Override
+    public void onCompletion(MediaPlayer player) {
+        //インテントの作成
+        //Intent intent = new Intent(getApplication(),ResultActivity.class);//画面遷移
+        //startActivity(intent);
     }
 }
+
