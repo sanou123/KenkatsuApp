@@ -10,16 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.a1521315.test02.VideoPlay">
 
-    <LinearLayout android:id="@+id/controlPanel"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center_horizontal"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"></LinearLayout>
-
     <SurfaceView android:id="@+id/videoSurfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -54,15 +44,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignTop="@+id/playBtn"
-        android:layout_centerHorizontal="true">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <TextView
-            android:text="TextView"
+            android:text="0.0km/h"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textSpeed"
-            tools:text="0.0km/h"
             android:textSize="30sp"
             android:textColor="@android:color/holo_red_dark"
             android:layout_marginBottom="50dp"
@@ -70,15 +59,24 @@
             android:layout_alignParentEnd="true" />
 
         <TextView
-            android:text="TextView"
+            android:text="走行距離0km"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textMileage"
-            tools:text="走行距離0km"
             android:textSize="30sp"
             android:textColor="@android:color/holo_red_dark"
             android:layout_alignBaseline="@+id/textSpeed"
             android:layout_alignBottom="@+id/textSpeed"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="時間:0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTime"
+            android:textSize="30sp"
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
     </RelativeLayout>
 
