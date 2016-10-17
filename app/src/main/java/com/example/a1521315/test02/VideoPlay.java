@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +37,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     private ScheduledExecutorService srv;
     PlaybackParams params = new PlaybackParams();
     double cnt = 0;
+
+    private TextView tTimer;
+    private Timer timer;
+    private CountUpTimerTask timerTask = null;
+    private Handler Timerhandler = new Handler();
+    private long count = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
         findViewById(R.id.buttonPlay).setOnClickListener(this);
         findViewById(R.id.buttonResult).setOnClickListener(this);
+
+        tTimer = (TextView)findViewById(R.id.textTimer);
+        tTimer.setText("00:00.0");
     }
 
 
@@ -129,6 +140,22 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 Speed.setText("時速:"+(float)(cnt*10)+"km/h");
                 mp.setPlaybackParams(params);
                 mp.seekTo(0);
+
+                if(null != timer){
+                    timer.cancel();
+                    timer = null;
+                }
+                // Timer インスタンスを生成
+                timer = new Timer();
+                // TimerTask インスタンスを生成
+                timerTask = new CountUpTimerTask();
+                // スケジュールを設定 100msec
+                // public void schedule (TimerTask task, long delay, long period)
+                timer.schedule(timerTask, 0, 100);
+                // カウンター
+                count = 0;
+                tTimer.setText("00:00.0");
+
                 BtnView.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
                 break;
             case R.id.buttonResult://Resultボタン押したとき
@@ -179,6 +206,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public void onCompletion(MediaPlayer agr0) {
         Log.v("MediaPlayer", "onCompletion");
         srv.shutdown();//サービス終了させる
+
+        if(null != timer){
+            // Cancel
+            timer.cancel();
+            timer = null;
+        }
+
         //ボタン表示↓
         Button BtnView2 = (Button) findViewById(R.id.buttonResult);
         BtnView2.setVisibility(View.VISIBLE);
@@ -194,6 +228,25 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         if(mp != null){
             mp.release();
             mp = null;
+        }
+    }
+
+
+    //タイマータスク
+    class CountUpTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            // handlerを使って処理をキューイングする
+            Timerhandler.post(new Runnable() {
+                public void run() {
+                    count++;
+                    long mm = count*100 / 1000 / 60;
+                    long ss = count*100 / 1000 % 60;
+                    long ms = (count*100 - ss * 1000 - mm * 1000 * 60)/100;
+                    // 桁数を合わせるために02d(2桁)を設定
+                    tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
+                }
+            });
         }
     }
 }

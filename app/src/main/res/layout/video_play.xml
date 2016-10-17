@@ -32,7 +32,7 @@
             android:textSize="80px"
             android:layout_gravity="right|bottom"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/textMileage"
@@ -42,19 +42,9 @@
             android:text="走行距離:0.0km"
             android:textSize="80px"
             android:layout_gravity="right"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:id="@+id/textHeartbeat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FF0000"
-            android:text="現在の心拍:-"
-            android:textSize="80px"
-            android:layout_gravity="right"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_above="@+id/textSpeed"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp" />
 
         <TextView
             android:text="aaaaaaaaaaaaaaa"
@@ -63,8 +53,18 @@
             android:id="@+id/textTest"
             android:textSize="30sp"
             android:textColor="@android:color/holo_orange_light"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
+
+        <Button
+            android:text="リザルト"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonResult"
+            android:visibility="invisible"
+            android:layout_above="@+id/buttonPlay"
+            android:layout_alignStart="@+id/buttonPlay"
+            android:layout_marginBottom="87dp" />
 
         <Button
             android:text="PLAY"
@@ -75,36 +75,57 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
-        <Button
-            android:text="リザルト"
+        <RelativeLayout
+            android:layout_width="92dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true">
+
+            <ImageView
+                android:orientation="vertical"
+                android:id="@+id/image_view_1"
+                android:gravity="left"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/image_view_2" />
+
+            <ImageView
+                android:orientation="vertical"
+                android:id="@+id/image_view_2"
+                android:scaleType="fitCenter"
+                android:gravity="left"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="14dp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:text="00:00.0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/buttonResult"
-            android:visibility="invisible" />
+            android:id="@+id/textTimer"
+            android:textSize="50sp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/background_light"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/textHeartbeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:text="心拍:-"
+            android:textSize="80px"
+            android:layout_gravity="right"
+            android:layout_alignBaseline="@+id/buttonPlay"
+            android:layout_alignBottom="@+id/buttonPlay" />
 
     </RelativeLayout>
-
-    <FrameLayout
-        android:layout_width="211dp"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-
-        <ImageView
-            android:orientation="vertical"
-            android:id="@+id/image_view_1"
-            android:gravity="left"
-            android:layout_width="30dp"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:orientation="vertical"
-            android:id="@+id/image_view_2"
-            android:scaleType="fitCenter"
-            android:gravity="left"
-            android:layout_width="30dp"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
 
 
 </FrameLayout>
