@@ -1,85 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/video_play"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#0099cc"
     tools:context="com.example.a1521315.test02.VideoPlay">
 
-    <LinearLayout android:id="@+id/controlPanel"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center_horizontal"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"></LinearLayout>
-
-    <SurfaceView android:id="@+id/videoSurfaceView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/buttonPlus" />
-
-    <Button
-        android:text="減速"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonMinus"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:id="@+id/buttonPlus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="加速"
-        android:layout_marginEnd="14dp"
-        android:visibility="visible"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/buttonMinus" />
-
-    <Button android:id="@+id/playBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Play"
-        android:visibility="visible"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@+id/playBtn"
-        android:layout_centerHorizontal="true">
+        android:layout_height="match_parent">
+
+        <SurfaceView android:id="@+id/surfaceView1" android:layout_width="match_parent" android:layout_height="match_parent"></SurfaceView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
-            android:text="TextView"
+            android:id="@+id/textSpeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textSpeed"
-            tools:text="0.0km/h"
-            android:textSize="30sp"
-            android:textColor="@android:color/holo_red_dark"
-            android:layout_marginBottom="50dp"
+            android:textColor="#FF0000"
+            android:text="時速:0.0km/h"
+            android:textSize="80px"
+            android:layout_gravity="right|bottom"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true" />
 
         <TextView
-            android:text="TextView"
+            android:id="@+id/textMileage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textMileage"
-            tools:text="走行距離0km"
+            android:textColor="#FF0000"
+            android:text="走行距離:0.0km"
+            android:textSize="80px"
+            android:layout_gravity="right"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/textHeartbeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:text="現在の心拍:-"
+            android:textSize="80px"
+            android:layout_gravity="right"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:text="aaaaaaaaaaaaaaa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTest"
             android:textSize="30sp"
-            android:textColor="@android:color/holo_red_dark"
-            android:layout_alignBaseline="@+id/textSpeed"
-            android:layout_alignBottom="@+id/textSpeed"
-            android:layout_alignParentStart="true" />
+            android:textColor="@android:color/holo_orange_light"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:text="PLAY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonPlay"
+            android:visibility="visible"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:text="リザルト"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonResult"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
-</RelativeLayout>
+    <FrameLayout
+        android:layout_width="211dp"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <ImageView
+            android:orientation="vertical"
+            android:id="@+id/image_view_1"
+            android:gravity="left"
+            android:layout_width="30dp"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:orientation="vertical"
+            android:id="@+id/image_view_2"
+            android:scaleType="fitCenter"
+            android:gravity="left"
+            android:layout_width="30dp"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+
+</FrameLayout>
