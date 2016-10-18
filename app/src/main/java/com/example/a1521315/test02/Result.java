@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -20,16 +23,35 @@ public class Result extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result);
-        TextView tv = (TextView)findViewById(R.id.restx);
+        Button btn_tweet = (Button)findViewById(R.id.tweet);
+        Button btn_back = (Button)findViewById(R.id.back);
 
-        MovementMethod mMethod = LinkMovementMethod.getInstance();
-        tv.setMovementMethod(mMethod);
-        String url = "https://twitter.com/intent/tweet?hashtags=けんかつAPP &text=ぼくはけんこうです！やったー！";
-        // urlをhtmlを使ってリンクテキストに埋め込む
-        CharSequence link = Html.fromHtml("<a href=\"" + url + "\">結果をつぶやく</a>");
-        tv.setText(link);
-        /*TextView textView = (TextView)findViewById(R.id.restx);
-        textView.setText("結果をつぶやく");*/
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(), VideoSelect.class);
+                startActivity( intent );
+            }
+        });
+
+        btn_tweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text=ぼくはけんこうです！やったー！"));
+                startActivity(i);
+            }
+        });
+
+    }
+
+    @Override
+    //戻るキーを無効にする
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }
