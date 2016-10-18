@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -24,17 +26,23 @@ import java.util.concurrent.TimeUnit;
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.OnClickListener, MediaPlayer.OnCompletionListener {
     Handler handler = new Handler();
-    TextView Speed;//時速
-    TextView Mileage;//走行距離
-    TextView Heartbeat;//心拍
-    TextView Test;//aaaaaaaa
+    TextView tSpeed;//時速の変数
+    TextView tMileage;//走行距離の変数
+    TextView tHeartbeat;//心拍の変数
+    TextView tTest;//再生時間の変数
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
     private SurfaceView mPreview;
     private MediaPlayer mp = null;
     private ScheduledExecutorService srv;
     PlaybackParams params = new PlaybackParams();
-    double cnt = 0;
+    double speedcount = 0.0;
+
+    private TextView tTimer;//タイマーの変数
+    private Timer timer;
+    private CountUpTimerTask timerTask = null;
+    private Handler Timerhandler = new Handler();
+    private long timercount = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,10 +53,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         holder = mPreview.getHolder();
         holder.addCallback(this);
 
-        Speed = (TextView)findViewById(R.id.textSpeed);
-        Mileage = (TextView)findViewById(R.id.textMileage);
-        Heartbeat = (TextView)findViewById(R.id.textHeartbeat);
-        Test = (TextView) findViewById(R.id.textTest);
+        tSpeed = (TextView)findViewById(R.id.textSpeed);
+        tMileage = (TextView)findViewById(R.id.textMileage);
+        tHeartbeat = (TextView)findViewById(R.id.textHeartbeat);
+        tTest = (TextView) findViewById(R.id.textTest);
         ImageView imageView1 = (ImageView)findViewById(R.id.image_view_1);
         imageView1.setImageResource(R.drawable.bar);
         ImageView imageView2 = (ImageView)findViewById(R.id.image_view_2);
@@ -56,6 +64,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
         findViewById(R.id.buttonPlay).setOnClickListener(this);
         findViewById(R.id.buttonResult).setOnClickListener(this);
+
+        tTimer = (TextView)findViewById(R.id.textTimer);
+        tTimer.setText("00:00.0");
     }
 
 
@@ -97,7 +108,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Test.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
+                        tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
                         //Mileage.setText("走行距離:" + String.format("f", (float) 83.7 / (mp.getDuration() / mp.getCurrentPosition()) ) + "km");
                     }
                 });
@@ -125,10 +136,27 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         switch(id) {
             case R.id.buttonPlay://Playボタン押したとき
                 Button BtnView = (Button) findViewById(R.id.buttonPlay);
-                cnt = 0;
-                Speed.setText("時速:"+(float)(cnt*10)+"km/h");
+                speedcount = 0.0;
+                //tSpeed.setText(""+(float)(cnt*10));
+                tSpeed.setText(String.format("%.1f",(float)(speedcount*10)));
                 mp.setPlaybackParams(params);
                 mp.seekTo(0);
+
+                if(null != timer){
+                    timer.cancel();
+                    timer = null;
+                }
+                // Timer インスタンスを生成
+                timer = new Timer();
+                // TimerTask インスタンスを生成
+                timerTask = new CountUpTimerTask();
+                // スケジュールを設定 100msec
+                // public void schedule (TimerTask task, long delay, long period)
+                timer.schedule(timerTask, 0, 100);
+                // カウンター
+                timercount = 0;
+                tTimer.setText("00:00.0");
+
                 BtnView.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
                 break;
             case R.id.buttonResult://Resultボタン押したとき
@@ -144,31 +172,32 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction()==KeyEvent.ACTION_DOWN) {
             if(event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
-                cnt = cnt + 0.1;
-                if(cnt > 5)//意味わからないほど早くされるとクラッシュする対策
+                speedcount = speedcount + 0.1;
+                if(speedcount > 5)//意味わからないほど早くされるとクラッシュする対策
                 {
-                    cnt = 5;
+                    speedcount = 5;
                 }
                 /*動画の再生速度を変えるのに必要なプログラム↓*/
-                params.setSpeed((float)cnt);//再生速度変更
+                params.setSpeed((float)speedcount);//再生速度変更
                 mp.setPlaybackParams(params);
                 //mp.start();
-                Speed.setText("時速:"+(float)(cnt*10)+"km/h");
+                //tSpeed.setText(""+(float)(cnt*10));
+                tSpeed.setText(String.format("%.1f", (float)(speedcount*10)));
                 return true;
             }
         }
         if (event.getAction()==KeyEvent.ACTION_DOWN) {
             if(event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                cnt = cnt - 0.1;
-                if(cnt <= 0.1)
+                speedcount = speedcount - 0.1;
+                if(speedcount <= 0.1)
                 {
-                    cnt = 0.00;
+                    speedcount = 0.0;
                 }
                 /*動画の再生速度を変えるのに必要なプログラム↓*/
-                params.setSpeed((float)cnt);//再生速度変更
+                params.setSpeed((float)speedcount);//再生速度変更
                 mp.setPlaybackParams(params);
                 //mp.start();
-                Speed.setText("時速:"+(float)(cnt*10)+"km/h");
+                tSpeed.setText(String.format("%.1f", (float)(speedcount*10)));
                 return true;
             }
         }
@@ -179,6 +208,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public void onCompletion(MediaPlayer agr0) {
         Log.v("MediaPlayer", "onCompletion");
         srv.shutdown();//サービス終了させる
+
+        if(null != timer){
+            // Cancel
+            timer.cancel();
+            timer = null;
+        }
+
         //ボタン表示↓
         Button BtnView2 = (Button) findViewById(R.id.buttonResult);
         BtnView2.setVisibility(View.VISIBLE);
@@ -194,6 +230,25 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         if(mp != null){
             mp.release();
             mp = null;
+        }
+    }
+
+
+    //タイマータスク
+    class CountUpTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            // handlerを使って処理をキューイングする
+            Timerhandler.post(new Runnable() {
+                public void run() {
+                    timercount++;
+                    long mm = timercount*100 / 1000 / 60;
+                    long ss = timercount*100 / 1000 % 60;
+                    long ms = (timercount*100 - ss * 1000 - mm * 1000 * 60)/100;
+                    // 桁数を合わせるために02d(2桁)を設定
+                    tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
+                }
+            });
         }
     }
 }
