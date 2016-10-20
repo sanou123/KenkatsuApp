@@ -69,6 +69,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
         findViewById(R.id.buttonPlay).setOnClickListener(this);
         findViewById(R.id.buttonResult).setOnClickListener(this);
+        findViewById(R.id.buttonPause).setOnClickListener(this);
 
         tTimer = (TextView)findViewById(R.id.textTimer);
         tTimer.setText("00:00.0");
@@ -123,8 +124,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     }
     @Override
     public void surfaceChanged(SurfaceHolder paramSurfaceHolder, int paramInt1, int paramInt2, int paramInt3) {
-
-
     }
     @Override
     public void surfaceDestroyed(SurfaceHolder paramSurfaceHolder) {
@@ -136,7 +135,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
 
 
-    //再生時間表示に関するやつ↓
+    //ボタンを押された時の処理
     public void onClick(View v){
         int id = v.getId();
         switch(id) {
@@ -170,7 +169,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 Intent intent = new Intent(getApplication(), Result.class);
                 startActivity(intent);
                 break;
+            case R.id.buttonPause://Pauseボタンを押したとき
 
+                break;
         }
     }
 
@@ -256,5 +257,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 }
             });
         }
+    }
+
+    @Override
+    //戻るキーを無効にする
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
