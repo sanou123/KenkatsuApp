@@ -1,6 +1,8 @@
 package com.example.a1521315.test02;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
@@ -17,15 +19,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
@@ -142,35 +142,53 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             case R.id.buttonPlay://Playボタン押したとき
                 Button BtnView = (Button) findViewById(R.id.buttonPlay);
                 speedcount = 0.0;
-                //tSpeed.setText(""+(float)(cnt*10));
                 tSpeed.setText(String.format("%.1f",(float)(speedcount*10)));
                 mp.setPlaybackParams(params);
                 mp.seekTo(0);
-
                 if(null != timer){
                     timer.cancel();
                     timer = null;
                 }
-                // Timer インスタンスを生成
-                timer = new Timer();
-                // TimerTask インスタンスを生成
-                timerTask = new CountUpTimerTask();
-                // スケジュールを設定 100msec
-                // public void schedule (TimerTask task, long delay, long period)
-                timer.schedule(timerTask, 0, 100);
-                // カウンター
-                timercount = 0;
+                timer = new Timer();// Timer インスタンスを生成
+                timerTask = new CountUpTimerTask(); // TimerTask インスタンスを生成
+                timer.schedule(timerTask, 0, 100); // スケジュールを設定 100msec// public void schedule (TimerTask task, long delay, long period)
+                timercount = 0;// カウンター
                 tTimer.setText("00:00.0");
-
                 BtnView.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
                 break;
+
             case R.id.buttonResult://Resultボタン押したとき
-                //インテントの作成
                 Intent intent = new Intent(getApplication(), Result.class);
                 startActivity(intent);
                 break;
-            case R.id.buttonPause://Pauseボタンを押したとき
 
+            case R.id.buttonPause://Pauseボタンを押したとき
+                //timerTask.cancel();
+                //mp.pause();//動画再生を一時停止
+                // 確認ダイアログの作成
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
+                alertDialog.setTitle("ポーズ");
+                alertDialog.setMessage("一時停止中です");
+                alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //VideoSelectに戻る処理
+                        srv.shutdown();//サービス終了させる
+                        if(mp != null){
+                            mp.release();
+                            mp = null;
+                        }
+                        Intent intent = new Intent(getApplication(),VideoSelect.class);
+                        startActivity(intent);
+                    }
+                });
+                alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //textView.setText("");
+                    }
+                });
+                alertDialog.create().show();
                 break;
         }
     }
@@ -210,19 +228,18 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
         return super.dispatchKeyEvent(event);
     }
+
     // 再生完了時の処理
     @Override
     public void onCompletion(MediaPlayer agr0) {
         Log.v("MediaPlayer", "onCompletion");
         srv.shutdown();//サービス終了させる
-
         if(null != timer){
             // Cancel
             timer.cancel();
             timer = null;
         }
-
-        //ボタン表示↓
+        //リザルトボタンを表示
         Button BtnView2 = (Button) findViewById(R.id.buttonResult);
         BtnView2.setVisibility(View.VISIBLE);
         if(mp != null){
