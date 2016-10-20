@@ -78,8 +78,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
-        String mediaPath = "/test02.mp4";//実機9の内部ストレージにあるファイルを指定
-        //String mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+        //String mediaPath = "/test02.mp4";//実機9のストレージにあるファイルを指定
+        String mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
 
         try {
             //MediaPlayerを生成
@@ -89,8 +89,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定している
 
             //動画ファイルをMediaPlayerに読み込ませる
-            //mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
-            mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
+            mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
+            //mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
 
 
             //読み込んだ動画ファイルを画面に表示する
