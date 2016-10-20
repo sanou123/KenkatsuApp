@@ -6,6 +6,7 @@ import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -73,19 +78,20 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
-        //String mediaPath = "/data/TestFolder/test_x264.mp4";//エミュレータ6P用
-        //String mediaPath = "/data/TestFolder/TEST01.mp4";//エミュレータ9用
-        //String mediaPath = "/sdcard/test_x264.mp4";//実機9用
-        //String mediaPath = "/storage/emulated/0/test_x264.mp4";//実機9用
-        //String mediaPath = "/sdcard/DCIM/Camera/VID_20160929_170002.3gp";//実機9用
-        String mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;
+        String mediaPath = "/test02.mp4";//実機9の内部ストレージにあるファイルを指定
+        //String mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
 
         try {
             //MediaPlayerを生成
             mp = new MediaPlayer();
 
+            File pathExternalPublicDir =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+            String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定している
+
             //動画ファイルをMediaPlayerに読み込ませる
-            mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));
+            //mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
+            mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
+
 
             //読み込んだ動画ファイルを画面に表示する
             mp.setDisplay(holder);
