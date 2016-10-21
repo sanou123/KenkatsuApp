@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -73,6 +76,30 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         tTimer = (TextView)findViewById(R.id.textTimer);
         tTimer.setText("00:00.0");
     }
+    // 再生完了時の処理
+    @Override
+    public void onCompletion(MediaPlayer agr0) {
+        Log.v("MediaPlayer", "onCompletion");
+        srv.shutdown();//サービス終了させる
+        timerscheduler.shutdown();//タイマー止める
+        //リザルトボタンを表示
+        Button BtnResultView = (Button) findViewById(R.id.buttonResult);
+        BtnResultView.setVisibility(View.VISIBLE);
+        if(mp != null){
+            mp.release();
+            mp = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mp != null){
+            mp.release();
+            mp = null;
+        }
+    }
+
 
 
 
@@ -190,8 +217,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                         future = timerscheduler.scheduleAtFixedRate(task, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                     }
                 });
-
-                //alertDialog.create().show();
                 AlertDialog myDialog =alertDialog.create();
                 myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
                 myDialog.show();
@@ -234,33 +259,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
         return super.dispatchKeyEvent(event);
     }
-
-    // 再生完了時の処理
-    @Override
-    public void onCompletion(MediaPlayer agr0) {
-        Log.v("MediaPlayer", "onCompletion");
-        srv.shutdown();//サービス終了させる
-        timerscheduler.shutdown();//タイマー止める
-        //リザルトボタンを表示
-        Button BtnResultView = (Button) findViewById(R.id.buttonResult);
-        BtnResultView.setVisibility(View.VISIBLE);
-        if(mp != null){
-            mp.release();
-            mp = null;
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mp != null){
-            mp.release();
-            mp = null;
-        }
-    }
-
-
-
 
     @Override
     //戻るキーを無効にする
