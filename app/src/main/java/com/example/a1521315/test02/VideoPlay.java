@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -21,10 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
@@ -39,14 +39,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     private SurfaceView mPreview;
     private MediaPlayer mp = null;
     private ScheduledExecutorService srv;
+    Runnable task = new MyTimerTask();
+    private ScheduledExecutorService timerscheduler;
+    ScheduledFuture future;
     PlaybackParams params = new PlaybackParams();
     double speedcount = 0.0;
 
     private TextView tTimer;//タイマーの変数
-    private Timer timer;
-    private CountUpTimerTask timerTask = null;
-    private Handler Timerhandler = new Handler();
-    private long timercount = 0;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +108,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             // TODO 自動生成された catch ブロック
             e.printStackTrace();
         }
+
+
         srv = Executors.newSingleThreadScheduledExecutor();
         srv.scheduleAtFixedRate(new Runnable() {
             public void run() {
@@ -147,15 +149,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 tSpeed.setText(String.format("%.1f",(float)(speedcount*10)));
                 mp.setPlaybackParams(params);
                 mp.seekTo(0);
-                if(null != timer){
-                    timer.cancel();
-                    timer = null;
-                }
-                timer = new Timer();// Timer インスタンスを生成
-                timerTask = new CountUpTimerTask(); // TimerTask インスタンスを生成
-                timer.schedule(timerTask, 0, 100); // スケジュールを設定 100msec// public void schedule (TimerTask task, long delay, long period)
-                timercount = 0;// カウンター
-                tTimer.setText("00:00.0");
+
+                timerscheduler = Executors.newSingleThreadScheduledExecutor();
+                future = timerscheduler.scheduleAtFixedRate(task, 0, 100, TimeUnit.MILLISECONDS);
 
                 break;
 
@@ -165,8 +161,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 break;
 
             case R.id.buttonPause://Pauseボタンを押したとき
-                //timerTask.cancel();
-                //mp.pause();//動画再生を一時停止
+                future.cancel(true);//タイマー一時停止
                 speedcount = 0;
                 params.setSpeed((float)speedcount);
                 mp.setPlaybackParams(params);
@@ -180,7 +175,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                     public void onClick(DialogInterface dialog, int which) {
                         //VideoSelectに戻る処理
                         srv.shutdown();//サービス終了させる
-                        timer.cancel();
+                        timerscheduler.shutdown();//タイマー終了
                         if(mp != null){
                             mp.release();
                             mp = null;
@@ -192,10 +187,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //textView.setText("");
+                        future = timerscheduler.scheduleAtFixedRate(task, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                     }
                 });
-                alertDialog.create().show();
+
+                //alertDialog.create().show();
+                AlertDialog myDialog =alertDialog.create();
+                myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+                myDialog.show();
                 break;
         }
     }
@@ -241,11 +240,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public void onCompletion(MediaPlayer agr0) {
         Log.v("MediaPlayer", "onCompletion");
         srv.shutdown();//サービス終了させる
-        if(null != timer){
-            // Cancel
-            timer.cancel();
-            timer = null;
-        }
+        timerscheduler.shutdown();//タイマー止める
         //リザルトボタンを表示
         Button BtnResultView = (Button) findViewById(R.id.buttonResult);
         BtnResultView.setVisibility(View.VISIBLE);
@@ -265,10 +260,22 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     }
 
 
+
+
+    @Override
+    //戻るキーを無効にする
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     //タイマータスク
-    class CountUpTimerTask extends TimerTask {
-        @Override
-        public void run() {
+    public class MyTimerTask implements Runnable{
+        private Handler Timerhandler = new Handler();
+        private long timercount = 0;
+        public void run(){
             // handlerを使って処理をキューイングする
             Timerhandler.post(new Runnable() {
                 public void run() {
@@ -282,14 +289,4 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             });
         }
     }
-
-    @Override
-    //戻るキーを無効にする
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
 }
