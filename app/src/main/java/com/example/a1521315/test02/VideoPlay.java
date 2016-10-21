@@ -40,6 +40,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     private SurfaceView mPreview;
     private MediaPlayer mp = null;
 
+
     private ScheduledExecutorService getplaytimescheduler;
     Runnable mygetplaytimetask = new MyGetPlayTimeTask();
     ScheduledFuture getplaytimefuture;
