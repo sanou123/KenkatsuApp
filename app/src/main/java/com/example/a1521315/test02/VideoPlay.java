@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -64,7 +65,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public static final int APP_DISCONNECT = (int) 0xFF;
     public static final int POT_UPPER_LIMIT = 100;
     public static final int POT_LOWER_LIMIT = 0;
-    public int flg = 0;
 
     public int sensor_value = 0;
 
@@ -74,12 +74,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     public IntentFilter filter_a;
 
-    private String TAG = "KENKATU";
 
     private enum ErrorMessageCode {
         ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING,
         ERROR_FIRMWARE_PROTOCOL
-    };
+    }
+
+    ;
 
     private USBAccessoryManager accessoryManager;
 
@@ -94,19 +95,19 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         holder = mPreview.getHolder();
         holder.addCallback(this);
 
-        tSpeed = (TextView)findViewById(R.id.textSpeed);
+        tSpeed = (TextView) findViewById(R.id.textSpeed);
         tSpeed.setText("0.0");
-        tMileage = (TextView)findViewById(R.id.textMileage);
+        tMileage = (TextView) findViewById(R.id.textMileage);
         tMileage.setText("0.0");
-        tHeartbeat = (TextView)findViewById(R.id.textHeartbeat);
+        tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
         tHeartbeat.setText("0");
-        tTimer = (TextView)findViewById(R.id.textTimer);
+        tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00.0");
         tTest = (TextView) findViewById(R.id.textTest);
         tTest.setText("");
-        ImageView imageView1 = (ImageView)findViewById(R.id.image_view_1);
+        ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
         imageView1.setImageResource(R.drawable.bar);
-        ImageView imageView2 = (ImageView)findViewById(R.id.image_view_2);
+        ImageView imageView2 = (ImageView) findViewById(R.id.image_view_2);
         imageView2.setImageResource(R.drawable.me);
 
         findViewById(R.id.buttonPlay).setOnClickListener(this);
@@ -114,7 +115,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         findViewById(R.id.buttonPause).setOnClickListener(this);
 
         //#####################################################################################################
-        accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
+        accessoryManager = new USBAccessoryManager(handler2, USBAccessoryWhat);
         try {
             PackageManager manager = this.getPackageManager();
             PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
@@ -126,6 +127,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         //#####################################################################################################
 
     }
+
     // 再生完了時の処理
     @Override
     public void onCompletion(MediaPlayer agr0) {
@@ -135,16 +137,17 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         //リザルトボタンを表示
         Button BtnResultView = (Button) findViewById(R.id.buttonResult);
         BtnResultView.setVisibility(View.VISIBLE);
-        if(mp != null){
+        if (mp != null) {
             mp.release();
             mp = null;
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();//##
-        if(mp != null){
+        if (mp != null) {
             mp.release();
             mp = null;
         }
@@ -208,8 +211,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         if (deviceAttached == false) {
             Toast.makeText(this, "デバイスが切断されました", Toast.LENGTH_LONG).show();
             return;
-        }
-        else{
+        } else {
 
         }
     }
@@ -246,11 +248,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             //MediaPlayerを生成
             mp = new MediaPlayer();
 
-            File pathExternalPublicDir =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+            File pathExternalPublicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
             String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定している
 
             //動画ファイルをMediaPlayerに読み込ませる
-            mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
+            mp.setDataSource(getApplicationContext(), Uri.parse(mediaPath));//rawフォルダから指定する場合
             //mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
 
 
@@ -272,30 +274,31 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         getplaytimescheduler = Executors.newSingleThreadScheduledExecutor();
         getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 1000, TimeUnit.MILLISECONDS);
     }
+
     @Override
     public void surfaceChanged(SurfaceHolder paramSurfaceHolder, int paramInt1, int paramInt2, int paramInt3) {
     }
+
     @Override
     public void surfaceDestroyed(SurfaceHolder paramSurfaceHolder) {
-        if(mp != null){
+        if (mp != null) {
             mp.release();
             mp = null;
         }
     }
 
 
-
     //ボタンを押された時の処理
-    public void onClick(View v){
+    public void onClick(View v) {
         int id = v.getId();
-        switch(id) {
+        switch (id) {
             case R.id.buttonPlay://Playボタン押したとき
                 Button BtnPlayView = (Button) findViewById(R.id.buttonPlay);
                 Button BtnPauseView = (Button) findViewById(R.id.buttonPause);
                 BtnPlayView.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
                 BtnPauseView.setVisibility(View.VISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
                 speedcount = 0.0;
-                tSpeed.setText(String.format("%.1f",(float)(speedcount*10)));
+                tSpeed.setText(String.format("%.1f", (float) (speedcount * 10)));
                 mp.setPlaybackParams(params);
                 mp.seekTo(0);
 
@@ -313,9 +316,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 future.cancel(true);//タイマー一時停止
                 getplaytimefuture.cancel(true);//タイマー一時停止
                 speedcount = 0;
-                params.setSpeed((float)speedcount);
+                params.setSpeed((float) speedcount);
                 mp.setPlaybackParams(params);
-                tSpeed.setText(String.format("%.1f", (float)(speedcount*10)));
+                tSpeed.setText(String.format("%.1f", (float) (speedcount * 10)));
                 // ポップアップメニュー表示
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
                 alertDialog.setTitle("ポーズ");
@@ -326,11 +329,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                         //VideoSelectに戻る処理
                         getplaytimescheduler.shutdown();//サービス終了させる
                         timerscheduler.shutdown();//タイマー終了
-                        if(mp != null){
+                        if (mp != null) {
                             mp.release();
                             mp = null;
                         }
-                        Intent intent = new Intent(getApplication(),VideoSelect.class);
+                        Intent intent = new Intent(getApplication(), VideoSelect.class);
                         startActivity(intent);
                     }
                 });
@@ -341,7 +344,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                         getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 100, TimeUnit.MILLISECONDS);
                     }
                 });
-                AlertDialog myDialog =alertDialog.create();
+                AlertDialog myDialog = alertDialog.create();
                 myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
                 myDialog.show();
                 break;
@@ -350,34 +353,33 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction()==KeyEvent.ACTION_DOWN) {
-            if(event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
                 speedcount = speedcount + 0.1;
-                if(speedcount > 5)//意味わからないほど早くされるとクラッシュする対策
+                if (speedcount > 5)//意味わからないほど早くされるとクラッシュする対策
                 {
                     speedcount = 5;
                 }
                 /*動画の再生速度を変えるのに必要なプログラム↓*/
-                params.setSpeed((float)speedcount);//再生速度変更
+                params.setSpeed((float) speedcount);//再生速度変更
                 mp.setPlaybackParams(params);
                 //mp.start();
                 //tSpeed.setText(""+(float)(cnt*10));
-                tSpeed.setText(String.format("%.1f", (float)(speedcount*10)));
+                tSpeed.setText(String.format("%.1f", (float) (speedcount * 10)));
                 return true;
             }
         }
-        if (event.getAction()==KeyEvent.ACTION_DOWN) {
-            if(event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
                 speedcount = speedcount - 0.1;
-                if(speedcount <= 0.1)
-                {
+                if (speedcount <= 0.1) {
                     speedcount = 0.0;
                 }
                 /*動画の再生速度を変えるのに必要なプログラム↓*/
-                params.setSpeed((float)speedcount);//再生速度変更
+                params.setSpeed((float) speedcount);//再生速度変更
                 mp.setPlaybackParams(params);
                 //mp.start();
-                tSpeed.setText(String.format("%.1f", (float)(speedcount*10)));
+                tSpeed.setText(String.format("%.1f", (float) (speedcount * 10)));
                 return true;
             }
         }
@@ -394,27 +396,30 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     }
 
     //カウントアップタイマタスク
-    public class MyTimerTask implements Runnable{
+    public class MyTimerTask implements Runnable {
         private Handler timerhandler = new Handler();
         private long timercount = 0;
-        public void run(){
+
+        public void run() {
             // handlerを使って処理をキューイングする
             timerhandler.post(new Runnable() {
                 public void run() {
                     timercount++;
-                    long mm = timercount*100 / 1000 / 60;
-                    long ss = timercount*100 / 1000 % 60;
-                    long ms = (timercount*100 - ss * 1000 - mm * 1000 * 60)/100;
+                    long mm = timercount * 100 / 1000 / 60;
+                    long ss = timercount * 100 / 1000 % 60;
+                    long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
                 }
             });
         }
     }
+
     //再生時間取得タスク
-    public class MyGetPlayTimeTask implements Runnable{
+    public class MyGetPlayTimeTask implements Runnable {
         private Handler getplaytimehandler = new Handler();
-        public void run(){
+
+        public void run() {
             getplaytimehandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -424,10 +429,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             });
         }
     }
-}
+
 
     /* Handler for receiving messages from the USB Manager thread or the LED control modules */
-    private Handler handler = new Handler() {
+    private Handler handler2 = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -467,11 +472,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                                         TextView pole_value = (TextView) findViewById(R.id.textSpeed);
                                         byte p_val = commandPacket[1];
                                         sensor_value = (int) commandPacket[1];
-                                        float speed_tmp = sensor_value / 10;
-                                        Speed.setText(speed_tmp/10+"km/h");
-                                        params.setSpeed((float)(speed_tmp/10));//再生速度変更
-                                        player.setPlaybackParams(params);
-                                        flg = 1;
+                                        float speed_tmp = sensor_value / 20;
+                                        tSpeed.setText(speed_tmp * 10 + "km/h");
+                                        params.setSpeed((float) (speed_tmp * 10));//再生速度変更
+                                        mp.setPlaybackParams(params);
                                         break;
                                 }
 
@@ -500,7 +504,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                                     Log.d(TAG, "connect message sent.");
                                     break;
                                 default:
-                                    showErrorPage(VideoPlay.ErrorMessageCode.ERROR_FIRMWARE_PROTOCOL);
+                                    //showErrorPage(VideoPlay.ErrorMessageCode.ERROR_FIRMWARE_PROTOCOL);
                                     break;
                             }
                             break;
@@ -531,6 +535,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         return new Integer(major).intValue();
     }
 
+    /*
     private void showErrorPage(VideoPlay.ErrorMessageCode error) {
         setContentView(R.layout.error);
 
@@ -547,4 +552,5 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 //errorMessage.setText(getResources().getText(R.string.error_default));
                 break;
         }
-    }
+    }*/
+}
