@@ -157,6 +157,15 @@
             android:layout_alignBottom="@+id/Kyori"
             android:layout_toEndOf="@+id/Sinpaku" />
 
+        <Button
+            android:text="Pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textHeartbeat"
+            android:layout_alignParentStart="true"
+            android:id="@+id/buttonPause"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
 
