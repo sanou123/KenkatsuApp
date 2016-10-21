@@ -289,7 +289,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 @Override
                 public void run() {
                     tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
-                    //tMileage.setText(String.format("d", 83.7 / (mp.getDuration() / mp.getCurrentPosition()) ) );
+                    //tMileage.setText(String.format("%.2f",f3));
                 }
             });
         }
