@@ -20,8 +20,7 @@ import android.widget.Toast;
  * メイン画面に関連するクラス
  * MainActivity
  */
-public class UserUpdate extends AppCompatActivity implements
-        RadioGroup.OnCheckedChangeListener {
+public class UserUpdate extends AppCompatActivity {
 
     private EditText mEditText01Name;        // 名前
     private EditText mEditText01Age;         // 年齢
@@ -37,9 +36,6 @@ public class UserUpdate extends AppCompatActivity implements
 
 
     private Button mButton01Regist;             // 登録ボタン
-    private Button mButton01Show;               // 表示ボタン
-
-    private RadioGroup mRadioGroup01Show;       // 選択用ラジオボタングループ
 
     private Intent intent;                      // インテント
 
@@ -48,14 +44,12 @@ public class UserUpdate extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        setContentView(R.layout.user_registration);
+        setContentView(R.layout.user_update);
 
         findViews();        // 各部品の結びつけ処理
 
         init();             //初期値設定
 
-        // ラジオボタン選択時
-        mRadioGroup01Show.setOnCheckedChangeListener(this);
 
         // 登録ボタン押下時処理
         mButton01Regist.setOnClickListener(new View.OnClickListener() {
@@ -73,20 +67,6 @@ public class UserUpdate extends AppCompatActivity implements
 
                 // DBに登録
                 saveList();
-
-            }
-        });
-
-        // 表示ボタン押下時処理
-        mButton01Show.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (intent != null) {
-                    startActivity(intent);      // 各画面へ遷移
-                } else {
-                    Toast.makeText(UserUpdate.this, "ラジオボタンが選択されていません。",
-                            Toast.LENGTH_SHORT).show();
-                }
 
             }
         });
@@ -123,9 +103,6 @@ public class UserUpdate extends AppCompatActivity implements
         mText01Kome05 = (TextView) findViewById(R.id.text01Kome05);             // 体重の※印
 
         mButton01Regist = (Button) findViewById(R.id.button01Regist);           // 登録ボタン
-        mButton01Show = (Button) findViewById(R.id.button01Show);               // 表示ボタン
-
-        mRadioGroup01Show = (RadioGroup) findViewById(R.id.radioGroup01);       // 選択用ラジオボタングループ
 
     }
 
@@ -148,23 +125,7 @@ public class UserUpdate extends AppCompatActivity implements
         mEditText01Name.requestFocus();      // フォーカスを品名のEditTextに指定
     }
 
-    /**
-     * ラジオボタン選択処理
-     * onCheckedChanged()
-     */
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-            case R.id.radioButton01Product:         // 名前一覧(ListView×ArrayAdapter)を選択した場合
-                intent = new Intent(UserUpdate.this, SelectSheetProduct.class);
-                break;
-            case R.id.radioButton01TableLayout:     // TableLayout表示を選択した場合
-                intent = new Intent(UserUpdate.this, SelectSheetTable.class);
-                break;
-        }
-    }
-
-    /**
+        /**
      * EditTextに入力したテキストをDBに登録
      * saveDB()
      */

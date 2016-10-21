@@ -62,8 +62,8 @@ public class MainUser extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.SelectSheetListView");
+                intent.setClassName("com.example.a1521315.myapplication",
+                        "com.example.a1521315.myapplication.SelectSheetListView");
                 startActivity(intent);
 
                 // キーボードを非表示
@@ -96,8 +96,8 @@ public class MainUser extends AppCompatActivity implements
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.SelectSheetListView");
+                intent.setClassName("com.example.a1521315.myapplication",
+                        "com.example.a1521315.myapplication.SelectSheetListView");
                 startActivity(intent);
             }
         });
@@ -157,9 +157,6 @@ public class MainUser extends AppCompatActivity implements
         switch (checkedId) {
             case R.id.radioButton01Product:         // 名前一覧(ListView×ArrayAdapter)を選択した場合
                 intent = new Intent(MainUser.this, SelectSheetProduct.class);
-                break;
-            case R.id.radioButton01TableLayout:     // TableLayout表示を選択した場合
-                intent = new Intent(MainUser.this, SelectSheetTable.class);
                 break;
         }
     }
@@ -225,10 +222,13 @@ public class MainUser extends AppCompatActivity implements
             int iHeight = Integer.parseInt(strHeight);
             int iWeight = Integer.parseInt(strWeight);
 
+
+
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.saveDB(strName, iAge, strSex, iHeight, iWeight);   // DBに登録
+            dbAdapter.saveDB(strName, strAge, strSex, iHeight, iWeight
+            );   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定

@@ -4,20 +4,18 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.List;
  */
 public class SelectSheetListView1 extends AppCompatActivity {
 
-    private DBAdapter1 dbAdapter1;
+    private DBAdapter dbAdapter;
     private MyBaseAdapter myBaseAdapter;
     private List<MyListItem1> items;
     private ListView mListView04;
@@ -40,12 +38,10 @@ public class SelectSheetListView1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //横画面に固定
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.select_sheet_listview1);
 
         // DBAdapterのコンストラクタ呼び出し
-        dbAdapter1 = new DBAdapter1(this);
+        dbAdapter = new DBAdapter(this);
 
         // itemsのArrayList生成
         items = new ArrayList<>();
@@ -58,6 +54,19 @@ public class SelectSheetListView1 extends AppCompatActivity {
 
         loadMyList();   // DBを読み込む＆更新する処理
 
+        //行を押した時の処理
+        mListView04.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long name) {
+                // IDを取得する
+                myListItem1 = items.get(position);
+                String listName = myListItem1.getHeart_rate();
+                String columns = listName + "さんが選択されました";
+                Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(SelectSheetListView1.this, MenuSelect.class);
+                intent.putExtra("SELECTED_DATA",columns);
+                startActivity(intent);
+            }
+        });
 
         // 行を長押しした時の処理
         mListView04.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -78,10 +87,10 @@ public class SelectSheetListView1 extends AppCompatActivity {
                         myListItem1 = items.get(position);
                         String listId = myListItem1.getName();
 
-                        dbAdapter1.openDB();     // DBの読み込み(読み書きの方)
-                        dbAdapter1.selectDelete(String.valueOf(listId));     // DBから取得したIDが入っているデータを削除する
+                        dbAdapter.openDB();     // DBの読み込み(読み書きの方)
+                        dbAdapter.selectDelete(String.valueOf(listId));     // DBから取得したIDが入っているデータを削除する
                         Log.d("Long click : ", String.valueOf(listId));
-                        dbAdapter1.closeDB();    // DBを閉じる
+                        dbAdapter.closeDB();    // DBを閉じる
                         loadMyList();
                     }
                 });
@@ -100,15 +109,6 @@ public class SelectSheetListView1 extends AppCompatActivity {
             }
         });
 
-        Button btnDisp = (Button)findViewById(R.id.insert);
-        btnDisp.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.MainResult");
-                startActivity(intent);
-            }
-        });
     }
 
     /**
@@ -120,10 +120,10 @@ public class SelectSheetListView1 extends AppCompatActivity {
         //ArrayAdapterに対してListViewのリスト(items)の更新
         items.clear();
 
-        dbAdapter1.openDB();     // DBの読み込み(読み書きの方)
+        dbAdapter.openDB();     // DBの読み込み(読み書きの方)
 
         // DBのデータを取得
-        Cursor c = dbAdapter1.getDB(columns);
+        Cursor c = dbAdapter.getDB1(columns);
 
         if (c.moveToFirst()) {
             do {
@@ -137,7 +137,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
                         c.getString(5));
 
 
-                Log.d("取得したCursor(名前):", String.valueOf(c.getString(0)));
+                Log.d("取得したCursor(名前):", String.valueOf(c.getInt(0)));
                 Log.d("取得したCursor(心拍数):", c.getString(1));
                 Log.d("取得したCursor(消費カロリー):", c.getString(2));
                 Log.d("取得したCursor(体重変化):", c.getString(3));
@@ -150,7 +150,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
             } while (c.moveToNext());
         }
         c.close();
-        dbAdapter1.closeDB();                    // DBを閉じる
+        dbAdapter.closeDB();                    // DBを閉じる
         mListView04.setAdapter(myBaseAdapter);  // ListViewにmyBaseAdapterをセット
         myBaseAdapter.notifyDataSetChanged();   // Viewの更新
 
@@ -167,7 +167,6 @@ public class SelectSheetListView1 extends AppCompatActivity {
 
         // 毎回findViewByIdをする事なく、高速化が出来るようするholderクラス
         private class ViewHolder {
-            TextView text05Name;
             TextView text05Heart_rate;
             TextView text05Calorie_consumption;
             TextView text05Weight_fluctuates;
@@ -225,7 +224,6 @@ public class SelectSheetListView1 extends AppCompatActivity {
 
                 // holderにviewを持たせておく
                 holder = new ViewHolder();
-                holder.text05Name = text05Name;
                 holder.text05Heart_rate = text05Heart_rate;
                 holder.text05Calorie_consumption = text05Calorie_consumption;
                 holder.text05Weight_fluctuates = text05Weight_fluctuates;
@@ -239,7 +237,6 @@ public class SelectSheetListView1 extends AppCompatActivity {
             }
 
             // 取得した各データを各TextViewにセット
-            holder.text05Name.setText(myListItem1.getName());
             holder.text05Heart_rate.setText(myListItem1.getHeart_rate());
             holder.text05Calorie_consumption.setText(myListItem1.getCalorie_consumption());
             holder.text05Weight_fluctuates.setText(myListItem1.getWeight_fluctuates());
@@ -251,12 +248,4 @@ public class SelectSheetListView1 extends AppCompatActivity {
         }
     }
 
-    @Override
-    //戻るキーを無効にする
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

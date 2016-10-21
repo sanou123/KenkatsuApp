@@ -12,9 +12,12 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter1 {
 
-    private final static String DB_NAME = "b.db";      // DB名
+    private final static String DB_NAME = "a.db";      // DB名
     private final static String DB_TABLE = "measurement";       // DBのテーブル名
     private final static int DB_VERSION = 3;                // DBのバージョン
+
+    private final static String DB_TABLE1 = "kenkathu";       // DBのテーブル名
+
 
     /**
      * DBのカラム名
@@ -28,13 +31,13 @@ public class DBAdapter1 {
 
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
-    private DBHelper dbHelper1 = null;           // DBHelper
+    private DBHelper1 dbHelper1 = null;           // DBHelper
     protected Context context;                  // Context
 
     // コンストラクタ
     public DBAdapter1(Context context) {
         this.context = context;
-        dbHelper1 = new DBHelper(this.context);
+        dbHelper1 = new DBHelper1(this.context);
     }
 
     /**
@@ -186,10 +189,10 @@ public class DBAdapter1 {
      * データベースの生成やアップグレードを管理するSQLiteOpenHelperを継承したクラス
      * DBHelper
      */
-    private static class DBHelper extends SQLiteOpenHelper {
+    private static class DBHelper1 extends SQLiteOpenHelper {
 
         // コンストラクタ
-        public DBHelper(Context context) {
+        public DBHelper1(Context context) {
             //第1引数：コンテキスト
             //第2引数：DB名
             //第3引数：factory nullでよい
@@ -208,7 +211,7 @@ public class DBAdapter1 {
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl = "CREATE TABLE " + DB_TABLE + " ("
-                    + COL_NAME + " TEXT  name,"
+                    + COL_NAME + " TEXT  NOT NULL,"
                     + COL_HEART_RATE + " INTEGER NOT NULL,"
                     + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL,"
                     + COL_WEIGHT_FLUCTUATES + " INTEGER NOT NULL,"
