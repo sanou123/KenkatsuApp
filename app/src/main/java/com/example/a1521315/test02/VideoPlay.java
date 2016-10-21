@@ -55,11 +55,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_play);
         getWindow().setFormat(PixelFormat.TRANSPARENT);
+        Intent intent = getIntent();
+
+
         mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
         holder = mPreview.getHolder();
         holder.addCallback(this);
@@ -110,8 +114,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
+
         //String mediaPath = "/test02.mp4";//実機9のストレージにあるファイルを指定
-        String mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+
+        String mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
+
+
+        //String mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
 
         try {
             //MediaPlayerを生成
@@ -121,8 +130,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定している
 
             //動画ファイルをMediaPlayerに読み込ませる
-            mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
-            //mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
+            //mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
+            mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
 
 
             //読み込んだ動画ファイルを画面に表示する
@@ -289,8 +298,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             getplaytimehandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    float f1=0,f2=0,f3=0,f4=0;
+                    f4 = (float)83.7;
+                    f1 = mp.getDuration();
+                    f2 = mp.getCurrentPosition();
+                    f3 = f4 / ( f1 / f2);
                     tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
-                    //tMileage.setText(String.format("%.2f",f3));
+                    tMileage.setText(String.format("%.2f",f3));
+
                 }
             });
         }

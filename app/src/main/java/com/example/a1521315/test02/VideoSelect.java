@@ -20,15 +20,21 @@ public class VideoSelect extends Activity {
         Button btnDisp0 = (Button)findViewById(R.id.course0);
         btnDisp0.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.VideoPlay");
+                Intent intent = new Intent(getApplication(),VideoPlay.class);
+
+                startActivity(intent);
+            }
+        });
+        Button btnDisp1 = (Button)findViewById(R.id.course1);
+        btnDisp1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(),VideoPlay.class);
                 startActivity(intent);
             }
         });
 
-        Button btnDisp1 = (Button)findViewById(R.id.menu_serect);
-        btnDisp1.setOnClickListener(new View.OnClickListener() {
+        Button btnBack = (Button)findViewById(R.id.menu_serect);
+        btnBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
@@ -37,8 +43,8 @@ public class VideoSelect extends Activity {
             }
         });
 
-        Button btnDisp2 = (Button)findViewById(R.id.testtest);
-        btnDisp2.setOnClickListener(new View.OnClickListener() {
+        Button btnTest = (Button)findViewById(R.id.testtest);
+        btnTest.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
