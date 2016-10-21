@@ -25,7 +25,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
@@ -140,7 +139,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         int id = v.getId();
         switch(id) {
             case R.id.buttonPlay://Playボタン押したとき
-                Button BtnView = (Button) findViewById(R.id.buttonPlay);
+                Button BtnPlayView = (Button) findViewById(R.id.buttonPlay);
+                Button BtnPauseView = (Button) findViewById(R.id.buttonPause);
+                BtnPlayView.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
+                BtnPauseView.setVisibility(View.VISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
                 speedcount = 0.0;
                 tSpeed.setText(String.format("%.1f",(float)(speedcount*10)));
                 mp.setPlaybackParams(params);
@@ -154,7 +156,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 timer.schedule(timerTask, 0, 100); // スケジュールを設定 100msec// public void schedule (TimerTask task, long delay, long period)
                 timercount = 0;// カウンター
                 tTimer.setText("00:00.0");
-                BtnView.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
+
                 break;
 
             case R.id.buttonResult://Resultボタン押したとき
@@ -165,7 +167,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             case R.id.buttonPause://Pauseボタンを押したとき
                 //timerTask.cancel();
                 //mp.pause();//動画再生を一時停止
-                // 確認ダイアログの作成
+                speedcount = 0;
+                params.setSpeed((float)speedcount);
+                mp.setPlaybackParams(params);
+                tSpeed.setText(String.format("%.1f", (float)(speedcount*10)));
+                // ポップアップメニュー表示
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
                 alertDialog.setTitle("ポーズ");
                 alertDialog.setMessage("一時停止中です");
@@ -174,6 +180,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                     public void onClick(DialogInterface dialog, int which) {
                         //VideoSelectに戻る処理
                         srv.shutdown();//サービス終了させる
+                        timer.cancel();
                         if(mp != null){
                             mp.release();
                             mp = null;
@@ -240,8 +247,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             timer = null;
         }
         //リザルトボタンを表示
-        Button BtnView2 = (Button) findViewById(R.id.buttonResult);
-        BtnView2.setVisibility(View.VISIBLE);
+        Button BtnResultView = (Button) findViewById(R.id.buttonResult);
+        BtnResultView.setVisibility(View.VISIBLE);
         if(mp != null){
             mp.release();
             mp = null;

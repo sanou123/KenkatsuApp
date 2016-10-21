@@ -163,7 +163,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/textHeartbeat"
             android:layout_alignParentStart="true"
-            android:id="@+id/buttonPause" />
+            android:id="@+id/buttonPause"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 
