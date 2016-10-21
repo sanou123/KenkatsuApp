@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
@@ -19,6 +22,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -51,8 +56,34 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     PlaybackParams params = new PlaybackParams();
     double speedcount = 0.0;
 
+    //#########################################################
+    private final static int USBAccessoryWhat = 0;
+    public static final int UPDATE_LED_SETTING = 1;
+    public static final int POLE_SENSOR_CHANGE = 3;
+    public static final int APP_CONNECT = (int) 0xFE;
+    public static final int APP_DISCONNECT = (int) 0xFF;
+    public static final int POT_UPPER_LIMIT = 100;
+    public static final int POT_LOWER_LIMIT = 0;
+    public int flg = 0;
 
+    public int sensor_value = 0;
 
+    private boolean deviceAttached = false;
+
+    private int firmwareProtocol = 0;
+
+    public IntentFilter filter_a;
+
+    private String TAG = "KENKATU";
+
+    private enum ErrorMessageCode {
+        ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING,
+        ERROR_FIRMWARE_PROTOCOL
+    };
+
+    private USBAccessoryManager accessoryManager;
+
+    //#########################################################
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +113,17 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         findViewById(R.id.buttonResult).setOnClickListener(this);
         findViewById(R.id.buttonPause).setOnClickListener(this);
 
+        //#####################################################################################################
+        accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
+        try {
+            PackageManager manager = this.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+            Log.d(TAG, "Info:" + info.packageName + "\n" + info.versionCode + "\n" + info.versionName);
+        } catch (PackageManager.NameNotFoundException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        //#####################################################################################################
 
     }
     // 再生完了時の処理
@@ -101,11 +143,99 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();//##
         if(mp != null){
             mp.release();
             mp = null;
         }
     }
+
+    //#################################################################################################
+    @Override
+    public void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
+        Toast.makeText(this, "onStart", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+        accessoryManager.enable(this, getIntent());
+        Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(this, "onStop", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //player.release();
+        Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
+
+        switch (firmwareProtocol) {
+            case 2:
+                byte[] commandPacket = new byte[2];
+                commandPacket[0] = (byte) APP_DISCONNECT;
+                commandPacket[1] = 0;
+                accessoryManager.write(commandPacket);
+                break;
+        }
+
+        try {
+            while (accessoryManager.isClosed() == false) {
+                Thread.sleep(2000);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        super.onPause();
+        accessoryManager.disable(this);
+        disconnectAccessory();
+    }
+
+    /* Resets the demo application when a device detaches */
+    public void disconnectAccessory() {
+        Log.d(TAG, "disconnectAccessory()");
+        Toast.makeText(this, "disconect accessory", Toast.LENGTH_LONG).show();
+
+        if (deviceAttached == false) {
+            Toast.makeText(this, "デバイスが切断されました", Toast.LENGTH_LONG).show();
+            return;
+        }
+        else{
+
+        }
+    }
+
+    /* インスタンスの状態を保存している */
+    /*
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        if (deviceAttached == false) {
+            //Log.d(TAG,"Device not connected.");
+            Toast.makeText(this, "onSaveIntstanceState", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //Save the UI state into the savedInstanceState Bundle.
+        //  We only need to save the state of the LEDs since they are the only control.
+        //  The state of the potentiometer and push buttons can be read and restored
+        //  from their current hardware state.
+        //savedInstanceState.putInt("POT", ((ProgressBar) findViewById(R.id.progress_bar)).getProgress());
+
+        //Call the super function that we are over writing now that we have saved our data.
+        super.onSaveInstanceState(savedInstanceState);
+    }
+    */
+
+    //#################################################################################################
 
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
@@ -295,3 +425,126 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
     }
 }
+
+    /* Handler for receiving messages from the USB Manager thread or the LED control modules */
+    private Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            byte[] commandPacket = new byte[2];
+            Log.d(TAG, "handleMessage");
+            switch (msg.what) {
+                case UPDATE_LED_SETTING:
+                    if (accessoryManager.isConnected() == false) {
+                        return;
+                    }
+
+                    /* LED初期化 */
+                    /*commandPacket[0] = UPDATE_LED_SETTING;
+                    commandPacket[1] = 0;
+                    accessoryManager.write(commandPacket);
+                    */
+                    break;
+
+                case USBAccessoryWhat:
+                    switch (((USBAccessoryManagerMessage) msg.obj).type) {
+                        case READ:
+                            if (accessoryManager.isConnected() == false) {
+                                return;
+                            }
+
+                            while (true) {
+                                if (accessoryManager.available() < 2) {
+                                    //All of our commands in this example are 2 bytes.  If there are less
+                                    //  than 2 bytes left, it is a partial command
+                                    break;
+                                }
+
+                                accessoryManager.read(commandPacket);
+
+                                switch (commandPacket[0]) {
+                                    case POLE_SENSOR_CHANGE:
+                                        TextView pole_value = (TextView) findViewById(R.id.textSpeed);
+                                        byte p_val = commandPacket[1];
+                                        sensor_value = (int) commandPacket[1];
+                                        float speed_tmp = sensor_value / 10;
+                                        Speed.setText(speed_tmp/10+"km/h");
+                                        params.setSpeed((float)(speed_tmp/10));//再生速度変更
+                                        player.setPlaybackParams(params);
+                                        flg = 1;
+                                        break;
+                                }
+
+                            }
+                            break;
+                        case CONNECTED:
+                            //追加すればうごくかも？
+                            //accessoryManager.enable(VideoPlay.this, getIntent());
+                            break;
+                        case READY:
+                            //setTitle("Device connected.");
+                            Log.d(TAG, "STAND BY OK");
+                            String version = ((USBAccessoryManagerMessage) msg.obj).accessory.getVersion();
+                            firmwareProtocol = getFirmwareProtocol(version);
+
+                            switch (firmwareProtocol) {
+                                case 1:
+                                    deviceAttached = true;
+                                    break;
+                                case 2:
+                                    deviceAttached = true;
+                                    commandPacket[0] = (byte) APP_CONNECT;
+                                    commandPacket[1] = 0;
+                                    Log.d(TAG, "sending connect message.");
+                                    accessoryManager.write(commandPacket);
+                                    Log.d(TAG, "connect message sent.");
+                                    break;
+                                default:
+                                    showErrorPage(VideoPlay.ErrorMessageCode.ERROR_FIRMWARE_PROTOCOL);
+                                    break;
+                            }
+                            break;
+                        case DISCONNECTED:
+                            disconnectAccessory();
+                            break;
+                    }
+
+                    break;
+                default:
+                    break;
+            }    //switch
+        } //handleMessage
+
+    }; //handler
+
+    private int getFirmwareProtocol(String version) {
+
+        String major = "0";
+
+        int positionOfDot;
+
+        positionOfDot = version.indexOf('.');
+        if (positionOfDot != -1) {
+            major = version.substring(0, positionOfDot);
+        }
+
+        return new Integer(major).intValue();
+    }
+
+    private void showErrorPage(VideoPlay.ErrorMessageCode error) {
+        setContentView(R.layout.error);
+
+        TextView errorMessage = (TextView) findViewById(R.id.error_message);
+
+        switch (error) {
+            case ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING:
+                //errorMessage.setText(getResources().getText(R.string.error_missing_open_accessory_framework));
+                break;
+            case ERROR_FIRMWARE_PROTOCOL:
+                //errorMessage.setText(getResources().getText(R.string.error_firmware_protocol));
+                break;
+            default:
+                //errorMessage.setText(getResources().getText(R.string.error_default));
+                break;
+        }
+    }
