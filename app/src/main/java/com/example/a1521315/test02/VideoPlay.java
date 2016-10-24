@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
 import android.os.Message;
+import android.system.ErrnoException;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -34,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.OnClickListener, MediaPlayer.OnCompletionListener {
-    Handler handler = new Handler();
+    //Handler handler = new Handler();
     TextView tSpeed;//時速の変数
     TextView tMileage;//走行距離の変数
     TextView tHeartbeat;//心拍の変数
@@ -115,7 +116,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         findViewById(R.id.buttonPause).setOnClickListener(this);
 
         //#####################################################################################################1
-        accessoryManager = new USBAccessoryManager(handler2, USBAccessoryWhat);
+        accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
         try {
             PackageManager manager = this.getPackageManager();
             PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
@@ -165,8 +166,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
-        accessoryManager.enable(this, getIntent());
         Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
+        accessoryManager.enable(this, getIntent());
     }
 
     @Override
@@ -374,44 +375,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         return super.onKeyDown(keyCode, event);
     }
 
-    //カウントアップタイマタスク
-    public class MyTimerTask implements Runnable {
-        private Handler timerhandler = new Handler();
-        private long timercount = 0;
-
-        public void run() {
-            // handlerを使って処理をキューイングする
-            timerhandler.post(new Runnable() {
-                public void run() {
-                    timercount++;
-                    long mm = timercount * 100 / 1000 / 60;
-                    long ss = timercount * 100 / 1000 % 60;
-                    long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
-                    // 桁数を合わせるために02d(2桁)を設定
-                    tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
-                }
-            });
-        }
-    }
-
-    //再生時間取得タスク
-    public class MyGetPlayTimeTask implements Runnable {
-        private Handler getplaytimehandler = new Handler();
-
-        public void run() {
-            getplaytimehandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
-                    //tMileage.setText(String.format("%.2f",f3));
-                }
-            });
-        }
-    }
-
-
     // USB通信のタスク
-    private Handler handler2 = new Handler() {
+    private Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -462,7 +427,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                             break;
                         case CONNECTED:
                             //追加すればうごくかも？
-                            accessoryManager.enable(VideoPlay.this, getIntent());
+                            //accessoryManager.enable(VideoPlay.this, getIntent());
                             break;
                         case READY:
                             //setTitle("Device connected.");
@@ -499,6 +464,44 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         } //handleMessage
 
     }; //handler
+
+    //カウントアップタイマタスク
+    public class MyTimerTask implements Runnable {
+        private Handler timerhandler = new Handler();
+        private long timercount = 0;
+
+        public void run() {
+            // handlerを使って処理をキューイングする
+            timerhandler.post(new Runnable() {
+                public void run() {
+                    timercount++;
+                    long mm = timercount * 100 / 1000 / 60;
+                    long ss = timercount * 100 / 1000 % 60;
+                    long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
+                    // 桁数を合わせるために02d(2桁)を設定
+                    tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
+                }
+            });
+        }
+    }
+
+    //再生時間取得タスク
+    public class MyGetPlayTimeTask implements Runnable {
+        private Handler getplaytimehandler = new Handler();
+
+        public void run() {
+            getplaytimehandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
+                    //tMileage.setText(String.format("%.2f",f3));
+                }
+            });
+        }
+    }
+
+
+
 
     private int getFirmwareProtocol(String version) {
 
