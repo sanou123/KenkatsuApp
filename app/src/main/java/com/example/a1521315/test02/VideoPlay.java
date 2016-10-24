@@ -57,7 +57,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     PlaybackParams params = new PlaybackParams();
     double speedcount = 0.0;
 
-    //#########################################################
+    //#########################################################1
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
     public static final int POLE_SENSOR_CHANGE = 3;
@@ -84,7 +84,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     private USBAccessoryManager accessoryManager;
 
-    //#########################################################
+    //#########################################################2
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,7 +114,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         findViewById(R.id.buttonResult).setOnClickListener(this);
         findViewById(R.id.buttonPause).setOnClickListener(this);
 
-        //#####################################################################################################
+        //#####################################################################################################1
         accessoryManager = new USBAccessoryManager(handler2, USBAccessoryWhat);
         try {
             PackageManager manager = this.getPackageManager();
@@ -124,7 +124,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        //#####################################################################################################
+        //#####################################################################################################2
 
     }
 
@@ -153,7 +153,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
     }
 
-    //#################################################################################################
+    //#################################################################################################1
     @Override
     public void onStart() {
         Log.d(TAG, "onStart");
@@ -216,28 +216,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
     }
 
-    /* インスタンスの状態を保存している */
-    /*
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        if (deviceAttached == false) {
-            //Log.d(TAG,"Device not connected.");
-            Toast.makeText(this, "onSaveIntstanceState", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        //Save the UI state into the savedInstanceState Bundle.
-        //  We only need to save the state of the LEDs since they are the only control.
-        //  The state of the potentiometer and push buttons can be read and restored
-        //  from their current hardware state.
-        //savedInstanceState.putInt("POT", ((ProgressBar) findViewById(R.id.progress_bar)).getProgress());
-
-        //Call the super function that we are over writing now that we have saved our data.
-        super.onSaveInstanceState(savedInstanceState);
-    }
-    */
-
-    //#################################################################################################
+    //#################################################################################################2
 
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
