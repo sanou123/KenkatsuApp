@@ -203,7 +203,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         disconnectAccessory();
     }
 
-    /* Resets the demo application when a device detaches */
+    // Resets the demo application when a device detaches
     public void disconnectAccessory() {
         Log.d(TAG, "disconnectAccessory()");
         Toast.makeText(this, "disconect accessory", Toast.LENGTH_LONG).show();
@@ -410,7 +410,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     }
 
 
-    /* Handler for receiving messages from the USB Manager thread or the LED control modules */
+    // USB通信のタスク
     private Handler handler2 = new Handler() {
 
         @Override
@@ -462,7 +462,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                             break;
                         case CONNECTED:
                             //追加すればうごくかも？
-                            //accessoryManager.enable(VideoPlay.this, getIntent());
+                            accessoryManager.enable(VideoPlay.this, getIntent());
                             break;
                         case READY:
                             //setTitle("Device connected.");
@@ -483,7 +483,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                                     Log.d(TAG, "connect message sent.");
                                     break;
                                 default:
-                                    //showErrorPage(VideoPlay.ErrorMessageCode.ERROR_FIRMWARE_PROTOCOL);
+                                    showErrorPage(VideoPlay.ErrorMessageCode.ERROR_FIRMWARE_PROTOCOL);
                                     break;
                             }
                             break;
@@ -506,6 +506,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
         int positionOfDot;
 
+        Toast.makeText(this, "getFirmware", Toast.LENGTH_LONG).show();
+
         positionOfDot = version.indexOf('.');
         if (positionOfDot != -1) {
             major = version.substring(0, positionOfDot);
@@ -514,12 +516,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         return new Integer(major).intValue();
     }
 
-    /*
+
     private void showErrorPage(VideoPlay.ErrorMessageCode error) {
-        setContentView(R.layout.error);
+        //setContentView(R.layout.error);
 
-        TextView errorMessage = (TextView) findViewById(R.id.error_message);
-
+        //TextView errorMessage = (TextView) findViewById(R.id.error_message);
+        Toast.makeText(this, "error", Toast.LENGTH_LONG).show();
         switch (error) {
             case ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING:
                 //errorMessage.setText(getResources().getText(R.string.error_missing_open_accessory_framework));
@@ -531,5 +533,5 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 //errorMessage.setText(getResources().getText(R.string.error_default));
                 break;
         }
-    }*/
+    }
 }
