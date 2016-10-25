@@ -62,8 +62,8 @@ public class MainUser extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.myapplication",
-                        "com.example.a1521315.myapplication.SelectSheetListView");
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.SelectSheetListView");
                 startActivity(intent);
 
                 // キーボードを非表示
@@ -96,8 +96,8 @@ public class MainUser extends AppCompatActivity implements
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.myapplication",
-                        "com.example.a1521315.myapplication.SelectSheetListView");
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.SelectSheetListView");
                 startActivity(intent);
             }
         });
@@ -227,7 +227,7 @@ public class MainUser extends AppCompatActivity implements
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.saveDB(strName, strAge, strSex, iHeight, iWeight
+            dbAdapter.saveDB(strName, iAge, strSex, iHeight, iWeight
             );   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 

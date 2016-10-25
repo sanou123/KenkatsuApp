@@ -20,7 +20,7 @@ import android.widget.Toast;
  */
 public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocusChangeListener, SearchView.OnQueryTextListener {
 
-    DBAdapter1 dbAdapter1;
+    DBAdapter dbAdapter;
 
     private SearchView mSearchView04;           // 検索窓
     private TableLayout mTableLayout04List;     //データ表示用TableLayout
@@ -38,7 +38,7 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.select_sheet_table1);
 
-        dbAdapter1 = new DBAdapter1(this);
+        dbAdapter = new DBAdapter(this);
 
         findViews();        // 各部品の結び付け
 
@@ -70,7 +70,7 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
     @Override
     public boolean onQueryTextSubmit(String query) {
 
-        dbAdapter1.readDB();                         // DBの読み込み(読み込みの方)
+        dbAdapter.readDB();                         // DBの読み込み(読み込みの方)
 
         mSearchView04.clearFocus();                 // 検索窓のフォーカスを外す(=キーボードを非表示)
 
@@ -107,7 +107,7 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
         String[] name = {query};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
-        Cursor c = dbAdapter1.searchDB(null, column, name);
+        Cursor c = dbAdapter.searchDB(null, column, name);
 
         if (c.moveToFirst()) {
             do {
@@ -148,7 +148,7 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
             Toast.makeText(this, "検索結果 0件", Toast.LENGTH_SHORT).show();
         }
         c.close();
-        dbAdapter1.closeDB();        // DBを閉じる
+        dbAdapter.closeDB();        // DBを閉じる
 
         return false;
     }

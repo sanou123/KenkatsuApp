@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "test1.db";      // DB名
+    private final static String DB_NAME = "abcde.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
     private final static int DB_VERSION = 1;                // DBのバージョン
@@ -32,7 +32,6 @@ public class DBAdapter {
     public final static String COL_WEIGHT = "weight";        // 体重
 
 
-    public final static String COL_YMDHM = "ymdhm";    // 年月日時分
     public final static String COL_HEART_RATE = "heart_rate";    // 心拍数
     public final static String COL_CALORIE_CONSUMPTION = "calorie_consumption";      // 消費カロリー
     public final static String COL_WEIGHT_FLUCTUATES = "weight_fluctuates";      // 体重変化
@@ -91,7 +90,7 @@ public class DBAdapter {
      * @param height  身長
      * @param weight   体重
      */
-    public void saveDB(String name, String age, String sex, int height, int weight) {
+    public void saveDB(String name, int age, String sex, int height, int weight) {
 
         db.beginTransaction();          // トランザクション開始
 
@@ -119,7 +118,7 @@ public class DBAdapter {
     }
 
 
-    public void saveDB2(String name ,int ymdhm, int heart_rate, int calorie_consumption, int weight_fluctuates,
+    public void saveDB2(String name , int heart_rate, int calorie_consumption, int weight_fluctuates,
                         int total_time, int total_distance) {
 
         db.beginTransaction();          // トランザクション開始
@@ -127,7 +126,6 @@ public class DBAdapter {
         try {
             ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
             values.put(COL_NAME, name);
-            values.put(COL_YMDHM, ymdhm);
             values.put(COL_HEART_RATE, heart_rate);
             values.put(COL_CALORIE_CONSUMPTION, calorie_consumption);
             values.put(COL_WEIGHT_FLUCTUATES, weight_fluctuates);
@@ -301,7 +299,7 @@ public class DBAdapter {
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_user = "CREATE TABLE " + DB_TABLE_USER + " ("
                     + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + COL_NAME + " TEXT FOREIGN  KEY,"
+                    + COL_NAME + " TEXT forgin key,"
                     + COL_AGE + " INTEGER NOT NULL,"
                     + COL_SEX + " TEXT NOT NULL,"
                     + COL_HEIGHT + " INTEGER NOT NULL,"
@@ -310,8 +308,7 @@ public class DBAdapter {
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_data = "CREATE TABLE " + DB_TABLE_DATA + " ("
-                    + COL_NAME
-                    + COL_YMDHM + "INTEGER"
+                    + COL_NAME + "  name  ,"
                     + COL_HEART_RATE + " INTEGER NOT NULL,"
                     + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL,"
                     + COL_WEIGHT_FLUCTUATES + " INTEGER NOT NULL,"

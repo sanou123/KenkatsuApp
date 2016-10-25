@@ -3,9 +3,9 @@ package com.example.a1521315.test02;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,10 +13,6 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 /**
  * メイン画面に関連するクラス
@@ -51,6 +47,8 @@ public class MainResult extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_result);
+        //横画面に固定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         findViews();        // 各部品の結びつけ処理
 
@@ -64,8 +62,8 @@ public class MainResult extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.myapplication",
-                        "com.example.a1521315.myapplication.MenuSelect");
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.MenuSelect");
                 startActivity(intent);
 
                 // キーボードを非表示
@@ -97,8 +95,8 @@ public class MainResult extends AppCompatActivity implements
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.myapplication",
-                        "com.example.a1521315.myapplication.SelectSheetListView1");
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.SelectSheetListView1");
                 startActivity(intent);
             }
         });
@@ -152,7 +150,7 @@ public class MainResult extends AppCompatActivity implements
         mText01Kome05.setText("");
         mText01Kome06.setText("");
 
-        mEditText01Heart_rate.requestFocus();      // フォーカスを品名のEditTextに指定
+        mEditText01Name.requestFocus();      // フォーカスを品名のEditTextに指定
     }
 
     /**
@@ -163,7 +161,7 @@ public class MainResult extends AppCompatActivity implements
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.radioButton01Product1:         // 品名一覧(ListView×ArrayAdapter)を選択した場合
-                intent = new Intent(MainResult.this, SelectSheetProduct.class);
+                intent = new Intent(MainResult.this, SelectSheetProduct1.class);
                 break;
             case R.id.radioButton01ListView1:        // ListView表示を選択した場合
                 intent = new Intent(MainResult.this, SelectSheetListView1.class);
@@ -178,7 +176,7 @@ public class MainResult extends AppCompatActivity implements
      * EditTextに入力したテキストをDBに登録
      * saveDB()
      */
-    private String saveList() {
+    private void saveList() {
 
         // 各EditTextで入力されたテキストを取得
         String strName = mEditText01Name.getText().toString();
@@ -233,15 +231,7 @@ public class MainResult extends AppCompatActivity implements
 
         } else {        // EditTextが全て入力されている場合
 
-            /**
-             * 現在日時をyyyy/MM/dd HH:mm:ss形式で取得する.<br>
-             */
-            final  DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            final Date date = new Date(System.currentTimeMillis());
-            return df.format(date);
-
             // 入力された値を文字列からint型へ変換
-            String strymdhm = Integer.parseInt(date);
             int iHeart_rate = Integer.parseInt(strHeart_rate);
             int iCalorie_consumption = Integer.parseInt(strCalorie_consumption);
             int iWeight_fluctuates = Integer.parseInt(strWeight_fluctuates);
@@ -251,7 +241,7 @@ public class MainResult extends AppCompatActivity implements
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.saveDB2(strName, strymdhm, iHeart_rate, iCalorie_consumption, iWeight_fluctuates,
+            dbAdapter.saveDB2(strName,iHeart_rate, iCalorie_consumption, iWeight_fluctuates,
                     iTotal_time, iTotal_distance);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
@@ -259,16 +249,6 @@ public class MainResult extends AppCompatActivity implements
 
         }
 
-        return strName;
-    }
-
-    @Override
-    //戻るキーを無効にする
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
 }
