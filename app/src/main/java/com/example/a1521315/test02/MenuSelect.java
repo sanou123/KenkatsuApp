@@ -1,16 +1,17 @@
 package com.example.a1521315.test02;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
 
 
-public class MenuSelect extends Activity {
-    protected MyListItem myListItem;
+public class MenuSelect extends AppCompatActivity {
+    protected MyListItem MyListItem;
 
     /**
      * Called when the activity is first created.
@@ -21,10 +22,12 @@ public class MenuSelect extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-                //menu_serectのレイアウトを使用
+        //横画面に固定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //menu_selectのレイアウトを使用
         setContentView(R.layout.menu_select);
 
-        //trainingボタンを押した時TrainingSerectへ移動
+        //trainingボタンを押した時TrainingSelectへ移動
         Button btnDisp0 = (Button) findViewById(R.id.training);
         btnDisp0.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -69,7 +72,7 @@ public class MenuSelect extends Activity {
             }
         });
 
-        //user_serectボタンを押した時UserSerectへ移動
+        //user_selectボタンを押した時UserSelectへ移動
         Button btnDisp4 = (Button) findViewById(R.id.user_serect);
         btnDisp4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -81,7 +84,7 @@ public class MenuSelect extends Activity {
             }
         });
 
-        //user_serectボタンを押した時UserSerectへ移動
+        //user_selectボタンを押した時UserSerectへ移動
         Button btnDisp5 = (Button) findViewById(R.id.search);
         btnDisp5.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

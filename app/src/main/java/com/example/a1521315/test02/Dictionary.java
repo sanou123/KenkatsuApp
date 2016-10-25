@@ -4,6 +4,7 @@ package com.example.a1521315.test02;
  * Created by Administrator on 2016/09/29.
  */
 
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,8 @@ public class Dictionary extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //横画面に固定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.dictionary);
         // 親ノードのリスト
         List<Map<String, String>> parentList = new ArrayList<Map<String, String>>();

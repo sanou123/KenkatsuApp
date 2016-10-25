@@ -2,6 +2,7 @@ package com.example.a1521315.test02;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ public class Search extends Activity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            //横画面に固定
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             setContentView(R.layout.search);
 
             TextView textView = (TextView)findViewById(R.id.textView);

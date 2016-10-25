@@ -7,10 +7,9 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -19,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -94,7 +94,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         tCourse.setText("コース"+CourseNum);
 
         if(CourseNum.equals("0")) {
-            mediaPath = "/test02.mp4";//実機9のストレージにあるファイルを指定
+            mediaPath = "/test01.mp4";//実機9のストレージにあるファルを指定
             TotalMileage = 10.4;
             //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
         }else if(CourseNum.equals("1")) {
