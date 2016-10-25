@@ -1,81 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0099cc"
-    tools:context=".VideoPlay">
+    tools:context="com.example.a1521315.test02.VideoPlay">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
-    <FrameLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            >
+        <SurfaceView android:id="@+id/surfaceView1" android:layout_width="match_parent" android:layout_height="match_parent"></SurfaceView>
+    </RelativeLayout>
 
-            <SurfaceView android:id="@+id/surfaceView1" android:layout_width="wrap_content" android:layout_height="wrap_content"></SurfaceView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/black_overlay"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
-        </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            >
-
-            <TextView
-                android:id="@+id/TextView01"
-                android:layout_width="270dp"
-                android:layout_height="wrap_content"
-                android:textColor="#FF0000"
-                android:text="現在の心拍:86bpm"
-                android:textSize="80px"
-                android:layout_gravity="right" />
-
-            <TextView
-                android:id="@+id/TextView02"
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:textColor="#FF0000"
-                android:text="走行距離:1.2km"
-                android:textSize="80px"
-                android:layout_gravity="right" />
+        <RelativeLayout
+            android:layout_width="92dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true">
 
             <ImageView
                 android:orientation="vertical"
                 android:id="@+id/image_view_1"
+                android:gravity="left"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/image_view_2" />
+
+            <ImageView
+                android:orientation="vertical"
+                android:id="@+id/image_view_2"
                 android:scaleType="fitCenter"
                 android:gravity="left"
                 android:layout_width="30dp"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="14dp" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-    </FrameLayout>
-    <TextView
-        android:id="@+id/TextView03"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
-        android:textColor="#FF0000"
-        android:text="時速:0.0km/h"
-        android:textSize="80px"
-        android:layout_gravity="right|bottom" />
+        <TextView
+            android:text="aaaaaaaaaaaaaaa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTest"
+            android:textSize="30sp"
+            android:textColor="@android:color/holo_orange_light"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:text="リザルト"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonResult"
+            android:visibility="invisible"
+            android:layout_above="@+id/buttonPlay"
+            android:layout_alignStart="@+id/buttonPlay"
+            android:layout_marginBottom="87dp" />
+
+        <Button
+            android:text="PLAY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonPlay"
+            android:visibility="visible"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="00:00.0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTimer"
+            android:textSize="50sp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/background_light"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="心拍:      "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/Sinpaku"
+            android:textSize="36sp"
+            android:textColor="@android:color/holo_red_light"
+            android:layout_above="@+id/Kyori"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/textHeartbeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_dark"
+            android:text="0"
+            android:textSize="80px"
+            android:layout_gravity="right"
+            android:layout_above="@+id/textMileage"
+            android:layout_alignEnd="@+id/Sinpaku" />
+
+        <TextView
+            android:text="        時速:             km/h"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/Jisoku"
+            android:textSize="36sp"
+            android:lineSpacingExtra="36sp"
+            android:textColor="@android:color/holo_red_light"
+            android:layout_alignTop="@+id/textSpeed"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="走行距離:             km"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/Kyori"
+            android:textSize="36sp"
+            android:textColor="@android:color/holo_red_light"
+            android:layout_above="@+id/Jisoku"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/textSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:text="0.0"
+            android:textSize="80px"
+            android:layout_gravity="right|bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/textMileage" />
+
+        <TextView
+            android:id="@+id/textMileage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:text="0.0"
+            android:textSize="80px"
+            android:layout_gravity="right"
+            android:layout_marginStart="30dp"
+            android:layout_alignBaseline="@+id/Kyori"
+            android:layout_alignBottom="@+id/Kyori"
+            android:layout_toEndOf="@+id/Sinpaku" />
+
+        <Button
+            android:text="Pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textHeartbeat"
+            android:layout_alignParentStart="true"
+            android:id="@+id/buttonPause"
+            android:visibility="invisible" />
+
+        <TextView
+            android:text="コース番号"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textCourse"
+            android:textSize="36sp"
+            android:textColor="@android:color/holo_red_light"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+
 </FrameLayout>

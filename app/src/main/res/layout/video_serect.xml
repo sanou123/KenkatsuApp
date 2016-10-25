@@ -20,7 +20,13 @@
         android:id="@+id/course0"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="伊豆沼一周(約13km)"/>
+        android:text="ポリテクから大地家(約10km)"/>
+
+    <Button
+        android:text="東京IC→御殿場IC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/course1" />
 
     <Button
         android:layout_width="wrap_content"

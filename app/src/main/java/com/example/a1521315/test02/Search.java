@@ -27,9 +27,7 @@ public class Search extends Activity {
             Intent intent = new Intent( this, MenuSelect.class );//kaede_jishoブランチでSelectに変更したらエラー起きたから戻した
             startActivity( intent );
 
-            //Uri uri = Uri.parse("https://twitter.com/intent/tweet?hashtags=けんかつ！APP &text=ぼくはけんこうです！やったー！");
-            //Uri uri = Uri.parse("http://hashtagsjp.appspot.com/tag/けんかつ！APP");
-            Uri uri = Uri.parse("https://twitter.com/search?q=＃けんかつ！APP");
+            Uri uri = Uri.parse("https://twitter.com/search?q=＃けんかつAPP");
             Intent i = new Intent(Intent.ACTION_VIEW,uri);
             startActivity(i);
 
