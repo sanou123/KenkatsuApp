@@ -56,12 +56,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
 
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_play);
         getWindow().setFormat(PixelFormat.TRANSPARENT);
-        Intent intent = getIntent();
 
 
         mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
@@ -86,6 +87,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         findViewById(R.id.buttonPlay).setOnClickListener(this);
         findViewById(R.id.buttonResult).setOnClickListener(this);
         findViewById(R.id.buttonPause).setOnClickListener(this);
+
+        //コース番号受け取り
+        Intent i = getIntent();
+        String CourseNum = i.getStringExtra("course");
+        TextView tText = (TextView)findViewById(R.id.textT);
+        tText.setText(CourseNum);
 
 
     }
@@ -114,13 +121,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
+        String mediaPath = null;//動画データ
+       // if(CourseNum == "0") {
+            mediaPath = "/test02.mp4";//実機9のストレージにあるファイルを指定
 
-        //String mediaPath = "/test02.mp4";//実機9のストレージにあるファイルを指定
-
-        String mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
-
-
-        //String mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+            //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+        //}else if(CourseNum == "1") {
+        //    mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
+        //}
 
         try {
             //MediaPlayerを生成
@@ -298,11 +306,16 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             getplaytimehandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    float f1=0,f2=0,f3=0,f4=0;
-                    f4 = (float)83.7;
+                    double TotalMileage=0;//総走行距離
+                    //if(CourseNum == "0") {
+                        TotalMileage = 10.4;
+                    //}else if(CourseNum == "1") {
+                    //    TotalMileage = 83.7;
+                    //}
+                    double f1=0,f2=0,f3=0;
                     f1 = mp.getDuration();
                     f2 = mp.getCurrentPosition();
-                    f3 = f4 / ( f1 / f2);
+                    f3 = TotalMileage / ( f1 / f2);
                     tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
                     tMileage.setText(String.format("%.2f",f3));
 

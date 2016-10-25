@@ -21,7 +21,7 @@ public class VideoSelect extends Activity {
         btnDisp0.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(),VideoPlay.class);
-
+                intent.putExtra("course","0");//VideoPlayにコース番号を渡す
                 startActivity(intent);
             }
         });
@@ -29,6 +29,7 @@ public class VideoSelect extends Activity {
         btnDisp1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(),VideoPlay.class);
+                intent.putExtra("course","1");//VideoPlayにコース番号を渡す
                 startActivity(intent);
             }
         });

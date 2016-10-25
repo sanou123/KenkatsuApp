@@ -166,6 +166,17 @@
             android:id="@+id/buttonPause"
             android:visibility="invisible" />
 
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/buttonPlay"
+            android:layout_alignEnd="@+id/Kyori"
+            android:layout_marginBottom="42dp"
+            android:id="@+id/textT"
+            android:textSize="36sp"
+            android:textColor="@android:color/holo_red_light" />
+
     </RelativeLayout>
 
 
