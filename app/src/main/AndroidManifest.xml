@@ -53,7 +53,7 @@
             android:name=".SelectSheetTable" />
 
         <activity
-            android:name=".MainResult" />
+            android:name=".Result" />
 
         <activity
             android:name=".SelectSheetTable1"
