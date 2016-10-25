@@ -40,7 +40,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     private SurfaceView mPreview;
     private MediaPlayer mp = null;
 
-
     private ScheduledExecutorService getplaytimescheduler;
     Runnable mygetplaytimetask = new MyGetPlayTimeTask();
     ScheduledFuture getplaytimefuture;
@@ -63,7 +62,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_play);
         getWindow().setFormat(PixelFormat.TRANSPARENT);
-
 
         mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
         holder = mPreview.getHolder();
@@ -124,7 +122,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         String mediaPath = null;//動画データ
        // if(CourseNum == "0") {
             mediaPath = "/test02.mp4";//実機9のストレージにあるファイルを指定
-
             //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
         //}else if(CourseNum == "1") {
         //    mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
