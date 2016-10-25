@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,7 +16,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
 import android.os.Message;
-import android.system.ErrnoException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,27 +23,16 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ErrorDialogFragment;
-
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.lang.Thread.UncaughtExceptionHandler;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.OnClickListener, MediaPlayer.OnCompletionListener {
@@ -55,9 +42,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     TextView tHeartbeat;//心拍の変数
     TextView tTest;//再生時間の変数
     TextView tTimer;//タイマーの変数
-
-    public static final String EX_STACK_TRACE = "exStackTrace";
-    public static final String PREF_NAME_SAMPLE = "prefNameSample";
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -102,11 +86,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_play);
 
-        // UncaughtExceptionHandlerを実装したクラスをセットする。
-        CustomUncaughtExceptionHandler customUncaughtExceptionHandler = new CustomUncaughtExceptionHandler(
-                getApplicationContext());
-        Thread.setDefaultUncaughtExceptionHandler(customUncaughtExceptionHandler);
-
         getWindow().setFormat(PixelFormat.TRANSPARENT);
         mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
         holder = mPreview.getHolder();
@@ -143,21 +122,16 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
         //#####################################################################################################2
 
-        // SharedPreferencesに保存してある例外発生時のスタックトレースを取得します。
-        SharedPreferences preferences = getApplicationContext()
-                .getSharedPreferences(PREF_NAME_SAMPLE, Context.MODE_PRIVATE);
-        String exStackTrace = preferences.getString(EX_STACK_TRACE, null);
-
-        if (!TextUtils.isEmpty(exStackTrace)) {
-            Toast.makeText(this, "stackTrace", Toast.LENGTH_LONG).show();//##
-        }
-
     }
 
     // 再生完了時の処理
     @Override
     public void onCompletion(MediaPlayer agr0) {
         Log.v("MediaPlayer", "onCompletion");
+        //USB通信の切断(停止がないため)
+        accessoryManager.disable(this);
+        disconnectAccessory();
+
         getplaytimescheduler.shutdown();//サービス終了させる
         timerscheduler.shutdown();//タイマー止める
         //リザルトボタンを表示
@@ -184,27 +158,23 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public void onStart() {
         Log.d(TAG, "onStart");
         super.onStart();
-        Toast.makeText(this, "onStart", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
-        Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
         accessoryManager.enable(VideoPlay.this, getIntent());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Toast.makeText(this, "onStop", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //player.release();
         Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
 
         switch (firmwareProtocol) {
@@ -226,19 +196,16 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
         super.onPause();
         accessoryManager.disable(this);
-        disconnectAccessory();
     }
 
     // Resets the demo application when a device detaches
     public void disconnectAccessory() {
         Log.d(TAG, "disconnectAccessory()");
-        Toast.makeText(this, "disconect accessory", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "DISCONNECT SUCCESS", Toast.LENGTH_LONG).show();
 
         if (deviceAttached == false) {
-            Toast.makeText(this, "デバイスが切断されました", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "デバイスが切断されました", Toast.LENGTH_LONG).show();
             return;
-        } else {
-
         }
     }
 
@@ -324,6 +291,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 params.setSpeed((float) speedcount);
                 mp.setPlaybackParams(params);
                 tSpeed.setText(String.format("%.1f", (float) (speedcount * 10)));
+                //USB通信の切断(停止がないため)###########################################################
+                accessoryManager.disable(this);
+                disconnectAccessory();
                 // ポップアップメニュー表示
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
                 alertDialog.setTitle("ポーズ");
@@ -347,6 +317,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                     public void onClick(DialogInterface dialog, int which) {
                         future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                         getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 100, TimeUnit.MILLISECONDS);
+                        accessoryManager.enable(VideoPlay.this, getIntent());
                     }
                 });
                 AlertDialog myDialog = alertDialog.create();
@@ -441,9 +412,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                                         TextView pole_value = (TextView) findViewById(R.id.textSpeed);
                                         byte p_val = commandPacket[1];
                                         sensor_value = (int) commandPacket[1];
-                                        float speed_tmp = sensor_value / 20;
-                                        //tSpeed.setText(speed_tmp * 10 + "km/h");
-                                        //params.setSpeed((float) (speed_tmp * 10));//再生速度変更
+                                        float speed_tmp = (float)sensor_value / 20;
+                                        tSpeed.setText(speed_tmp*10+"km/h");//debug時はsensor_valueをつかう
+                                        params.setSpeed((float)(sensor_value/20));//再生速度変更
                                         mp.setPlaybackParams(params);
                                         break;
                                 }
@@ -451,17 +422,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                             }
                             break;
                         case CONNECTED:
-                            //追加すればうごくかも？
-                            //accessoryManager.enable(VideoPlay.this, getIntent());
                             break;
                         case READY:
                             //setTitle("Device connected.");
                             Log.d(TAG, "STAND BY OK");
                             String version = ((USBAccessoryManagerMessage) msg.obj).accessory.getVersion();
                             firmwareProtocol = getFirmwareProtocol(version);
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
-                            alertDialog.setTitle("サンプル");
-                            alertDialog.setMessage("firmware:"+firmwareProtocol);
+
                             switch (firmwareProtocol) {
                                 case 1:
                                     deviceAttached = true;
@@ -527,16 +494,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
     }
 
-
-
-
     private int getFirmwareProtocol(String version) {
 
         String major = "0";
 
         int positionOfDot;
 
-        Toast.makeText(this, "getFirmware", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "getFirmware", Toast.LENGTH_LONG).show();
 
         positionOfDot = version.indexOf('.');
         if (positionOfDot != -1) {

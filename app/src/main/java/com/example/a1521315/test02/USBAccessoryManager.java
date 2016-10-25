@@ -190,7 +190,7 @@ public class USBAccessoryManager {
 
                         Log.d(TAG,
                                 "USBAccessoryManager:enable() device ready");
-                        Toast.makeText(context, "SUCCESS", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "CONNECT SUCCESS", Toast.LENGTH_LONG).show();
                         return RETURN_CODES.SUCCESS;
                     } else {
 						/*
@@ -229,7 +229,7 @@ public class USBAccessoryManager {
             Toast.makeText(context, "EMPTY2", Toast.LENGTH_LONG).show();
             return RETURN_CODES.ACCESSORIES_LIST_IS_EMPTY;
         }
-        Toast.makeText(context, "SUCCES2", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "CONNECT SUCCES2", Toast.LENGTH_LONG).show();
         return RETURN_CODES.SUCCESS;
     }
 
