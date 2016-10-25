@@ -28,12 +28,12 @@ import java.util.concurrent.TimeUnit;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.OnClickListener, MediaPlayer.OnCompletionListener {
-    Handler handler = new Handler();
     TextView tSpeed;//時速の変数
     TextView tMileage;//走行距離の変数
     TextView tHeartbeat;//心拍の変数
     TextView tTest;//再生時間の変数
     TextView tTimer;//タイマーの変数
+    TextView tCourse;//コース番号
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -52,7 +52,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     double speedcount = 0.0;
 
 
-
+    String mediaPath = null;//動画データ
+    double TotalMileage=0;//総走行距離
 
 
 
@@ -89,8 +90,17 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         //コース番号受け取り
         Intent i = getIntent();
         String CourseNum = i.getStringExtra("course");
-        TextView tText = (TextView)findViewById(R.id.textT);
-        tText.setText(CourseNum);
+        tCourse = (TextView)findViewById(R.id.textCourse);
+        tCourse.setText("コース"+CourseNum);
+
+        if(CourseNum.equals("0")) {
+            mediaPath = "/test02.mp4";//実機9のストレージにあるファイルを指定
+            TotalMileage = 10.4;
+            //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+        }else if(CourseNum.equals("1")) {
+            mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
+            TotalMileage = 83.7;
+        }
 
 
     }
@@ -119,14 +129,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
-        String mediaPath = null;//動画データ
-       // if(CourseNum == "0") {
-            mediaPath = "/test02.mp4";//実機9のストレージにあるファイルを指定
-            //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
-        //}else if(CourseNum == "1") {
-        //    mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
-        //}
-
         try {
             //MediaPlayerを生成
             mp = new MediaPlayer();
@@ -303,18 +305,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             getplaytimehandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    double TotalMileage=0;//総走行距離
-                    //if(CourseNum == "0") {
-                        TotalMileage = 10.4;
-                    //}else if(CourseNum == "1") {
-                    //    TotalMileage = 83.7;
-                    //}
                     double f1=0,f2=0,f3=0;
                     f1 = mp.getDuration();
                     f2 = mp.getCurrentPosition();
                     f3 = TotalMileage / ( f1 / f2);
-                    tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
-                    tMileage.setText(String.format("%.2f",f3));
+                    tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());tMileage.setText(String.format("%.2f",f3));
 
                 }
             });

@@ -167,15 +167,14 @@
             android:visibility="invisible" />
 
         <TextView
-            android:text="TextView"
+            android:text="コース番号"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/buttonPlay"
-            android:layout_alignEnd="@+id/Kyori"
-            android:layout_marginBottom="42dp"
-            android:id="@+id/textT"
+            android:id="@+id/textCourse"
             android:textSize="36sp"
-            android:textColor="@android:color/holo_red_light" />
+            android:textColor="@android:color/holo_red_light"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 
