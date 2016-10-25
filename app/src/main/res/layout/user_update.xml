@@ -1,22 +1,289 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context=".UserUpdate">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <!-- 名前 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/text01_name"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome01"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <!-- ellipsize：文字が行に収まりきらない末尾を「...」表示 -->
+        <!-- inputType：表示するキーボードを文字に指定 -->
+        <EditText
+            android:id="@+id/editText01Name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:hint="@string/text01_hinttext"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLength="12"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- 年齢 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Age"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Name"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Age"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/text01_age"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome02"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <!-- inputType：表示するキーボードを数値に指定 -->
+        <EditText
+            android:id="@+id/editText01Age"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:hint="@string/text01_hintnumber"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- 性別 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Age"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Sex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/text01_sex"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome03"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <!-- 選択用ラジオボタン -->
+        <RadioGroup
+            android:id="@+id/radioGroup01Sex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:layout_alignParentStart="false"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentLeft="false"
+            android:orientation="horizontal"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            >
+
+            <RadioButton
+                android:id="@+id/radioButton01Man"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:checked="false"
+                android:text="@string/radio01_man"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radioButton01Woman"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:layout_marginTop="8dp"
+                android:checked="false"
+                android:text="@string/radio01_woman"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <!-- 身長 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Sex"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Height"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/text01_height"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome04"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <!-- inputType：表示するキーボードを数値に指定 -->
+        <EditText
+            android:id="@+id/editText01Height"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:hint="@string/text01_hintnumber"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- 体重 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Weight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Height"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/text01_weight"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome05"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText01Weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:hint="@string/text01_hintnumber"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+    <!-- 登録ボタン -->
     <Button
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:id="@+id/buttonInsert" android:text="Insert">
-    </Button>
+        android:id="@+id/button01Regist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout01Weight"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:text="@string/button01_regist"
+        android:textSize="16sp" />
+
 
     <Button
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:id="@+id/buttonUpdate" android:text="Update">
-    </Button>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cancel"
+        android:layout_below="@+id/button01Regist"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:text="@string/button01_cancel"
+        android:textSize="16sp" />
 
-    <Button
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:id="@+id/buttonDelete" android:text="Delete">
-    </Button>
-</LinearLayout>
+</RelativeLayout>
