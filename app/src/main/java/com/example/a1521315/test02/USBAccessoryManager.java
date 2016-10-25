@@ -77,7 +77,7 @@ public class USBAccessoryManager {
      *            The context that the USB manager should register to
      * @return RETURN_CODES - the status of the enable request
      */
-    public RETURN_CODES enable(Context context, Intent intent) {
+    public RETURN_CODES enable(Context context, Intent intent) {/////////////////////////////////////////////////////////////////////
         // Grab the packageName to use for an attach Intent
         actionString = context.getPackageName() + ".action.USB_PERMISSION";
 
@@ -114,6 +114,7 @@ public class USBAccessoryManager {
 
             // If we were unable to get a UsbManager, return an error
             if (deviceManager == null) {
+                Toast.makeText(context, "DEVICE_MANAGER_IS_NULL", Toast.LENGTH_LONG).show();
                 return RETURN_CODES.DEVICE_MANAGER_IS_NULL;
             }
 
@@ -122,6 +123,7 @@ public class USBAccessoryManager {
 
             // If the list of accessories is empty, then exit
             if (accessories == null) {
+                Toast.makeText(context, "EMPTY1", Toast.LENGTH_LONG).show();
                 return RETURN_CODES.ACCESSORIES_LIST_IS_EMPTY;
             }
 
@@ -150,6 +152,7 @@ public class USBAccessoryManager {
 
                         if(parcelFileDescriptor == null) {
                             Log.d(TAG, "USBAccessoryManager:enable() parcelFileDescriptor == null");
+                            Toast.makeText(context, "NOT_OPEN1", Toast.LENGTH_LONG).show();
                             return RETURN_CODES.FILE_DESCRIPTOR_WOULD_NOT_OPEN;
                         }
 
@@ -167,6 +170,7 @@ public class USBAccessoryManager {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
+                            Toast.makeText(context, "NOT_OPEN2", Toast.LENGTH_LONG).show();
                             return RETURN_CODES.FILE_DESCRIPTOR_WOULD_NOT_OPEN;
                         }
 
@@ -186,7 +190,7 @@ public class USBAccessoryManager {
 
                         Log.d(TAG,
                                 "USBAccessoryManager:enable() device ready");
-
+                        Toast.makeText(context, "SUCCESS", Toast.LENGTH_LONG).show();
                         return RETURN_CODES.SUCCESS;
                     } else {
 						/*
@@ -217,14 +221,15 @@ public class USBAccessoryManager {
                                 permissionIntent);
 
                         permissionRequested = true;
+                        Toast.makeText(context, "PERMISSION", Toast.LENGTH_LONG).show();
                         return RETURN_CODES.PERMISSION_PENDING;
                     }
                 }
             }
-
+            Toast.makeText(context, "EMPTY2", Toast.LENGTH_LONG).show();
             return RETURN_CODES.ACCESSORIES_LIST_IS_EMPTY;
         }
-
+        Toast.makeText(context, "SUCCES2", Toast.LENGTH_LONG).show();
         return RETURN_CODES.SUCCESS;
     }
 
