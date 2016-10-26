@@ -78,6 +78,7 @@ public class USBAccessoryManager {
      * @return RETURN_CODES - the status of the enable request
      */
     public RETURN_CODES enable(Context context, Intent intent) {/////////////////////////////////////////////////////////////////////
+
         // Grab the packageName to use for an attach Intent
         actionString = context.getPackageName() + ".action.USB_PERMISSION";
 
