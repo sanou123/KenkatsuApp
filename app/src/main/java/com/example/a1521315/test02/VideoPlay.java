@@ -36,12 +36,13 @@ import java.util.concurrent.TimeUnit;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.OnClickListener, MediaPlayer.OnCompletionListener {
-    //Handler handler = new Handler();
+    Handler handler = new Handler();
     TextView tSpeed;//時速の変数
     TextView tMileage;//走行距離の変数
     TextView tHeartbeat;//心拍の変数
     TextView tTest;//再生時間の変数
     TextView tTimer;//タイマーの変数
+    TextView tCourse;//コース番号
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -68,6 +69,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public static final int POT_UPPER_LIMIT = 100;
     public static final int POT_LOWER_LIMIT = 0;
 
+    String mediaPath = null;//動画データ
+    double TotalMileage=0;//総走行距離
+
+
     public int sensor_value = 0;
     private boolean deviceAttached = false;
     private int firmwareProtocol = 0;
@@ -85,7 +90,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_play);
-
         getWindow().setFormat(PixelFormat.TRANSPARENT);
         mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
         holder = mPreview.getHolder();
@@ -110,6 +114,21 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         findViewById(R.id.buttonResult).setOnClickListener(this);
         findViewById(R.id.buttonPause).setOnClickListener(this);
 
+        //コース番号受け取り
+        Intent i = getIntent();
+        String CourseNum = i.getStringExtra("course");
+        tCourse = (TextView)findViewById(R.id.textCourse);
+        tCourse.setText("コース"+CourseNum);
+
+        if(CourseNum.equals("0")) {
+            mediaPath = "/test01.mp4";//実機9のストレージにあるファルを指定
+            TotalMileage = 10.4;
+            //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+        }else if(CourseNum.equals("1")) {
+            mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
+            TotalMileage = 83.7;
+        }
+
         //#####################################################################################################1
         accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
         try {
@@ -123,7 +142,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         //#####################################################################################################2
 
     }
-
     // 再生完了時の処理
     @Override
     public void onCompletion(MediaPlayer agr0) {
@@ -142,7 +160,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             mp = null;
         }
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -213,8 +230,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
-        //String mediaPath = "/test02.mp4";//実機9のストレージにあるファイルを指定
-        String mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+
 
         try {
             //MediaPlayerを生成
@@ -224,8 +240,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定している
 
             //動画ファイルをMediaPlayerに読み込ませる
-            mp.setDataSource(getApplicationContext(), Uri.parse(mediaPath));//rawフォルダから指定する場合
-            //mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
+            //mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
+            mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
 
 
             //読み込んだ動画ファイルを画面に表示する
@@ -246,11 +262,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         getplaytimescheduler = Executors.newSingleThreadScheduledExecutor();
         getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 1000, TimeUnit.MILLISECONDS);
     }
-
     @Override
     public void surfaceChanged(SurfaceHolder paramSurfaceHolder, int paramInt1, int paramInt2, int paramInt3) {
     }
-
     @Override
     public void surfaceDestroyed(SurfaceHolder paramSurfaceHolder) {
         if (mp != null) {
@@ -258,6 +272,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             mp = null;
         }
     }
+
 
 
     //ボタンを押された時の処理
@@ -296,7 +311,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 disconnectAccessory();
                 // ポップアップメニュー表示
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
-                alertDialog.setTitle("ポーズ");
+                alertDialog.setTitle("aaaaa");
                 alertDialog.setMessage("一時停止中です");
                 alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
                     @Override
@@ -487,8 +502,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             getplaytimehandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
-                    //tMileage.setText(String.format("%.2f",f3));
+                    double f1=0,f2=0,f3=0;
+                    f1 = mp.getDuration();
+                    f2 = mp.getCurrentPosition();
+                    f3 = TotalMileage / ( f1 / f2);
+                    tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());tMileage.setText(String.format("%.2f",f3));
+
                 }
             });
         }

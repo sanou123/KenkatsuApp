@@ -3,9 +3,9 @@ package com.example.a1521315.test02;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -47,6 +47,8 @@ public class MainResult extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_result);
+        //横画面に固定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         findViews();        // 各部品の結びつけ処理
 
@@ -94,7 +96,7 @@ public class MainResult extends AppCompatActivity implements
                 // Sub 画面を起動
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.SelectSheetListView");
+                        "com.example.a1521315.test02.SelectSheetListView1");
                 startActivity(intent);
             }
         });
@@ -148,7 +150,7 @@ public class MainResult extends AppCompatActivity implements
         mText01Kome05.setText("");
         mText01Kome06.setText("");
 
-        mEditText01Heart_rate.requestFocus();      // フォーカスを品名のEditTextに指定
+        mEditText01Name.requestFocus();      // フォーカスを品名のEditTextに指定
     }
 
     /**
@@ -159,10 +161,10 @@ public class MainResult extends AppCompatActivity implements
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.radioButton01Product1:         // 品名一覧(ListView×ArrayAdapter)を選択した場合
-                intent = new Intent(MainResult.this, SelectSheetProduct.class);
+                intent = new Intent(MainResult.this, SelectSheetProduct1.class);
                 break;
             case R.id.radioButton01ListView1:        // ListView表示を選択した場合
-                intent = new Intent(MainResult.this, SelectSheetListView.class);
+                intent = new Intent(MainResult.this, SelectSheetListView1.class);
                 break;
             case R.id.radioButton01TableLayout1:     // TableLayout表示を選択した場合
                 intent = new Intent(MainResult.this, SelectSheetTable1.class);
@@ -229,7 +231,7 @@ public class MainResult extends AppCompatActivity implements
 
         } else {        // EditTextが全て入力されている場合
 
-            // 入力された単価と個数は文字列からint型へ変換
+            // 入力された値を文字列からint型へ変換
             int iHeart_rate = Integer.parseInt(strHeart_rate);
             int iCalorie_consumption = Integer.parseInt(strCalorie_consumption);
             int iWeight_fluctuates = Integer.parseInt(strWeight_fluctuates);
@@ -237,25 +239,16 @@ public class MainResult extends AppCompatActivity implements
             int iTotal_distance = Integer.parseInt(strTotal_time);
 
             // DBへの登録処理
-            DBAdapter1 dbAdapter1 = new DBAdapter1(this);
-            dbAdapter1.openDB();                                         // DBの読み書き
-            dbAdapter1.saveDB(strName, iHeart_rate, iCalorie_consumption, iWeight_fluctuates,
+            DBAdapter dbAdapter = new DBAdapter(this);
+            dbAdapter.openDB();                                         // DBの読み書き
+            dbAdapter.saveDB2(strName,iHeart_rate, iCalorie_consumption, iWeight_fluctuates,
                     iTotal_time, iTotal_distance);   // DBに登録
-            dbAdapter1.closeDB();                                        // DBを閉じる
+            dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定
 
         }
 
-    }
-
-    @Override
-    //戻るキーを無効にする
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
 }

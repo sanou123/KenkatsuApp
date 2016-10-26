@@ -1,5 +1,9 @@
 package com.example.a1521315.test02;
 
+/**
+ * Created by 1521315 on 2016/10/04.
+ */
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,9 +16,10 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "a.db";      // DB名
-    private final static String DB_TABLE = "kenkathu";       // DBのテーブル名
-    private final static int DB_VERSION = 3;                // DBのバージョン
+    private final static String DB_NAME = "abcde.db";      // DB名
+    private final static String DB_TABLE_USER = "user";       // DBのテーブル名
+    private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
+    private final static int DB_VERSION = 1;                // DBのバージョン
 
     /**
      * DBのカラム名
@@ -27,8 +32,15 @@ public class DBAdapter {
     public final static String COL_WEIGHT = "weight";        // 体重
 
 
+    public final static String COL_HEART_RATE = "heart_rate";    // 心拍数
+    public final static String COL_CALORIE_CONSUMPTION = "calorie_consumption";      // 消費カロリー
+    public final static String COL_WEIGHT_FLUCTUATES = "weight_fluctuates";      // 体重変化
+    public final static String COL_TOTAL_TIME = "total_time";        // 総走行時間
+    public final static String COL_TOTAL_DISTANCE = "total_distance";        // 総走行距離
+
+
     private SQLiteDatabase db = null;           // SQLiteDatabase
-    private DBHelper dbHelper = null;           // DBHepler
+    private DBHelper dbHelper = null;           // DBHelper
     protected Context context;                  // Context
 
     // コンストラクタ
@@ -78,7 +90,7 @@ public class DBAdapter {
      * @param height  身長
      * @param weight   体重
      */
-    public void saveDB(String name, String age, String sex, int height, int weight) {
+    public void saveDB(String name, int age, String sex, int height, int weight) {
 
         db.beginTransaction();          // トランザクション開始
 
@@ -90,11 +102,12 @@ public class DBAdapter {
             values.put(COL_HEIGHT, height);
             values.put(COL_WEIGHT, weight);
 
+
             // insertメソッド データ登録
             // 第1引数：DBのテーブル名
             // 第2引数：更新する条件式
             // 第3引数：ContentValues
-            db.insert(DB_TABLE, null, values);      // レコードへ登録
+            db.insert(DB_TABLE_USER, null, values);      // レコードへ登録
 
             db.setTransactionSuccessful();      // トランザクションへコミット
         } catch (Exception e) {
@@ -103,6 +116,37 @@ public class DBAdapter {
             db.endTransaction();                // トランザクションの終了
         }
     }
+
+
+    public void saveDB2(String name , int heart_rate, int calorie_consumption, int weight_fluctuates,
+                        int total_time, int total_distance) {
+
+        db.beginTransaction();          // トランザクション開始
+
+        try {
+            ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
+            values.put(COL_NAME, name);
+            values.put(COL_HEART_RATE, heart_rate);
+            values.put(COL_CALORIE_CONSUMPTION, calorie_consumption);
+            values.put(COL_WEIGHT_FLUCTUATES, weight_fluctuates);
+            values.put(COL_TOTAL_TIME, total_time);
+            values.put(COL_TOTAL_DISTANCE, total_distance);
+
+
+            // insertメソッド データ登録
+            // 第1引数：DBのテーブル名
+            // 第2引数：更新する条件式
+            // 第3引数：ContentValues
+            db.insert(DB_TABLE_DATA, null, values);      // レコードへ登録
+
+            db.setTransactionSuccessful();      // トランザクションへコミット
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();                // トランザクションの終了
+        }
+    }
+
 
     /**
      * DBのデータを取得
@@ -121,7 +165,29 @@ public class DBAdapter {
         // 第5引数：集計条件(GROUP BY句)
         // 第6引数：選択条件(HAVING句)
         // 第7引数：ソート条件(ODERBY句)
-        return db.query(DB_TABLE, columns, null, null, null, null, null);
+        return db.query(DB_TABLE_USER, columns, null, null, null, null, null);
+
+    }
+
+    /**
+     * DBのデータを取得
+     * getDB()
+     *
+     * @param columns String[] 取得するカラム名 nullの場合は全カラムを取得
+     * @return DBのデータ
+     */
+    public Cursor getDB1(String[] columns) {
+
+        // queryメソッド DBのデータを取得
+        // 第1引数：DBのテーブル名
+        // 第2引数：取得するカラム名
+        // 第3引数：選択条件(WHERE句)
+        // 第4引数：第3引数のWHERE句において?を使用した場合に使用
+        // 第5引数：集計条件(GROUP BY句)
+        // 第6引数：選択条件(HAVING句)
+        // 第7引数：ソート条件(ODERBY句)
+        return db.query(DB_TABLE_DATA, columns, null, null, null, null, null);
+
     }
 
     /**
@@ -134,7 +200,7 @@ public class DBAdapter {
      * @return DBの検索したデータ
      */
     public Cursor searchDB(String[] columns, String column, String[] name) {
-        return db.query(DB_TABLE, columns, column + " like ?", name, null, null, null);
+        return db.query(DB_TABLE_DATA, columns, column + " like ?", name, null, null, null,null);
     }
 
     /**
@@ -149,7 +215,7 @@ public class DBAdapter {
             // 第1引数：テーブル名
             // 第2引数：削除する条件式 nullの場合は全レコードを削除
             // 第3引数：第2引数で?を使用した場合に使用
-            db.delete(DB_TABLE, null, null);        // DBのレコードを全削除
+            db.delete(DB_TABLE_USER, null, null);        // DBのレコードを全削除
             db.setTransactionSuccessful();          // トランザクションへコミット
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,37 +234,12 @@ public class DBAdapter {
 
         db.beginTransaction();                      // トランザクション開始
         try {
-            db.delete(DB_TABLE, COL_ID + "=?", new String[]{position});
+            db.delete(DB_TABLE_USER, COL_ID + "=?", new String[]{position});
             db.setTransactionSuccessful();          // トランザクションへコミット
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             db.endTransaction();                    // トランザクションの終了
-        }
-    }
-
-    public void saveDB(String strName, int strAge,String strSex, int strHeight, int strWeight) {
-        db.beginTransaction();          // トランザクション開始
-
-        try {
-            ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
-            values.put(COL_NAME, strName);
-            values.put(COL_AGE, strAge);
-            values.put(COL_SEX, strSex);
-            values.put(COL_HEIGHT, strHeight);
-            values.put(COL_WEIGHT, strWeight);
-
-            // insertメソッド データ登録
-            // 第1引数：DBのテーブル名
-            // 第2引数：更新する条件式
-            // 第3引数：ContentValues
-            db.insert(DB_TABLE, null, values);      // レコードへ登録
-
-            db.setTransactionSuccessful();      // トランザクションへコミット
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            db.endTransaction();                // トランザクションの終了
         }
     }
 
@@ -220,7 +261,7 @@ public class DBAdapter {
 
             String whereClause = "name = ?";
             String whereArgs[] = new String[]{strName};
-            db.update(DB_TABLE, values, whereClause, whereArgs);
+            db.update(DB_TABLE_USER, values, whereClause, whereArgs);
 
             db.setTransactionSuccessful();      // トランザクションへコミット
         } catch (Exception e) {
@@ -229,6 +270,7 @@ public class DBAdapter {
             db.endTransaction();                // トランザクションの終了
         }
     }
+
 
     /**
      * データベースの生成やアップグレードを管理するSQLiteOpenHelperを継承したクラス
@@ -255,16 +297,28 @@ public class DBAdapter {
         public void onCreate(SQLiteDatabase db) {
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
-            String createTbl = "CREATE TABLE " + DB_TABLE + " ("
+            String createTbl_user = "CREATE TABLE " + DB_TABLE_USER + " ("
                     + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + COL_NAME + " TEXT NOT NULL,"
+                    + COL_NAME + " TEXT forgin key,"
                     + COL_AGE + " INTEGER NOT NULL,"
                     + COL_SEX + " TEXT NOT NULL,"
                     + COL_HEIGHT + " INTEGER NOT NULL,"
                     + COL_WEIGHT + " INTEGER NOT NULL"
                     + ");";
 
-            db.execSQL(createTbl);      //SQL文の実行
+            //テーブルを作成するSQL文の定義 ※スペースに気を付ける
+            String createTbl_data = "CREATE TABLE " + DB_TABLE_DATA + " ("
+                    + COL_NAME + "  name  ,"
+                    + COL_HEART_RATE + " INTEGER NOT NULL,"
+                    + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL,"
+                    + COL_WEIGHT_FLUCTUATES + " INTEGER NOT NULL,"
+                    + COL_TOTAL_TIME + " INTEGER NOT NULL,"
+                    + COL_TOTAL_DISTANCE + " INTEGER NOT NULL"
+                    + ");";
+            db.execSQL(createTbl_user);      //SQL文の実行
+
+            db.execSQL(createTbl_data);      //SQL文の実行
+
         }
 
         /**
@@ -277,7 +331,9 @@ public class DBAdapter {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // DBからテーブル削除
-            db.execSQL("DROP TABLE IF EXISTS" + DB_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS" + DB_TABLE_USER);
+            // DBからテーブル削除
+            db.execSQL("DROP TABLE IF EXISTS" + DB_TABLE_DATA);
             // テーブル生成
             onCreate(db);
         }

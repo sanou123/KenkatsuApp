@@ -42,16 +42,31 @@
             android:label="@string/name_main_user" />
         <activity
             android:name=".MenuSelect"
-            android:label="@string/name_menu_serect" />
+            android:label="@string/name_menu_select" />
         <activity
             android:name=".VideoSelect"
-            android:label="@string/name_video_serect" />
-        <activity android:name=".SelectSheetProduct" />
+            android:label="@string/name_video_select" />
+
+        <activity
+            android:name=".VideoPlay" />
+
+        <activity
+            android:name=".SelectSheetProduct" />
+
         <activity
             android:name=".SelectSheetListView"
             android:label="@string/name_selectsheet_listview" />
-        <activity android:name=".SelectSheetTable" />
-        <activity android:name=".MainResult" />
+        <activity
+            android:name=".SelectSheetListView1"/>
+
+        <activity
+            android:name=".SelectSheetTable" />
+
+        <activity
+            android:name=".Result" />
+        <activity
+            android:name=".MainResult" />
+
         <activity
             android:name=".SelectSheetTable1"
             android:label="@string/name_selectsheet_tabel" />
@@ -61,12 +76,15 @@
         <activity
             android:name=".Dictionary"
             android:label="@string/dictionary" />
+
+
         <activity
             android:name=".Search"
             android:label="@string/search" />
-        <activity android:name=".TrainingSelect" />
-        <activity android:name=".Result" />
-        <activity android:name=".VideoPlay"></activity>
+
+        <activity
+            android:name=".TrainingSelect"
+            android:label="@string/name_training_select"/>
     </application>
 
 </manifest>
