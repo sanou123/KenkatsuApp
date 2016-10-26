@@ -36,6 +36,22 @@ public class VideoSelect extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button btnDisp2 = (Button)findViewById(R.id.course2);
+        btnDisp2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(),VideoPlay.class);
+                intent.putExtra("course","2");//VideoPlayにコース番号を渡す
+                startActivity(intent);
+            }
+        });
+        Button btnDisp3 = (Button)findViewById(R.id.course3);
+        btnDisp3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(),VideoPlay.class);
+                intent.putExtra("course","3");//VideoPlayにコース番号を渡す
+                startActivity(intent);
+            }
+        });
 
         Button btnBack = (Button)findViewById(R.id.menu_serect);
         btnBack.setOnClickListener(new View.OnClickListener() {

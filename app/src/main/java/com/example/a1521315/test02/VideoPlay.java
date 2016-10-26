@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -54,6 +55,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     String mediaPath = null;//動画データ
     double TotalMileage=0;//総走行距離
+    int raw = 0;
 
 
 
@@ -94,12 +96,21 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         tCourse.setText("コース"+CourseNum);
 
         if(CourseNum.equals("0")) {
-            mediaPath = "/test01.mp4";//実機9のストレージにあるファルを指定
+            mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
             TotalMileage = 10.4;
-            //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+            raw = 0;
         }else if(CourseNum.equals("1")) {
             mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
             TotalMileage = 83.7;
+            raw = 0;
+        }else if(CourseNum.equals("2")) {
+            mediaPath = "/_naruko.mp4";//実機9のストレージにあるファイルを指定
+            TotalMileage = 1.3;
+            raw = 0;
+        }else if(CourseNum.equals("3")) {
+            mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+            TotalMileage = 20.0;
+            raw = 1;
         }
 
 
@@ -133,13 +144,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             //MediaPlayerを生成
             mp = new MediaPlayer();
 
-            File pathExternalPublicDir =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-            String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定している
-
-            //動画ファイルをMediaPlayerに読み込ませる
-            //mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
-            mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
-
+            if(raw==1){
+                //動画ファイルをMediaPlayerに読み込ませる
+                mp.setDataSource(getApplicationContext(), Uri.parse(mediaPath));//rawフォルダから指定する場合
+            }else{
+                File pathExternalPublicDir =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+                String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定してい
+                //動画ファイルをMediaPlayerに読み込ませる
+                mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
+            }
 
             //読み込んだ動画ファイルを画面に表示する
             mp.setDisplay(holder);
