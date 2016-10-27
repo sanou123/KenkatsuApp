@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.OnClickListener, MediaPlayer.OnCompletionListener {
-    Handler handler = new Handler();
+    //Handler handler = new Handler();
     TextView tSpeed;//時速の変数
     TextView tMileage;//走行距離の変数
     TextView tHeartbeat;//心拍の変数
@@ -71,7 +71,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     String mediaPath = null;//動画データ
     double TotalMileage=0;//総走行距離
-
+    public boolean usb_flg = false;
 
     public int sensor_value = 0;
     private boolean deviceAttached = false;
@@ -148,8 +148,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         Log.v("MediaPlayer", "onCompletion");
         //USB通信の切断(停止がないため)
         accessoryManager.disable(this);
-        disconnectAccessory();
-
+        disconnectAccessory();//################################       あやしいかもよ～
+        Button BtnPauseView2 = (Button) findViewById(R.id.buttonPause);
+        BtnPauseView2.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
         getplaytimescheduler.shutdown();//サービス終了させる
         timerscheduler.shutdown();//タイマー止める
         //リザルトボタンを表示
@@ -173,14 +174,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     //#################################################################################################1
     @Override
     public void onStart() {
-        Log.d(TAG, "onStart");
         super.onStart();
+        Log.d(TAG, "onStart");
     }
 
     @Override
     public void onResume() {
-        Log.d(TAG, "onResume");
         super.onResume();
+        Log.d(TAG, "onResume");
         accessoryManager.enable(VideoPlay.this, getIntent());
     }
 
@@ -193,7 +194,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     public void onPause() {
         super.onPause();
         Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
-
         switch (firmwareProtocol) {
             case 2:
                 byte[] commandPacket = new byte[2];
@@ -211,8 +211,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             e.printStackTrace();
         }
 
-        super.onPause();
+        //super.onPause();
         accessoryManager.disable(this);
+        disconnectAccessory();
     }
 
     // Resets the demo application when a device detaches
@@ -231,7 +232,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
 
-
         try {
             //MediaPlayerを生成
             mp = new MediaPlayer();
@@ -242,7 +242,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             //動画ファイルをMediaPlayerに読み込ませる
             //mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
             mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
-
 
             //読み込んだ動画ファイルを画面に表示する
             mp.setDisplay(holder);
@@ -273,8 +272,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
     }
 
-
-
     //ボタンを押された時の処理
     public void onClick(View v) {
         int id = v.getId();
@@ -300,23 +297,23 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 break;
 
             case R.id.buttonPause://Pauseボタンを押したとき
+
+                usb_flg = true;
+
                 future.cancel(true);//タイマー一時停止
                 getplaytimefuture.cancel(true);//タイマー一時停止
                 speedcount = 0;
                 params.setSpeed((float) speedcount);
                 mp.setPlaybackParams(params);
                 tSpeed.setText(String.format("%.1f", (float) (speedcount * 10)));
-                //USB通信の切断(停止がないため)###########################################################
-                accessoryManager.disable(this);
-                disconnectAccessory();
+
                 // ポップアップメニュー表示
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
-                alertDialog.setTitle("aaaaa");
+                alertDialog.setTitle("ポーズ");
                 alertDialog.setMessage("一時停止中です");
                 alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //VideoSelectに戻る処理
                         getplaytimescheduler.shutdown();//サービス終了させる
                         timerscheduler.shutdown();//タイマー終了
                         if (mp != null) {
@@ -332,7 +329,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                     public void onClick(DialogInterface dialog, int which) {
                         future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                         getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 100, TimeUnit.MILLISECONDS);
-                        accessoryManager.enable(VideoPlay.this, getIntent());
+                        usb_flg = false;
                     }
                 });
                 AlertDialog myDialog = alertDialog.create();
@@ -424,16 +421,20 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
                                 switch (commandPacket[0]) {
                                     case POLE_SENSOR_CHANGE:
-                                        TextView pole_value = (TextView) findViewById(R.id.textSpeed);
-                                        byte p_val = commandPacket[1];
-                                        sensor_value = (int) commandPacket[1];
-                                        float speed_tmp = (float)sensor_value / 20;
-                                        tSpeed.setText(speed_tmp*10+"km/h");//debug時はsensor_valueをつかう
-                                        params.setSpeed((float)(sensor_value/20));//再生速度変更
+                                        float speed_tmp;
+                                        if( usb_flg == true ) {
+                                            speed_tmp = 0;
+                                        }
+                                        else
+                                        {
+                                             sensor_value = (int) commandPacket[1];
+                                             speed_tmp = (float) sensor_value / 20;
+                                         }
+                                        tSpeed.setText(speed_tmp * 10 + "km/h");//debug時はsensor_valueをつかう
+                                        params.setSpeed(speed_tmp);//再生速度変更
                                         mp.setPlaybackParams(params);
                                         break;
                                 }
-
                             }
                             break;
                         case CONNECTED:
