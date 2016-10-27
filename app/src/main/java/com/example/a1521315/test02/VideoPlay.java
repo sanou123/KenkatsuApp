@@ -55,7 +55,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     String mediaPath = null;//動画データ
     double TotalMileage=0;//総走行距離
-    int raw = 0;
+    int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
 
 
 
