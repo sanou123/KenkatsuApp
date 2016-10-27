@@ -57,9 +57,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     double TotalMileage=0;//総走行距離
     int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
 
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
