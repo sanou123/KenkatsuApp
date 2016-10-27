@@ -71,6 +71,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     String mediaPath = null;//動画データ
     double TotalMileage=0;//総走行距離
+    int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
     public boolean usb_flg = false;
 
     public int sensor_value = 0;
@@ -105,9 +106,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         tTimer.setText("00:00.0");
         tTest = (TextView) findViewById(R.id.textTest);
         tTest.setText("");
-        ImageView imageView1 = (ImageView) findViewById(R.id.image_view_1);
+        ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
         imageView1.setImageResource(R.drawable.bar);
-        ImageView imageView2 = (ImageView) findViewById(R.id.image_view_2);
+        ImageView imageView2 = (ImageView)findViewById(R.id.image_view_me);
         imageView2.setImageResource(R.drawable.me);
 
         findViewById(R.id.buttonPlay).setOnClickListener(this);
@@ -121,12 +122,21 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         tCourse.setText("コース"+CourseNum);
 
         if(CourseNum.equals("0")) {
-            mediaPath = "/test01.mp4";//実機9のストレージにあるファルを指定
+            mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
             TotalMileage = 10.4;
-            //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+            raw = 0;
         }else if(CourseNum.equals("1")) {
             mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
             TotalMileage = 83.7;
+            raw = 0;
+        }else if(CourseNum.equals("2")) {
+            mediaPath = "/_naruko.mp4";//実機9のストレージにあるファイルを指定
+            TotalMileage = 1.3;
+            raw = 0;
+        }else if(CourseNum.equals("3")) {
+            mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+            TotalMileage = 20.0;
+            raw = 1;
         }
 
         //#####################################################################################################1
@@ -236,12 +246,17 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             //MediaPlayerを生成
             mp = new MediaPlayer();
 
-            File pathExternalPublicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-            String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定している
 
-            //動画ファイルをMediaPlayerに読み込ませる
-            //mp.setDataSource(getApplicationContext(),Uri.parse(mediaPath));//rawフォルダから指定する場合
-            mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
+
+            if(raw==1){
+                //動画ファイルをMediaPlayerに読み込ませる
+                mp.setDataSource(getApplicationContext(), Uri.parse(mediaPath));//rawフォルダから指定する場合
+            }else{
+                File pathExternalPublicDir =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+                String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定してい
+                //動画ファイルをMediaPlayerに読み込ませる
+                mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
+            }
 
             //読み込んだ動画ファイルを画面に表示する
             mp.setDisplay(holder);
@@ -271,6 +286,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             mp = null;
         }
     }
+
+
 
     //ボタンを押された時の処理
     public void onClick(View v) {
@@ -314,6 +331,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //VideoSelectに戻る処理
                         getplaytimescheduler.shutdown();//サービス終了させる
                         timerscheduler.shutdown();//タイマー終了
                         if (mp != null) {

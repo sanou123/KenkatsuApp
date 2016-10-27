@@ -38,51 +38,57 @@
         </activity>
         <!-- suppress AndroidDomInspection -->
         <activity
+            android:screenOrientation="landscape"
             android:name=".MainUser"
             android:label="@string/name_main_user" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".MenuSelect"
             android:label="@string/name_menu_select" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".VideoSelect"
             android:label="@string/name_video_select" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".VideoPlay" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetProduct" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetListView"
             android:label="@string/name_selectsheet_listview" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetListView1"/>
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetTable" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".Result" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".MainResult" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetTable1"
             android:label="@string/name_selectsheet_tabel" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".UserUpdate"
             android:label="@string/name_update_user" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".Dictionary"
             android:label="@string/dictionary" />
-
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".Search"
             android:label="@string/search" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".TrainingSelect"
             android:label="@string/name_training_select"/>
     </application>
