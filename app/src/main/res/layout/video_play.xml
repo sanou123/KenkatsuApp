@@ -162,19 +162,18 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/bar"
                 android:id="@+id/image_view_bar"
+                android:layout_marginTop="15dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="32dp" />
+                android:scaleType="fitEnd" />
 
             <ImageView
-                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/me"
                 android:id="@+id/image_view_me"
-                android:scaleType="fitCenter"
-                android:gravity="left"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignEnd="@+id/image_view_bar" />
+                android:layout_alignBottom="@+id/image_view_bar"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 
