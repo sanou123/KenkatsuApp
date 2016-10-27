@@ -17,6 +17,11 @@ import android.widget.TextView;
  */
 
 public class Result extends Activity {
+    String coursename = "デバック用コース";
+    String mileage = "10km";
+    String maxheartbeat = "130bpm";
+    String avg = "5km/h";
+    String time = "2時間";
 
     /** Called when the activity is first created. */
     @Override
@@ -38,7 +43,7 @@ public class Result extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text=ぼくはけんこうです！やったー！"));
+                        Uri.parse("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text="+"コース名："+coursename+"%0a"+"走行距離："+mileage+"%0a"+"最大心拍："+maxheartbeat+"%0a"+"平均速度："+avg+"%0a"+"運動時間："+time+"%0a"));
                 startActivity(i);
             }
         });

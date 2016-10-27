@@ -4,10 +4,11 @@
     android:versionCode="1"
     android:versionName="1.0">
 
+    <uses-feature android:name="android.hardware.usb.accessory" />
+
     <uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="17" />
-
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
@@ -25,6 +26,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- USB ATTACHED-->
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+
+            <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
+
         </activity>
         <!-- suppress AndroidDomInspection -->
         <activity
