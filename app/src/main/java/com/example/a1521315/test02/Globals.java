@@ -7,5 +7,12 @@ import android.app.Application;
  */
 
 public class Globals extends Application {
-    String coursename = "グローバル変数";
+    //リザルトで使う変数
+    String coursename = "コース";
+    String mileage = "0";
+    String maxheartbeat = "0";
+    String avg = "0";
+    String max = "0";
+    String time = "0";
+    String cal = "0";
 }
