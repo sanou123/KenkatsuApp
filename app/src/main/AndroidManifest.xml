@@ -4,10 +4,11 @@
     android:versionCode="1"
     android:versionName="1.0">
 
+    <uses-feature android:name="android.hardware.usb.accessory" />
+
     <uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="17" />
-
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
@@ -16,7 +17,8 @@
         android:allowBackup="true"
         android:icon="@drawable/kenkatsu"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".Globals" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -25,54 +27,69 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- USB ATTACHED-->
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+
+            <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
+
         </activity>
         <!-- suppress AndroidDomInspection -->
         <activity
+            android:screenOrientation="landscape"
             android:name=".MainUser"
             android:label="@string/name_main_user" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".MenuSelect"
             android:label="@string/name_menu_select" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".VideoSelect"
             android:label="@string/name_video_select" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".VideoPlay" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetProduct" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetListView"
             android:label="@string/name_selectsheet_listview" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetListView1"/>
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetTable" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".Result" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".MainResult" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".SelectSheetTable1"
             android:label="@string/name_selectsheet_tabel" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".UserUpdate"
             android:label="@string/name_update_user" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".Dictionary"
             android:label="@string/dictionary" />
-
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".Search"
             android:label="@string/search" />
-
         <activity
+            android:screenOrientation="landscape"
             android:name=".TrainingSelect"
             android:label="@string/name_training_select"/>
     </application>

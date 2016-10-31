@@ -23,10 +23,22 @@
         android:text="ポリテクから大地家(約10km)"/>
 
     <Button
-        android:text="東京IC→御殿場IC"
+        android:text="東京IC→御殿場IC(約84km)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/course1" />
+
+    <Button
+        android:text="鳴子(約1.3km)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/course2" />
+
+    <Button
+        android:text="デバッグ用(rawフォルダ)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/course3" />
 
     <Button
         android:layout_width="wrap_content"
