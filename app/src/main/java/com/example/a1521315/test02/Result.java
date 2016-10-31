@@ -12,16 +12,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+
 /**
  * Created by Administrator on 2016/09/29.
  */
 
 public class Result extends Activity {
-    String coursename = "デバック用コース";
-    String mileage = "10km";
-    String maxheartbeat = "130bpm";
-    String avg = "5km/h";
-    String time = "2時間";
+    Globals globals;
+    String coursename;
+    String mileage;
+    String maxheartbeat;
+    String avg;
+    String max;
+    String time;
+    String cal;
 
     /** Called when the activity is first created. */
     @Override
@@ -30,6 +34,14 @@ public class Result extends Activity {
         setContentView(R.layout.result);
         Button btn_tweet = (Button)findViewById(R.id.tweet);
         Button btn_back = (Button)findViewById(R.id.back);
+
+        globals = (Globals)this.getApplication();
+
+        coursename = globals.coursename;
+
+        TextView textView = (TextView)findViewById(R.id.coursename);
+        textView.setText(coursename);
+
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +55,7 @@ public class Result extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text="+"コース名："+coursename+"%0a"+"走行距離："+mileage+"%0a"+"最大心拍："+maxheartbeat+"%0a"+"平均速度："+avg+"%0a"+"運動時間："+time+"%0a"));
+                        Uri.parse("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text="+"コース名："+coursename+"%0a"+"走行距離："+mileage+"%0a"+"最大心拍："+maxheartbeat+"%0a"+"平均速度："+avg+"%0a"+"最高速度："+max+"%0a"+"運動時間："+time+"%0a"+"消費カロリー："+cal+"%0a"));
                 startActivity(i);
             }
         });
