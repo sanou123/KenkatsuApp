@@ -38,9 +38,27 @@ public class Result extends Activity {
         globals = (Globals)this.getApplication();
 
         coursename = globals.coursename;
+        mileage = globals.mileage;
+        maxheartbeat = globals.maxheartbeat;
+        avg = globals.avg;
+        max = globals.max;
+        time = globals.time;
+        cal = globals.cal;
 
-        TextView textView = (TextView)findViewById(R.id.coursename);
-        textView.setText(coursename);
+        TextView textcoursename = (TextView)findViewById(R.id.coursename);
+        textcoursename.setText(coursename);
+        TextView textmileage = (TextView)findViewById(R.id.mileage);
+        textmileage.setText(mileage);
+        TextView textmaxheartbeat = (TextView)findViewById(R.id.maxheartbeat);
+        textmaxheartbeat.setText(maxheartbeat);
+        TextView textavg = (TextView)findViewById(R.id.avg);
+        textavg.setText(avg);
+        TextView textmax = (TextView)findViewById(R.id.max);
+        textmax.setText(max);
+        TextView texttime = (TextView)findViewById(R.id.time);
+        texttime.setText(time);
+        TextView textcal = (TextView)findViewById(R.id.cal);
+        textcal.setText(cal);
 
 
         btn_back.setOnClickListener(new View.OnClickListener() {

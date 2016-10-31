@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.OnClickListener, MediaPlayer.OnCompletionListener {
-    //Handler handler = new Handler();
+    Globals globals;
     TextView tSpeed;//時速の変数
     TextView tMileage;//走行距離の変数
     TextView tHeartbeat;//心拍の変数
@@ -96,6 +96,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         holder = mPreview.getHolder();
         holder.addCallback(this);
 
+        globals = (Globals)this.getApplication();
+
         tSpeed = (TextView) findViewById(R.id.textSpeed);
         tSpeed.setText("0.0");
         tMileage = (TextView) findViewById(R.id.textMileage);
@@ -122,20 +124,24 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         tCourse.setText("コース"+CourseNum);
 
         if(CourseNum.equals("0")) {
+            tCourse.setText("ポリテク→大地");
             mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
             TotalMileage = 10.4;
             raw = 0;
         }else if(CourseNum.equals("1")) {
+            tCourse.setText("東京→御殿場");
             mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
             TotalMileage = 83.7;
             raw = 0;
         }else if(CourseNum.equals("2")) {
+            tCourse.setText("鳴子");
             mediaPath = "/_naruko.mp4";//実機9のストレージにあるファイルを指定
             TotalMileage = 1.3;
             raw = 0;
         }else if(CourseNum.equals("3")) {
+            tCourse.setText("デバッグ用");
             mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
-            TotalMileage = 20.0;
+            TotalMileage = 10.0;
             raw = 1;
         }
 
@@ -309,6 +315,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 break;
 
             case R.id.buttonResult://Resultボタン押したとき
+                globals.coursename = tCourse.getText().toString();//コース名
+                globals.mileage = tMileage.getText().toString();//走行距離
+                globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+                globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
+                globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+                globals.time = tTimer.getText().toString();//運動時間
+                globals.cal = "1234";//消費カロリー
+
                 Intent intent = new Intent(getApplication(), Result.class);
                 startActivity(intent);
                 break;
