@@ -60,7 +60,7 @@ public class MyListItem1 {
 
     /**
      * 消費カロリーを取得
-     * getMadeIn()
+     * getCalorie_consumption()
      *
      * @return calorie_consumption String 消費カロリー
      */
@@ -70,7 +70,7 @@ public class MyListItem1 {
 
     /**
      * 体重変化を取得
-     * getNumber()
+     * getWeight_fluctuates()
      *
      * @return weight_fluctuates String 体重変化
      */
@@ -80,7 +80,7 @@ public class MyListItem1 {
 
     /**
      * 総走行時間を取得
-     * getPrice()
+     * getTotal_time()
      *
      * @return total_time String 総走行時間
      */
@@ -90,7 +90,7 @@ public class MyListItem1 {
 
     /**
      * 総走行距離を取得
-     * getPrice()
+     * getTotal_distance()
      *
      * @return price String 総走行距離
      */

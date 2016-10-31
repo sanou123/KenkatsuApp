@@ -299,7 +299,7 @@ public class DBAdapter {
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_user = "CREATE TABLE " + DB_TABLE_USER + " ("
                     + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + COL_NAME + " TEXT forgin key,"
+                    + COL_NAME + " TEXT FOREIGN KEY,"
                     + COL_AGE + " INTEGER NOT NULL,"
                     + COL_SEX + " TEXT NOT NULL,"
                     + COL_HEIGHT + " INTEGER NOT NULL,"
@@ -308,7 +308,7 @@ public class DBAdapter {
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_data = "CREATE TABLE " + DB_TABLE_DATA + " ("
-                    + COL_NAME + "  name  ,"
+                    + COL_NAME + "  FOREIGN KEY  ,"
                     + COL_HEART_RATE + " INTEGER NOT NULL,"
                     + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL,"
                     + COL_WEIGHT_FLUCTUATES + " INTEGER NOT NULL,"

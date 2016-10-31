@@ -275,53 +275,12 @@
         android:text="@string/button01_regist"
         android:textSize="16sp" />
 
-    <!-- 選択用ラジオボタン -->
-    <RadioGroup
-        android:id="@+id/radioGroup01"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="false"
-        android:layout_below="@+id/button01Regist"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
-        android:layout_alignParentLeft="false">
-
-        <RadioButton
-            android:id="@+id/radioButton01Product"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="@string/radio01_product"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <RadioButton
-            android:id="@+id/radioButton01TableLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:checked="false"
-            android:text="@string/radio01_tablelayout"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-    </RadioGroup>
-
-    <!-- 表示ボタン -->
-    <Button
-        android:id="@+id/button01Show"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/radioGroup01"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
-        android:text="@string/button01_show"
-        android:textSize="16sp" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cancel"
-        android:layout_below="@+id/button01Show"
+        android:layout_below="@+id/button01Regist"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:text="@string/button01_cancel"

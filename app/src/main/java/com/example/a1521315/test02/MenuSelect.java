@@ -7,11 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import java.util.List;
 
 
 public class MenuSelect extends AppCompatActivity {
     protected MyListItem MyListItem;
+    private List<MyListItem> items;
 
     /**
      * Called when the activity is first created.
@@ -26,6 +29,11 @@ public class MenuSelect extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //menu_selectのレイアウトを使用
         setContentView(R.layout.menu_select);
+
+        Intent intent = getIntent();
+        String listName = intent.getStringExtra("SELECTED_DATA");//設定したSELECTED_DATAで取り出す
+        String columns = listName + "さんのメニュー";
+        Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
 
         //trainingボタンを押した時TrainingSelectへ移動
         Button btnDisp0 = (Button) findViewById(R.id.training);

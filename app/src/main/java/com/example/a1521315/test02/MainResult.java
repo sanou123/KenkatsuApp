@@ -32,9 +32,9 @@ public class MainResult extends AppCompatActivity implements
     private TextView mText01Kome01;             // 名前の※印
     private TextView mText01Kome02;             // 心拍数の※印
     private TextView mText01Kome03;             // 消費カロリーの※印
-    private TextView mText01Kome04;             // 単価の※印
-    private TextView mText01Kome05;             // 単価の※印
-    private TextView mText01Kome06;             // 単価の※印
+    private TextView mText01Kome04;             // 単体重変化の※印
+    private TextView mText01Kome05;             // 総走行時間の※印
+    private TextView mText01Kome06;             // 総走行距離の※印
 
     private Button mButton01Regist;             // 登録ボタン
     private Button mButton01Show;               // 表示ボタン
@@ -236,7 +236,7 @@ public class MainResult extends AppCompatActivity implements
             int iCalorie_consumption = Integer.parseInt(strCalorie_consumption);
             int iWeight_fluctuates = Integer.parseInt(strWeight_fluctuates);
             int iTotal_time = Integer.parseInt(strTotal_time);
-            int iTotal_distance = Integer.parseInt(strTotal_time);
+            int iTotal_distance = Integer.parseInt(strTotal_distance);
 
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
