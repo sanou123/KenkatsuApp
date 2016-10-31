@@ -141,7 +141,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }else if(CourseNum.equals("3")) {
             tCourse.setText("デバッグ用");
             mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
-            TotalMileage = 20.0;
+            TotalMileage = 10.0;
             raw = 1;
         }
 
@@ -315,12 +315,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                 break;
 
             case R.id.buttonResult://Resultボタン押したとき
-                globals.coursename = tCourse.toString();//コース名
-                globals.mileage = tMileage.toString();//走行距離
-                globals.maxheartbeat = tHeartbeat.toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-                globals.avg = tSpeed.toString();//平均速度(これも計算する処理が必要)
-                globals.max = tSpeed.toString();//最高速度(これも同じ)
-                globals.time = tTimer.toString();//運動時間
+                globals.coursename = tCourse.getText().toString();//コース名
+                globals.mileage = tMileage.getText().toString();//走行距離
+                globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+                globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
+                globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+                globals.time = tTimer.getText().toString();//運動時間
                 globals.cal = "1234";//消費カロリー
 
                 Intent intent = new Intent(getApplication(), Result.class);
