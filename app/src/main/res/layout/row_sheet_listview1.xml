@@ -21,6 +21,24 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+
+        <!-- タイトル：日時 -->
+        <TextView
+            android:id="@+id/text05Title_Date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text05_title_date"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：日時 -->
+        <TextView
+            android:id="@+id/text05Date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
         <!-- タイトル：心拍数 -->
         <TextView
             android:id="@+id/text05_Title_Heart_rate"
@@ -56,23 +74,6 @@
             android:textColor="#000000"
             android:textSize="14sp" />
 
-        <!-- タイトル：体重変化 -->
-        <TextView
-            android:id="@+id/text05Title_Weight_fluctuates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/text05_title_weight_fluctuates"
-            android:textSize="14sp" />
-
-        <!-- データ表示用：体重変化 -->
-        <TextView
-            android:id="@+id/text05Weight_fluctuates"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:textColor="#000000"
-            android:textSize="14sp" />
-
         <!-- タイトル：総走行時間 -->
         <TextView
             android:id="@+id/text05title_Total_time"
@@ -103,6 +104,24 @@
         <!-- データ表示用：総走行距離 -->
         <TextView
             android:id="@+id/text05Total_distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <!-- タイトル：コース名 -->
+        <TextView
+            android:id="@+id/text05Title_Cousename"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/text05_title_coursename"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：コース名 -->
+        <TextView
+            android:id="@+id/text05Coursename"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"

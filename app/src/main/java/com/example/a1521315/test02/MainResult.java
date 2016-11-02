@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,6 +14,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * メイン画面に関連するクラス
@@ -22,19 +27,22 @@ public class MainResult extends AppCompatActivity implements
         RadioGroup.OnCheckedChangeListener {
 
     private EditText mEditText01Name;        // 名前
+    private EditText mEditText01Date;        // 日時
     private EditText mEditText01Heart_rate;        // 心拍数
     private EditText mEditText01Calorie_consumption;         // 消費カロリー
-    private EditText mEditText01Weight_fluctuates;         // 体重変化
     private EditText mEditText01Total_time;          // 総走行時間
     private EditText mEditText01Total_distance;          // 総走行距離
+    private EditText mEditText01Coursename;
 
 
     private TextView mText01Kome01;             // 名前の※印
-    private TextView mText01Kome02;             // 心拍数の※印
-    private TextView mText01Kome03;             // 消費カロリーの※印
-    private TextView mText01Kome04;             // 単体重変化の※印
+    private TextView mText01Kome02;             // 日時の※印
+    private TextView mText01Kome03;             // 心拍数の※印
+    private TextView mText01Kome04;             // 消費カロリーの※印
     private TextView mText01Kome05;             // 総走行時間の※印
     private TextView mText01Kome06;             // 総走行距離の※印
+    private TextView mText01Kome07;             // 日時の※印
+
 
     private Button mButton01Regist;             // 登録ボタン
     private Button mButton01Show;               // 表示ボタン
@@ -63,7 +71,7 @@ public class MainResult extends AppCompatActivity implements
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.MenuSelect");
+                        "com.example.a1521315.test02.VideoSelect");
                 startActivity(intent);
 
                 // キーボードを非表示
@@ -96,7 +104,7 @@ public class MainResult extends AppCompatActivity implements
                 // Sub 画面を起動
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.SelectSheetListView1");
+                        "com.example.a1521315.test02.SelectSheetListView");
                 startActivity(intent);
             }
         });
@@ -110,11 +118,13 @@ public class MainResult extends AppCompatActivity implements
     private void findViews() {
 
         mEditText01Name = (EditText) findViewById(R.id.editText01Name);   // 品名
+        mEditText01Date = (EditText) findViewById(R.id.editText01Date);   // 品名
         mEditText01Heart_rate = (EditText) findViewById(R.id.editText01Heart_rate);   // 品名
         mEditText01Calorie_consumption = (EditText) findViewById(R.id.editText01Calorie_consumption);     // 産地
-        mEditText01Weight_fluctuates = (EditText) findViewById(R.id.editText01Weight_fluctuates);     // 個数
         mEditText01Total_time = (EditText) findViewById(R.id.editText01Total_time);       // 単価
         mEditText01Total_distance = (EditText) findViewById(R.id.editText01Total_distance);       // 単価
+        mEditText01Coursename = (EditText) findViewById(R.id.editText01Coursename);       // 単価
+
 
         mText01Kome01 = (TextView) findViewById(R.id.text01Kome01);             // 品名の※印
         mText01Kome02 = (TextView) findViewById(R.id.text01Kome02);             // 産地※印
@@ -122,6 +132,8 @@ public class MainResult extends AppCompatActivity implements
         mText01Kome04 = (TextView) findViewById(R.id.text01Kome04);             // 単価の※印
         mText01Kome05 = (TextView) findViewById(R.id.text01Kome05);             // 単価の※印
         mText01Kome06 = (TextView) findViewById(R.id.text01Kome06);             // 単価の※印
+        mText01Kome07 = (TextView) findViewById(R.id.text01Kome07);             // 単価の※印
+
 
         mButton01Regist = (Button) findViewById(R.id.button01Regist1);           // 登録ボタン
         mButton01Show = (Button) findViewById(R.id.button01Show);               // 表示ボタン
@@ -135,12 +147,22 @@ public class MainResult extends AppCompatActivity implements
      * init()
      */
     private void init() {
+
+        long currentTimeMillis = System.currentTimeMillis();
+
+        Date date = new Date(currentTimeMillis);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日\nHH時mm分ss秒");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+        Log.v("時間", simpleDateFormat.format(date));
+
         mEditText01Name.setText("");
+        mEditText01Date.setText(simpleDateFormat.format(date));
         mEditText01Heart_rate.setText("");
         mEditText01Calorie_consumption.setText("");
-        mEditText01Weight_fluctuates.setText("");
         mEditText01Total_time.setText("");
         mEditText01Total_distance.setText("");
+        mEditText01Coursename.setText("");
+
 
 
         mText01Kome01.setText("");
@@ -149,6 +171,7 @@ public class MainResult extends AppCompatActivity implements
         mText01Kome04.setText("");
         mText01Kome05.setText("");
         mText01Kome06.setText("");
+        mText01Kome07.setText("");
 
         mEditText01Name.requestFocus();      // フォーカスを品名のEditTextに指定
     }
@@ -180,16 +203,17 @@ public class MainResult extends AppCompatActivity implements
 
         // 各EditTextで入力されたテキストを取得
         String strName = mEditText01Name.getText().toString();
+        String strDate = mEditText01Date.getText().toString();
         String strHeart_rate = mEditText01Heart_rate.getText().toString();
         String strCalorie_consumption = mEditText01Calorie_consumption.getText().toString();
-        String strWeight_fluctuates = mEditText01Weight_fluctuates.getText().toString();
         String strTotal_time = mEditText01Total_time.getText().toString();
         String strTotal_distance = mEditText01Total_distance.getText().toString();
+        String strCoursename = mEditText01Coursename.getText().toString();
 
 
         // EditTextが空白の場合
-        if (strName.equals("") || strHeart_rate.equals("") || strCalorie_consumption.equals("") || strWeight_fluctuates.equals("")
-                || strTotal_time.equals("") || strTotal_distance.equals("")) {
+        if (strName.equals("") || strDate.equals("") || strHeart_rate.equals("") || strCalorie_consumption.equals("")
+                || strTotal_time.equals("") || strTotal_distance.equals("") || strCoursename.equals("")) {
 
             if (strName.equals("")) {
                 mText01Kome01.setText("※");     // 品名が空白の場合、※印を表示
@@ -197,19 +221,19 @@ public class MainResult extends AppCompatActivity implements
                 mText01Kome01.setText("");      // 空白でない場合は※印を消す
             }
 
-            if (strHeart_rate.equals("")) {
+            if (strDate.equals("")) {
                 mText01Kome02.setText("※");     // 品名が空白の場合、※印を表示
             } else {
                 mText01Kome02.setText("");      // 空白でない場合は※印を消す
             }
 
-            if (strCalorie_consumption.equals("")) {
+            if (strHeart_rate.equals("")) {
                 mText01Kome03.setText("※");     // 産地が空白の場合、※印を表示
             } else {
                 mText01Kome03.setText("");      // 空白でない場合は※印を消す
             }
 
-            if (strWeight_fluctuates.equals("")) {
+            if (strCalorie_consumption.equals("")) {
                 mText01Kome04.setText("※");     // 個数が空白の場合、※印を表示
             } else {
                 mText01Kome04.setText("");      // 空白でない場合は※印を消す
@@ -226,6 +250,11 @@ public class MainResult extends AppCompatActivity implements
             } else {
                 mText01Kome06.setText("");      // 空白でない場合は※印を消す
             }
+            if (strTotal_time.equals("")) {
+                mText01Kome07.setText("※");     // 単価が空白の場合、※印を表示
+            } else {
+                mText01Kome07.setText("");      // 空白でない場合は※印を消す
+            }
 
             Toast.makeText(MainResult.this, "※の箇所を入力して下さい。", Toast.LENGTH_SHORT).show();
 
@@ -234,15 +263,14 @@ public class MainResult extends AppCompatActivity implements
             // 入力された値を文字列からint型へ変換
             int iHeart_rate = Integer.parseInt(strHeart_rate);
             int iCalorie_consumption = Integer.parseInt(strCalorie_consumption);
-            int iWeight_fluctuates = Integer.parseInt(strWeight_fluctuates);
             int iTotal_time = Integer.parseInt(strTotal_time);
             int iTotal_distance = Integer.parseInt(strTotal_distance);
 
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.saveDB2(strName,iHeart_rate, iCalorie_consumption, iWeight_fluctuates,
-                    iTotal_time, iTotal_distance);   // DBに登録
+            dbAdapter.saveDB2(strName,strDate, iHeart_rate, iCalorie_consumption,
+                    iTotal_time, iTotal_distance,strCoursename);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定

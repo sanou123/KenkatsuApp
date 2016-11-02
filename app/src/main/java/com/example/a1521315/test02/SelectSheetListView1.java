@@ -31,7 +31,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
     private ListView mListView04;
     protected MyListItem1 myListItem1;
 
-    // 参照するDBのカラム：名前,最大心拍数,消費カロリー,体重変化,総走行時間,総走行距離の全部なのでnullを指定
+    // 参照するDBのカラム：名前,日時,最大心拍数,消費カロリー,総走行時間,総走行距離の全部なのでnullを指定
     private String[] columns = null;
 
     @Override
@@ -121,15 +121,17 @@ public class SelectSheetListView1 extends AppCompatActivity {
                         c.getString(2),
                         c.getString(3),
                         c.getString(4),
-                        c.getString(5));
+                        c.getString(5),
+                        c.getString(6));
 
 
                 Log.d("取得したCursor(名前):", String.valueOf(c.getString(0)));
-                Log.d("取得したCursor(心拍数):", c.getString(1));
-                Log.d("取得したCursor(消費カロリー):", c.getString(2));
-                Log.d("取得したCursor(体重変化):", c.getString(3));
+                Log.d("取得したCursor(日時):", c.getString(1));
+                Log.d("取得したCursor(心拍数):", c.getString(2));
+                Log.d("取得したCursor(消費カロリー):", c.getString(3));
                 Log.d("取得したCursor(総走行時間):", c.getString(4));
                 Log.d("取得したCursor(総走行距離):", c.getString(5));
+                Log.d("取得したCursor(コース名):", c.getString(6));
 
 
                 items.add(myListItem1);          // 取得した要素をitemsに追加
@@ -155,11 +157,12 @@ public class SelectSheetListView1 extends AppCompatActivity {
         // 毎回findViewByIdをする事なく、高速化が出来るようするholderクラス
         private class ViewHolder {
             TextView text05Name;
+            TextView text05Date;
             TextView text05Heart_rate;
             TextView text05Calorie_consumption;
-            TextView text05Weight_fluctuates;
             TextView text05Total_time;
             TextView text05Total_distance;
+            TextView text05Coursename;
         }
 
         // コンストラクタの生成
@@ -203,21 +206,24 @@ public class SelectSheetListView1 extends AppCompatActivity {
                 view = inflater.inflate(R.layout.row_sheet_listview1, parent, false);
 
                 TextView text05Name = (TextView) view.findViewById(R.id.text05Name);      // 品名のTextView
+                TextView text05Date = (TextView) view.findViewById(R.id.text05Date);
                 TextView text05Heart_rate = (TextView) view.findViewById(R.id.text05Heart_rate);      // 品名のTextView
                 TextView text05Calorie_consumption = (TextView) view.findViewById(R.id.text05Calorie_consumption);        // 産地のTextView
-                TextView text05Weight_fluctuates = (TextView) view.findViewById(R.id.text05Weight_fluctuates);        // 個数のTextView
                 TextView text05Total_time = (TextView) view.findViewById(R.id.text05Total_time);          // 単価のTextView
                 TextView text05Total_distance = (TextView) view.findViewById(R.id.text05Total_distance);          // 単価のTextView
+                TextView text05Coursename = (TextView) view.findViewById(R.id.text05Coursename);      // 品名のTextView
+
 
 
                 // holderにviewを持たせておく
                 holder = new ViewHolder();
                 holder.text05Name = text05Name;
+                holder.text05Date = text05Date;
                 holder.text05Heart_rate = text05Heart_rate;
                 holder.text05Calorie_consumption = text05Calorie_consumption;
-                holder.text05Weight_fluctuates = text05Weight_fluctuates;
                 holder.text05Total_time = text05Total_time;
                 holder.text05Total_distance = text05Total_distance;
+                holder.text05Coursename = text05Coursename;
                 view.setTag(holder);
 
             } else {
@@ -227,11 +233,12 @@ public class SelectSheetListView1 extends AppCompatActivity {
 
             // 取得した各データを各TextViewにセット
             holder.text05Name.setText(myListItem1.getName());
+            holder.text05Date.setText(myListItem1.getDate());
             holder.text05Heart_rate.setText(myListItem1.getHeart_rate());
             holder.text05Calorie_consumption.setText(myListItem1.getCalorie_consumption());
-            holder.text05Weight_fluctuates.setText(myListItem1.getWeight_fluctuates());
             holder.text05Total_time.setText(myListItem1.getTotal_time());
             holder.text05Total_distance.setText(myListItem1.getTotal_distance());
+            holder.text05Coursename.setText(myListItem1.getCoursename());
 
             return view;
 

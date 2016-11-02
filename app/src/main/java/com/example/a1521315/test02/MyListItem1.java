@@ -8,32 +8,35 @@ package com.example.a1521315.test02;
  */
 public class MyListItem1 {
     protected String name;           // 名前
+    protected String date;          //日時
     protected String heart_rate;   // 心拍数
     protected String calorie_consumption;    // 消費カロリー
-    protected String weight_fluctuates;    // 体重変化
     protected String total_time;     // 総走行時間
     protected String total_distance;     // 総走行距離
+    protected String coursename;        //コース名
 
 
     /**
      * MyListItem()
      *
      * @param name      String 名前
+     * @param date      String 日時
      * @param heart_rate  String 心拍数
      * @param calorie_consumption String  消費カロリー
-     * @param weight_fluctuates String 体重変化
      * @param total_time  String 総走行時間
      * @param total_distance  String 総走行距離
+     * @param coursename String コース名
      *
      */
-    public MyListItem1(String name, String heart_rate, String calorie_consumption, String weight_fluctuates,
-                       String total_time, String total_distance) {
+    public MyListItem1(String name,String date, String heart_rate, String calorie_consumption,
+                       String total_time, String total_distance, String coursename) {
         this.name = name;
+        this.date = date;
         this.heart_rate = heart_rate;
         this.calorie_consumption = calorie_consumption;
-        this.weight_fluctuates = weight_fluctuates;
         this.total_time = total_time;
         this.total_distance = total_distance;
+        this.coursename = coursename;
 
     }
 
@@ -46,6 +49,16 @@ public class MyListItem1 {
     public String getName() {
         Log.d("名前：", String.valueOf(name));
         return name;
+    }
+
+    /**
+     * 日時を取得
+     * getDate()
+     *
+     * @return date String 日時
+     */
+    public String getDate() {
+        return date;
     }
 
     /**
@@ -68,15 +81,7 @@ public class MyListItem1 {
         return calorie_consumption;
     }
 
-    /**
-     * 体重変化を取得
-     * getWeight_fluctuates()
-     *
-     * @return weight_fluctuates String 体重変化
-     */
-    public String getWeight_fluctuates() {
-        return weight_fluctuates;
-    }
+
 
     /**
      * 総走行時間を取得
@@ -97,4 +102,14 @@ public class MyListItem1 {
     public String getTotal_distance() {
         return total_distance;
     }
+
+
+
+    /**
+     * コース名を取得
+     * getcoursename()
+     *
+     * @return price String コース名
+     */
+    public String getCoursename() { return coursename;  }
 }

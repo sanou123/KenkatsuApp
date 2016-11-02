@@ -50,11 +50,12 @@
     <string name="text05_title_height">身長：</string>
     <string name="text05_title_weight">体重：</string>
 
+    <string name="text05_title_date">日時：</string>
     <string name="text05_title_heart_rate">心拍数：</string>
     <string name="text05_title_calorie_consumption">消費カロリー：</string>
-    <string name="text05_title_weight_fluctuates">体重変化：</string>
     <string name="text05_title_total_time">総走行時間：</string>
     <string name="text05_title_total_total_distance">総走行距離：</string>
+    <string name="text05_title_coursename">コース名：</string>
     <!-- ここまで -->
 
     <!-- select_sheet_listview 03 -->
