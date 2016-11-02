@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "abc.db";      // DB名
+    private final static String DB_NAME = "abcdef.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
     private final static int DB_VERSION = 1;                // DBのバージョン
@@ -31,12 +31,12 @@ public class DBAdapter {
     public final static String COL_HEIGHT = "height";      // 身長
     public final static String COL_WEIGHT = "weight";        // 体重
 
-
+    public final static String COL_DATE = "date";                //日時
     public final static String COL_HEART_RATE = "heart_rate";    // 心拍数
     public final static String COL_CALORIE_CONSUMPTION = "calorie_consumption";      // 消費カロリー
-    public final static String COL_WEIGHT_FLUCTUATES = "weight_fluctuates";      // 体重変化
     public final static String COL_TOTAL_TIME = "total_time";        // 総走行時間
     public final static String COL_TOTAL_DISTANCE = "total_distance";        // 総走行距離
+    public final static String COL_COUSENAME = "coursename";
 
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
@@ -118,19 +118,21 @@ public class DBAdapter {
     }
 
 
-    public void saveDB2(String name , int heart_rate, int calorie_consumption, int weight_fluctuates,
-                        int total_time, int total_distance) {
+    public void saveDB2(String name ,String date, int heart_rate, int calorie_consumption,
+                        int total_time, int total_distance, String coursename) {
 
         db.beginTransaction();          // トランザクション開始
 
         try {
             ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
             values.put(COL_NAME, name);
+            values.put(COL_DATE, date);
             values.put(COL_HEART_RATE, heart_rate);
             values.put(COL_CALORIE_CONSUMPTION, calorie_consumption);
-            values.put(COL_WEIGHT_FLUCTUATES, weight_fluctuates);
             values.put(COL_TOTAL_TIME, total_time);
             values.put(COL_TOTAL_DISTANCE, total_distance);
+            values.put(COL_COUSENAME, coursename);
+
 
 
             // insertメソッド データ登録
@@ -309,11 +311,12 @@ public class DBAdapter {
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_data = "CREATE TABLE " + DB_TABLE_DATA + " ("
                     + COL_NAME + " TEXT NOT NULL ,"
+                    + COL_DATE + " TEXT NOT NULL ,"
                     + COL_HEART_RATE + " INTEGER NOT NULL,"
                     + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL,"
-                    + COL_WEIGHT_FLUCTUATES + " INTEGER NOT NULL,"
                     + COL_TOTAL_TIME + " INTEGER NOT NULL,"
-                    + COL_TOTAL_DISTANCE + " INTEGER NOT NULL"
+                    + COL_TOTAL_DISTANCE + " INTEGER NOT NULL,"
+                    + COL_COUSENAME+ " TEXT NOT NULL "
                     + ");";
             db.execSQL(createTbl_user);      //SQL文の実行
 

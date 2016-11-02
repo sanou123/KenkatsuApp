@@ -53,13 +53,59 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <!-- 個数 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Name"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="日時"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome02"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <!-- inputType：表示するキーボードを数値に指定 -->
+        <EditText
+            android:id="@+id/editText01Date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.30"
+            android:ellipsize="end"
+            android:hint="@string/text01_hintnumber"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
     <!-- 品名 -->
     <LinearLayout
         android:id="@+id/linearLayout01Heart_rate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout01Name"
+        android:layout_below="@+id/linearLayout01Date"
         android:orientation="horizontal"
         android:layout_alignParentLeft="true">
 
@@ -73,7 +119,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text01Kome02"
+            android:id="@+id/text01Kome03"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -120,7 +166,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text01Kome03"
+            android:id="@+id/text01Kome04"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -145,51 +191,7 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <!-- 個数 -->
-    <LinearLayout
-        android:id="@+id/linearLayout01Weight_fluctuates"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout01Calorie_consumption"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true">
 
-        <TextView
-            android:id="@+id/text01Weight_fluctuates"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="体重変化"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/text01Kome04"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:text="@string/text01_kome"
-            android:textColor="#FF0000"
-            android:textSize="14sp" />
-
-        <!-- inputType：表示するキーボードを数値に指定 -->
-        <EditText
-            android:id="@+id/editText01Weight_fluctuates"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.30"
-            android:ellipsize="end"
-            android:hint="@string/text01_hintnumber"
-            android:inputType="number"
-            android:lines="1"
-            android:maxLength="24"
-            android:maxLines="1"
-            android:minLines="1"
-            android:singleLine="true"
-            android:textSize="16sp" />
-    </LinearLayout>
 
     <!-- 単価 -->
     <LinearLayout
@@ -197,7 +199,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout01Weight_fluctuates"
+        android:layout_below="@+id/linearLayout01Calorie_consumption"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:layout_alignParentLeft="true">
@@ -281,12 +283,57 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <!-- 単価 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Coursename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Total_distance"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Coursename"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="コース名"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome07"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText01Coursename"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.30"
+            android:ellipsize="end"
+            android:hint="@string/text01_hinttext"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
     <!-- 登録ボタン -->
     <Button
         android:id="@+id/button01Regist1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout01Total_distance"
+        android:layout_below="@+id/linearLayout01Coursename"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:text="@string/button01_regist"

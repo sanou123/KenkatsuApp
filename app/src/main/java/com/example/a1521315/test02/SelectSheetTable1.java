@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 /**
  * TableLayout画面に関連するクラス
- * SelectSheetTable
+ * SelectSheetTable1
  */
 public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocusChangeListener, SearchView.OnQueryTextListener {
 
@@ -86,9 +86,6 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
         // ヘッダー：消費カロリー
         TextView headerCalorie_consumption = setTextItem("消費カロリー", GCH);
         TableRow.LayoutParams paramsCalorie_consumption = setParams(0.3f);
-        // ヘッダー：体重変化
-        TextView headerWeight_fluctuates = setTextItem("体重変化", GCH);
-        TableRow.LayoutParams paramsWeight_fluctuates = setParams(0.3f);
         // ヘッダー：総走行距離
         TextView headerTotal_time = setTextItem("総走行距離", GCH);
         TableRow.LayoutParams paramsTotal_time = setParams(0.4f);
@@ -102,7 +99,6 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
         rowHeader.addView(headerDate, paramsDate);          // ヘッダー：日時
         rowHeader.addView(headerHeart_rate, paramsHeart_rate);          // ヘッダー：最大心拍数
         rowHeader.addView(headerCalorie_consumption, paramsCalorie_consumption);          // ヘッダー：消費カロリー
-        rowHeader.addView(headerWeight_fluctuates, paramsWeight_fluctuates);            // ヘッダー：体重変化
         rowHeader.addView(headerTotal_time, paramsTotal_time);          // ヘッダー：総走行距離
         rowHeader.addView(headerTotal_distance, paramsTotal_distance);            // ヘッダー：総走行時間
         rowHeader.addView(headerCourse, paramsCourse);          // ヘッダー：コース名
@@ -125,25 +121,22 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
                 row.setPadding(16, 12, 16, 12);             // 行のパディングを指定(左, 上, 右, 下)
 
                 // 日時
-                TextView textDate = setTextItem(c.getString(0), GCH);     // TextViewのカスタマイズ処理
+                TextView textDate = setTextItem(c.getString(1), GCH);     // TextViewのカスタマイズ処理
                 // 最大心拍数
-                TextView textHeart_rate = setTextItem(c.getString(1)+" [bpm]", GCH);     // TextViewのカスタマイズ処理
+                TextView textHeart_rate = setTextItem(c.getString(2)+" [bpm]", GCH);     // TextViewのカスタマイズ処理
                 // 消費カロリー
-                TextView textCalorie_consumption = setTextItem(c.getString(2)+" [cal]", GCH);      // TextViewのカスタマイズ処理
-                // 体重変化
-                TextView textWeight_fluctuates = setTextItem(c.getString(3)+" [kg]", GCH);      // TextViewのカスタマイズ処理
+                TextView textCalorie_consumption = setTextItem(c.getString(3)+" [cal]", GCH);      // TextViewのカスタマイズ処理
                 // 総走行距離
                 TextView textTotal_time = setTextItem(c.getString(4)+" [km]", GCH);      // TextViewのカスタマイズ処理
                 // 総走行時間
                 TextView textTotal_distance = setTextItem(c.getString(5)+" [min]", GCH);      // TextViewのカスタマイズ処理
                 // コース名
-                TextView textCourse = setTextItem(c.getString(0), GCH);      // TextViewのカスタマイズ処理
+                TextView textCourse = setTextItem(c.getString(6), GCH);      // TextViewのカスタマイズ処理
 
                 // rowHeaderに各項目(DBから取得した産地,個数,単価)を追加
                 row.addView(textDate, paramsDate);      // 日時
                 row.addView(textHeart_rate, paramsHeart_rate);      // 最大心拍数
                 row.addView(textCalorie_consumption, paramsCalorie_consumption);      // 消費カロリー
-                row.addView(textWeight_fluctuates, paramsWeight_fluctuates);        // 体重変化
                 row.addView(textTotal_time, paramsTotal_time);      // 総走行距離
                 row.addView(textTotal_distance, paramsTotal_distance);        // 総走行時間
                 row.addView(textCourse, paramsCourse);          // コース名

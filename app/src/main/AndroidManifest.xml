@@ -65,9 +65,6 @@
             android:name=".SelectSheetListView1"/>
         <activity
             android:screenOrientation="landscape"
-            android:name=".SelectSheetTable" />
-        <activity
-            android:screenOrientation="landscape"
             android:name=".Result" />
         <activity
             android:screenOrientation="landscape"
@@ -92,6 +89,9 @@
             android:screenOrientation="landscape"
             android:name=".TrainingSelect"
             android:label="@string/name_training_select"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".Graph"/>
     </application>
 
 </manifest>

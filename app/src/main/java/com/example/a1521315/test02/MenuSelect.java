@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class MenuSelect extends AppCompatActivity {
         Intent intent = getIntent();
         String listName = intent.getStringExtra("SELECTED_DATA");//設定したSELECTED_DATAで取り出す
         String columns = listName + "さんのメニュー";
-        Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
+        //setText(columns);
 
         //trainingボタンを押した時TrainingSelectへ移動
         Button btnDisp0 = (Button) findViewById(R.id.training);
@@ -56,8 +55,19 @@ public class MenuSelect extends AppCompatActivity {
         });
 
         //updateボタンを押した時MainUserへ移動
-        Button btnDisp2 = (Button) findViewById(R.id.update);
+        Button btnDisp2 = (Button) findViewById(R.id.graph);
         btnDisp2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.Graph");
+                startActivity(intent);
+            }
+        });
+
+        //updateボタンを押した時MainUserへ移動
+        Button btnDisp3 = (Button) findViewById(R.id.update);
+        btnDisp3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
@@ -67,8 +77,8 @@ public class MenuSelect extends AppCompatActivity {
         });
 
         //dictionaryボタンを押した時Dictionaryへ移動
-        Button btnDisp3 = (Button) findViewById(R.id.dictionary);
-        btnDisp3.setOnClickListener(new View.OnClickListener() {
+        Button btnDisp4 = (Button) findViewById(R.id.dictionary);
+        btnDisp4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
@@ -79,8 +89,8 @@ public class MenuSelect extends AppCompatActivity {
         });
 
         //user_selectボタンを押した時UserSelectへ移動
-        Button btnDisp4 = (Button) findViewById(R.id.user_serect);
-        btnDisp4.setOnClickListener(new View.OnClickListener() {
+        Button btnDisp5 = (Button) findViewById(R.id.user_serect);
+        btnDisp5.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
@@ -90,9 +100,9 @@ public class MenuSelect extends AppCompatActivity {
             }
         });
 
-        //user_selectボタンを押した時UserSerectへ移動
-        Button btnDisp5 = (Button) findViewById(R.id.search);
-        btnDisp5.setOnClickListener(new View.OnClickListener() {
+        //searchボタンを押した時UserSelectへ移動
+        Button btnDisp6 = (Button) findViewById(R.id.search);
+        btnDisp6.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();

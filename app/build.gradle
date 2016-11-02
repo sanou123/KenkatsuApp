@@ -27,3 +27,10 @@ dependencies {
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+dependencies {
+    compile 'com.github.PhilJay:MPAndroidChart:v2.1.0'
+}
+
