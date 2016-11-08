@@ -60,6 +60,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     PlaybackParams params = new PlaybackParams();
     double speedcount = 0.0;
 
+    private ImageView imageView;//image_view_me用の変数
+    float imageX ;
+    float imageY ;
     //#########################################################1
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
@@ -110,8 +113,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         tTest.setText("");
         ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
         imageView1.setImageResource(R.drawable.bar);
-        ImageView imageView2 = (ImageView)findViewById(R.id.image_view_me);
-        imageView2.setImageResource(R.drawable.me);
+        imageView = (ImageView)findViewById(R.id.image_view_me);
+        imageView.setImageResource(R.drawable.me);
+        imageX = imageView.getX();
+        imageY = imageView.getY();
 
         findViewById(R.id.buttonPlay).setOnClickListener(this);
         findViewById(R.id.buttonResult).setOnClickListener(this);
@@ -540,6 +545,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                     f2 = mp.getCurrentPosition();
                     f3 = TotalMileage / ( f1 / f2);
                     tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());tMileage.setText(String.format("%.2f",f3));
+
+                    imageX = imageView.getX();
+                    imageY = imageView.getY();
+                    imageY -= 100;
+                    //y方向は20pixづつ、画像の横縦幅はそのまま維持
+                    imageView.layout((int)imageX, (int)imageY, (int)imageX + imageView.getWidth(), (int)imageY + imageView.getHeight());
+                    Log.d("imageXY", "X:" + imageX + " Y:" + imageY);
 
                 }
             });
