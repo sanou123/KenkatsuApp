@@ -63,6 +63,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     private ImageView imageView;//image_view_me用の変数
     float imageX ;
     float imageY ;
+
     //#########################################################1
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
@@ -115,8 +116,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         imageView1.setImageResource(R.drawable.bar);
         imageView = (ImageView)findViewById(R.id.image_view_me);
         imageView.setImageResource(R.drawable.me);
-        imageX = imageView.getX();
-        imageY = imageView.getY();
 
         findViewById(R.id.buttonPlay).setOnClickListener(this);
         findViewById(R.id.buttonResult).setOnClickListener(this);
@@ -252,12 +251,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
-
+        imageX = imageView.getX();
+        imageY = 850;
         try {
             //MediaPlayerを生成
             mp = new MediaPlayer();
-
-
 
             if(raw==1){
                 //動画ファイルをMediaPlayerに読み込ませる
@@ -365,7 +363,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
-                        getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 100, TimeUnit.MILLISECONDS);
+                        getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 1000, TimeUnit.MILLISECONDS);
                         usb_flg = false;
                     }
                 });
@@ -546,9 +544,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                     f3 = TotalMileage / ( f1 / f2);
                     tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());tMileage.setText(String.format("%.2f",f3));
 
-                    imageX = imageView.getX();
-                    imageY = imageView.getY();
-                    imageY -= 100;
+                    //imageX = imageView.getX();
+                    //imageY = imageView.getY();
+                    imageY -= 50;
                     //y方向は20pixづつ、画像の横縦幅はそのまま維持
                     imageView.layout((int)imageX, (int)imageY, (int)imageX + imageView.getWidth(), (int)imageY + imageView.getHeight());
                     Log.d("imageXY", "X:" + imageX + " Y:" + imageY);
