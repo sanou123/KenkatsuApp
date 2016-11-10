@@ -117,6 +117,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         findViewById(R.id.buttonResult).setOnClickListener(this);
         findViewById(R.id.buttonPause).setOnClickListener(this);
 
+
         //コース番号受け取り
         Intent i = getIntent();
         String CourseNum = i.getStringExtra("course");
