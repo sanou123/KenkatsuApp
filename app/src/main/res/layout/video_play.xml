@@ -123,28 +123,29 @@
             android:layout_alignStart="@+id/buttonPlay" />
 
         <RelativeLayout
-            android:layout_height="match_parent"
+            android:layout_height="501dp"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="15dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_width="100dp">
+            android:layout_marginEnd="12dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/bar"
                 android:id="@+id/image_view_bar"
-                android:layout_marginTop="15dp"
+                android:scaleType="fitEnd"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:scaleType="fitEnd" />
+                android:layout_alignEnd="@+id/image_view_me" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/me"
                 android:id="@+id/image_view_me"
-                android:layout_alignBottom="@+id/image_view_bar"
-                android:layout_centerHorizontal="true" />
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true" />
 
         </RelativeLayout>
 
