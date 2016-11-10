@@ -43,7 +43,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     TextView tTest;//再生時間の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース番号
-
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
     private SurfaceView mPreview;
