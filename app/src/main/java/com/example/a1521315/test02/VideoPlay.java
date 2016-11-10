@@ -179,7 +179,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        //bluetooth**********************************************************************************
+        //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.statusValue);
         //connectButton = (Button)findViewById(R.id.connectButton);
