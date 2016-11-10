@@ -29,13 +29,21 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 
-public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.OnClickListener, MediaPlayer.OnCompletionListener {
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.UUID;
+
+public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, View.OnClickListener, MediaPlayer.OnCompletionListener {
     Globals globals;
     TextView tSpeed;//時速の変数
     TextView tMileage;//走行距離の変数
@@ -59,7 +67,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     PlaybackParams params = new PlaybackParams();
     double speedcount = 0.0;
 
-    //#########################################################1
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
     public static final int POLE_SENSOR_CHANGE = 3;
@@ -84,7 +91,25 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
 
     private USBAccessoryManager accessoryManager;
 
-    //#########################################################2
+    //bluetooth**********************************************************************************
+    private BluetoothAdapter mAdapter;/* Bluetooth Adapter */
+    private BluetoothDevice mDevice;/* Bluetoothデバイス */
+    private final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");/* Bluetooth UUID */
+    private final String DEVICE_NAME = "RNBT-C46F";/* デバイス名 */
+    private BluetoothSocket mSocket; /* Soket */
+    private Thread mThread; /* Thread */
+    private boolean isRunning; /* Threadの状態を表す */
+    //private Button connectButton;/** 接続ボタン. */
+    private TextView mStatusTextView;/** ステータス. */
+    private TextView mInputTextView;/** Bluetoothから受信した値. */
+    private static final int VIEW_STATUS = 0; /** Action(ステータス表示). */
+    private static final int VIEW_INPUT = 1;/** Action(取得文字列). */
+
+    /** BluetoothのOutputStream. */
+    OutputStream mmOutputStream = null;
+    private boolean connectFlg = false;
+
+    //********************************************************************************
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,7 +170,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             raw = 1;
         }
 
-        //#####################################################################################################1
         accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
         try {
             PackageManager manager = this.getPackageManager();
@@ -155,16 +179,36 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        //#####################################################################################################2
+        //bluetooth**********************************************************************************
+        mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
+        mStatusTextView = (TextView)findViewById(R.id.statusValue);
+        //connectButton = (Button)findViewById(R.id.connectButton);
+        //connectButton.setOnClickListener(this);
+        findViewById(R.id.connectButton).setOnClickListener(this);
 
+        // Bluetoothのデバイス名を取得
+        // デバイス名は、RNBT-XXXXになるため、
+        // DVICE_NAMEでデバイス名を定義
+        mAdapter = BluetoothAdapter.getDefaultAdapter();
+        mStatusTextView.setText("SearchDevice");
+        Set< BluetoothDevice > devices = mAdapter.getBondedDevices();
+        for ( BluetoothDevice device : devices){
+
+            if(device.getName().equals(DEVICE_NAME)){
+                mStatusTextView.setText("find: " + device.getName());
+                mDevice = device;
+            }
+        }
+        //**********************************************************************************
     }
+
     // 再生完了時の処理
     @Override
     public void onCompletion(MediaPlayer agr0) {
         Log.v("MediaPlayer", "onCompletion");
         //USB通信の切断(停止がないため)
         accessoryManager.disable(this);
-        disconnectAccessory();//################################       あやしいかもよ～
+        disconnectAccessory();
         Button BtnPauseView2 = (Button) findViewById(R.id.buttonPause);
         BtnPauseView2.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
         getplaytimescheduler.shutdown();//サービス終了させる
@@ -187,7 +231,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
     }
 
-    //#################################################################################################1
     @Override
     public void onStart() {
         super.onStart();
@@ -209,6 +252,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     @Override
     public void onPause() {
         super.onPause();
+
         Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
         switch (firmwareProtocol) {
             case 2:
@@ -230,6 +274,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         //super.onPause();
         accessoryManager.disable(this);
         disconnectAccessory();
+
+        //bluetooth***********
+        isRunning = false;
+        try{
+            mSocket.close();
+        }
+        catch(Exception e){}
+        //*************************
     }
 
     // Resets the demo application when a device detaches
@@ -243,16 +295,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
     }
 
-    //#################################################################################################2
-
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
 
         try {
             //MediaPlayerを生成
             mp = new MediaPlayer();
-
-
 
             if(raw==1){
                 //動画ファイルをMediaPlayerに読み込ませる
@@ -293,12 +341,110 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
         }
     }
 
+    //bluetooth**********************************************************************************
+    //Runnableインターフェース追加
+    @Override
+    public void run() {
+        InputStream mmInStream = null;
 
+        Message valueMsg = new Message();
+        valueMsg.what = VIEW_STATUS;
+        valueMsg.obj = "connecting...";
+        mHandler.sendMessage(valueMsg);
+
+        try{
+
+            // 取得したデバイス名を使ってBluetoothでSocket接続
+            mSocket = mDevice.createRfcommSocketToServiceRecord(MY_UUID);
+            mSocket.connect();
+            mmInStream = mSocket.getInputStream();
+            mmOutputStream = mSocket.getOutputStream();
+
+            // InputStreamのバッファを格納
+            byte[] buffer = new byte[1024];
+
+            // 取得したバッファのサイズを格納
+            int bytes;
+            valueMsg = new Message();
+            valueMsg.what = VIEW_STATUS;
+            valueMsg.obj = "connected.";
+            mHandler.sendMessage(valueMsg);
+
+            connectFlg = true;
+
+            while(isRunning){
+
+                // InputStreamの読み込み
+                bytes = mmInStream.read(buffer);
+                Log.i(TAG,"bytes="+bytes);
+                // String型に変換
+                String readMsg = new String(buffer, 0, bytes);
+
+                // null以外なら表示
+                if(readMsg.trim() != null && !readMsg.trim().equals("")){
+                    Log.i(TAG,"value="+readMsg.trim());
+
+                    valueMsg = new Message();
+                    valueMsg.what = VIEW_INPUT;
+                    valueMsg.obj = readMsg;
+                    mHandler.sendMessage(valueMsg);
+                }
+                else{
+                    // Log.i(TAG,"value=nodata");
+                }
+
+                //Thread.sleep(10);
+
+            }
+
+        }catch(Exception e){
+
+            valueMsg = new Message();
+            valueMsg.what = VIEW_STATUS;
+            valueMsg.obj = "Error1:" + e;
+            mHandler.sendMessage(valueMsg);
+
+            try{
+                mSocket.close();
+            }catch(Exception ee){}
+            isRunning = false;
+        }
+    }
+
+    /**
+     * 描画処理はHandlerでおこなう
+     */
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            int action = msg.what;
+            String msgStr = (String)msg.obj;
+            if(action == VIEW_INPUT){
+                mInputTextView.setText(msgStr);
+            }
+            else if(action == VIEW_STATUS){
+                mStatusTextView.setText(msgStr);
+            }
+        }
+    };
+    //*****************************************************************************************
 
     //ボタンを押された時の処理
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.connectButton://connectボタンを押したとき
+                if(!connectFlg) {
+
+                    mStatusTextView.setText("try connect");
+
+                    mThread = new Thread(this);
+                    // Threadを起動し、Bluetooth接続
+                    isRunning = true;
+                    mThread.start();
+                }
+                break;
+
             case R.id.buttonPlay://Playボタン押したとき
                 Button BtnPlayView = (Button) findViewById(R.id.buttonPlay);
                 Button BtnPauseView = (Button) findViewById(R.id.buttonPause);
@@ -549,7 +695,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
     private int getFirmwareProtocol(String version) {
 
         String major = "0";
-
         int positionOfDot;
 
         //Toast.makeText(this, "getFirmware", Toast.LENGTH_LONG).show();
