@@ -45,7 +45,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable,  MediaPlayer.OnCompletionListener {
+import static com.example.a1521315.test02.R.id.connectButton;
+
+public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener,View.OnClickListener {
     Globals globals;
     TextView tSpeed;//時速の変数
     TextView tMileage;//走行距離の変数
@@ -53,6 +55,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tTest;//再生時間の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース番号
+
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
     private SurfaceView mPreview;
@@ -195,7 +198,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         mStatusTextView = (TextView)findViewById(R.id.statusValue);
         //connectButton = (Button)findViewById(R.id.connectButton);
         //connectButton.setOnClickListener(this);
-        findViewById(R.id.connectButton).setOnClickListener(this);
+        findViewById(connectButton).setOnClickListener(this);
 
         // Bluetoothのデバイス名を取得
         // デバイス名は、RNBT-XXXXになるため、
@@ -525,6 +528,28 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             startActivity(intent);
         }
     };
+
+    //Connectボタンを押したときの処理
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch(id) {
+            case R.id.connectButton:
+                //イベント処理を記入
+                //if (v.equals(connectButton)) {
+                    if (!connectFlg) {
+
+                        mStatusTextView.setText("try connect");
+
+                        mThread = new Thread(this);
+                        // Threadを起動し、Bluetooth接続
+                        isRunning = true;
+                        mThread.start();
+                    }
+                //}
+                break;
+        }
+    }
 
 
     //ボリュームキーの操作
