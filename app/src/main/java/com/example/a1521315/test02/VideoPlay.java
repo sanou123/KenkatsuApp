@@ -525,6 +525,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                     long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
+                    imageX = imageView.getX();
+                    imageY = imageView.getY();
+                    imageY -= 20;
+                    //y方向は20pixづつ、画像の横縦幅はそのまま維持
+                    imageView.layout((int)imageX, (int)imageY, (int)imageX + imageView.getWidth(), (int)imageY + imageView.getHeight());
+                    Log.d("imageXY", "X:" + imageX + " Y:" + imageY);
+
                 }
             });
         }
@@ -544,12 +551,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, View.
                     f3 = TotalMileage / ( f1 / f2);
                     tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());tMileage.setText(String.format("%.2f",f3));
 
-                    //imageX = imageView.getX();
-                    //imageY = imageView.getY();
-                    imageY -= 50;
-                    //y方向は20pixづつ、画像の横縦幅はそのまま維持
-                    imageView.layout((int)imageX, (int)imageY, (int)imageX + imageView.getWidth(), (int)imageY + imageView.getHeight());
-                    Log.d("imageXY", "X:" + imageX + " Y:" + imageY);
 
                 }
             });
