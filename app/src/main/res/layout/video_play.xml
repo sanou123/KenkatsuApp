@@ -26,23 +26,14 @@
         android:layout_height="match_parent">
 
         <Button
-            android:text="リザルト"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonResult"
-            android:visibility="invisible"
-            android:layout_above="@+id/buttonPlay"
-            android:layout_alignStart="@+id/buttonPlay"
-            android:layout_marginBottom="87dp" />
-
-        <Button
             android:text="PLAY"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:id="@+id/buttonPlay"
             android:visibility="visible"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_width="500dp"
+            android:textSize="100sp" />
 
         <TextView
             android:text="00:00.0"
@@ -111,17 +102,6 @@
             android:layout_alignBottom="@+id/Kyori"
             android:layout_toEndOf="@+id/Sinpaku" />
 
-        <TextView
-            android:text="aaaaaaaaaaaaaaa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textTest"
-            android:textSize="30sp"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_marginStart="52dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/buttonPlay" />
-
         <RelativeLayout
             android:layout_height="501dp"
             android:layout_width="wrap_content"
@@ -160,25 +140,6 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="16dp" />
 
-        <Button
-            android:id="@+id/connectButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Connect"
-            android:layout_above="@+id/statusValue"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:text="Pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonPause"
-            android:visibility="invisible"
-            android:layout_alignBaseline="@+id/buttonPlay"
-            android:layout_alignBottom="@+id/buttonPlay"
-            android:layout_alignParentStart="true" />
-
         <TextView
             android:text="時速:        　  　   km"
             android:layout_width="wrap_content"
@@ -209,6 +170,68 @@
             android:textSize="36sp"
             android:layout_above="@+id/Sinpaku"
             android:layout_alignStart="@+id/textHeartbeat" />
+
+        <TextView
+            android:text="aaaaaaaaaaaaaaa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTest"
+            android:textSize="30sp"
+            android:textColor="@android:color/holo_orange_light"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/textTimer" />
+
+        <Button
+            android:text="リザルト"
+            android:layout_width="500dp"
+            android:layout_height="150dp"
+            android:id="@+id/buttonResult"
+            android:visibility="invisible"
+            android:layout_alignTop="@+id/buttonPlay"
+            android:layout_alignStart="@+id/buttonPlay" />
+
+        <Button
+            android:text="Pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonPause"
+            android:visibility="invisible"
+            android:layout_above="@+id/connectButton"
+            android:layout_alignParentStart="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/textHeartbeat"
+            android:layout_marginBottom="10dp"
+            android:layout_alignEnd="@+id/buttonPlay"
+            android:layout_alignStart="@+id/buttonPlay"
+            android:layout_below="@+id/textTimer">
+
+            <Button
+                android:text="No"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonNoConnect"
+                android:layout_weight="1"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/connectButton"
+                android:layout_marginStart="93dp"
+                android:layout_marginBottom="43dp" />
+
+            <Button
+                android:id="@+id/connectButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Connect"
+                android:layout_weight="1"
+                android:layout_marginStart="108dp"
+                android:layout_alignBaseline="@+id/buttonNoConnect"
+                android:layout_alignBottom="@+id/buttonNoConnect"
+                android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
