@@ -644,8 +644,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                              sensor_value = (int) commandPacket[1];
                                              speed_tmp = (float) sensor_value / 20;
                                          }
-                                        tSpeed.setText(speed_tmp * 10 + "km/h");//debug時はsensor_valueをつかう
-                                        params.setSpeed(speed_tmp);//再生速度変更
+                                        tSpeed.setText(sensor_value + "km/h");//debug時はsensor_valueをつかう
+                                        //tSpeed.setText(speed_tmp * 10 + "km/h");//debug時はsensor_valueをつかう
+                                        //params.setSpeed(speed_tmp);//再生速度変更
+                                        params.setSpeed(1);//再生速度変更
                                         mp.setPlaybackParams(params);
                                         break;
                                 }
