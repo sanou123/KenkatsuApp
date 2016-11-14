@@ -102,7 +102,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         ERROR_FIRMWARE_PROTOCOL
     };
 
-    private USBAccessoryManager accessoryManager;
+    private USBAccessoryManager accessoryManager;//
 
     //bluetooth**********************************************************************************
     private BluetoothAdapter mAdapter;/* Bluetooth Adapter */
