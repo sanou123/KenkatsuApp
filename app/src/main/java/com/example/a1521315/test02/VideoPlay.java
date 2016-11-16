@@ -2,10 +2,8 @@ package com.example.a1521315.test02;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
@@ -16,7 +14,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -45,7 +42,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import static com.example.a1521315.test02.R.id.connectButton;
+import static com.example.a1521315.test02.R.id.buttonNo;
+import static com.example.a1521315.test02.R.id.buttonYes;
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener,View.OnClickListener {
     Globals globals;
@@ -193,12 +191,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
-        mStatusTextView = (TextView)findViewById(R.id.statusValue);
+        mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
         //connectButton = (Button)findViewById(R.id.connectButton);
         //connectButton.setOnClickListener(this);
-        findViewById(connectButton).setOnClickListener(this);
+        findViewById(buttonYes).setOnClickListener(this);
+        findViewById(buttonNo).setOnClickListener(this);
 
         // Bluetoothのデバイス名を取得
         // デバイス名は、RNBT-XXXXになるため、
@@ -214,6 +214,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //**********************************************************************************
+
     }
     // 再生完了時の処理
     @Override
@@ -223,7 +224,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         accessoryManager.disable(this);
         disconnectAccessory();//################################       あやしいかもよ～
         Button BtnPauseView2 = (Button) findViewById(R.id.buttonPause);
-        BtnPauseView2.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
+        BtnPauseView2.setVisibility(View.INVISIBLE);
         getplaytimescheduler.shutdown();//サービス終了させる
         timerscheduler.shutdown();//タイマー止める
         movemetimer.cancel();//MoveMeTask止める
@@ -405,16 +406,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 else{
                     // Log.i(TAG,"value=nodata");
                 }
-
                 //Thread.sleep(10);
-
             }
-
         }catch(Exception e){
 
             valueMsg = new Message();
             valueMsg.what = VIEW_STATUS;
-            valueMsg.obj = "Error1:" + e;
+            //valueMsg.obj = "Error1:" + e;
+            valueMsg.obj = "not connected.";
             mHandler.sendMessage(valueMsg);
 
             try{
@@ -447,10 +446,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     View.OnClickListener PlayClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Button BtnPlayView = (Button) findViewById(R.id.buttonPlay);
-            Button BtnPauseView = (Button) findViewById(R.id.buttonPause);
-            BtnPlayView.setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
-            BtnPauseView.setVisibility(View.VISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
+            findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
+            findViewById(R.id.buttonPause).setVisibility(View.VISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
             speedcount = 0.0;
             tSpeed.setText(String.format("%.1f", (float) (speedcount * 10)));
             mp.setPlaybackParams(params);
@@ -534,19 +531,21 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public void onClick(View v) {
         int id = v.getId();
         switch(id) {
-            case R.id.connectButton:
+            case R.id.buttonYes:
                 //イベント処理を記入
-                //if (v.equals(connectButton)) {
-                    if (!connectFlg) {
+                if (!connectFlg) {
+                    mStatusTextView.setText("try connect");
+                    mThread = new Thread(this);
+                    // Threadを起動し、Bluetooth接続
+                    isRunning = true;
+                    mThread.start();
+                }
+                break;
 
-                        mStatusTextView.setText("try connect");
-
-                        mThread = new Thread(this);
-                        // Threadを起動し、Bluetooth接続
-                        isRunning = true;
-                        mThread.start();
-                    }
-                //}
+            case buttonNo:
+                findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                tHeartbeat.setText("Not");
                 break;
         }
     }

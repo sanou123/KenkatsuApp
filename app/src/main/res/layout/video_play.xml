@@ -26,23 +26,14 @@
         android:layout_height="match_parent">
 
         <Button
-            android:text="リザルト"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonResult"
-            android:visibility="invisible"
-            android:layout_above="@+id/buttonPlay"
-            android:layout_alignStart="@+id/buttonPlay"
-            android:layout_marginBottom="87dp" />
-
-        <Button
             android:text="PLAY"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:id="@+id/buttonPlay"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_width="500dp"
+            android:textSize="100sp" />
 
         <TextView
             android:text="00:00.0"
@@ -111,17 +102,6 @@
             android:layout_alignBottom="@+id/Kyori"
             android:layout_toEndOf="@+id/Sinpaku" />
 
-        <TextView
-            android:text="aaaaaaaaaaaaaaa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textTest"
-            android:textSize="30sp"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_marginStart="52dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/buttonPlay" />
-
         <RelativeLayout
             android:layout_height="501dp"
             android:layout_width="wrap_content"
@@ -150,36 +130,6 @@
         </RelativeLayout>
 
         <TextView
-            android:text="コース番号"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textCourse"
-            android:textSize="36sp"
-            android:textColor="@android:color/holo_red_light"
-            android:layout_below="@+id/textTimer"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/connectButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Connect"
-            android:layout_above="@+id/statusValue"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:text="Pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonPause"
-            android:visibility="invisible"
-            android:layout_alignBaseline="@+id/buttonPlay"
-            android:layout_alignBottom="@+id/buttonPlay"
-            android:layout_alignParentStart="true" />
-
-        <TextView
             android:text="時速:        　  　   km"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -205,10 +155,151 @@
             android:id="@+id/statusValue"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_light"
             android:textSize="36sp"
             android:layout_above="@+id/Sinpaku"
-            android:layout_alignStart="@+id/textHeartbeat" />
+            android:layout_alignStart="@+id/textHeartbeat"
+            android:textColor="@android:color/holo_red_light"
+            android:text="text" />
+
+        <TextView
+            android:text="aaaaaaaaaaaaaaa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTest"
+            android:textSize="30sp"
+            android:textColor="@android:color/holo_orange_light"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/textTimer" />
+
+        <Button
+            android:text="リザルト"
+            android:layout_width="500dp"
+            android:layout_height="150dp"
+            android:id="@+id/buttonResult"
+            android:visibility="invisible"
+            android:layout_alignTop="@+id/buttonPlay"
+            android:layout_alignStart="@+id/buttonPlay"
+            android:textSize="100sp" />
+
+        <Button
+            android:text="Pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonPause"
+            android:visibility="invisible"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="コース番号"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textCourse"
+            android:textSize="36sp"
+            android:textColor="@android:color/holo_red_light"
+            android:layout_alignBottom="@+id/buttonPause"
+            android:layout_alignParentStart="true" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:id="@+id/ConnectCheak"
+            android:visibility="visible"
+            android:layout_above="@+id/statusValue"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="46dp"
+            android:background="@android:color/holo_red_dark">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/textConnectMsg1"
+                    android:text="心拍数を測定しながら走行しますか？"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg1"
+                    android:id="@+id/textConnectMsg2"
+                    android:text="接続する場合は接続を押して接続確立させてから続行。"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true"
+                    />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg2"
+                    android:id="@+id/textConnectMsg3"
+                    android:text="接続しない場合はそのまま続行。"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg3"
+                    android:id="@+id/textConnectMsg4"
+                    android:text=""
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg4"
+                    android:id="@+id/textConnectStatus"
+                    android:text="connect. / not connected."
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="100dp"
+                android:layout_width="600dp"
+                android:layout_gravity="center"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="0dp"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/buttonYes"
+                    android:text="接続する"
+                    android:layout_width="300dp"
+                    android:layout_height="100dp"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/buttonNo"
+                    android:text="続行"
+                    android:layout_width="300dp"
+                    android:layout_height="100dp"
+                    android:textSize="30sp" />
+
+
+            </LinearLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 
