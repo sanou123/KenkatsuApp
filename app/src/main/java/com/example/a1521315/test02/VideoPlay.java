@@ -14,7 +14,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
 import android.os.Message;
-import android.text.Layout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -43,7 +42,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import static com.example.a1521315.test02.R.id.ConnectCheak;
 import static com.example.a1521315.test02.R.id.buttonNo;
 import static com.example.a1521315.test02.R.id.buttonYes;
 
@@ -196,7 +194,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
-        mStatusTextView = (TextView)findViewById(R.id.statusValue);
+        mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
         //connectButton = (Button)findViewById(R.id.connectButton);
         //connectButton.setOnClickListener(this);
         findViewById(buttonYes).setOnClickListener(this);
@@ -414,7 +412,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
             valueMsg = new Message();
             valueMsg.what = VIEW_STATUS;
-            valueMsg.obj = "Error1:" + e;
+            //valueMsg.obj = "Error1:" + e;
+            valueMsg.obj = "not connected.";
             mHandler.sendMessage(valueMsg);
 
             try{

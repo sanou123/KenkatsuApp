@@ -155,10 +155,11 @@
             android:id="@+id/statusValue"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_light"
             android:textSize="36sp"
             android:layout_above="@+id/Sinpaku"
-            android:layout_alignStart="@+id/textHeartbeat" />
+            android:layout_alignStart="@+id/textHeartbeat"
+            android:textColor="@android:color/holo_red_light"
+            android:text="text" />
 
         <TextView
             android:text="aaaaaaaaaaaaaaa"
@@ -188,44 +189,88 @@
             android:visibility="invisible"
             android:layout_alignParentStart="true" />
 
+        <TextView
+            android:text="コース番号"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textCourse"
+            android:textSize="36sp"
+            android:textColor="@android:color/holo_red_light"
+            android:layout_alignBottom="@+id/buttonPause"
+            android:layout_alignParentStart="true" />
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="250dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="120dp"
-            android:layout_alignParentEnd="true"
+            android:layout_height="300dp"
             android:id="@+id/ConnectCheak"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:layout_above="@+id/statusValue"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="46dp"
+            android:background="@android:color/holo_red_dark">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center">
 
                 <TextView
+                    android:id="@+id/textConnectMsg1"
                     android:text="心拍数を測定しながら走行しますか？"
                     android:layout_width="600dp"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:textSize="30sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
                     android:textColor="@color/common_google_signin_btn_text_dark_pressed"
-                    android:background="@color/colorAccent" />
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
 
                 <TextView
-                    android:id="@+id/textStatus"
-                    android:text="ステータス"
+                    android:layout_below="@+id/textConnectMsg1"
+                    android:id="@+id/textConnectMsg2"
+                    android:text="接続する場合は接続を押して接続確立させてから続行。"
                     android:layout_width="600dp"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:textSize="30sp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
                     android:textColor="@color/common_google_signin_btn_text_dark_pressed"
-                    android:background="@color/colorAccent" />
+                    android:layout_alignParentStart="true"
+                    />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg2"
+                    android:id="@+id/textConnectMsg3"
+                    android:text="接続しない場合はそのまま続行。"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg3"
+                    android:id="@+id/textConnectMsg4"
+                    android:text=""
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg4"
+                    android:id="@+id/textConnectStatus"
+                    android:text="connect. / not connected."
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true" />
+
 
             </RelativeLayout>
 
@@ -247,7 +292,7 @@
 
                 <Button
                     android:id="@+id/buttonNo"
-                    android:text="接続しない"
+                    android:text="続行"
                     android:layout_width="300dp"
                     android:layout_height="100dp"
                     android:textSize="30sp" />
@@ -255,16 +300,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
-        <TextView
-            android:text="コース番号"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textCourse"
-            android:textSize="36sp"
-            android:textColor="@android:color/holo_red_light"
-            android:layout_alignBottom="@+id/buttonPause"
-            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 
