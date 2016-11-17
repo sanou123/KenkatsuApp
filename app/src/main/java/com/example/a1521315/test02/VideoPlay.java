@@ -143,10 +143,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer.setText("00:00.0");
         tTest = (TextView) findViewById(R.id.textTest);
         tTest.setText("");
-        ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
-        imageView1.setImageResource(R.drawable.bar);
         imageView = (ImageView)findViewById(R.id.image_view_me);
         imageView.setImageResource(R.drawable.me);
+        ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
+        imageView1.setImageResource(R.drawable.bar);
+        ImageView imageView2 = (ImageView)findViewById(R.id.image_meter);
+        imageView2.setImageResource(R.drawable.meter);
+
 
         findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
         findViewById(R.id.buttonPause).setOnClickListener(PauseClickListener);
@@ -191,7 +194,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -214,7 +217,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //**********************************************************************************
-
+*/
     }
     // 再生完了時の処理
     @Override

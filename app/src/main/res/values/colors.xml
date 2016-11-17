@@ -3,5 +3,5 @@
     <color name="colorPrimary">#53d6da</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
-    <color name="black_overlay">#66000000</color>
+    <color name="black_overlay">#66f40f0f</color>
 </resources>
