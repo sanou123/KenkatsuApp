@@ -7,7 +7,7 @@ import android.util.Log;
  * MyListItem
  */
 public class MyListItem {
-    protected int id;           // ID
+    protected int user_id;           // ID
     protected String name;   // 名前
     protected String age;    // 年齢
     protected String sex;    // 性別
@@ -17,7 +17,7 @@ public class MyListItem {
     /**
      * MyListItem()
      *
-     * @param id      int ID
+     * @param user_id      int USER_ID
      * @param name String 名前
      * @param age  String 年齢
      * @param sex  String 性別
@@ -25,9 +25,9 @@ public class MyListItem {
      * @param weight   String 体重
      *
      */
-    public MyListItem(int id, String name, String age, String sex,String height,
+    public MyListItem(int user_id, String name, String age, String sex,String height,
                       String weight) {
-        this.id = id;
+        this.user_id = user_id;
         this.name = name;
         this.age = age;
         this.sex = sex;
@@ -38,13 +38,13 @@ public class MyListItem {
 
     /**
      * IDを取得
-     * getId()
+     * getUser_id()
      *
-     * @return id int ID
+     * @return user_id int USER_ID
      */
-    public int getId() {
-        Log.d("取得したID：", String.valueOf(id));
-        return id;
+    public int getUser_id() {
+        Log.d("取得したID：", String.valueOf(user_id));
+        return user_id;
     }
 
     /**

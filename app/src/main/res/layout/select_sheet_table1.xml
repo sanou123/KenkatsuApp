@@ -17,12 +17,6 @@
         android:textColor="#333333" />
 
     <!-- 検索窓 -->
-    <SearchView
-        android:id="@+id/searchView03"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:queryHint="@string/text04_hinttext" />
 
     <!-- スクロール -->
     <ScrollView

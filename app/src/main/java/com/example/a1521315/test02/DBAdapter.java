@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "abcdef.db";      // DB名
+    private final static String DB_NAME = "asdfg.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
     private final static int DB_VERSION = 1;                // DBのバージョン
@@ -24,19 +24,26 @@ public class DBAdapter {
     /**
      * DBのカラム名
      */
-    public final static String COL_ID = "_id";             // id
+    public final static String COL_ID_USER = "user_id";             // id
     public final static String COL_NAME = "name";    // 名前
     public final static String COL_AGE = "age";      // 年齢
     public final static String COL_SEX = "sex";      // 性別
     public final static String COL_HEIGHT = "height";      // 身長
     public final static String COL_WEIGHT = "weight";        // 体重
 
+    public final static String COL_ID_DATA = "data_id";             // id
+    public final static String COL_NAME_ID = "name_id";         //名前に対するID
     public final static String COL_DATE = "date";                //日時
     public final static String COL_HEART_RATE = "heart_rate";    // 心拍数
     public final static String COL_CALORIE_CONSUMPTION = "calorie_consumption";      // 消費カロリー
     public final static String COL_TOTAL_TIME = "total_time";        // 総走行時間
     public final static String COL_TOTAL_DISTANCE = "total_distance";        // 総走行距離
-    public final static String COL_COUSENAME = "coursename";
+    public final static String COL_COURSE_NAME = "course_name";        //コース名
+    public final static String COL_TIME = "time";                   //タイム
+    public final static String COL_AVG_SPEED = "avg_speed";         //平均速度
+    public final static String COL_MAX_SPEED = "max_speed";         //最高速度
+    public final static String COL_DISTANCE = "distance";           //走行距離
+    public final static String COL_BMI = "bmi";           //BMI指数
 
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
@@ -118,20 +125,27 @@ public class DBAdapter {
     }
 
 
-    public void saveDB2(String name ,String date, int heart_rate, int calorie_consumption,
-                        int total_time, int total_distance, String coursename) {
+    public void saveDB_DATA(int name_id, String name ,String date, String heart_rate, String calorie_consumption,
+                            String total_time, String total_distance, String course_name, String time,
+                            String avg_speed, String max_speed, String distance, String bmi) {
 
         db.beginTransaction();          // トランザクション開始
 
         try {
             ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
+            values.put(COL_NAME_ID, name_id);
             values.put(COL_NAME, name);
             values.put(COL_DATE, date);
             values.put(COL_HEART_RATE, heart_rate);
             values.put(COL_CALORIE_CONSUMPTION, calorie_consumption);
             values.put(COL_TOTAL_TIME, total_time);
             values.put(COL_TOTAL_DISTANCE, total_distance);
-            values.put(COL_COUSENAME, coursename);
+            values.put(COL_COURSE_NAME, course_name);
+            values.put(COL_TIME, time);
+            values.put(COL_AVG_SPEED, avg_speed);
+            values.put(COL_MAX_SPEED, max_speed);
+            values.put(COL_DISTANCE, distance);
+            values.put(COL_BMI, bmi);
 
 
 
@@ -236,7 +250,7 @@ public class DBAdapter {
 
         db.beginTransaction();                      // トランザクション開始
         try {
-            db.delete(DB_TABLE_USER, COL_ID + "=?", new String[]{position});
+            db.delete(DB_TABLE_USER, COL_ID_USER + "=?", new String[]{position});
             db.setTransactionSuccessful();          // トランザクションへコミット
         } catch (Exception e) {
             e.printStackTrace();
@@ -300,7 +314,7 @@ public class DBAdapter {
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_user = "CREATE TABLE " + DB_TABLE_USER + " ("
-                    + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + COL_ID_USER + " INTEGER PRIMARY KEY ,"
                     + COL_NAME + " TEXT NOT NULL ,"
                     + COL_AGE + " INTEGER NOT NULL,"
                     + COL_SEX + " TEXT NOT NULL,"
@@ -310,13 +324,22 @@ public class DBAdapter {
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_data = "CREATE TABLE " + DB_TABLE_DATA + " ("
+                    + COL_ID_DATA + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + COL_NAME_ID + " INTEGER COL_ID_USER,"
+                    //+ DB_TABLE_USER + COL_ID_USER +" REFERENCES,"
                     + COL_NAME + " TEXT NOT NULL ,"
                     + COL_DATE + " TEXT NOT NULL ,"
                     + COL_HEART_RATE + " INTEGER NOT NULL,"
                     + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL,"
                     + COL_TOTAL_TIME + " INTEGER NOT NULL,"
                     + COL_TOTAL_DISTANCE + " INTEGER NOT NULL,"
-                    + COL_COUSENAME+ " TEXT NOT NULL "
+                    + COL_COURSE_NAME + " TEXT NOT NULL ,"
+                    + COL_TIME + " INTEGER NOT NULL ,"
+                    + COL_AVG_SPEED + " INTEGER NOT NULL ,"
+                    + COL_MAX_SPEED + " INTEGER NOT NULL ,"
+                    + COL_DISTANCE + " INTEGER NOT NULL ,"
+                    + COL_BMI +" INTEGER NOT NULL"
+                    //+" FOREIGN KEY(COL_ID_USER) REFERENCES days(COL_ID_USER) ON DELETE CASCADE )"
                     + ");";
             db.execSQL(createTbl_user);      //SQL文の実行
 

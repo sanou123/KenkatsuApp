@@ -8,50 +8,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
-    <!-- 名前 -->
-    <LinearLayout
-        android:id="@+id/linearLayout01Name"
-        android:layout_width="match_parent"
+
+
+    <TextView
+        android:id="@+id/title01"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true">
-
-        <TextView
-            android:id="@+id/text01Name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/text01_name"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/text01Kome01"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:text="@string/text01_kome"
-            android:textColor="#FF0000"
-            android:textSize="14sp" />
-
-        <!-- ellipsize：文字が行に収まりきらない末尾を「...」表示 -->
-        <!-- inputType：表示するキーボードを文字に指定 -->
-        <EditText
-            android:id="@+id/editText01Name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ellipsize="end"
-            android:hint="@string/text01_hinttext"
-            android:inputType="text"
-            android:lines="1"
-            android:maxLength="12"
-            android:maxLines="1"
-            android:minLines="1"
-            android:singleLine="true"
-            android:textSize="16sp" />
-    </LinearLayout>
+        android:layout_weight="0.5"
+        android:textColor="#000000"
+        android:textSize="16sp" />
 
     <!-- 年齢 -->
     <LinearLayout

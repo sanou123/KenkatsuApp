@@ -116,22 +116,34 @@ public class SelectSheetListView1 extends AppCompatActivity {
             do {
                 // MyListItemのコンストラクタ呼び出し(myListItemのオブジェクト生成)
                 myListItem1 = new MyListItem1(
-                        c.getString(0),
-                        c.getString(1),
+                        c.getInt(0),
+                        c.getInt(1),
                         c.getString(2),
                         c.getString(3),
                         c.getString(4),
                         c.getString(5),
-                        c.getString(6));
+                        c.getString(6),
+                        c.getString(7),
+                        c.getString(8),
+                        c.getString(9),
+                        c.getString(10),
+                        c.getString(11),
+                        c.getString(12));
 
+                Log.d("取得したCursor(DATA_ID):", String.valueOf(c.getString(0)));
+                Log.d("取得したCursor(名前に対するID):", String.valueOf(c.getString(1)));
+                Log.d("取得したCursor(名前):", String.valueOf(c.getString(2)));
+                Log.d("取得したCursor(日時):", c.getString(3));
+                Log.d("取得したCursor(心拍数):", c.getString(4));
+                Log.d("取得したCursor(消費カロリー):", c.getString(5));
+                Log.d("取得したCursor(総走行時間):", c.getString(6));
+                Log.d("取得したCursor(総走行距離):", c.getString(7));
+                Log.d("取得したCursor(コース名):", c.getString(8));
+                Log.d("取得したCursor(タイム):", c.getString(9));
+                Log.d("取得したCursor(平均速度):", c.getString(10));
+                Log.d("取得したCursor(最高速度):", c.getString(11));
+                Log.d("取得したCursor(走行距離):", c.getString(12));
 
-                Log.d("取得したCursor(名前):", String.valueOf(c.getString(0)));
-                Log.d("取得したCursor(日時):", c.getString(1));
-                Log.d("取得したCursor(心拍数):", c.getString(2));
-                Log.d("取得したCursor(消費カロリー):", c.getString(3));
-                Log.d("取得したCursor(総走行時間):", c.getString(4));
-                Log.d("取得したCursor(総走行距離):", c.getString(5));
-                Log.d("取得したCursor(コース名):", c.getString(6));
 
 
                 items.add(myListItem1);          // 取得した要素をitemsに追加
@@ -162,7 +174,12 @@ public class SelectSheetListView1 extends AppCompatActivity {
             TextView text05Calorie_consumption;
             TextView text05Total_time;
             TextView text05Total_distance;
-            TextView text05Coursename;
+            TextView text05Course_name;
+            TextView text05Time;
+            TextView text05Avg_speed;
+            TextView text05Max_speed;
+            TextView text05Distance;
+
         }
 
         // コンストラクタの生成
@@ -211,7 +228,11 @@ public class SelectSheetListView1 extends AppCompatActivity {
                 TextView text05Calorie_consumption = (TextView) view.findViewById(R.id.text05Calorie_consumption);        // 産地のTextView
                 TextView text05Total_time = (TextView) view.findViewById(R.id.text05Total_time);          // 単価のTextView
                 TextView text05Total_distance = (TextView) view.findViewById(R.id.text05Total_distance);          // 単価のTextView
-                TextView text05Coursename = (TextView) view.findViewById(R.id.text05Coursename);      // 品名のTextView
+                TextView text05Course_name = (TextView) view.findViewById(R.id.text05Course_name);      // 品名のTextView
+                TextView text05Time = (TextView) view.findViewById(R.id.text05Time);      // 品名のTextView
+                TextView text05Avg_speed = (TextView) view.findViewById(R.id.text05Avg_speed);      // 品名のTextView
+                TextView text05Max_speed = (TextView) view.findViewById(R.id.text05Max_speed);      // 品名のTextView
+                TextView text05Distance = (TextView) view.findViewById(R.id.text05Distance);      // 品名のTextView
 
 
 
@@ -223,7 +244,12 @@ public class SelectSheetListView1 extends AppCompatActivity {
                 holder.text05Calorie_consumption = text05Calorie_consumption;
                 holder.text05Total_time = text05Total_time;
                 holder.text05Total_distance = text05Total_distance;
-                holder.text05Coursename = text05Coursename;
+                holder.text05Course_name = text05Course_name;
+                holder.text05Time = text05Time;
+                holder.text05Avg_speed = text05Avg_speed;
+                holder.text05Max_speed = text05Max_speed;
+                holder.text05Distance = text05Distance;
+
                 view.setTag(holder);
 
             } else {
@@ -238,7 +264,12 @@ public class SelectSheetListView1 extends AppCompatActivity {
             holder.text05Calorie_consumption.setText(myListItem1.getCalorie_consumption());
             holder.text05Total_time.setText(myListItem1.getTotal_time());
             holder.text05Total_distance.setText(myListItem1.getTotal_distance());
-            holder.text05Coursename.setText(myListItem1.getCoursename());
+            holder.text05Course_name.setText(myListItem1.getCourse_name());
+            holder.text05Time.setText(myListItem1.getTime());
+            holder.text05Avg_speed.setText(myListItem1.getAvg_speed());
+            holder.text05Max_speed.setText(myListItem1.getMax_speed());
+            holder.text05Distance.setText(myListItem1.getDistance());
+
 
             return view;
 

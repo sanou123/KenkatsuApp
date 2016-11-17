@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -22,13 +21,15 @@ import android.widget.Toast;
  */
 public class UserUpdate extends AppCompatActivity {
 
-    private EditText mEditText01Name;        // 名前
+    Globals globals;
+
+    //private EditText mEditText01Name;        // 名前
     private EditText mEditText01Age;         // 年齢
     private RadioGroup mRadioGroup01Sex;         // 性別
     private EditText mEditText01Height;         // 身長
     private EditText mEditText01Weight;          // 体重
 
-    private TextView mText01Kome01;             // 名前の※印
+    //private TextView mText01Kome01;             // 名前の※印
     private TextView mText01Kome02;             // 年齢の※印
     private TextView mText01Kome03;             // 性別の※印
     private TextView mText01Kome04;             // 身長の※印
@@ -37,7 +38,6 @@ public class UserUpdate extends AppCompatActivity {
 
     private Button mButton01Regist;             // 登録ボタン
 
-    private Intent intent;                      // インテント
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,13 @@ public class UserUpdate extends AppCompatActivity {
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.user_update);
+
+        // TextView インスタンス生成
+        TextView textView = (TextView)findViewById(R.id.title01);
+
+        String columns = globals.now_user + "さんの登録情報を更新します。";
+        textView.setText(columns);
+
 
         findViews();        // 各部品の結びつけ処理
 
@@ -90,13 +97,13 @@ public class UserUpdate extends AppCompatActivity {
      */
     private void findViews() {
 
-        mEditText01Name = (EditText) findViewById(R.id.editText01Name);   // 名前
+        //mEditText01Name = (EditText) findViewById(R.id.editText01Name);   // 名前
         mEditText01Age = (EditText) findViewById(R.id.editText01Age);     // 年齢
         mRadioGroup01Sex = (RadioGroup) findViewById(R.id.radioGroup01Sex);     // 年齢
         mEditText01Height = (EditText) findViewById(R.id.editText01Height);     // 身長
         mEditText01Weight = (EditText) findViewById(R.id.editText01Weight);       // 体重
 
-        mText01Kome01 = (TextView) findViewById(R.id.text01Kome01);             // 名前の※印
+        //mText01Kome01 = (TextView) findViewById(R.id.text01Kome01);             // 名前の※印
         mText01Kome02 = (TextView) findViewById(R.id.text01Kome02);             // 年齢※印
         mText01Kome03 = (TextView) findViewById(R.id.text01Kome03);             // 性別の※印
         mText01Kome04 = (TextView) findViewById(R.id.text01Kome04);             // 身長の※印
@@ -111,18 +118,18 @@ public class UserUpdate extends AppCompatActivity {
      * init()
      */
     private void init() {
-        mEditText01Name.setText("");
+        //mEditText01Name.setText("");
         mEditText01Age.setText("");
         mEditText01Height.setText("");
         mEditText01Weight.setText("");
 
-        mText01Kome01.setText("");
+        //mText01Kome01.setText("");
         mText01Kome02.setText("");
         mText01Kome03.setText("");
         mText01Kome04.setText("");
         mText01Kome05.setText("");
 
-        mEditText01Name.requestFocus();      // フォーカスを品名のEditTextに指定
+        //mEditText01Name.requestFocus();      // フォーカスを品名のEditTextに指定
     }
 
         /**
@@ -137,7 +144,7 @@ public class UserUpdate extends AppCompatActivity {
 
 
         // 各EditTextで入力されたテキストを取得
-        String strName = mEditText01Name.getText().toString();
+        //String strName = mEditText01Name.getText().toString();
         String strAge = mEditText01Age.getText().toString();
         String strSex = mRadioGroup01Sex.getText().toString();
         String strHeight = mEditText01Height.getText().toString();
@@ -145,15 +152,15 @@ public class UserUpdate extends AppCompatActivity {
 
 
         // EditTextが空白の場合
-        if (strName.equals("") || strAge.equals("") || strSex.equals("")
+        if (/*strName.equals("") || */strAge.equals("") || strSex.equals("")
                 || strHeight.equals("") || strWeight.equals("")) {
 
-            if (strName.equals("")) {
+            /*if (strName.equals("")) {
                 mText01Kome01.setText("※");     // 名前が空白の場合、※印を表示
             } else {
                 mText01Kome01.setText("");      // 空白でない場合は※印を消す
             }
-
+*/
             if (strAge.equals("")) {
                 mText01Kome02.setText("※");     // 年齢が空白の場合、※印を表示
             } else {
@@ -183,6 +190,7 @@ public class UserUpdate extends AppCompatActivity {
 
         } else {        // EditTextが全て入力されている場合
 
+
             // 入力された年齢と身長、体重は文字列からint型へ変換
             int iAge = Integer.parseInt(strAge);
             int iHeight = Integer.parseInt(strHeight);
@@ -191,22 +199,11 @@ public class UserUpdate extends AppCompatActivity {
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.updateDB(strName, iAge, strSex, iHeight, iWeight);   // DBに登録
+            dbAdapter.updateDB(globals.now_user, iAge, strSex, iHeight, iWeight);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定
 
         }
-
     }
-
-    @Override
-    //戻るキーを無効にする
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
 }

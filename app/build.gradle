@@ -30,7 +30,7 @@ dependencies {
 repositories {
     maven { url "https://jitpack.io" }
 }
-dependencies {
-    compile 'com.github.PhilJay:MPAndroidChart:v2.1.0'
-}
 
+dependencies {
+    compile 'com.github.PhilJay:MPAndroidChart:v2.1.5'
+}

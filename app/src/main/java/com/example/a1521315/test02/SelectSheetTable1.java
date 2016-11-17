@@ -6,9 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -18,18 +16,18 @@ import android.widget.Toast;
  * TableLayout画面に関連するクラス
  * SelectSheetTable1
  */
-public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocusChangeListener, SearchView.OnQueryTextListener {
+public class SelectSheetTable1 extends AppCompatActivity {
 
+    Globals globals;
     DBAdapter dbAdapter;
 
-    private SearchView mSearchView04;           // 検索窓
     private TableLayout mTableLayout04List;     //データ表示用TableLayout
 
     private int colorFlg = 1;                   //背景切り替え用フラグ
 
     private final static int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
     private final static int GCH = Gravity.CENTER_HORIZONTAL;
-    private final static int GE = Gravity.END;         // Gravity.RIGHTでもよい
+    //private final static int GE = Gravity.END;         // Gravity.RIGHTでもよい
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +40,7 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
 
         findViews();        // 各部品の結び付け
 
-        // 検索窓を開いた状態にする(設定していない場合はアイコンをクリックしないと入力箇所が開かない)
-        mSearchView04.setIconified(false);
-        // 検索窓のイベント処理
-        mSearchView04.setOnQueryTextListener(this);
+        init();
 
     }
 
@@ -54,25 +49,14 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
      * findViews()
      */
     private void findViews() {
-        mSearchView04 = (SearchView) findViewById(R.id.searchView03);               // 検索窓
         mTableLayout04List = (TableLayout) findViewById(R.id.tableLayout03List);    //データ表示用TableLayout
     }
 
-    /**
-     * SearchViewの各イベント処理
-     */
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-
-    }
 
     // 検索を始める時
-    @Override
-    public boolean onQueryTextSubmit(String query) {
+    private void init() {
 
         dbAdapter.readDB();                         // DBの読み込み(読み込みの方)
-
-        mSearchView04.clearFocus();                 // 検索窓のフォーカスを外す(=キーボードを非表示)
 
         TableRow rowHeader = new TableRow(this);    // 行を作成
         rowHeader.setPadding(16, 12, 16, 12);       // 行のパディングを指定(左, 上, 右, 下)
@@ -86,13 +70,13 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
         // ヘッダー：消費カロリー
         TextView headerCalorie_consumption = setTextItem("消費カロリー", GCH);
         TableRow.LayoutParams paramsCalorie_consumption = setParams(0.3f);
-        // ヘッダー：総走行距離
-        TextView headerTotal_time = setTextItem("総走行距離", GCH);
+        // ヘッダー：総走行時間
+        TextView headerTotal_time = setTextItem("走行時間", GCH);
         TableRow.LayoutParams paramsTotal_time = setParams(0.4f);
-        // ヘッダー：総走行時間
-        TextView headerTotal_distance = setTextItem("総走行時間", GCH);
+        // ヘッダー：総走行距離
+        TextView headerTotal_distance = setTextItem("走行距離", GCH);
         TableRow.LayoutParams paramsTotal_distance = setParams(0.3f);
-        // ヘッダー：総走行時間
+        // ヘッダー：コース名
         TextView headerCourse = setTextItem("コース名", GCH);
         TableRow.LayoutParams paramsCourse = setParams(0.3f);
         // rowHeaderにヘッダータイトルを追加
@@ -109,7 +93,7 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
         mTableLayout04List.addView(rowHeader);
 
         String column = "name";          //検索対象のカラム名
-        String[] name = {query};            //検索対象の文字
+        String[] name = {globals.now_user};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
         Cursor c = dbAdapter.searchDB(null, column, name);
@@ -121,24 +105,41 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
                 row.setPadding(16, 12, 16, 12);             // 行のパディングを指定(左, 上, 右, 下)
 
                 // 日時
-                TextView textDate = setTextItem(c.getString(1), GCH);     // TextViewのカスタマイズ処理
+                TextView textDate = setTextItem(c.getString(3), GCH);     // TextViewのカスタマイズ処理
                 // 最大心拍数
-                TextView textHeart_rate = setTextItem(c.getString(2)+" [bpm]", GCH);     // TextViewのカスタマイズ処理
+                TextView textHeart_rate = setTextItem(c.getString(4)+" [bpm]", GCH);     // TextViewのカスタマイズ処理
                 // 消費カロリー
-                TextView textCalorie_consumption = setTextItem(c.getString(3)+" [cal]", GCH);      // TextViewのカスタマイズ処理
-                // 総走行距離
-                TextView textTotal_time = setTextItem(c.getString(4)+" [km]", GCH);      // TextViewのカスタマイズ処理
+                TextView textCalorie_consumption = setTextItem(c.getString(5)+" [cal]", GCH);      // TextViewのカスタマイズ処理
                 // 総走行時間
-                TextView textTotal_distance = setTextItem(c.getString(5)+" [min]", GCH);      // TextViewのカスタマイズ処理
+                TextView textTotal_time = setTextItem(c.getString(9)+" [分]", GCH);      // TextViewのカスタマイズ処理
+                // 総走行距離
+                TextView textTotal_distance = setTextItem(c.getString(12)+" [km]", GCH);      // TextViewのカスタマイズ処理
                 // コース名
-                TextView textCourse = setTextItem(c.getString(6), GCH);      // TextViewのカスタマイズ処理
+                TextView textCourse = setTextItem(c.getString(8), GCH);      // TextViewのカスタマイズ処理
+
+                /* getString()参考
+                Log.d("取得したCursor(DATA_ID):", String.valueOf(c.getString(0)));
+                Log.d("取得したCursor(名前に対するID):", String.valueOf(c.getString(1)));
+                Log.d("取得したCursor(名前):", String.valueOf(c.getString(2)));
+                Log.d("取得したCursor(日時):", c.getString(3));
+                Log.d("取得したCursor(心拍数):", c.getString(4));
+                Log.d("取得したCursor(消費カロリー):", c.getString(5));
+                Log.d("取得したCursor(総走行時間):", c.getString(6));
+                Log.d("取得したCursor(総走行距離):", c.getString(7));
+                Log.d("取得したCursor(コース名):", c.getString(8));
+                Log.d("取得したCursor(タイム):", c.getString(9));
+                Log.d("取得したCursor(平均速度):", c.getString(10));
+                Log.d("取得したCursor(最高速度):", c.getString(11));
+                Log.d("取得したCursor(走行距離):", c.getString(12));
+                */
+
 
                 // rowHeaderに各項目(DBから取得した産地,個数,単価)を追加
                 row.addView(textDate, paramsDate);      // 日時
                 row.addView(textHeart_rate, paramsHeart_rate);      // 最大心拍数
                 row.addView(textCalorie_consumption, paramsCalorie_consumption);      // 消費カロリー
-                row.addView(textTotal_time, paramsTotal_time);      // 総走行距離
-                row.addView(textTotal_distance, paramsTotal_distance);        // 総走行時間
+                row.addView(textTotal_time, paramsTotal_time);      // 総走行時間
+                row.addView(textTotal_distance, paramsTotal_distance);        // 総走行距離
                 row.addView(textCourse, paramsCourse);          // コース名
 
                 mTableLayout04List.addView(row);            // TableLayoutにrowHeaderを追加
@@ -158,17 +159,8 @@ public class SelectSheetTable1 extends AppCompatActivity implements View.OnFocus
         c.close();
         dbAdapter.closeDB();        // DBを閉じる
 
-        return false;
     }
 
-    // 検索窓のテキストが変わった時
-    @Override
-    public boolean onQueryTextChange(String newText) {
-
-        mTableLayout04List.removeAllViews();        // TableLayoutのViewを全て消す
-
-        return false;
-    }
 
     /**
      * 行の各項目のTextViewカスタマイズ処理

@@ -55,7 +55,13 @@
     <string name="text05_title_calorie_consumption">消費カロリー：</string>
     <string name="text05_title_total_time">総走行時間：</string>
     <string name="text05_title_total_total_distance">総走行距離：</string>
-    <string name="text05_title_coursename">コース名：</string>
+    <string name="text05_title_course_name">コース名：</string>
+    <string name="text05_title_time">タイム：</string>
+    <string name="text05_title_avg_speed">平均速度：</string>
+    <string name="text05_title_max_speed">最高速度：</string>
+    <string name="text05_title_distance">走行距離：</string>
+    <string name="text05_title_bmi">BMI：</string>
+
     <!-- ここまで -->
 
     <!-- select_sheet_listview 03 -->

@@ -112,16 +112,106 @@
 
         <!-- タイトル：コース名 -->
         <TextView
-            android:id="@+id/text05Title_Cousename"
+            android:id="@+id/text05Title_Course_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="@string/text05_title_coursename"
+            android:text="@string/text05_title_course_name"
             android:textSize="14sp" />
 
         <!-- データ表示用：コース名 -->
         <TextView
-            android:id="@+id/text05Coursename"
+            android:id="@+id/text05Course_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <!-- タイトル：タイム -->
+        <TextView
+            android:id="@+id/text05Title_Time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/text05_title_time"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：タイム -->
+        <TextView
+            android:id="@+id/text05Time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <!-- タイトル：平均速度 -->
+        <TextView
+            android:id="@+id/text05Title_Avg_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/text05_title_avg_speed"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：平均速度 -->
+        <TextView
+            android:id="@+id/text05Avg_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <!-- タイトル：最高速度 -->
+        <TextView
+            android:id="@+id/text05Title_Max_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/text05_title_max_speed"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：最高速度 -->
+        <TextView
+            android:id="@+id/text05Max_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <!-- タイトル：走行距離 -->
+        <TextView
+            android:id="@+id/text05Title_Distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/text05_title_distance"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：走行距離 -->
+        <TextView
+            android:id="@+id/text05Distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <!-- タイトル：走行距離 -->
+        <TextView
+            android:id="@+id/text05Title_Bmi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/text05_title_bmi"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：走行距離 -->
+        <TextView
+            android:id="@+id/text05Bmi"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"

@@ -55,14 +55,14 @@
             android:name=".VideoPlay" />
         <activity
             android:screenOrientation="landscape"
-            android:name=".SelectSheetProduct" />
-        <activity
-            android:screenOrientation="landscape"
             android:name=".SelectSheetListView"
             android:label="@string/name_selectsheet_listview" />
         <activity
             android:screenOrientation="landscape"
             android:name=".SelectSheetListView1"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".SelectSheetProduct1"/>
         <activity
             android:screenOrientation="landscape"
             android:name=".Result" />
@@ -89,9 +89,6 @@
             android:screenOrientation="landscape"
             android:name=".TrainingSelect"
             android:label="@string/name_training_select"/>
-        <activity
-            android:screenOrientation="landscape"
-            android:name=".Graph"/>
     </application>
 
 </manifest>
