@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ public class SelectSheetListView extends AppCompatActivity {
     private List<MyListItem> items;
     private ListView mListView03;
     protected MyListItem myListItem;
+    Globals globals;
 
     // 参照するDBのカラム：ID,名前,年齢,身長,体重の全部なのでnullを指定
     private String[] columns = null;
@@ -65,10 +65,20 @@ public class SelectSheetListView extends AppCompatActivity {
                 // IDを取得する
                 myListItem = items.get(position);
                 String listName = myListItem.getName();
+                int NameID = myListItem.getUser_id();
+                String Weight = myListItem.getWeight();
+                String Height = myListItem.getHeight();
+
+                //int listId =  myListItem.getUser_id();//################
                 String columns = listName + "さんが選択されました";
                 Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
+                //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
+                //intent.putExtra("SELECTED_DATA",listName);
+                globals.now_user = listName;
+                globals.name_id = NameID;
+                globals.weight = Weight;
+                globals.height = Height;
                 Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
-                intent.putExtra("SELECTED_DATA",listName);
                 startActivity(intent);
             }
         });
@@ -77,7 +87,7 @@ public class SelectSheetListView extends AppCompatActivity {
         mListView03.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long user_id) {
 
                 // アラートダイアログ表示
                 AlertDialog.Builder builder = new AlertDialog.Builder(SelectSheetListView.this);
@@ -90,7 +100,7 @@ public class SelectSheetListView extends AppCompatActivity {
 
                         // IDを取得する
                         myListItem = items.get(position);
-                        int listId = myListItem.getId();
+                        int listId = myListItem.getUser_id();
 
                         dbAdapter.openDB();     // DBの読み込み(読み書きの方)
                         dbAdapter.selectDelete(String.valueOf(listId));     // DBから取得したIDが入っているデータを削除する
@@ -114,13 +124,35 @@ public class SelectSheetListView extends AppCompatActivity {
             }
         });
 
+
+
         Button btnDisp = (Button)findViewById(R.id.insert);
         btnDisp.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.MainUser");
-                startActivity(intent);
+
+         /*      dbAdapter.openDB();     // DBの読み込み(読み書きの方)
+
+                // DBのデータを取得
+                String[] columns = {DBAdapter.COL_ID_USER};     // DBのカラム：ID
+                Cursor c = dbAdapter.getDB(columns);
+                c.moveToFirst();
+                if ( c.getInt(0)  < 6) {    */
+                    Intent intent = new Intent();
+                    intent.setClassName("com.example.a1521315.test02",
+                            "com.example.a1521315.test02.MainUser");
+                    startActivity(intent);
+
+         /*           c.close();
+                    dbAdapter.closeDB();    // DBを閉じる
+                }else{
+                    do {
+                        String over = "登録出来ません。ユーザーを削除してください。";
+                        Toast.makeText(getApplicationContext(), over, Toast.LENGTH_LONG).show();
+
+                        c.close();
+                        dbAdapter.closeDB();    // DBを閉じる
+                    } while (c.moveToNext());
+                }   */
             }
         });
     }
@@ -152,7 +184,7 @@ public class SelectSheetListView extends AppCompatActivity {
 
                 );
 
-                Log.d("取得したCursor(ID):", String.valueOf(c.getInt(0)));
+                Log.d("取得したCursor(USER_ID):", String.valueOf(c.getInt(0)));
                 Log.d("取得したCursor(名前):", c.getString(1));
                 Log.d("取得したCursor(年齢):", c.getString(2));
                 Log.d("取得したCursor(性別):", c.getString(3));
@@ -262,14 +294,5 @@ public class SelectSheetListView extends AppCompatActivity {
             return view;
 
         }
-    }
-
-    @Override
-    //戻るキーを無効にする
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

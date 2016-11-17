@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.text.method.MovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 /**
@@ -77,6 +79,33 @@ public class Result extends Activity {
                 startActivity(i);
             }
         });
+
+        // DBに登録
+        saveList();
+
+
+    }
+    private void saveList() {
+
+
+        long currentTimeMillis = System.currentTimeMillis();
+
+        Date date = new Date(currentTimeMillis);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日\nHH時mm分ss秒");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+        Log.v("時間", simpleDateFormat.format(date));
+
+
+        globals.bmi = (Integer.parseInt(globals.weight) / (Integer.parseInt(globals.height) * Integer.parseInt(globals.height)));
+        //globals.cal = (1.05 * 9 * Integer.parseInt(globals.time) * Integer.parseInt(globals.weight));
+
+        // DBへの登録処理
+        DBAdapter dbAdapter = new DBAdapter(this);
+        dbAdapter.openDB();                                         // DBの読み書き
+        dbAdapter.saveDB_DATA(globals.name_id, globals.now_user, simpleDateFormat.format(date), globals.maxheartbeat,
+                globals.cal, globals.total_time, globals.total_mileage, globals.coursename,
+                globals.time, globals.avg, globals.max, globals.mileage, String.valueOf(globals.bmi));   // DBに登録
+        dbAdapter.closeDB();                                        // DBを閉じる
 
     }
 

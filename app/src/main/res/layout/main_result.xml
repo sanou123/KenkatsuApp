@@ -1,3 +1,8 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,96 +13,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
-    <!-- 品名 -->
-    <LinearLayout
-        android:id="@+id/linearLayout01Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true">
 
-        <TextView
-            android:id="@+id/text01Name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.56"
-            android:text="名前"
-            android:textColor="#000000"
-            android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/text01Kome01"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:text="@string/text01_kome"
-            android:textColor="#FF0000"
-            android:textSize="14sp" />
 
-        <!-- ellipsize：文字が行に収まりきらない末尾を「...」表示 -->
-        <!-- inputType：表示するキーボードを文字に指定 -->
-        <EditText
-            android:id="@+id/editText01Name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.30"
-            android:ellipsize="end"
-            android:hint="@string/text01_hinttext"
-            android:inputType="text"
-            android:lines="1"
-            android:maxLength="12"
-            android:maxLines="1"
-            android:minLines="1"
-            android:singleLine="true"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <!-- 個数 -->
-    <LinearLayout
-        android:id="@+id/linearLayout01Date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout01Name"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true">
-
-        <TextView
-            android:id="@+id/text01Date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="日時"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/text01Kome02"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:text="@string/text01_kome"
-            android:textColor="#FF0000"
-            android:textSize="14sp" />
-
-        <!-- inputType：表示するキーボードを数値に指定 -->
-        <EditText
-            android:id="@+id/editText01Date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.30"
-            android:ellipsize="end"
-            android:hint="@string/text01_hintnumber"
-            android:inputType="number"
-            android:lines="1"
-            android:maxLength="24"
-            android:maxLines="1"
-            android:minLines="1"
-            android:singleLine="true"
-            android:textSize="16sp" />
-    </LinearLayout>
 
     <!-- 品名 -->
     <LinearLayout
@@ -105,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout01Date"
+        android:layout_below="@+id/linearLayout01Name"
         android:orientation="horizontal"
         android:layout_alignParentLeft="true">
 
@@ -119,7 +37,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text01Kome03"
+            android:id="@+id/text01Kome01"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -166,7 +84,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text01Kome04"
+            android:id="@+id/text01Kome02"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -214,7 +132,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text01Kome05"
+            android:id="@+id/text01Kome03"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -259,7 +177,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text01Kome06"
+            android:id="@+id/text01Kome04"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -285,7 +203,7 @@
 
     <!-- 単価 -->
     <LinearLayout
-        android:id="@+id/linearLayout01Coursename"
+        android:id="@+id/linearLayout01Course_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -295,7 +213,7 @@
         android:layout_alignParentLeft="true">
 
         <TextView
-            android:id="@+id/text01Coursename"
+            android:id="@+id/text01Course_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
@@ -304,7 +222,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text01Kome07"
+            android:id="@+id/text01Kome05"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -313,7 +231,7 @@
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/editText01Coursename"
+            android:id="@+id/editText01Course_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.30"
@@ -328,12 +246,238 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <!-- 単価 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Course_name"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="タイム"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome06"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText01Time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.30"
+            android:ellipsize="end"
+            android:hint="@string/text01_hintnumber"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- 単価 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Avg_speed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Time"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Avg_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="平均速度"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome07"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText01Avg_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.30"
+            android:ellipsize="end"
+            android:hint="@string/text01_hintnumber"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- 単価 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Max_speed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Avg_speed"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Max_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="最高速度"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome08"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText01Max_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.30"
+            android:ellipsize="end"
+            android:hint="@string/text01_hintnumber"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- 単価 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01Distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Max_speed"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01Distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="走行距離"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome09"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText01Distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.30"
+            android:ellipsize="end"
+            android:hint="@string/text01_hintnumber"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- 単価 -->
+    <LinearLayout
+        android:id="@+id/linearLayout01BMI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout01Distance"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/text01BMI"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="BMI指数"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text01Kome10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="@string/text01_kome"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/editText01BMI"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.30"
+            android:ellipsize="end"
+            android:hint="@string/text01_hintnumber"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
     <!-- 登録ボタン -->
     <Button
         android:id="@+id/button01Regist1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout01Coursename"
+        android:layout_below="@+id/linearLayout01BMI"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:text="@string/button01_regist"
@@ -402,3 +546,4 @@
         android:textSize="16sp" />
 
 </RelativeLayout>
+    </ScrollView>

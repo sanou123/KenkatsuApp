@@ -7,30 +7,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-
-import java.util.List;
+import android.widget.TextView;
 
 
 public class MenuSelect extends AppCompatActivity {
-    protected MyListItem MyListItem;
-    private List<MyListItem> items;
-
+    Globals globals;
     /**
      * Called when the activity is first created.
      */
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         //menu_selectのレイアウトを使用
         setContentView(R.layout.menu_select);
 
-        Intent intent = getIntent();
-        String listName = intent.getStringExtra("SELECTED_DATA");//設定したSELECTED_DATAで取り出す
-        String columns = listName + "さんのメニュー";
-        //setText(columns);
+        // TextView インスタンス生成
+        TextView textView = (TextView)findViewById(R.id.title_user_select);
+
+        String columns = globals.now_user + "さんのメニュー";
+        textView.setText(columns);
+
+
 
         //trainingボタンを押した時TrainingSelectへ移動
         Button btnDisp0 = (Button) findViewById(R.id.training);
@@ -111,6 +114,16 @@ public class MenuSelect extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

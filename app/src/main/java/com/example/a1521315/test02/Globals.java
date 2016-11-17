@@ -8,11 +8,19 @@ import android.app.Application;
 
 public class Globals extends Application {
     //リザルトで使う変数
-    String coursename = "コース";
-    String mileage = "0";
-    String maxheartbeat = "0";
-    String avg = "0";
-    String max = "0";
-    String time = "0";
-    String cal = "0";
+    static String coursename;
+    static String mileage;
+    static String maxheartbeat;
+    static String avg;
+    static String max;
+    static String time;
+    static String cal;
+    static String now_user;
+    String total_time = "10";
+    String total_mileage = "55";
+    static int name_id;
+    static int bmi;
+    static String weight;
+    static String height;
+
 }
