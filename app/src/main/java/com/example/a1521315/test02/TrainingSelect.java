@@ -29,6 +29,18 @@ public class TrainingSelect extends AppCompatActivity {
         });
 
         //buttonBackを押した時MenuSerectへ移動
+        Button btndebug = (Button) findViewById(R.id.buttonFitness);
+        btndebug.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Sub 画面を起動
+                Intent intent = new Intent();
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.usb_debug");
+                startActivity(intent);
+            }
+        });
+
+        //buttonBackを押した時MenuSerectへ移動
         Button btnBack = (Button) findViewById(R.id.buttonBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
