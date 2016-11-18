@@ -778,4 +778,5 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 break;
         }
     }
+
 }
