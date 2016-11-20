@@ -904,7 +904,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         return new Integer(major).intValue();
     }
 
-
     private void showErrorPage(VideoPlay.ErrorMessageCode error) {
         //setContentView(R.layout.error);
 
