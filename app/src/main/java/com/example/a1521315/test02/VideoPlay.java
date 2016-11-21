@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -42,11 +43,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import static com.example.a1521315.test02.R.id.buttonNo;
+//import static com.example.a1521315.test02.R.id.buttonNo;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener,View.OnClickListener {
-    double kakudo =-158;//オフセット
+    double kakudo =-158;//メーター0の位置
     Globals globals;
     TextView tSpeed;//時速の変数
     TextView tSpeedDec;//時速の変数　少数
@@ -233,14 +234,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             e1.printStackTrace();
         }
 
-/*
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
         //connectButton = (Button)findViewById(R.id.connectButton);
         //connectButton.setOnClickListener(this);
-        findViewById(buttonYes).setOnClickListener(this);
-        findViewById(buttonNo).setOnClickListener(this);
+        findViewById(R.id.buttonYes).setOnClickListener(this);
+        findViewById(R.id.buttonNo).setOnClickListener(this);
 
         // Bluetoothのデバイス名を取得
         // デバイス名は、RNBT-XXXXになるため、
@@ -256,7 +257,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //**********************************************************************************
-*/
+
     }
 
     // 再生完了時の処理
@@ -594,6 +595,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             case R.id.buttonYes:
                 //イベント処理を記入
                 if (!connectFlg) {
+
                     mStatusTextView.setText("try connect");
                     mThread = new Thread(this);
                     // Threadを起動し、Bluetooth接続
@@ -602,7 +604,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 }
                 break;
 
-            case buttonNo:
+            case R.id.buttonNo:
+                Log.d("No","no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
                 findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
                 tHeartbeat.setText("Not");
@@ -763,9 +766,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             getplaytimehandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    double f1 = mp.getDuration();
-                    double f2 = mp.getCurrentPosition();
-                    double f3 = TotalMileage / ( f1 / f2);
+                    double f3 = TotalMileage / ( mp.getDuration() / mp.getCurrentPosition());
                     //tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
                     tMileage.setText(String.format("%.2f",f3));
                     //tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
@@ -795,7 +796,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    kakudo = kakudo + 0.452;
+                    if(speedcount != 5) {
+                        kakudo = kakudo + 0.452;
+                    }
                     //画像の横、縦サイズを取得
                     int imageWidth = bitmap.getWidth();
                     int imageHeight = bitmap.getHeight();
@@ -911,22 +914,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-    //test
-    public class TestMoveMeTask implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    imageX = imageView.getX();
-                    imageY = imageView.getY();
-                    imageY -= 20;
-                    //y方向は20pixづつ、画像の横縦幅はそのまま維持
-                    imageView.layout((int)imageX, (int)imageY, (int)imageX + imageView.getWidth(), (int)imageY + imageView.getHeight());
-                    Log.d("imageXY", "X:" + imageX + " Y:" + imageY);
-                }
-            });
-        }
-    }
+
     //test
     public class TestMoveMeTask3 implements Runnable {
         public void run() {
