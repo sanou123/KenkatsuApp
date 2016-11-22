@@ -147,11 +147,17 @@ public class usb_debug extends Activity {
                                         float speed_tmp;
                                         sent_cnt++;
                                         TextView tSpeed = (TextView) findViewById(R.id.textView5);
+                                        TextView tSpeed2 = (TextView) findViewById(R.id.textView6);
                                         sensor_value = (int) (commandPacket[1] & 0xFF);
                                             tSpeed.setText(sensor_value+"changed→"+sent_cnt);
-                                            if(sent_cnt > 30000){
-                                                sent_cnt = 0;
-                                            }
+                                        if(sensor_value > 150){
+                                            speed_tmp = 0;
+                                        }
+                                        else{
+                                            speed_tmp = 60 - ((float) sensor_value / 10 * 4);
+                                        }
+                                        speed_tmp = (float)Math.floor((double)speed_tmp * 10) / 10;
+                                        tSpeed2.setText(speed_tmp+"km/h");
                                         break;
                                 }
                             }

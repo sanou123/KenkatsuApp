@@ -83,6 +83,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
     public static final int POLE_SENSOR_CHANGE = 3;
+    public static final int RESISTANCE_LEVEL = 4;
+    public static final int ALERT_MORTER = 5;
     public static final int APP_CONNECT = (int) 0xFE;
     public static final int APP_DISCONNECT = (int) 0xFF;
     public static final int POT_UPPER_LIMIT = 100;
@@ -94,6 +96,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public boolean usb_flg = false;
 
     public int sensor_value = 0;
+    public float resistance_Level = (float)1.0;
+    public int real_aveSpeed = 20;//実際の撮影時の係数
+
     private boolean deviceAttached = false;
     private int firmwareProtocol = 0;
 
@@ -267,7 +272,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     @Override
     public void onPause() {
         super.onPause();
-        Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
+
         switch (firmwareProtocol) {
             case 2:
                 byte[] commandPacket = new byte[2];
@@ -279,7 +284,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
         try {
             while (accessoryManager.isClosed() == false) {
-                Thread.sleep(2000);
+                Thread.sleep(2000);Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -299,12 +304,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     // Resets the demo application when a device detaches
     public void disconnectAccessory() {
         Log.d(TAG, "disconnectAccessory()");
-        Toast.makeText(this, "DISCONNECT SUCCESS", Toast.LENGTH_LONG).show();
+
 
         if (deviceAttached == false) {
             //Toast.makeText(this, "デバイスが切断されました", Toast.LENGTH_LONG).show();
             return;
         }
+        Toast.makeText(this, "DISCONNECT SUCCESS", Toast.LENGTH_LONG).show();
     }
 
     //#################################################################################################2
@@ -634,21 +640,39 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                 accessoryManager.read(commandPacket);
 
                                 switch (commandPacket[0]) {
+                                    //ポールセンサーの値が変化したとき
                                     case POLE_SENSOR_CHANGE:
+
                                         float speed_tmp;
                                         if( usb_flg == true ) {
                                             speed_tmp = 0;
                                         }
                                         else
                                         {
-                                             sensor_value = (int) commandPacket[1];
-                                             speed_tmp = (float) sensor_value / 20;
+                                            sensor_value = (int) (commandPacket[1] & 0xFF);
+                                            //値の調整
+                                            if(sensor_value > 150){
+                                                speed_tmp = 0;
+                                            }
+                                            else{
+                                                speed_tmp = 60 - ((float) sensor_value / 10 * 4);
+                                                speed_tmp = (float)Math.floor((double)speed_tmp * 10) / 10;
+                                            }
+
                                          }
-                                        tSpeed.setText(sensor_value + "km/h");//debug時はsensor_valueをつかう
+                                        tSpeed.setText((speed_tmp*resistance_Level) + "km/h");//debug時はsensor_valueをつかう
                                         //tSpeed.setText(speed_tmp * 10 + "km/h");//debug時はsensor_valueをつかう
                                         //params.setSpeed(speed_tmp);//再生速度変更
-                                        params.setSpeed(1);//再生速度変更
+                                        params.setSpeed((speed_tmp*resistance_Level)/10);//再生速度変更
                                         mp.setPlaybackParams(params);
+                                        break;
+                                    //負荷のレベルが変動した時
+                                    case RESISTANCE_LEVEL:
+
+                                        break;
+
+                                    //モーターの温度が一定以上のとき
+                                    case ALERT_MORTER:
                                         break;
                                 }
                             }
