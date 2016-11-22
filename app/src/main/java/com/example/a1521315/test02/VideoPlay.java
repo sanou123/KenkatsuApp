@@ -159,7 +159,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTest = (TextView) findViewById(R.id.textTest);
         tTest.setText("");
         tGPT = (TextView) findViewById(R.id.textGetPlayTime);
-        tGPT.setText("a");
+        tGPT.setText("シークバーの値");
         imageView = (ImageView)findViewById(R.id.image_view_me);
         imageView.setImageResource(R.drawable.me);
         ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
@@ -170,8 +170,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hari4_45);
         imageViewHari.setImageBitmap(bitmap);
 
-        Testimg = (ImageView)findViewById(R.id.TestHari);
-        Testimg.setImageResource(R.drawable.hari3);
 
 
         //画像の横、縦サイズを取得
