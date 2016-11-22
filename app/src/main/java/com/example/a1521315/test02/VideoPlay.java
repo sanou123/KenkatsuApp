@@ -66,9 +66,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private SurfaceView mPreview;
     private MediaPlayer mp = null;
 
-    private ScheduledExecutorService getplaytimescheduler;
-    Runnable mygetplaytimetask = new MyGetPlayTimeTask();
-    ScheduledFuture getplaytimefuture;
 
     private ScheduledExecutorService timerscheduler;
     Runnable mytimertask = new MyTimerTask();
@@ -269,7 +266,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         disconnectAccessory();//################################       あやしいかもよ～
         Button BtnPauseView2 = (Button) findViewById(R.id.buttonPause);
         BtnPauseView2.setVisibility(View.INVISIBLE);
-        getplaytimescheduler.shutdown();//サービス終了させる
         timerscheduler.shutdown();//タイマー止める
         //movemetimer.cancel();//MoveMeTask止める
         //リザルトボタンを表示
@@ -385,8 +381,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             // TODO 自動生成された catch ブロック
             e.printStackTrace();
         }
-        getplaytimescheduler = Executors.newSingleThreadScheduledExecutor();
-        getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 1000, TimeUnit.MILLISECONDS);
     }
     @Override
     public void surfaceChanged(SurfaceHolder paramSurfaceHolder, int paramInt1, int paramInt2, int paramInt3) {
@@ -530,7 +524,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
             usb_flg = true;
             future.cancel(true);//タイマー一時停止
-            getplaytimefuture.cancel(true);//タイマー一時停止
             speedcount = 0;
             params.setSpeed((float) speedcount);
             mp.setPlaybackParams(params);
@@ -546,7 +539,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //VideoSelectに戻る処理
-                    getplaytimescheduler.shutdown();//サービス終了させる
                     timerscheduler.shutdown();//タイマー終了
                     //movemetimer.cancel();//MoveMeTask止める
                     if (mp != null) {
@@ -561,7 +553,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
-                    getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 1000, TimeUnit.MILLISECONDS);
                     usb_flg = false;
                 }
             });
@@ -753,20 +744,23 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
                     Runnable TestMoveMe = new TestMoveMeTask3();
                     TestMoveMe.run();
+                    Runnable TestMileageTask = new MileageTask();
+                    TestMileageTask.run();
+
                 }
             });
         }
     }
 
-    //再生時間取得タスク
-    public class MyGetPlayTimeTask implements Runnable {
-        private Handler getplaytimehandler = new Handler();
 
+    //加速タスク
+    public class MileageTask implements Runnable {
         public void run() {
-            getplaytimehandler.post(new Runnable() {
+            handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    double f3 = TotalMileage / ( mp.getDuration() / mp.getCurrentPosition());
+                    //走行距離表示↓
+                    double f3 = TotalMileage / ( (double)mp.getDuration() / (double)mp.getCurrentPosition());
                     //tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
                     tMileage.setText(String.format("%.2f",f3));
                     //tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
@@ -783,13 +777,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         tMileageInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0,3));
                         tMileageDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(3, 6));
                     }
-
-
+                    //
                 }
             });
         }
     }
-
     //加速タスク
     public class SpeedUpTask implements Runnable {
         public void run() {
