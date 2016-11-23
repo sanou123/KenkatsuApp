@@ -153,7 +153,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tMileageInt = (TextView) findViewById(R.id.textMileageInt);
         tMileageInt.setText("0");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
-        tHeartbeat.setText("0");
+        tHeartbeat.setText("000");
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00.0");
         tTest = (TextView) findViewById(R.id.textTest);
@@ -164,9 +164,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         imageView.setImageResource(R.drawable.me);
         ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
         imageView1.setImageResource(R.drawable.bar2);
-        ImageView imageView2 = (ImageView)findViewById(R.id.image_meter);
-        imageView2.setImageResource(R.drawable.meter2);
+        ImageView imageSpeedMeter = (ImageView)findViewById(R.id.image_SpeedMeter);
+        imageSpeedMeter.setImageResource(R.drawable.meter0);
         imageViewHari = (ImageView)findViewById(R.id.image_Hari);
+        ImageView imageHeartBeatMeter = (ImageView)findViewById(R.id.image_HeartBeatMeter);
+        imageHeartBeatMeter.setImageResource(R.drawable.heartbeatmeter);
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hari4_45);
         imageViewHari.setImageBitmap(bitmap);
 
@@ -907,13 +909,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //test
     public class TestMoveMeTask3 implements Runnable {
+
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 750;
-                    getPlayTime = 750 - getPlayTime;
-                    tGPT.setText(""+getPlayTime);
+                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 499;//500という数字はbarのpx数
+                    getPlayTime = 499 - getPlayTime;
+                    tGPT.setText("" + getPlayTime);
                     imageView.setY(getPlayTime);
 
                 }
