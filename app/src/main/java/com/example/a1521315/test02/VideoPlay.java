@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -256,7 +257,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //**********************************************************************************
 */
     }
-
     // 再生完了時の処理
     @Override
     public void onCompletion(MediaPlayer agr0) {
