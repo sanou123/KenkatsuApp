@@ -22,7 +22,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
         <Button
@@ -39,7 +39,7 @@
             android:text="PLAY"
             android:layout_height="150dp"
             android:id="@+id/buttonPlay"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:layout_width="500dp"
@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="300dp"
             android:id="@+id/ConnectCheak"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:background="@android:color/holo_red_dark"
             android:layout_above="@+id/textTest"
             android:layout_centerHorizontal="true">
@@ -203,16 +203,15 @@
 
         <RelativeLayout
             android:id="@+id/BarLayout"
-            android:layout_height="800px"
+            android:layout_height="550px"
             android:layout_width="50px"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="100dp" >
-
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="70dp" >
             <ImageView
-                app:srcCompat="@drawable/bar"
+                app:srcCompat="@drawable/bar2"
                 android:id="@+id/image_view_bar"
-                android:layout_width="50px"
-                android:layout_height="800px"
+                android:layout_width="20px"
+                android:layout_height="500px"
                 android:layout_centerInParent="true" />
 
             <RelativeLayout
@@ -220,8 +219,7 @@
                 android:layout_width="50px"
                 android:layout_height="50px"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="26dp">
-
+                android:layout_marginTop="66dp">
                 <ImageView
                     app:srcCompat="@drawable/ghost"
                     android:id="@+id/image_view_ghost"
@@ -235,8 +233,9 @@
                 android:id="@+id/image_view_me"
                 android:layout_width="50px"
                 android:layout_height="50px"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="750px" />
+                android:layout_marginTop="100dp"
+                android:layout_centerHorizontal="true" />
+
 
         </RelativeLayout>
 
