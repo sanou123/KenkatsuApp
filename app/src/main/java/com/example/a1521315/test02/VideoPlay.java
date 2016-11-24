@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -43,7 +44,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-//import static com.example.a1521315.test02.R.id.buttonNo;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener,View.OnClickListener {
@@ -53,10 +53,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tSpeedDec;//時速の変数　少数
     TextView tSpeedInt;//時速の変数　整数
     TextView tMileage;//走行距離の変数
-    TextView tMileageDec;//走行距離の変数
-    TextView tMileageInt;//走行距離の変数
+    TextView tMileageDec;//走行距離の変数　小数
+    TextView tMileageInt;//走行距離の変数　整数
     TextView tHeartbeat;//心拍の変数
-    TextView tTest;//再生時間の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース番号
     TextView tGPT;
@@ -77,7 +76,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     PlaybackParams params = new PlaybackParams();
     double speedcount = 0.0;
 
-    private ImageView imageView;//image_view_me用の変数
+    private ImageView imageMe;//image_view_me用の変数
     float imageX ;
     float imageY ;
 
@@ -145,7 +144,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tSpeedInt = (TextView) findViewById(R.id.textSpeedInt);
         tSpeedInt.setText("0");
         tSpeed = (TextView) findViewById(R.id.textSpeed);
-        tSpeed.setText(""+tSpeedInt+tSpeedDec);
+        tSpeed.setText("0.0");
         tMileage = (TextView) findViewById(R.id.textMileage);
         tMileage.setText("0.00");
         tMileageDec = (TextView) findViewById(R.id.textMileageDec);
@@ -153,20 +152,18 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tMileageInt = (TextView) findViewById(R.id.textMileageInt);
         tMileageInt.setText("0");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
-        tHeartbeat.setText("0");
+        tHeartbeat.setText("000");
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00.0");
-        tTest = (TextView) findViewById(R.id.textTest);
-        tTest.setText("");
-        tGPT = (TextView) findViewById(R.id.textGetPlayTime);
-        tGPT.setText("シークバーの値");
-        imageView = (ImageView)findViewById(R.id.image_view_me);
-        imageView.setImageResource(R.drawable.me);
+        imageMe = (ImageView)findViewById(R.id.image_view_me);
+        imageMe.setImageResource(R.drawable.me);
         ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
-        imageView1.setImageResource(R.drawable.bar);
-        ImageView imageView2 = (ImageView)findViewById(R.id.image_meter);
-        imageView2.setImageResource(R.drawable.meter2);
+        imageView1.setImageResource(R.drawable.bar2);
+        ImageView imageSpeedMeter = (ImageView)findViewById(R.id.image_SpeedMeter);
+        imageSpeedMeter.setImageResource(R.drawable.meter0);
         imageViewHari = (ImageView)findViewById(R.id.image_Hari);
+        ImageView imageHeartBeatMeter = (ImageView)findViewById(R.id.image_HeartBeatMeter);
+        imageHeartBeatMeter.setImageResource(R.drawable.heartbeatmeter);
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hari4_45);
         imageViewHari.setImageBitmap(bitmap);
 
@@ -229,7 +226,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             e1.printStackTrace();
         }
 
-
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -253,6 +249,40 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         //**********************************************************************************
 
+    }
+
+    public void ConnectCheckDialog(){
+        mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
+        alertDialog.setTitle("接続確認");
+        alertDialog.setMessage("Bluetoothで心拍センサとの通信をしますか？");
+        alertDialog.setPositiveButton("接続", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //接続処理
+                if (!connectFlg) {
+                    mStatusTextView.setText("try connect");
+                    mThread = new Thread(VideoPlay.this);
+                    // Threadを起動し、Bluetooth接続
+                    isRunning = true;
+                    mThread.start();
+                }
+            }
+        });
+        alertDialog.setNegativeButton("続行", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //続行処理
+                Log.d("No","no");
+                findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                tHeartbeat.setText("-");
+            }
+        });
+        AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
     }
 
     // 再生完了時の処理
@@ -582,10 +612,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         int id = v.getId();
         switch(id) {
             case R.id.buttonYes:
-                //イベント処理を記入
                 if (!connectFlg) {
-
-                    mStatusTextView.setText("try connect");
+                    //mStatusTextView.setText("try connect");
                     mThread = new Thread(this);
                     // Threadを起動し、Bluetooth接続
                     isRunning = true;
@@ -597,7 +625,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 Log.d("No","no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
                 findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
-                tHeartbeat.setText("Not");
+                tHeartbeat.setText("- ");
                 break;
         }
     }
@@ -759,7 +787,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 public void run() {
                     //走行距離表示↓
                     double f3 = TotalMileage / ( (double)mp.getDuration() / (double)mp.getCurrentPosition());
-                    //tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());
                     tMileage.setText(String.format("%.2f",f3));
                     //tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
                     if(f3 < 10.00) {
@@ -907,14 +934,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //test
     public class TestMoveMeTask3 implements Runnable {
+
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 750;
-                    getPlayTime = 750 - getPlayTime;
-                    tGPT.setText(""+getPlayTime);
-                    imageView.setY(getPlayTime);
+                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 450;//barのpx数
+                    getPlayTime = 450 - getPlayTime;
+                    //tGPT.setText("" + getPlayTime);
+                    imageMe.setY(getPlayTime);
 
                 }
             });
@@ -928,11 +956,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             // handlerを使って処理をキューイングする
             handler.post(new Runnable() {
                 public void run() {
-                    imageX = imageView.getX();
-                    imageY = imageView.getY();
+                    imageX = imageMe.getX();
+                    imageY = imageMe.getY();
                     imageY -= 20;
                     //y方向は20pixづつ、画像の横縦幅はそのまま維持
-                    imageView.layout((int)imageX, (int)imageY, (int)imageX + imageView.getWidth(), (int)imageY + imageView.getHeight());
+                    imageMe.layout((int)imageX, (int)imageY, (int)imageX + imageMe.getWidth(), (int)imageY + imageMe.getHeight());
                     Log.d("imageXY", "X:" + imageX + " Y:" + imageY);
 
                 }

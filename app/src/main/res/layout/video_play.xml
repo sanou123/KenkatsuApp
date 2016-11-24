@@ -15,55 +15,189 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/SurfaceViewLayout">
 
         <SurfaceView android:id="@+id/surfaceView1" android:layout_width="match_parent" android:layout_height="match_parent"></SurfaceView>
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
-        <Button
-            android:text="リザルト"
+        <RelativeLayout
+            android:id="@+id/CoursenameLayout"
+            android:layout_width="400dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true">
+
+            <TextView
+                android:id="@+id/textCourse"
+                android:text="コース名"
+                android:textSize="36sp"
+                android:textColor="@android:color/holo_red_light"
+                android:gravity="bottom|right"
+                android:layout_width="400dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="500dp"
             android:layout_height="150dp"
-            android:id="@+id/buttonResult"
-            android:visibility="invisible"
-            android:layout_alignTop="@+id/buttonPlay"
-            android:layout_alignStart="@+id/buttonPlay"
-            android:textSize="100sp" />
+            android:layout_centerInParent="true"
+            android:id="@+id/PlayResultLayout">
+            <Button
+                android:id="@+id/buttonPlay"
+                android:text="プレイ"
+                android:textSize="100sp"
+                android:layout_width="500dp"
+                android:layout_height="150dp"
+                android:visibility="invisible"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+            <Button
+                android:id="@+id/buttonResult"
+                android:text="リザルト"
+                android:textSize="100sp"
+                android:layout_width="500dp"
+                android:layout_height="150dp"
+                android:visibility="invisible"
+                android:layout_alignTop="@+id/buttonPlay"
+                android:layout_alignStart="@+id/buttonPlay" />
+        </RelativeLayout>
 
-        <Button
-            android:text="PLAY"
-            android:layout_height="150dp"
-            android:id="@+id/buttonPlay"
-            android:visibility="invisible"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_width="500dp"
-            android:textSize="100sp" />
+        <RelativeLayout
+            android:id="@+id/MeterUILayout"
+            android:layout_width="460dp"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
 
-        <TextView
-            android:text="確認用(完成したら削除する)"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textTest"
-            android:textSize="30sp"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_above="@+id/MeterLayout"
-            android:layout_centerHorizontal="true" />
+            <RelativeLayout
+                android:id="@+id/HeartBeatMeterLayout"
+                android:layout_width="230dp"
+                android:layout_height="200dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/heartbeatmeter2"
+                    android:id="@+id/image_HeartBeatMeter"/>
+
+                <TextView
+                    android:id="@+id/textHeartbeat"
+                    android:text="059"
+                    android:textSize="110px"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="bottom|right"
+                    android:layout_width="95dp"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="24px"
+                    android:layout_marginStart="110px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/SpeedMeterLayout"
+                android:layout_width="230dp"
+                android:layout_height="200dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart
+                    ="true">
+
+                <ImageView
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/meter0"
+                    android:id="@+id/image_SpeedMeter"
+                    android:layout_width="match_parent" />
+
+                <TextView
+                    android:id="@+id/textSpeedInt"
+                    android:text="50"
+                    android:textSize="120px"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="bottom|right"
+                    android:layout_width="70dp"
+                    android:layout_height="65dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:id="@+id/textSpeedDec"
+                    tools:text=".0"
+                    android:textSize="80px"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="bottom|right"
+                    android:layout_width="40dp"
+                    android:layout_height="45dp"
+                    android:layout_alignTop="@+id/textSpeedInt"
+                    android:layout_toEndOf="@+id/textSpeedInt" />
+
+                <TextView
+                    android:id="@+id/textMileageInt"
+                    android:text="999"
+                    android:textSize="100px"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="bottom|right"
+                    android:layout_width="90dp"
+                    android:layout_height="50dp"
+                    android:layout_alignStart="@+id/textSpeedInt"
+                    android:layout_marginTop="60dp" />
+                <TextView
+                    android:id="@+id/textMileageDec"
+                    tools:text=".99"
+                    android:textSize="50px"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="bottom|right"
+                    android:layout_width="35dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/textMileageInt"
+                    android:layout_toEndOf="@+id/textMileageInt" />
+
+
+
+                <RelativeLayout
+                    android:id="@+id/HariLayout"
+                    android:layout_height="200dp"
+                    android:layout_width="230dp"
+                    android:layout_marginTop="0px"
+                    android:gravity="bottom|right">
+
+                    <ImageView
+                        android:id="@+id/image_Hari"
+                        app:srcCompat="@drawable/hari4_45"
+                        android:visibility="visible"
+                        android:scaleType="centerInside"
+                        android:layout_marginRight="22px"
+                        android:layout_width="208dp"
+                        android:layout_height="208dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="26dp"/>
+                </RelativeLayout>
+
+
+
+            </RelativeLayout>
+        </RelativeLayout>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
             android:id="@+id/ConnectCheak"
+            android:orientation="vertical"
+            android:layout_width="600dp"
+            android:layout_height="300dp"
             android:visibility="visible"
             android:background="@android:color/holo_red_dark"
-            android:layout_above="@+id/textTest"
-            android:layout_centerHorizontal="true">
+            android:layout_centerInParent="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -96,7 +230,7 @@
                 <TextView
                     android:layout_below="@+id/textConnectMsg2"
                     android:id="@+id/textConnectMsg3"
-                    android:text="接続しない場合はそのまま続行。"
+                    android:text="続行を押す。"
                     android:layout_width="600dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -107,7 +241,7 @@
                 <TextView
                     android:layout_below="@+id/textConnectMsg3"
                     android:id="@+id/textConnectMsg4"
-                    android:text=""
+                    android:text="接続しない場合はそのまま続行を押す。"
                     android:layout_width="600dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -131,8 +265,8 @@
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_height="100dp"
-                android:layout_width="600dp"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
                 android:layout_gravity="center"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="0dp"
@@ -154,257 +288,139 @@
 
 
             </LinearLayout>
+
         </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/TimerLayout"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
             android:background="@color/common_google_signin_btn_text_dark_default"
-            android:layout_width="310dp"
-            android:layout_height="60dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
 
             <TextView
-                android:text="TIME:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/TIME"
-                android:textSize="50sp"
-                android:textColor="@android:color/black" />
+                android:text="TIME: "
+                android:textSize="40dp"
+                android:textColor="@android:color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp" />
 
             <TextView
-                android:text="00:00.0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/textTimer"
-                android:textSize="50sp"
+                android:text="00:00.0"
+                android:textSize="40dp"
                 android:textColor="@android:color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/TIME" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="700dp"
-            android:layout_height="50dp"
-            android:id="@+id/CoursenameLayout"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true">
-
-            <TextView
-                android:text="コース番号"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textCourse"
-                android:textSize="36sp"
-                android:textColor="@android:color/holo_red_light"
-                android:layout_centerHorizontal="true" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/BarLayout"
-            android:layout_height="800px"
+            android:id="@+id/MileageBarLayout"
             android:layout_width="50px"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="100dp" >
-
-            <ImageView
-                app:srcCompat="@drawable/bar"
-                android:id="@+id/image_view_bar"
-                android:layout_width="50px"
-                android:layout_height="800px"
-                android:layout_centerInParent="true" />
+            android:layout_height="310dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="60dp" >
 
             <RelativeLayout
-                android:id="@+id/ghostLayout"
+                android:id="@+id/BarLayout"
                 android:layout_width="50px"
-                android:layout_height="50px"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="26dp">
+                android:layout_height="500px"
+                android:layout_centerInParent="true">
+
+                <ImageView
+                    app:srcCompat="@drawable/bar2"
+                    android:id="@+id/image_view_bar"
+                    android:layout_width="50px"
+                    android:layout_height="500px"
+                    android:layout_centerInParent="true" />
 
                 <ImageView
                     app:srcCompat="@drawable/ghost"
                     android:id="@+id/image_view_ghost"
                     android:layout_width="50px"
                     android:layout_height="50px"
+                    android:layout_marginTop="450px"
                     android:layout_centerHorizontal="true" />
+
+                <ImageView
+                    app:srcCompat="@drawable/me"
+                    android:id="@+id/image_view_me"
+                    android:layout_width="50px"
+                    android:layout_height="50px"
+                    android:layout_marginTop="450px"
+                    android:layout_centerHorizontal="true" />
+
             </RelativeLayout>
 
-            <ImageView
-                app:srcCompat="@drawable/me"
-                android:id="@+id/image_view_me"
-                android:layout_width="50px"
-                android:layout_height="50px"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="750px" />
+            <TextView
+                android:id="@+id/textG"
+                android:text="G"
+                android:textSize="50px"
+                android:textColor="@android:color/holo_orange_light"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="0px"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/textS"
+                android:text="S"
+                android:textSize="50px"
+                android:textColor="@android:color/holo_orange_light"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="560px"
+                android:layout_centerHorizontal="true" />
+
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/MeterLayout"
-            android:layout_height="200dp"
-            android:layout_width="230dp"
+            android:id="@+id/PauseLayout"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true">
 
-            <ImageView
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/meter2"
-                android:id="@+id/image_meter"
-                android:layout_width="match_parent" />
-
-            <TextView
-                android:id="@+id/textSpeedInt"
-                android:textColor="@android:color/holo_orange_light"
-                android:text="50"
-                android:layout_gravity="bottom|right"
-                android:layout_width="70dp"
-                android:layout_marginStart="50dp"
-                android:textSize="120px"
-                android:layout_height="65dp"
-                android:gravity="bottom|right"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true" />
-
-            <TextView
-                android:text="TextView"
-                android:id="@+id/textSpeedDec"
-                android:gravity="bottom|right"
-                android:textSize="40sp"
-                android:textColor="@android:color/holo_orange_light"
-                tools:text=".0"
-                android:layout_width="40dp"
-                android:layout_height="45dp"
-                android:layout_alignTop="@+id/textSpeedInt"
-                android:layout_toEndOf="@+id/textSpeedInt" />
-
-            <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textMileageDec"
-                android:textColor="@android:color/holo_orange_light"
-                tools:text=".99"
-                android:textSize="25sp"
-                android:layout_marginStart="22dp"
-                android:layout_marginBottom="48dp"
-                android:layout_above="@+id/textSpeedDec"
-                android:layout_toEndOf="@+id/textSpeedInt"
-                android:gravity="bottom|right" />
-
-            <TextView
-                android:text="999"
-                android:id="@+id/textMileageInt"
-                android:textSize="50sp"
-                android:textColor="@android:color/holo_orange_light"
-                android:gravity="bottom|right"
-                android:layout_width="90dp"
-                android:layout_height="60dp"
-                android:layout_above="@+id/textSpeedInt"
-                android:layout_alignStart="@+id/textSpeedInt"
-                android:layout_marginBottom="26dp" />
-
-            <RelativeLayout
-                android:id="@+id/HariLayout"
-                android:layout_height="200dp"
-                android:layout_width="2300dp"
-                android:layout_marginTop="0px"
-                android:gravity="bottom|right">
-
-                <ImageView
-                    android:id="@+id/image_Hari"
-                    app:srcCompat="@drawable/hari4_45"
-                    android:visibility="visible"
-                    android:scaleType="centerInside"
-                    android:layout_marginRight="21px"
-                    android:layout_marginBottom="-35px"
-                    android:layout_width="208dp"
-                    android:layout_height="208dp" />
-            </RelativeLayout>
-
-
-
-        </RelativeLayout>
-
-        <TextView
-            android:text="textSpeed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textSpeed"
-            android:textColor="@android:color/holo_orange_dark"
-            android:textSize="30sp"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:id="@+id/textMileage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FF0000"
-            android:text="textMileage"
-            android:textSize="80px"
-            android:layout_gravity="right"
-            android:gravity="bottom|right"
-            android:layout_below="@+id/textSpeed"
-            android:layout_alignParentEnd="true" />
-
-        <RelativeLayout
-            android:layout_below="@+id/textConnectMsg4"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="439dp"
-            android:layout_width="200dp"
-            android:layout_height="200dp">
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_height="50dp"
-            android:layout_width="160dp"
-            android:id="@+id/HeartBeatLayout"
-            android:layout_above="@+id/MeterLayout"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="21dp">
-
-            <TextView
-                android:text="心拍:      "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/Sinpaku"
-                android:textSize="36sp"
-                android:textColor="@android:color/holo_red_light"
-                android:layout_alignParentStart="true" />
-
-            <TextView
-                android:id="@+id/textHeartbeat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/holo_red_dark"
-                android:text="999"
+            <Button
+                android:id="@+id/buttonPause"
+                android:text="ポーズ"
                 android:textSize="80px"
-                android:layout_gravity="right"
+                android:layout_width="150dp"
+                android:layout_height="80dp"
+                android:visibility="invisible"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true" />
-
         </RelativeLayout>
 
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="17dp"
-            android:id="@+id/textGetPlayTime"
-            android:textSize="36sp"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_below="@+id/BarLayout"
-            android:layout_alignStart="@+id/BarLayout" />
-
-        <Button
-            android:id="@+id/buttonPause"
-            android:text="Pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true" />
+        <RelativeLayout
+            android:id="@+id/DataLayout"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
+            <TextView
+                android:id="@+id/textMileage"
+                android:text="textMileage"
+                android:textSize="30sp"
+                android:textColor="#FF0000"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_above="@+id/textSpeed"
+                android:layout_alignParentEnd="true" />
+            <TextView
+                android:id="@+id/textSpeed"
+                android:text="textSpeed"
+                android:textSize="30sp"
+                android:textColor="@android:color/holo_orange_dark"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
 
     </RelativeLayout>
 
