@@ -33,6 +33,34 @@ public class MenuSelect extends AppCompatActivity {
         String columns = globals.now_user + "さんのメニュー";
         textView.setText(columns);
 
+        TextView textView1 = (TextView)findViewById(R.id.text_bmi);
+
+        //Degree of obesity(肥満度)
+        if(globals.bmi < 18.5){
+            String Doo = "低体重";
+            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+            textView1.setText(columns1);
+        }else if(globals.bmi >= 18.5 || globals.bmi < 25){
+            String Doo = new String("普通体重");
+            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+            textView1.setText(columns1);
+        }else if(globals.bmi >= 25 || globals.bmi < 30){
+            String Doo = new String("肥満(1度)");
+            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+            textView1.setText(columns1);
+        }else if(globals.bmi >= 30 || globals.bmi < 35){
+            String Doo = new String("肥満(2度)");
+            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+            textView1.setText(columns1);
+        }else if(globals.bmi >= 35 || globals.bmi < 40){
+            String Doo = new String("肥満(3度)");
+            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+            textView1.setText(columns1);
+        }else if(globals.bmi >= 40){
+            String Doo = new String("肥満(4度)");
+            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+            textView1.setText(columns1);
+        }
 
 
         //trainingボタンを押した時TrainingSelectへ移動
@@ -114,6 +142,7 @@ public class MenuSelect extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override

@@ -19,8 +19,8 @@ public class Globals extends Application {
     String total_time = "10";
     String total_mileage = "55";
     static int name_id;
-    static int bmi;
+    static double bmi;
     static String weight;
     static String height;
-
+    static String sex;
 }
