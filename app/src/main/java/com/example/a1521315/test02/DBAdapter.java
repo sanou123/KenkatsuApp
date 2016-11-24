@@ -133,7 +133,7 @@ public class DBAdapter {
 
     public void saveDB_DATA(int name_id, String name ,String date, String heart_rate, String calorie_consumption,
                             String total_time, String total_distance, String course_name, String time,
-                            String avg_speed, String max_speed, String distance, String bmi) {
+                            String avg_speed, String max_speed, String distance, double bmi) {
 
         db.beginTransaction();          // トランザクション開始
 

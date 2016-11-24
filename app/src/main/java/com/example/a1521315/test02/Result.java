@@ -95,8 +95,12 @@ public class Result extends Activity {
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
         Log.v("時間", simpleDateFormat.format(date));
 
+        int weight = Integer.parseInt(globals.weight);
+        int height = Integer.parseInt(globals.height);
 
-        globals.bmi = (Integer.parseInt(globals.weight) / (Integer.parseInt(globals.height) * Integer.parseInt(globals.height)));
+
+
+        globals.bmi = weight / (height * height);
         //globals.cal = (1.05 * 9 * Integer.parseInt(globals.time) * Integer.parseInt(globals.weight));
 
         // DBへの登録処理
@@ -104,7 +108,7 @@ public class Result extends Activity {
         dbAdapter.openDB();                                         // DBの読み書き
         dbAdapter.saveDB_DATA(globals.name_id, globals.now_user, simpleDateFormat.format(date), globals.maxheartbeat,
                 globals.cal, globals.total_time, globals.total_mileage, globals.coursename,
-                globals.time, globals.avg, globals.max, globals.mileage, String.valueOf(globals.bmi));   // DBに登録
+                globals.time, globals.avg, globals.max, globals.mileage, globals.bmi);   // DBに登録
         dbAdapter.closeDB();                                        // DBを閉じる
 
     }

@@ -334,7 +334,7 @@ public class MainResult extends AppCompatActivity implements
             dbAdapter.openDB();                                         // DBの読み書き
             dbAdapter.saveDB_DATA(globals.name_id, globals.now_user, simpleDateFormat.format(date), globals.maxheartbeat,
                     globals.cal, globals.total_time, globals.total_mileage, globals.coursename,
-                    globals.time, globals.avg, globals.max, globals.mileage, String.valueOf(globals.bmi));   // DBに登録
+                    globals.time, globals.avg, globals.max, globals.mileage, globals.bmi);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定
