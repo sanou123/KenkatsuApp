@@ -32,5 +32,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="@string/button02_alldelete" />
+        android:text="@string/button02_all_delete" />
 </LinearLayout>

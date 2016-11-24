@@ -91,6 +91,9 @@
             android:screenOrientation="landscape"
             android:name=".TrainingSelect"
             android:label="@string/name_training_select"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".Graph"/>
     </application>
 
 </manifest>

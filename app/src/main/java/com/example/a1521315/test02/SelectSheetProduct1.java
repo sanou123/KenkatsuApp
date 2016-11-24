@@ -14,7 +14,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 /**
- * 品名一覧 (ListView×ArrayAdapter)画面に関連するクラス
+ * データ一覧 (ListView×ArrayAdapter)画面に関連するクラス
  * SelectSheetProduct1
  */
 public class SelectSheetProduct1 extends AppCompatActivity {
@@ -44,7 +44,7 @@ public class SelectSheetProduct1 extends AppCompatActivity {
 
         // DBのデータを取得
         String[] columns = {DBAdapter.COL_NAME};     // DBのカラム：品名
-        Cursor c = dbAdapter.getDB(columns);
+        Cursor c = dbAdapter.getDB1(columns);
 
         if (c.moveToFirst()) {
             do {
