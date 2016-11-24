@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "asdfg.db";      // DB名
+    private final static String DB_NAME = "asdfgh.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
     private final static int DB_VERSION = 1;                // DBのバージョン
@@ -76,6 +76,12 @@ public class DBAdapter {
     public DBAdapter readDB() {
         db = dbHelper.getReadableDatabase();        // DBの読み込み
         return this;
+    }
+
+    public void onOpen(SQLiteDatabase db) {
+        if (!db.isReadOnly()) {
+            db.execSQL("PRAGMA foreign_keys = ON;");
+        }
     }
 
     /**
@@ -231,7 +237,7 @@ public class DBAdapter {
             // 第1引数：テーブル名
             // 第2引数：削除する条件式 nullの場合は全レコードを削除
             // 第3引数：第2引数で?を使用した場合に使用
-            db.delete(DB_TABLE_USER, null, null);        // DBのレコードを全削除
+            db.delete(DB_TABLE_DATA, null, null);        // DBのレコードを全削除
             db.setTransactionSuccessful();          // トランザクションへコミット
         } catch (Exception e) {
             e.printStackTrace();
@@ -325,8 +331,7 @@ public class DBAdapter {
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_data = "CREATE TABLE " + DB_TABLE_DATA + " ("
                     + COL_ID_DATA + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + COL_NAME_ID + " INTEGER COL_ID_USER,"
-                    //+ DB_TABLE_USER + COL_ID_USER +" REFERENCES,"
+                    + COL_NAME_ID + " INTEGER NOT NULL,"
                     + COL_NAME + " TEXT NOT NULL ,"
                     + COL_DATE + " TEXT NOT NULL ,"
                     + COL_HEART_RATE + " INTEGER NOT NULL,"
@@ -338,8 +343,8 @@ public class DBAdapter {
                     + COL_AVG_SPEED + " INTEGER NOT NULL ,"
                     + COL_MAX_SPEED + " INTEGER NOT NULL ,"
                     + COL_DISTANCE + " INTEGER NOT NULL ,"
-                    + COL_BMI +" INTEGER NOT NULL"
-                    //+" FOREIGN KEY(COL_ID_USER) REFERENCES days(COL_ID_USER) ON DELETE CASCADE )"
+                    + COL_BMI +" INTEGER NOT NULL,"
+                    + "FOREIGN KEY(name_id) REFERENCES DB_TABLE_USER(COL_ID_USER) ON DELETE CASCADE"
                     + ");";
             db.execSQL(createTbl_user);      //SQL文の実行
 

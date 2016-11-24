@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,15 +21,11 @@ public class UserUpdate extends AppCompatActivity {
 
     Globals globals;
 
-    //private EditText mEditText01Name;        // 名前
     private EditText mEditText01Age;         // 年齢
-    private RadioGroup mRadioGroup01Sex;         // 性別
     private EditText mEditText01Height;         // 身長
     private EditText mEditText01Weight;          // 体重
 
-    //private TextView mText01Kome01;             // 名前の※印
     private TextView mText01Kome02;             // 年齢の※印
-    private TextView mText01Kome03;             // 性別の※印
     private TextView mText01Kome04;             // 身長の※印
     private TextView mText01Kome05;             // 体重の※印
 
@@ -97,15 +91,11 @@ public class UserUpdate extends AppCompatActivity {
      */
     private void findViews() {
 
-        //mEditText01Name = (EditText) findViewById(R.id.editText01Name);   // 名前
         mEditText01Age = (EditText) findViewById(R.id.editText01Age);     // 年齢
-        mRadioGroup01Sex = (RadioGroup) findViewById(R.id.radioGroup01Sex);     // 年齢
         mEditText01Height = (EditText) findViewById(R.id.editText01Height);     // 身長
         mEditText01Weight = (EditText) findViewById(R.id.editText01Weight);       // 体重
 
-        //mText01Kome01 = (TextView) findViewById(R.id.text01Kome01);             // 名前の※印
         mText01Kome02 = (TextView) findViewById(R.id.text01Kome02);             // 年齢※印
-        mText01Kome03 = (TextView) findViewById(R.id.text01Kome03);             // 性別の※印
         mText01Kome04 = (TextView) findViewById(R.id.text01Kome04);             // 身長の※印
         mText01Kome05 = (TextView) findViewById(R.id.text01Kome05);             // 体重の※印
 
@@ -118,18 +108,13 @@ public class UserUpdate extends AppCompatActivity {
      * init()
      */
     private void init() {
-        //mEditText01Name.setText("");
         mEditText01Age.setText("");
         mEditText01Height.setText("");
         mEditText01Weight.setText("");
 
-        //mText01Kome01.setText("");
         mText01Kome02.setText("");
-        mText01Kome03.setText("");
         mText01Kome04.setText("");
         mText01Kome05.setText("");
-
-        //mEditText01Name.requestFocus();      // フォーカスを品名のEditTextに指定
     }
 
         /**
@@ -138,41 +123,20 @@ public class UserUpdate extends AppCompatActivity {
      */
     private void saveList() {
 
-        int checkedId = mRadioGroup01Sex.getCheckedRadioButtonId();
-
-        RadioButton mRadioGroup01Sex = (RadioButton) findViewById(checkedId);// (Fragmentの場合は「getActivity().findViewById」にする)
-
-
         // 各EditTextで入力されたテキストを取得
-        //String strName = mEditText01Name.getText().toString();
         String strAge = mEditText01Age.getText().toString();
-        String strSex = mRadioGroup01Sex.getText().toString();
         String strHeight = mEditText01Height.getText().toString();
         String strWeight = mEditText01Weight.getText().toString();
 
 
         // EditTextが空白の場合
-        if (/*strName.equals("") || */strAge.equals("") || strSex.equals("")
-                || strHeight.equals("") || strWeight.equals("")) {
+        if (strAge.equals("")  || strHeight.equals("") || strWeight.equals("")) {
 
-            /*if (strName.equals("")) {
-                mText01Kome01.setText("※");     // 名前が空白の場合、※印を表示
-            } else {
-                mText01Kome01.setText("");      // 空白でない場合は※印を消す
-            }
-*/
             if (strAge.equals("")) {
                 mText01Kome02.setText("※");     // 年齢が空白の場合、※印を表示
             } else {
                 mText01Kome02.setText("");      // 空白でない場合は※印を消す
             }
-
-            if (strSex.equals("")) {
-                mText01Kome03.setText("※");     // 身長が空白の場合、※印を表示
-            } else {
-                mText01Kome03.setText("");      // 空白でない場合は※印を消す
-            }
-
 
             if (strHeight.equals("")) {
                 mText01Kome04.setText("※");     // 身長が空白の場合、※印を表示
@@ -199,7 +163,7 @@ public class UserUpdate extends AppCompatActivity {
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.updateDB(globals.now_user, iAge, strSex, iHeight, iWeight);   // DBに登録
+            dbAdapter.updateDB(globals.now_user, iAge, globals.sex, iHeight, iWeight);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定

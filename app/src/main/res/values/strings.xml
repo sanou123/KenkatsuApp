@@ -42,7 +42,7 @@
     <!-- select_sheet_product 02 -->
     <string name="text02_title_detail">ListViewを表示する為にArrayAdapterを使ってシンプルに品名だけをリスト表示します。</string>
     <string name="text02_title">ユーザ一覧</string>
-    <string name="button02_alldelete">全削除</string>
+    <string name="button02_all_delete">全削除</string>
 
     <!-- row_sheet_listview 05 -->
     <string name="text05_title_age">年齢：</string>

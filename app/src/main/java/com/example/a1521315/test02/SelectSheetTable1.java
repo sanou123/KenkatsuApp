@@ -7,10 +7,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * TableLayout画面に関連するクラス
@@ -19,8 +23,11 @@ import android.widget.Toast;
 public class SelectSheetTable1 extends AppCompatActivity {
 
     Globals globals;
-    DBAdapter dbAdapter;
+    private DBAdapter dbAdapter;                // DBAdapter
+    private ArrayAdapter<String> adapter;       // ArrayAdapter
+    private ArrayList<String> items;            // ArrayList
 
+    private Button mButton03AllDelete;          // 全削除ボタン
     private TableLayout mTableLayout04List;     //データ表示用TableLayout
 
     private int colorFlg = 1;                   //背景切り替え用フラグ
@@ -40,7 +47,9 @@ public class SelectSheetTable1 extends AppCompatActivity {
 
         findViews();        // 各部品の結び付け
 
-        init();
+        init();         //データの検索を始める時
+
+        delete();
 
     }
 
@@ -50,6 +59,7 @@ public class SelectSheetTable1 extends AppCompatActivity {
      */
     private void findViews() {
         mTableLayout04List = (TableLayout) findViewById(R.id.tableLayout03List);    //データ表示用TableLayout
+        mButton03AllDelete = (Button) findViewById(R.id.button02AllDelete);         // 全削除ボタン
     }
 
 
@@ -154,7 +164,7 @@ public class SelectSheetTable1 extends AppCompatActivity {
 
             } while (c.moveToNext());
         } else {
-            Toast.makeText(this, "検索結果 0件", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "登録されているデータがありません。", Toast.LENGTH_SHORT).show();
         }
         c.close();
         dbAdapter.closeDB();        // DBを閉じる
@@ -191,4 +201,40 @@ public class SelectSheetTable1 extends AppCompatActivity {
         return params;
     }
 
+    /**
+     * トレーニング情報の削除
+     * */
+    private void delete(){
+     /*   dbAdapter = new DBAdapter(this);
+        dbAdapter.openDB();     // DBの読み込み(読み書きの方)
+
+        findViews();            // 各部品の結び付け
+
+        // ArrayListを生成
+        items = new ArrayList<>();
+
+        // DBのデータを取得
+        String[] columns = {DBAdapter.COL_NAME};     // DBのカラム：品名
+        Cursor c = dbAdapter.getDB1(columns);
+
+        c.close();
+        dbAdapter.closeDB();    // DBを閉じる
+
+        // 全削除ボタン押下時処理
+        mButton03AllDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!items.isEmpty()) {
+                    dbAdapter.openDB();     // DBの読み込み(読み書きの方)
+                    dbAdapter.allDelete();  // DBのレコードを全削除
+                    dbAdapter.closeDB();    // DBを閉じる
+
+                }else {
+                    Toast.makeText(SelectSheetTable1.this, "登録されているデータがありません。", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });*/
+    }
 }

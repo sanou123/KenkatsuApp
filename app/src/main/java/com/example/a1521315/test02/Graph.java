@@ -5,24 +5,23 @@ package com.example.a1521315.test02;
  */
 
 
-        import android.content.pm.ActivityInfo;
-        import android.database.Cursor;
-        import android.os.Bundle;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
-        import android.widget.ArrayAdapter;
-        import android.widget.ListView;
-        import android.widget.Toast;
+import android.content.pm.ActivityInfo;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
-        import com.github.mikephil.charting.animation.Easing;
-        import com.github.mikephil.charting.charts.BarChart;
-        import com.github.mikephil.charting.components.XAxis;
-        import com.github.mikephil.charting.data.BarData;
-        import com.github.mikephil.charting.data.BarDataSet;
-        import com.github.mikephil.charting.data.BarEntry;
-        import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
 
 public class Graph extends AppCompatActivity {
@@ -92,16 +91,20 @@ public class Graph extends AppCompatActivity {
         String[] columns = {DBAdapter.COL_DATE};     // DBのカラム：日付
         Cursor c = dbAdapter.getDB1(columns);
 
-    /*    if (c.moveToFirst()) {
-            do {
-                xValues.add(c.getString(3));
-                Log.d("取得したCursor:", c.getString(3));
-            } while (c.moveToNext());
-        }else {
-            Toast.makeText(this, "登録されているデータがありません。", Toast.LENGTH_SHORT).show();
+
+
+        if(c!=null && c.getCount() > 0) {
+            if (c.moveToFirst()) {
+                do {
+                    xValues.add(c.getString(12));
+                } while (c.moveToNext());
+            } else {
+                Toast.makeText(this, "登録されているデータがありません。", Toast.LENGTH_SHORT).show();
+            }
         }
-        */
-        c.moveToFirst();
+
+
+/*        c.moveToFirst();
 
 
         if (!xValues.isEmpty()) {
@@ -110,15 +113,28 @@ public class Graph extends AppCompatActivity {
         } else {
             Toast.makeText(this, "登録されているデータがありません。", Toast.LENGTH_SHORT).show();
         }
+*/
 
-
-
+/*
         // valueA
         ArrayList<BarEntry> valuesA = new ArrayList<>();
 
-        if (!xValues.isEmpty()) {
-            valuesA.add(new BarEntry(1,2));
-            Log.d("取得したCursor:", c.getString(12));
+        if (c.moveToFirst()) {
+            do {
+                valuesA.add(new BarEntry(1,2));
+                Log.d("取得したCursor:", c.getString(12));
+            } while (c.moveToNext());
+        }
+        */
+
+        ArrayList<BarEntry> valuesA = new ArrayList<>();
+
+        if(c!=null && c.getCount() > 0) {
+            if (c.moveToFirst()) {
+                do {
+                    valuesA.add(new BarEntry(1,2));
+                } while (c.moveToNext());
+            }
         }
 
 

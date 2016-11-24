@@ -66,6 +66,7 @@ public class SelectSheetListView extends AppCompatActivity {
                 myListItem = items.get(position);
                 String listName = myListItem.getName();
                 int NameID = myListItem.getUser_id();
+                String Sex = myListItem.getSex();
                 String Weight = myListItem.getWeight();
                 String Height = myListItem.getHeight();
 
@@ -76,6 +77,7 @@ public class SelectSheetListView extends AppCompatActivity {
                 //intent.putExtra("SELECTED_DATA",listName);
                 globals.now_user = listName;
                 globals.name_id = NameID;
+                globals.sex = Sex;
                 globals.weight = Weight;
                 globals.height = Height;
                 Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
@@ -104,6 +106,8 @@ public class SelectSheetListView extends AppCompatActivity {
 
                         dbAdapter.openDB();     // DBの読み込み(読み書きの方)
                         dbAdapter.selectDelete(String.valueOf(listId));     // DBから取得したIDが入っているデータを削除する
+                       // dbAdapter.delete("MyList", "_id=1", null);
+                        dbAdapter.allDelete();
                         Log.d("Long click : ", String.valueOf(listId));
                         dbAdapter.closeDB();    // DBを閉じる
                         loadMyList();
@@ -181,7 +185,6 @@ public class SelectSheetListView extends AppCompatActivity {
                         c.getString(3),
                         c.getString(4),
                         c.getString(5)
-
                 );
 
                 Log.d("取得したCursor(USER_ID):", String.valueOf(c.getInt(0)));

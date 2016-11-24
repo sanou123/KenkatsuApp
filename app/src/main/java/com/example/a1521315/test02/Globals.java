@@ -22,5 +22,7 @@ public class Globals extends Application {
     static int bmi;
     static String weight;
     static String height;
+    static String sex;
+
 
 }
