@@ -163,7 +163,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         imageView = (ImageView)findViewById(R.id.image_view_me);
         imageView.setImageResource(R.drawable.me);
         ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
-        imageView1.setImageResource(R.drawable.bar);
+        imageView1.setImageResource(R.drawable.bar2);
         ImageView imageView2 = (ImageView)findViewById(R.id.image_meter);
         imageView2.setImageResource(R.drawable.meter2);
         imageViewHari = (ImageView)findViewById(R.id.image_Hari);
@@ -229,7 +229,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             e1.printStackTrace();
         }
 
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -252,7 +252,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //**********************************************************************************
-
+*/
     }
 
     // 再生完了時の処理
