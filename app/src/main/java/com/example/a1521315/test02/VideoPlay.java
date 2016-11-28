@@ -67,8 +67,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
 
     private ScheduledExecutorService timerscheduler;
-    Runnable mytimertask = new MyTimerTask();
     ScheduledFuture future;
+    Runnable mytimertask = new MyTimerTask();
+    private ScheduledExecutorService seekbarscheduler;
+    ScheduledFuture seekbarfuture;
+    Runnable mySeekBar = new MySeekBarTask();
+
 
     private Timer movemetimer;
     private MoveMeTask timerTask = null;
@@ -283,6 +287,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         Button BtnPauseView2 = (Button) findViewById(R.id.buttonPause);
         BtnPauseView2.setVisibility(View.INVISIBLE);
         timerscheduler.shutdown();//タイマー止める
+        seekbarscheduler.shutdown();
         //movemetimer.cancel();//MoveMeTask止める
         //リザルトボタンを表示
         Button BtnResultView = (Button) findViewById(R.id.buttonResult);
@@ -514,6 +519,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
             timerscheduler = Executors.newSingleThreadScheduledExecutor();
             future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);
+            seekbarscheduler = Executors.newSingleThreadScheduledExecutor();
+            seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBar, 0, 1000, TimeUnit.MILLISECONDS);
             /*if (null != movemetimer) {
                 movemetimer.cancel();
                 movemetimer = null;
@@ -545,6 +552,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 */
             usb_flg = true;
             future.cancel(true);//タイマー一時停止
+            seekbarfuture.cancel(true);
             speedcount = 0;
             params.setSpeed((float) speedcount);
             mp.setPlaybackParams(params);
@@ -561,6 +569,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 public void onClick(DialogInterface dialog, int which) {
                     //VideoSelectに戻る処理
                     timerscheduler.shutdown();//タイマー終了
+                    seekbarscheduler.shutdown();//タイマー終了
                     //movemetimer.cancel();//MoveMeTask止める
                     if (mp != null) {
                         mp.release();
@@ -574,6 +583,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
+                    seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBar, 0, 1000, TimeUnit.MILLISECONDS);
                     usb_flg = false;
                 }
             });
@@ -794,6 +804,25 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
+    //カウントアップタイマタスク
+    public class MySeekBarTask implements Runnable {
+        //private Handler timerhandler = new Handler();
+        private long timercount = 0;
+
+        public void run() {
+            // handlerを使って処理をキューイングする
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Thread MoveMe = new Thread(new TestMoveMeTask3());
+                    MoveMe.start();
+                    Thread TestMileageTask = new Thread(new MileageTask());
+                    TestMileageTask.start();
+                }
+            });
+        }
+    }
+
 
     //s走行距離タスク
     public class MileageTask implements Runnable {
@@ -823,50 +852,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-    //加速タスク
-    public class SpeedUpTask implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(speedcount != 5) {
-                        kakudo = kakudo + 0.452;
-                    }
-                    //画像の横、縦サイズを取得
-                    int imageWidth = bitmap.getWidth();
-                    int imageHeight = bitmap.getHeight();
-                    //Matrixインスタンス生成
-                    Matrix matrix = new Matrix();
-                    //画像中心を起点に90度回転
-                    matrix.setRotate((float)kakudo, imageWidth/2, imageHeight/2);
-                    //90度回転したBitmap画像を生成
-                    Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
-                    imageViewHari.setImageBitmap(bitmap2);
-                    if(speedcount < 0.1){
-                        speedcount = speedcount + 0.1;
-                    }else {
-                        speedcount = speedcount + 0.01;
-                    }
-                    if (speedcount > 5)//意味わからないほど早くされるとクラッシュする対策
-                    {
-                        speedcount = 5;
-                    }
-                /*動画の再生速度を変えるのに必要なプログラム↓*/
-                    params.setSpeed((float) speedcount);//再生速度変更
-                    mp.setPlaybackParams(params);
-                    //mp.start();
-                    tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
-                    if((speedcount*10) < 10.0) {
-                        tSpeedInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0, 1));
-                        tSpeedDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(1, 3));
-                    }else{
-                        tSpeedInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0, 2));
-                        tSpeedDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(2, 4));
-                    }
-                }
-            });
-        }
-    }
+
     //スピードメータータスク
     public class SpeedMeterTask implements Runnable {
         private float pSpeedCount = (float) 0.0;
@@ -893,71 +879,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-    //減速タスク
-    public class SpeedDownTask implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    kakudo = kakudo - 0.452;
-                    //画像の横、縦サイズを取得
-                    int imageWidth = bitmap.getWidth();
-                    int imageHeight = bitmap.getHeight();
-                    //Matrixインスタンス生成
-                    Matrix matrix = new Matrix();
-                    //画像中心を起点に90度回転
-                    matrix.setRotate((float)kakudo, imageWidth/2, imageHeight/2);
-                    //90度回転したBitmap画像を生成
-                    Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
-                    imageViewHari.setImageBitmap(bitmap2);
-                    if(speedcount <= 0.1){
-                        speedcount = speedcount - 0.1;
-                    }else {
-                        speedcount = speedcount - 0.01;
-                    }
-                    if (speedcount <= 0.01) {
-                        speedcount = 0.00;
-                    }
-                /*動画の再生速度を変えるのに必要なプログラム↓*/
-                    params.setSpeed((float) speedcount);//再生速度変更
-                    mp.setPlaybackParams(params);
-                    //mp.start();
-                    tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
-                    if((speedcount*10) < 10.0) {
-                        //0.0~9.9までの処理
-                        tSpeedInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0, 1));
-                        tSpeedDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(1, 3));
-                    }else{
-                        //10.0~50.0までの処理
-                        tSpeedInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0, 2));
-                        tSpeedDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(2, 4));
-                    }
-                }
-            });
-        }
-    }
-    //針を0に戻すタスク
-    public class StopTask implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    kakudo = -158;
-                    //画像の横、縦サイズを取得
-                    int imageWidth = bitmap.getWidth();
-                    int imageHeight = bitmap.getHeight();
-                    //Matrixインスタンス生成
-                    Matrix matrix = new Matrix();
-                    //画像中心を起点に90度回転
-                    matrix.setRotate((float)kakudo, imageWidth/2, imageHeight/2);
-                    //90度回転したBitmap画像を生成
-                    Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
-                    imageViewHari.setImageBitmap(bitmap2);
-                }
-            });
-        }
-    }
-    //針を0に戻すタスク
+
+    //速度の針のタスク
     public class SpeedMeterNeedle implements Runnable {
         private double angle = 0.0;
         public SpeedMeterNeedle(double angle){
@@ -977,22 +900,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     //90度回転したBitmap画像を生成
                     Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
                     imageViewHari.setImageBitmap(bitmap2);
-                }
-            });
-        }
-    }
-    //test
-    public class TestSpinTask implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    double d;
-                    d = kakudo;
-                    kakudo = kakudo + 0.452;
-                    RotateAnimation rotare = new RotateAnimation((float)d,(float)kakudo,100,100);
-                    rotare.setDuration(10);
-                    Testimg.startAnimation(rotare);
                 }
             });
         }
