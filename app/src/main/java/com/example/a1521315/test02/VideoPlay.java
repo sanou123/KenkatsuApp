@@ -167,21 +167,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hari4_45);
         imageViewHari.setImageBitmap(bitmap);
 
-
-
-        //画像の横、縦サイズを取得
-        int imageWidth = bitmap.getWidth();
-        int imageHeight = bitmap.getHeight();
-        //Matrixインスタンス生成
-        Matrix matrix = new Matrix();
-        //画像中心を起点に90度回転
-        matrix.setRotate((float)kakudo, imageWidth/2, imageHeight);
-
-        //90度回転したBitmap画像を生成
-        Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
-        imageViewHari.setImageBitmap(bitmap2);
-
-
+        kakudo = -158;
+        Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(kakudo));
+        SetNeedletoZero.start();
 
         findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
         findViewById(R.id.buttonPause).setOnClickListener(PauseClickListener);
@@ -512,12 +500,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     View.OnClickListener PlayClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Runnable HariStop = new StopTask();
-            HariStop.run();
+            kakudo = -158;
+            Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(kakudo));
+            SetNeedletoZero.start();
             findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
             findViewById(R.id.buttonPause).setVisibility(View.VISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
             speedcount = 0.0;
             tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
+            tSpeedInt.setText("0");
+            tSpeedDec.setText(".0");
             mp.setPlaybackParams(params);
             mp.seekTo(0);
 
@@ -537,8 +528,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     View.OnClickListener PauseClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Runnable HariStop = new StopTask();
-            HariStop.run();
+            kakudo = -158;
+            Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(kakudo));
+            SetNeedletoZero.start();
+            /*
             //画像の横、縦サイズを取得
             int imageWidth = bitmap.getWidth();
             int imageHeight = bitmap.getHeight();
@@ -549,7 +542,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             //回転したBitmap画像を生成
             Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
             imageViewHari.setImageBitmap(bitmap2);
-
+*/
             usb_flg = true;
             future.cancel(true);//タイマー一時停止
             speedcount = 0;
@@ -636,15 +629,39 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
-                Runnable VolumeUpTask = new SpeedUpTask();
-                VolumeUpTask.run();
+                if(speedcount < 0.1){
+                    speedcount = speedcount + 0.1;
+                    kakudo = kakudo + 4.52;
+                }else {
+                    speedcount = speedcount + 0.01;
+                    kakudo = kakudo + 0.452;
+                }
+                if (speedcount > 5){//意味わからないほど早くされるとクラッシュする対策
+                    speedcount = 5;
+                }
+                Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(kakudo));
+                SetNeedleUp.start();
+                Thread SpeedUp = new Thread(new SpeedMeterTask((float)speedcount));
+                SpeedUp.start();
                 return true;
             }
         }
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                Runnable VolumeDownTask = new SpeedDownTask();
-                VolumeDownTask.run();
+                if(speedcount <= 0.1){
+                    speedcount = speedcount - 0.1;
+                    kakudo = kakudo - 4.52;
+                }else {
+                    speedcount = speedcount - 0.01;
+                    kakudo = kakudo - 0.452;
+                }
+                if (speedcount <= 0.01) {
+                    speedcount = 0.00;
+                }
+                Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(kakudo));
+                SetNeedleDown.start();
+                Thread SpeedDown = new Thread(new SpeedMeterTask((float)speedcount));
+                SpeedDown.start();
                 return true;
             }
         }
@@ -768,18 +785,17 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
-                    Runnable TestMoveMe = new TestMoveMeTask3();
-                    TestMoveMe.run();
-                    Runnable TestMileageTask = new MileageTask();
-                    TestMileageTask.run();
-
+                    Thread MoveMe = new Thread(new TestMoveMeTask3());
+                    MoveMe.start();
+                    Thread TestMileageTask = new Thread(new MileageTask());
+                    TestMileageTask.start();
                 }
             });
         }
     }
 
 
-    //加速タスク
+    //s走行距離タスク
     public class MileageTask implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -851,6 +867,32 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
+    //スピードメータータスク
+    public class SpeedMeterTask implements Runnable {
+        private float pSpeedCount = (float) 0.0;
+        public SpeedMeterTask(float pSpeedCount){
+            this.pSpeedCount = pSpeedCount;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    /*動画の再生速度を変えるのに必要なプログラム↓*/
+                    params.setSpeed((float)pSpeedCount);//再生速度変更
+                    mp.setPlaybackParams(params);
+                    //mp.start();
+                    tSpeed.setText(String.format("%.1f", (float) (pSpeedCount*10)));
+                    if((pSpeedCount * 10) < 10.0) {
+                        tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 1));
+                        tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(1, 3));
+                    }else{
+                        tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 2));
+                        tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(2, 4));
+                    }
+                }
+            });
+        }
+    }
     //減速タスク
     public class SpeedDownTask implements Runnable {
         public void run() {
@@ -908,6 +950,30 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     Matrix matrix = new Matrix();
                     //画像中心を起点に90度回転
                     matrix.setRotate((float)kakudo, imageWidth/2, imageHeight/2);
+                    //90度回転したBitmap画像を生成
+                    Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
+                    imageViewHari.setImageBitmap(bitmap2);
+                }
+            });
+        }
+    }
+    //針を0に戻すタスク
+    public class SpeedMeterNeedle implements Runnable {
+        private double angle = 0.0;
+        public SpeedMeterNeedle(double angle){
+            this.angle = angle;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //画像の横、縦サイズを取得
+                    int imageWidth = bitmap.getWidth();
+                    int imageHeight = bitmap.getHeight();
+                    //Matrixインスタンス生成
+                    Matrix matrix = new Matrix();
+                    //画像中心を起点に90度回転
+                    matrix.setRotate((float)angle, imageWidth/2, imageHeight/2);
                     //90度回転したBitmap画像を生成
                     Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
                     imageViewHari.setImageBitmap(bitmap2);
