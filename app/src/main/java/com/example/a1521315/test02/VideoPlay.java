@@ -158,16 +158,18 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
         tHeartbeat.setText("000");
         tTimer = (TextView) findViewById(R.id.textTimer);
-        tTimer.setText("00:00.0");
+        tTimer.setText("00:00:00.0");
         imageMe = (ImageView)findViewById(R.id.image_view_me);
         imageMe.setImageResource(R.drawable.me);
         ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
-        imageView1.setImageResource(R.drawable.bar2);
+        imageView1.setImageResource(R.drawable.bar0);
         ImageView imageSpeedMeter = (ImageView)findViewById(R.id.image_SpeedMeter);
         imageSpeedMeter.setImageResource(R.drawable.meter0);
         imageViewHari = (ImageView)findViewById(R.id.image_Hari);
         ImageView imageHeartBeatMeter = (ImageView)findViewById(R.id.image_HeartBeatMeter);
         imageHeartBeatMeter.setImageResource(R.drawable.heartbeatmeter);
+        ImageView timeDisplay = (ImageView)findViewById(R.id.image_TimeDisplay);
+        timeDisplay.setImageResource(R.drawable.time);
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hari4_45);
         imageViewHari.setImageBitmap(bitmap);
 
@@ -217,14 +219,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-
+        findViewById(R.id.buttonYes).setOnClickListener(this);
+        findViewById(R.id.buttonNo).setOnClickListener(this);
+        /*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
         //connectButton = (Button)findViewById(R.id.connectButton);
         //connectButton.setOnClickListener(this);
-        findViewById(R.id.buttonYes).setOnClickListener(this);
-        findViewById(R.id.buttonNo).setOnClickListener(this);
+
 
         // Bluetoothのデバイス名を取得
         // デバイス名は、RNBT-XXXXになるため、
@@ -240,7 +243,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //**********************************************************************************
-
+*/
     }
 
     public void ConnectCheckDialog(){
@@ -518,7 +521,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             mp.seekTo(0);
 
             timerscheduler = Executors.newSingleThreadScheduledExecutor();
-            future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);
+            future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 5, TimeUnit.MILLISECONDS);
             seekbarscheduler = Executors.newSingleThreadScheduledExecutor();
             seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBar, 0, 1000, TimeUnit.MILLISECONDS);
             /*if (null != movemetimer) {
@@ -582,7 +585,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
+                    future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 5, TimeUnit.MILLISECONDS);//タイマーを動かす
                     seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBar, 0, 1000, TimeUnit.MILLISECONDS);
                     usb_flg = false;
                 }
@@ -789,12 +792,20 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    //時間の表示がまだ終わってないです
                     timercount++;
+                    long hh = timercount * 100 / 1000 % 3600;
                     long mm = timercount * 100 / 1000 / 60;
                     long ss = timercount * 100 / 1000 % 60;
                     long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
+                    /*
+                    long mm = timercount * 100 / 1000 / 60;
+                    long ss = timercount * 100 / 1000 % 60;
+                    long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
+                    */
                     // 桁数を合わせるために02d(2桁)を設定
-                    tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
+                    //tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
+                    tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
                     Thread MoveMe = new Thread(new TestMoveMeTask3());
                     MoveMe.start();
                     Thread TestMileageTask = new Thread(new MileageTask());
@@ -912,8 +923,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 450;//barのpx数
-                    getPlayTime = 450 - getPlayTime;
+                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 480;//barのpx数
+                    getPlayTime = 480 - getPlayTime;
+                    getPlayTime = getPlayTime +45;
                     //tGPT.setText("" + getPlayTime);
                     imageMe.setY(getPlayTime);
 
