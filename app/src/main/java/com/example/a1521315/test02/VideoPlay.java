@@ -521,7 +521,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             mp.seekTo(0);
 
             timerscheduler = Executors.newSingleThreadScheduledExecutor();
-            future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 5, TimeUnit.MILLISECONDS);
+            future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);
             seekbarscheduler = Executors.newSingleThreadScheduledExecutor();
             seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBar, 0, 1000, TimeUnit.MILLISECONDS);
             /*if (null != movemetimer) {
@@ -585,7 +585,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 5, TimeUnit.MILLISECONDS);//タイマーを動かす
+                    future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                     seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBar, 0, 1000, TimeUnit.MILLISECONDS);
                     usb_flg = false;
                 }
@@ -785,26 +785,20 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //カウントアップタイマタスク
     public class MyTimerTask implements Runnable {
         //private Handler timerhandler = new Handler();
-        private long timercount = 0;
+        private long timerCount = 0;
 
         public void run() {
             // handlerを使って処理をキューイングする
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    //時間の表示がまだ終わってないです
-                    timercount++;
-                    long hh = timercount * 100 / 1000 % 3600;
-                    long mm = timercount * 100 / 1000 / 60;
-                    long ss = timercount * 100 / 1000 % 60;
-                    long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
-                    /*
-                    long mm = timercount * 100 / 1000 / 60;
-                    long ss = timercount * 100 / 1000 % 60;
-                    long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
-                    */
+                    //100msecごとに定期実行するプログラムになっている
+                    timerCount++;//timerCountが＋1　＝　100msecが＋1
+                    long hh = timerCount * 100 / 1000 / 3600;//時
+                    long mm = timerCount * 100 / 1000 / 60 % 60;//分
+                    long ss = timerCount * 100 / 1000 % 60;//秒
+                    long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600);//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
-                    //tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
                     Thread MoveMe = new Thread(new TestMoveMeTask3());
                     MoveMe.start();
