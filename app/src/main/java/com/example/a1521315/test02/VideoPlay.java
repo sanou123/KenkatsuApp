@@ -162,7 +162,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         imageSpeedMeter.setImageResource(R.drawable.meter0);
         imageViewHari = (ImageView)findViewById(R.id.image_Hari);
         ImageView imageHeartBeatMeter = (ImageView)findViewById(R.id.image_HeartBeatMeter);
-        imageHeartBeatMeter.setImageResource(R.drawable.heartbeatmeter);
+        imageHeartBeatMeter.setImageResource(R.drawable.heartbeatmeter2);
         ImageView timeDisplay = (ImageView)findViewById(R.id.image_TimeDisplay);
         timeDisplay.setImageResource(R.drawable.time);
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hari4_45);
