@@ -58,7 +58,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tHeartbeat;//心拍の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース番号
-    TextView tGPT;
+    TextView tDebug1;
+    TextView tDebug2;
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -149,6 +150,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tSpeedInt.setText("0");
         tSpeed = (TextView) findViewById(R.id.textSpeed);
         tSpeed.setText("0.0");
+        tDebug1 = (TextView) findViewById(R.id.textDebug1);
+        tDebug1.setText("デバッグ用テキスト1");
+        tDebug2 = (TextView) findViewById(R.id.textDebug2);
+        tDebug2.setText("デバッグ用テキスト2");
         tMileage = (TextView) findViewById(R.id.textMileage);
         tMileage.setText("0.00");
         tMileageDec = (TextView) findViewById(R.id.textMileageDec);
@@ -245,7 +250,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //**********************************************************************************
 */
     }
-
+/***********************今は使ってない(今後使う予定)
     public void ConnectCheckDialog(){
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
         // ポップアップメニュー表示
@@ -279,7 +284,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
         myDialog.show();
     }
-
+*/
     // 再生完了時の処理
     @Override
     public void onCompletion(MediaPlayer agr0) {
@@ -792,12 +797,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    //100msecごとに定期実行するプログラムになっている
-                    timerCount++;//timerCountが＋1　＝　100msecが＋1
+                    //100msecごとに定期実行される
+                    if(timerCount <= 35999900) {//99時間59分59秒
+                        timerCount++;
+                    }
                     long hh = timerCount * 100 / 1000 / 3600;//時
                     long mm = timerCount * 100 / 1000 / 60 % 60;//分
                     long ss = timerCount * 100 / 1000 % 60;//秒
-                    long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600);//ミリ秒
+                    long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
                     Thread MoveMe = new Thread(new TestMoveMeTask3());
@@ -812,7 +819,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //カウントアップタイマタスク
     public class MySeekBarTask implements Runnable {
         //private Handler timerhandler = new Handler();
-        private long timercount = 0;
 
         public void run() {
             // handlerを使って処理をキューイングする
