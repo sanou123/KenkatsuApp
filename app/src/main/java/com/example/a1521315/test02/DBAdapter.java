@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "asdfgh.db";      // DB名
+    private final static String DB_NAME = "asdfghjkl1.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
     private final static int DB_VERSION = 1;                // DBのバージョン
@@ -30,6 +30,9 @@ public class DBAdapter {
     public final static String COL_SEX = "sex";      // 性別
     public final static String COL_HEIGHT = "height";      // 身長
     public final static String COL_WEIGHT = "weight";        // 体重
+    public final static String COL_BMI = "bmi";           //BMI指数
+    public final static String COL_IDEAL_WEIGHT = "ideal_weight";           //理想体重
+
 
     public final static String COL_ID_DATA = "data_id";             // id
     public final static String COL_NAME_ID = "name_id";         //名前に対するID
@@ -43,7 +46,6 @@ public class DBAdapter {
     public final static String COL_AVG_SPEED = "avg_speed";         //平均速度
     public final static String COL_MAX_SPEED = "max_speed";         //最高速度
     public final static String COL_DISTANCE = "distance";           //走行距離
-    public final static String COL_BMI = "bmi";           //BMI指数
 
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
@@ -102,8 +104,11 @@ public class DBAdapter {
      * @param sex   性別
      * @param height  身長
      * @param weight   体重
+     * @param bmi   BMI
+     *
      */
-    public void saveDB(String name, int age, String sex, int height, int weight) {
+    public void saveDB(String name, int age, String sex, int height,
+                       int weight, double bmi, double ideal_weight) {
 
         db.beginTransaction();          // トランザクション開始
 
@@ -114,6 +119,8 @@ public class DBAdapter {
             values.put(COL_SEX, sex);
             values.put(COL_HEIGHT, height);
             values.put(COL_WEIGHT, weight);
+            values.put(COL_BMI, bmi);
+            values.put(COL_IDEAL_WEIGHT, ideal_weight);
 
 
             // insertメソッド データ登録
@@ -131,9 +138,9 @@ public class DBAdapter {
     }
 
 
-    public void saveDB_DATA(int name_id, String name ,String date, String heart_rate, String calorie_consumption,
+    public void saveDB_DATA(int name_id, String name ,String date, String heart_rate, double calorie_consumption,
                             String total_time, String total_distance, String course_name, String time,
-                            String avg_speed, String max_speed, String distance, double bmi) {
+                            String avg_speed, String max_speed, String distance) {
 
         db.beginTransaction();          // トランザクション開始
 
@@ -151,7 +158,6 @@ public class DBAdapter {
             values.put(COL_AVG_SPEED, avg_speed);
             values.put(COL_MAX_SPEED, max_speed);
             values.put(COL_DISTANCE, distance);
-            values.put(COL_BMI, bmi);
 
 
 
@@ -265,7 +271,8 @@ public class DBAdapter {
         }
     }
 
-    public void updateDB(String strName, int strAge,String strSex, int strHeight, int strWeight) {
+    public void updateDB(String strName, int strAge,String strSex, int strHeight,
+                         int strWeight, double strBmi, double ideal_weight) {
         db.beginTransaction();          // トランザクション開始
 
         try {
@@ -275,6 +282,8 @@ public class DBAdapter {
             values.put(COL_SEX, strSex);
             values.put(COL_HEIGHT, strHeight);
             values.put(COL_WEIGHT, strWeight);
+            values.put(COL_BMI, strBmi);
+            values.put(COL_IDEAL_WEIGHT, ideal_weight);
 
             // insertメソッド データ登録
             // 第1引数：DBのテーブル名
@@ -325,7 +334,9 @@ public class DBAdapter {
                     + COL_AGE + " INTEGER NOT NULL,"
                     + COL_SEX + " TEXT NOT NULL,"
                     + COL_HEIGHT + " INTEGER NOT NULL,"
-                    + COL_WEIGHT + " INTEGER NOT NULL"
+                    + COL_WEIGHT + " INTEGER NOT NULL,"
+                    + COL_BMI +" INTEGER NOT NULL,"
+                    + COL_IDEAL_WEIGHT +" INTEGER NOT NULL"
                     + ");";
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
@@ -343,7 +354,6 @@ public class DBAdapter {
                     + COL_AVG_SPEED + " INTEGER NOT NULL ,"
                     + COL_MAX_SPEED + " INTEGER NOT NULL ,"
                     + COL_DISTANCE + " INTEGER NOT NULL ,"
-                    + COL_BMI +" INTEGER NOT NULL,"
                     + "FOREIGN KEY(name_id) REFERENCES DB_TABLE_USER(COL_ID_USER) ON DELETE CASCADE"
                     + ");";
             db.execSQL(createTbl_user);      //SQL文の実行

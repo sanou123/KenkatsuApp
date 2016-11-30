@@ -33,6 +33,7 @@ public class SelectSheetListView extends AppCompatActivity {
     private List<MyListItem> items;
     private ListView mListView03;
     protected MyListItem myListItem;
+
     Globals globals;
 
     // 参照するDBのカラム：ID,名前,年齢,身長,体重の全部なのでnullを指定
@@ -69,6 +70,9 @@ public class SelectSheetListView extends AppCompatActivity {
                 String Sex = myListItem.getSex();
                 String Weight = myListItem.getWeight();
                 String Height = myListItem.getHeight();
+                double Bmi = myListItem.getBmi();
+                double ideal_weight = myListItem.getIdeal_weight();
+
 
                 //int listId =  myListItem.getUser_id();//################
                 String columns = listName + "さんが選択されました";
@@ -80,6 +84,8 @@ public class SelectSheetListView extends AppCompatActivity {
                 globals.sex = Sex;
                 globals.weight = Weight;
                 globals.height = Height;
+                globals.bmi = Bmi;
+                globals.ideal_weight = ideal_weight;
                 Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
                 startActivity(intent);
             }
@@ -184,7 +190,9 @@ public class SelectSheetListView extends AppCompatActivity {
                         c.getString(2),
                         c.getString(3),
                         c.getString(4),
-                        c.getString(5)
+                        c.getString(5),
+                        c.getDouble(6),
+                        c.getDouble(7)
                 );
 
                 Log.d("取得したCursor(USER_ID):", String.valueOf(c.getInt(0)));
@@ -193,6 +201,8 @@ public class SelectSheetListView extends AppCompatActivity {
                 Log.d("取得したCursor(性別):", c.getString(3));
                 Log.d("取得したCursor(身長):", c.getString(4));
                 Log.d("取得したCursor(体重):", c.getString(5));
+                Log.d("取得したCursor(BMI):", c.getString(6));
+                Log.d("取得したCursor(理想体重):", c.getString(7));
 
 
                 items.add(myListItem);          // 取得した要素をitemsに追加

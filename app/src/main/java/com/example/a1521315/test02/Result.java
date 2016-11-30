@@ -27,7 +27,7 @@ public class Result extends Activity {
     String avg;
     String max;
     String time;
-    String cal;
+    double cal;
 
     /** Called when the activity is first created. */
     @Override
@@ -60,7 +60,8 @@ public class Result extends Activity {
         TextView texttime = (TextView)findViewById(R.id.time);
         texttime.setText(time);
         TextView textcal = (TextView)findViewById(R.id.cal);
-        textcal.setText(cal);
+        String calorie = new Double(cal).toString();
+        textcal.setText(calorie);
 
 
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -94,21 +95,18 @@ public class Result extends Activity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日\nHH時mm分ss秒");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
         Log.v("時間", simpleDateFormat.format(date));
+        globals.date = simpleDateFormat.format(date);
 
-        int weight = Integer.parseInt(globals.weight);
-        int height = Integer.parseInt(globals.height);
+        //int iWeight = Integer.parseInt(globals.weight);
 
-
-
-        globals.bmi = weight / (height * height);
-        //globals.cal = (1.05 * 9 * Integer.parseInt(globals.time) * Integer.parseInt(globals.weight));
+       //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);
 
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);
         dbAdapter.openDB();                                         // DBの読み書き
-        dbAdapter.saveDB_DATA(globals.name_id, globals.now_user, simpleDateFormat.format(date), globals.maxheartbeat,
+        dbAdapter.saveDB_DATA(globals.name_id, globals.now_user, globals.date, globals.maxheartbeat,
                 globals.cal, globals.total_time, globals.total_mileage, globals.coursename,
-                globals.time, globals.avg, globals.max, globals.mileage, globals.bmi);   // DBに登録
+                globals.time, globals.avg, globals.max, globals.mileage);   // DBに登録
         dbAdapter.closeDB();                                        // DBを閉じる
 
     }
