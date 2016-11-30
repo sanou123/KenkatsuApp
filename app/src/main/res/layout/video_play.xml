@@ -73,9 +73,10 @@
             android:text="0"
             android:textSize="80px"
             android:layout_gravity="right"
-            android:layout_alignEnd="@+id/textMileage"
             android:layout_alignStart="@+id/textMileage"
-            android:layout_above="@+id/Kyori" />
+            android:layout_above="@+id/Kyori"
+            android:layout_toStartOf="@+id/relativeLayout"
+            android:layout_alignEnd="@+id/textTimer" />
 
         <TextView
             android:text="走行距離:             km"
@@ -180,7 +181,7 @@
             android:layout_alignParentStart="true" />
 
         <TextView
-            android:text="時速:        　  　   km"
+            android:text="時速:        　  　   "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/Jisoku"

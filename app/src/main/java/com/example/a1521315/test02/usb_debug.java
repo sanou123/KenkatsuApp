@@ -21,6 +21,8 @@ public class usb_debug extends Activity {
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
     public static final int POLE_SENSOR_CHANGE = 3;
+    public  static  final  int DEBUG_HOLE = 4;
+
     public static final int APP_CONNECT = (int) 0xFE;
     public static final int APP_DISCONNECT = (int) 0xFF;
     public static final int POT_UPPER_LIMIT = 100;
@@ -36,13 +38,16 @@ public class usb_debug extends Activity {
     private boolean deviceAttached = false;
     private int firmwareProtocol = 0;
     public int sent_cnt= 0;
+    float speed_tmp = 0;
+
+    public  int old_hole = 0; // #################################
 
     private enum ErrorMessageCode {
         ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING,
         ERROR_FIRMWARE_PROTOCOL
     };
 
-    private USBAccessoryManager accessoryManager;//
+    private USBAccessoryManager accessoryManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class usb_debug extends Activity {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
+
     }
 
     @Override
@@ -75,6 +81,7 @@ public class usb_debug extends Activity {
     public void onPause() {
         super.onPause();
         Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
+
         switch (firmwareProtocol) {
             case 2:
                 byte[] commandPacket = new byte[2];
@@ -91,6 +98,7 @@ public class usb_debug extends Activity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         accessoryManager.disable(this);
         disconnectAccessory();
 
@@ -144,20 +152,37 @@ public class usb_debug extends Activity {
 
                                 switch (commandPacket[0]) {
                                     case POLE_SENSOR_CHANGE:
-                                        float speed_tmp;
+
                                         sent_cnt++;
+
                                         TextView tSpeed = (TextView) findViewById(R.id.textView5);
                                         TextView tSpeed2 = (TextView) findViewById(R.id.textView6);
+
                                         sensor_value = (int) (commandPacket[1] & 0xFF);
-                                            tSpeed.setText(sensor_value+"changed→"+sent_cnt);
-                                        if(sensor_value > 150){
-                                            speed_tmp = 0;
+
+
+                                        tSpeed.setText("HOLE_STATE:"+sensor_value+"changed→"+sent_cnt);
+                                        if(sensor_value == 1 && old_hole == 0) {
+                                            //speed_tmp += 0.0005F;
+                                            speed_tmp += 0.2F;
+                                        }
+                                        else if(sensor_value == 0 && old_hole == 1){
+                                            //speed_tmp += 0.0005F;
+                                            speed_tmp += 0.2F;
                                         }
                                         else{
-                                            speed_tmp = 60 - ((float) sensor_value / 10 * 4);
+
                                         }
-                                        speed_tmp = (float)Math.floor((double)speed_tmp * 10) / 10;
-                                        tSpeed2.setText(speed_tmp+"km/h");
+                                        speed_tmp = (float)Math.floor((double)speed_tmp * 100) / 100;
+                                        //if(speed_tmp > 0.1){
+                                            tSpeed2.setText(speed_tmp+"km/h");
+                                        //}
+                                        //else{
+
+                                        //}
+
+                                        old_hole = sensor_value;//1コ前の値だよ
+
                                         break;
                                 }
                             }

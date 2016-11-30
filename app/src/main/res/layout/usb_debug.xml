@@ -16,5 +16,12 @@
         android:layout_height="77dp"
         android:textSize="36sp"
         android:id="@+id/textView6" />
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="77dp"
+        android:textSize="36sp"
+        android:id="@+id/textView7" />
+
 
 </LinearLayout>

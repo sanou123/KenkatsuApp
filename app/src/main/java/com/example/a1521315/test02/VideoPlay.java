@@ -29,6 +29,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Set;
@@ -79,35 +81,54 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     float imageX ;
     float imageY ;
 
-    //#########################################################1
+    //##################################################################
+    //USB通信関連の変数　初期化
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
-    public static final int POLE_SENSOR_CHANGE = 3;
+    public static final int HOLE_SENSOR_CHANGE = 3;
     public static final int RESISTANCE_LEVEL = 4;
     public static final int ALERT_MORTER = 5;
     public static final int APP_CONNECT = (int) 0xFE;
     public static final int APP_DISCONNECT = (int) 0xFF;
-    public static final int POT_UPPER_LIMIT = 100;
-    public static final int POT_LOWER_LIMIT = 0;
-
-    String mediaPath = null;//動画データ
-    double TotalMileage=0;//総走行距離
-    int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
-    public boolean usb_flg = false;
-
-    public int sensor_value = 0;
-    public float resistance_Level = (float)1.0;
-    public int real_aveSpeed = 20;//実際の撮影時の係数
-
     private boolean deviceAttached = false;
     private int firmwareProtocol = 0;
+
+    //センサー、動画再生関連の変数　初期化
+    double speed_Value = 0.0;
+    double dist_Value = 0.0;
+    double my_dist_Value = 0.0;
+    public float plus_dist_Value = 0.0015F;
+
+    double old_dist_Value = 0;
+    double TotalMileage=0;//総走行距離
+    public float resist_Level = (float)1.0;//負荷のレベルによる係数
+    NumberFormat format = NumberFormat.getInstance();
+
+    public int hole_Value = 0;
+    public  int old_hole_Value = 0;
+
+    public boolean run_Flg = false;
+    public boolean usb_Flg = false;
+    public boolean chSpd_Flg = false;
+    public int null_Cnt = 0;
+    Runnable watcher_Timer = new MyTimerTask();//新型のタイマー
+    ScheduledFuture watcher_Future;
+
+    String mediaPath = null;//動画データ
+    int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
+
 
     private enum ErrorMessageCode {
         ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING,
         ERROR_FIRMWARE_PROTOCOL
     };
 
-    private USBAccessoryManager accessoryManager;//
+    private USBAccessoryManager accessoryManager;
+
+    //画面上のタイマーの変数
+    long mm = 0;
+    long ss = 0;
+    long ms = 0;
 
     //bluetooth**********************************************************************************
     private BluetoothAdapter mAdapter;/* Bluetooth Adapter */
@@ -137,6 +158,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
         holder = mPreview.getHolder();
         holder.addCallback(this);
+
+        format.setMaximumFractionDigits(2);
 
         globals = (Globals)this.getApplication();
 
@@ -198,9 +221,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        //bluetooth*********************************************************************************
-        mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
-        mStatusTextView = (TextView)findViewById(R.id.statusValue);
+        //bluetooth*********************************************************************************##############
+       // mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
+       // mStatusTextView = (TextView)findViewById(R.id.statusValue);
         //connectButton = (Button)findViewById(R.id.connectButton);
         //connectButton.setOnClickListener(this);
         findViewById(connectButton).setOnClickListener(this);
@@ -209,12 +232,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         // デバイス名は、RNBT-XXXXになるため、
         // DVICE_NAMEでデバイス名を定義
         mAdapter = BluetoothAdapter.getDefaultAdapter();
-        mStatusTextView.setText("SearchDevice");
+       // mStatusTextView.setText("SearchDevice");
         Set< BluetoothDevice > devices = mAdapter.getBondedDevices();
         for ( BluetoothDevice device : devices){
 
             if(device.getName().equals(DEVICE_NAME)){
-                mStatusTextView.setText("find: " + device.getName());
+               // mStatusTextView.setText("find: " + device.getName());
                 mDevice = device;
             }
         }
@@ -464,6 +487,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
             timerscheduler = Executors.newSingleThreadScheduledExecutor();
             future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);
+            watcher_Future = timerscheduler.scheduleAtFixedRate(watcher_Timer, 0, 100, TimeUnit.MILLISECONDS);//新型 watcher_Future.cancel(true);//タイマー一時停止
             if (null != movemetimer) {
                 movemetimer.cancel();
                 movemetimer = null;
@@ -478,8 +502,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     View.OnClickListener PauseClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            usb_flg = true;
+            usb_Flg = true;
             future.cancel(true);//タイマー一時停止
+            watcher_Future.cancel(true);
             getplaytimefuture.cancel(true);//タイマー一時停止
             speedcount = 0;
             params.setSpeed((float) speedcount);
@@ -509,8 +534,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
+                    watcher_Future = timerscheduler.scheduleAtFixedRate(watcher_Timer, 0, 100, TimeUnit.MILLISECONDS);//新型
                     getplaytimefuture = getplaytimescheduler.scheduleAtFixedRate(mygetplaytimetask, 0, 1000, TimeUnit.MILLISECONDS);
-                    usb_flg = false;
+                    usb_Flg = false;
                 }
             });
             AlertDialog myDialog = alertDialog.create();
@@ -639,42 +665,91 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                 accessoryManager.read(commandPacket);
 
+                                //######################################################################
+
                                 switch (commandPacket[0]) {
                                     //ポールセンサーの値が変化したとき
-                                    case POLE_SENSOR_CHANGE:
+                                    case HOLE_SENSOR_CHANGE:
 
-                                        float speed_tmp;
-                                        if( usb_flg == true ) {
-                                            speed_tmp = 0;
+                                        if( usb_Flg == true ) {
+                                            speed_Value = 0;
                                         }
+
                                         else
                                         {
-                                            sensor_value = (int) (commandPacket[1] & 0xFF);
-                                            //値の調整
-                                            if(sensor_value > 150){
-                                                speed_tmp = 0;
+                                            //時間の取得
+                                            long mm_tmp = mm;
+                                            long ss_tmp = ss;
+                                            float time_tmp = (float)((mm*60) + ss);
+
+                                            //センサー値取得
+                                            hole_Value = (int) (commandPacket[1] & 0xFF);
+
+                                            //距離の加算(径分)
+                                            if(hole_Value == 1 && old_hole_Value == 0 && run_Flg == false) {
+                                                dist_Value += plus_dist_Value;
+                                                my_dist_Value += plus_dist_Value;
+                                                run_Flg = true;
+                                                chSpd_Flg = true;
+                                                null_Cnt = 0;
                                             }
+                                            //距離の加算(径分)
+                                            else if(hole_Value == 0 && old_hole_Value == 1 && run_Flg == true){
+                                                dist_Value += plus_dist_Value;
+                                                my_dist_Value += plus_dist_Value;
+                                                run_Flg = false;
+                                                chSpd_Flg = true;
+                                                null_Cnt = 0;
+                                            }
+                                            //一定値以上の場合、停止したとみなす①
                                             else{
-                                                speed_tmp = 60 - ((float) sensor_value / 10 * 4);
-                                                speed_tmp = (float)Math.floor((double)speed_tmp * 10) / 10;
+                                                null_Cnt++;
+                                            }
+
+                                            //一定値以上の場合、停止したとみなす②(cnt上限は適当)
+                                            if(null_Cnt > 1800){
+                                                if(null_Cnt>5000){
+                                                    null_Cnt = 1800;
+                                                }
+                                                speed_Value = 0;
+                                                my_dist_Value = 0;
+                                                chSpd_Flg = false;
+                                            }
+
+                                            //距離が進んだ場合
+                                            if(chSpd_Flg == true){
+                                                //加算された距離とタイマーの時間で、時速割り出し(現在の時速)
+                                                speed_Value = my_dist_Value / (time_tmp / 3600);
                                             }
 
                                          }
-                                        tSpeed.setText((speed_tmp*resistance_Level) + "km/h");//debug時はsensor_valueをつかう
-                                        //tSpeed.setText(speed_tmp * 10 + "km/h");//debug時はsensor_valueをつかう
-                                        //params.setSpeed(speed_tmp);//再生速度変更
-                                        params.setSpeed((speed_tmp*resistance_Level)/10);//再生速度変更
-                                        mp.setPlaybackParams(params);
-                                        break;
-                                    //負荷のレベルが変動した時
-                                    case RESISTANCE_LEVEL:
 
-                                        break;
+                                        //初回時のInfinity回避
+                                        if(Double.isNaN(speed_Value) || Double.isInfinite(speed_Value)){
+                                            speed_Value = 0;
+                                            dist_Value = 0;
+                                            my_dist_Value = 0;
+                                        }
 
-                                    //モーターの温度が一定以上のとき
-                                    case ALERT_MORTER:
+                                        //各テキストに値を反映
+                                        tHeartbeat.setText("debug_value:"+null_Cnt);
+                                        tSpeed.setText(format.format(speed_Value) + "km/h");
+                                        tMileage.setText(String.format("%.3f",dist_Value));
+
+                                        //メディアプレイヤーの再生速度を設定
+                                        if(speed_Value <= 50 && speed_Value >= 0){
+                                            params.setSpeed((float)speed_Value/10);//再生速度変更
+                                            mp.setPlaybackParams(params);
+                                        }
+
+                                        //過去の値を更新
+                                        old_hole_Value = hole_Value;
+                                        old_dist_Value = dist_Value;
                                         break;
                                 }
+
+                                //######################################################################
+
                             }
                             break;
                         case CONNECTED:
@@ -726,15 +801,17 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void run() {
                     timercount++;
-                    long mm = timercount * 100 / 1000 / 60;
-                    long ss = timercount * 100 / 1000 % 60;
-                    long ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
+                    mm = timercount * 100 / 1000 / 60;
+                    ss = timercount * 100 / 1000 % 60;
+                    ms = (timercount * 100 - ss * 1000 - mm * 1000 * 60) / 100;
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
                 }
             });
         }
     }
+
+    //getduration msec
 
     //再生時間取得タスク
     public class MyGetPlayTimeTask implements Runnable {
@@ -747,8 +824,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     double f1=0,f2=0,f3=0;
                     f1 = mp.getDuration();
                     f2 = mp.getCurrentPosition();
-                    f3 = TotalMileage / ( f1 / f2);
-                    tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());tMileage.setText(String.format("%.2f",f3));
+                    f3 = TotalMileage / ( f1 / f2);//######################
+                    tTest.setText("総再生時間:" + mp.getDuration() + " 再生時間:" + mp.getCurrentPosition());                   //tMileage.setText(String.format("%.2f",f3));
                 }
             });
         }
