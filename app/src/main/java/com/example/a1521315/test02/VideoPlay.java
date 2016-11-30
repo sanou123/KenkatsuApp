@@ -19,19 +19,15 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
-import java.util.Set;
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -69,21 +65,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     private ScheduledExecutorService timerscheduler;
     ScheduledFuture future;
-    Runnable mytimertask = new MyTimerTask();
+    Runnable myTimerTask = new TimerTask();
     private ScheduledExecutorService seekbarscheduler;
     ScheduledFuture seekbarfuture;
-    Runnable mySeekBar = new MySeekBarTask();
-
-
-    private Timer movemetimer;
-    private MoveMeTask timerTask = null;
+    Runnable mySeekBarTask = new SeekBarTask();
 
     PlaybackParams params = new PlaybackParams();
     double speedcount = 0.0;
 
     private ImageView imageMe;//image_view_me用の変数
-    float imageX ;
-    float imageY ;
 
     Bitmap bitmap;//bitmap形式にして針を回すので必要
     ImageView imageViewHari;//針用のimageView
@@ -296,7 +286,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         BtnPauseView2.setVisibility(View.INVISIBLE);
         timerscheduler.shutdown();//タイマー止める
         seekbarscheduler.shutdown();
-        //movemetimer.cancel();//MoveMeTask止める
         //リザルトボタンを表示
         Button BtnResultView = (Button) findViewById(R.id.buttonResult);
         BtnResultView.setVisibility(View.VISIBLE);
@@ -526,16 +515,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             mp.seekTo(0);
 
             timerscheduler = Executors.newSingleThreadScheduledExecutor();
-            future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);
+            future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
             seekbarscheduler = Executors.newSingleThreadScheduledExecutor();
-            seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBar, 0, 1000, TimeUnit.MILLISECONDS);
-            /*if (null != movemetimer) {
-                movemetimer.cancel();
-                movemetimer = null;
-            }*/
-            //movemetimer = new Timer();//Timerインスタンスを生成
-            //timerTask = new MoveMeTask();//TimerTaskインスタンスを生成
-            //movemetimer.schedule(timerTask, 0, 1000);//スケジュールを設定1000msec
+            seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
         }
     };
 
@@ -546,18 +528,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             kakudo = -158;
             Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(kakudo));
             SetNeedletoZero.start();
-            /*
-            //画像の横、縦サイズを取得
-            int imageWidth = bitmap.getWidth();
-            int imageHeight = bitmap.getHeight();
-            //Matrixインスタンス生成
-            Matrix matrix = new Matrix();
-            //画像中心を起点に90度回転
-            matrix.setRotate((float)kakudo, imageWidth/2, imageHeight);
-            //回転したBitmap画像を生成
-            Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
-            imageViewHari.setImageBitmap(bitmap2);
-*/
+
             usb_flg = true;
             future.cancel(true);//タイマー一時停止
             seekbarfuture.cancel(true);
@@ -578,7 +549,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     //VideoSelectに戻る処理
                     timerscheduler.shutdown();//タイマー終了
                     seekbarscheduler.shutdown();//タイマー終了
-                    //movemetimer.cancel();//MoveMeTask止める
                     if (mp != null) {
                         mp.release();
                         mp = null;
@@ -590,8 +560,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    future = timerscheduler.scheduleAtFixedRate(mytimertask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
-                    seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBar, 0, 1000, TimeUnit.MILLISECONDS);
+                    future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
+                    seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
                     usb_flg = false;
                 }
             });
@@ -788,10 +758,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }; //handler
 
     //カウントアップタイマタスク
-    public class MyTimerTask implements Runnable {
-        //private Handler timerhandler = new Handler();
+    public class TimerTask implements Runnable {
         private long timerCount = 0;
-
         public void run() {
             // handlerを使って処理をキューイングする
             handler.post(new Runnable() {
@@ -807,25 +775,25 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
-                    Thread MoveMe = new Thread(new TestMoveMeTask3());
+                    /*
+                    Thread MoveMe = new Thread(new MoveMeTask());
                     MoveMe.start();
                     Thread TestMileageTask = new Thread(new MileageTask());
                     TestMileageTask.start();
+                    */
                 }
             });
         }
     }
 
-    //カウントアップタイマタスク
-    public class MySeekBarTask implements Runnable {
-        //private Handler timerhandler = new Handler();
-
+    //シークバータスク
+    public class SeekBarTask implements Runnable {
         public void run() {
             // handlerを使って処理をキューイングする
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Thread MoveMe = new Thread(new TestMoveMeTask3());
+                    Thread MoveMe = new Thread(new MoveMeTask());
                     MoveMe.start();
                     Thread TestMileageTask = new Thread(new MileageTask());
                     TestMileageTask.start();
@@ -835,7 +803,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
 
 
-    //s走行距離タスク
+    //走行距離タスク
     public class MileageTask implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -917,25 +885,23 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
 
     //test
-    public class TestMoveMeTask3 implements Runnable {
-
+    public class MoveMeTask implements Runnable {
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 480;//barのpx数
                     getPlayTime = 480 - getPlayTime;
-                    getPlayTime = getPlayTime +45;
-                    //tGPT.setText("" + getPlayTime);
+                    getPlayTime = getPlayTime + 45;
                     imageMe.setY(getPlayTime);
 
                 }
             });
         }
     }
-
+/*
     //自機を動かす用のタスク
-    class MoveMeTask extends TimerTask {
+    class OldMoveMeTask extends TimerTask {
         @Override
         public void run() {
             // handlerを使って処理をキューイングする
@@ -952,7 +918,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-
+*/
     private int getFirmwareProtocol(String version) {
 
         String major = "0";
