@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -40,10 +42,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import static com.example.a1521315.test02.R.id.ConnectCheak;
+import static com.example.a1521315.test02.R.id.buttonPlay;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener,View.OnClickListener {
-    double kakudo =-158;//メーター0の位置
+    double speedMeterAngle = -158;//メーター0の位置
+    double heartbeatMeterAngle = -158;//メーター0の位置
     Globals globals;
     TextView tSpeed;//時速の変数
     TextView tSpeedDec;//時速の変数　少数
@@ -75,9 +80,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     private ImageView imageMe;//image_view_me用の変数
 
-    Bitmap bitmap;//bitmap形式にして針を回すので必要
-    ImageView imageViewHari;//針用のimageView
-    ImageView Testimg;
+    Bitmap bitmapSpeedMeterNeedle;//bitmap形式にして針を回すので必要
+    ImageView imageSpeedMeterNeedle;//s針用のimageView
+    Bitmap bitmapHeartbeatMeterNeedle;//bitmap形式にして針を回すので必要
+    ImageView imageHeartbeatMeterNeedle;//s針用のimageView
 
     //#########################################################1
     private final static int USBAccessoryWhat = 0;
@@ -160,20 +166,24 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         imageView1.setImageResource(R.drawable.bar0);
         ImageView imageSpeedMeter = (ImageView)findViewById(R.id.image_SpeedMeter);
         imageSpeedMeter.setImageResource(R.drawable.meter0);
-        imageViewHari = (ImageView)findViewById(R.id.image_Hari);
+
         ImageView imageHeartBeatMeter = (ImageView)findViewById(R.id.image_HeartBeatMeter);
         imageHeartBeatMeter.setImageResource(R.drawable.heartbeatmeter2);
         ImageView timeDisplay = (ImageView)findViewById(R.id.image_TimeDisplay);
         timeDisplay.setImageResource(R.drawable.time);
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hari4_45);
-        imageViewHari.setImageBitmap(bitmap);
+        imageSpeedMeterNeedle = (ImageView)findViewById(R.id.image_Hari1);
+        bitmapSpeedMeterNeedle = BitmapFactory.decodeResource(getResources(), R.drawable.hari4_45);
+        imageSpeedMeterNeedle.setImageBitmap(bitmapSpeedMeterNeedle);
 
-        kakudo = -158;
-        Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(kakudo));
-        SetNeedletoZero.start();
+        imageHeartbeatMeterNeedle = (ImageView)findViewById(R.id.image_Hari2);
+        bitmapHeartbeatMeterNeedle = BitmapFactory.decodeResource(getResources(), R.drawable.hari4_45);
+        imageHeartbeatMeterNeedle.setImageBitmap(bitmapHeartbeatMeterNeedle);
 
-        findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
-        findViewById(R.id.buttonPause).setOnClickListener(PauseClickListener);
+        Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(-158));//2つの針を0に戻す
+        SetBothNeedlesToZero.start();
+
+        findViewById(buttonPlay).setOnClickListener(PlayClickListener);
+        //findViewById(R.id.buttonPause).setOnClickListener(PauseClickListener);
         findViewById(R.id.buttonResult).setOnClickListener(ResultClickListener);
 
         //コース番号受け取り
@@ -216,7 +226,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-        /*
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -238,7 +248,21 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //**********************************************************************************
-*/
+
+    }
+    //画面タップでユーザ選択に遷移
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.d("", "ACTION_DOWN");
+                if( findViewById(buttonPlay).getVisibility() == View.INVISIBLE &&  findViewById(ConnectCheak).getVisibility() == View.INVISIBLE) {
+                    //トレーニングが始まっているときのみ画面タップでポーズする
+                    PauseProcess();
+                }
+                break;
+        }
+        return true;
     }
 /***********************今は使ってない(今後使う予定)
     public void ConnectCheckDialog(){
@@ -282,8 +306,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //USB通信の切断(停止がないため)
         accessoryManager.disable(this);
         disconnectAccessory();//################################       あやしいかもよ～
-        Button BtnPauseView2 = (Button) findViewById(R.id.buttonPause);
-        BtnPauseView2.setVisibility(View.INVISIBLE);
+        ////Button BtnPauseView2 = (Button) findViewById(R.id.buttonPause);
+        ////BtnPauseView2.setVisibility(View.INVISIBLE);
         timerscheduler.shutdown();//タイマー止める
         seekbarscheduler.shutdown();
         //リザルトボタンを表示
@@ -502,11 +526,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     View.OnClickListener PlayClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            kakudo = -158;
-            Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(kakudo));
-            SetNeedletoZero.start();
-            findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
-            findViewById(R.id.buttonPause).setVisibility(View.VISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
+
+
+
+            speedMeterAngle = -158;
+            heartbeatMeterAngle = -158;
+            Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(-158));//2つの針を0に戻す
+            SetBothNeedlesToZero.start();
+            findViewById(buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
+            //findViewById(R.id.buttonPause).setVisibility(View.VISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
             speedcount = 0.0;
             tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
             tSpeedInt.setText("0");
@@ -525,49 +553,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     View.OnClickListener PauseClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            kakudo = -158;
-            Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(kakudo));
-            SetNeedletoZero.start();
-
-            usb_flg = true;
-            future.cancel(true);//タイマー一時停止
-            seekbarfuture.cancel(true);
-            speedcount = 0;
-            params.setSpeed((float) speedcount);
-            mp.setPlaybackParams(params);
-            tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
-            tSpeedInt.setText("0");
-            tSpeedDec.setText(".0");
-
-            // ポップアップメニュー表示
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
-            alertDialog.setTitle("ポーズ");
-            alertDialog.setMessage("一時停止中です");
-            alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //VideoSelectに戻る処理
-                    timerscheduler.shutdown();//タイマー終了
-                    seekbarscheduler.shutdown();//タイマー終了
-                    if (mp != null) {
-                        mp.release();
-                        mp = null;
-                    }
-                    Intent intent = new Intent(getApplication(), VideoSelect.class);
-                    startActivity(intent);
-                }
-            });
-            alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
-                    seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
-                    usb_flg = false;
-                }
-            });
-            AlertDialog myDialog = alertDialog.create();
-            myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
-            myDialog.show();
+            PauseProcess();
         }
     };
 
@@ -605,7 +591,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             case R.id.buttonNo:
                 Log.d("No","no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                findViewById(buttonPlay).setVisibility(View.VISIBLE);
                 tHeartbeat.setText("- ");
                 break;
         }
@@ -619,16 +605,17 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
                 if(speedcount < 0.1){
                     speedcount = speedcount + 0.1;
-                    kakudo = kakudo + 4.52;
+                    speedMeterAngle = speedMeterAngle + 4.52;
                 }else {
                     speedcount = speedcount + 0.01;
-                    kakudo = kakudo + 0.452;
+                    speedMeterAngle = speedMeterAngle + 0.452;
                 }
                 if (speedcount > 5){//意味わからないほど早くされるとクラッシュする対策
                     speedcount = 5;
                 }
-                Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(kakudo));
+                Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
                 SetNeedleUp.start();
+
                 Thread SpeedUp = new Thread(new SpeedMeterTask((float)speedcount));
                 SpeedUp.start();
                 return true;
@@ -638,15 +625,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
                 if(speedcount <= 0.1){
                     speedcount = speedcount - 0.1;
-                    kakudo = kakudo - 4.52;
+                    speedMeterAngle = speedMeterAngle - 4.52;
                 }else {
                     speedcount = speedcount - 0.01;
-                    kakudo = kakudo - 0.452;
+                    speedMeterAngle = speedMeterAngle - 0.452;
                 }
                 if (speedcount <= 0.01) {
                     speedcount = 0.00;
                 }
-                Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(kakudo));
+                Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
                 SetNeedleDown.start();
                 Thread SpeedDown = new Thread(new SpeedMeterTask((float)speedcount));
                 SpeedDown.start();
@@ -759,6 +746,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //カウントアップタイマタスク
     public class TimerTask implements Runnable {
+        //private Handler handler = new Handler();
         private long timerCount = 0;
         public void run() {
             // handlerを使って処理をキューイングする
@@ -775,12 +763,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
-                    /*
-                    Thread MoveMe = new Thread(new MoveMeTask());
-                    MoveMe.start();
-                    Thread TestMileageTask = new Thread(new MileageTask());
-                    TestMileageTask.start();
-                    */
+
+                    //Thread MoveMe = new Thread(new MoveMeTask());
+                    //MoveMe.start();
+                    //Thread TestMileageTask = new Thread(new MileageTask());
+                    //TestMileageTask.start();
+
+
                 }
             });
         }
@@ -812,7 +801,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     //走行距離表示↓
                     double f3 = TotalMileage / ( (double)mp.getDuration() / (double)mp.getCurrentPosition());
                     tMileage.setText(String.format("%.2f",f3));
-                    //tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
                     if(f3 < 10.00) {
                         //0.00~9.99までの処理
                         tMileageInt.setText(String.format("%.2f",f3).substring(0,1));
@@ -826,7 +814,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         tMileageInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0,3));
                         tMileageDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(3, 6));
                     }
-                    //
                 }
             });
         }
@@ -858,7 +845,31 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-
+    //針を0にするタスク
+    public class BothNeedlesToZero implements Runnable {
+        private double angle = 0.0;
+        public BothNeedlesToZero(double angle){
+            this.angle = angle;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //画像の横、縦サイズを取得
+                    int imageWidth = bitmapSpeedMeterNeedle.getWidth();
+                    int imageHeight = bitmapSpeedMeterNeedle.getHeight();
+                    //Matrixインスタンス生成
+                    Matrix matrix = new Matrix();
+                    //画像中心を起点に90度回転
+                    matrix.setRotate((float)angle, imageWidth/2, imageHeight/2);
+                    //90度回転したBitmap画像を生成
+                    Bitmap bitmapSet = bitmapSpeedMeterNeedle.createBitmap(bitmapSpeedMeterNeedle,0,0, imageWidth, imageHeight, matrix, true);
+                    imageSpeedMeterNeedle.setImageBitmap(bitmapSet);
+                    imageHeartbeatMeterNeedle.setImageBitmap(bitmapSet);
+                }
+            });
+        }
+    }
     //速度の針のタスク
     public class SpeedMeterNeedle implements Runnable {
         private double angle = 0.0;
@@ -870,28 +881,54 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void run() {
                     //画像の横、縦サイズを取得
-                    int imageWidth = bitmap.getWidth();
-                    int imageHeight = bitmap.getHeight();
+                    int imageWidth = bitmapSpeedMeterNeedle.getWidth();
+                    int imageHeight = bitmapSpeedMeterNeedle.getHeight();
                     //Matrixインスタンス生成
                     Matrix matrix = new Matrix();
                     //画像中心を起点に90度回転
                     matrix.setRotate((float)angle, imageWidth/2, imageHeight/2);
                     //90度回転したBitmap画像を生成
-                    Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,0, imageWidth, imageHeight, matrix, true);
-                    imageViewHari.setImageBitmap(bitmap2);
+                    Bitmap bitmapSet = bitmapSpeedMeterNeedle.createBitmap(bitmapSpeedMeterNeedle,0,0, imageWidth, imageHeight, matrix, true);
+                    imageSpeedMeterNeedle.setImageBitmap(bitmapSet);
+                }
+            });
+        }
+    }
+    //心拍の針のタスク
+    public class HeartbeatMeterNeedle implements Runnable {
+        private double angle = 0.0;
+        public HeartbeatMeterNeedle(double angle){
+            this.angle = angle;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //画像の横、縦サイズを取得
+                    int imageWidth = bitmapHeartbeatMeterNeedle.getWidth();
+                    int imageHeight = bitmapHeartbeatMeterNeedle.getHeight();
+                    //Matrixインスタンス生成
+                    Matrix matrix = new Matrix();
+                    //画像中心を起点に90度回転
+                    matrix.setRotate((float)angle, imageWidth/2, imageHeight/2);
+                    //90度回転したBitmap画像を生成
+                    Bitmap bitmapSet = bitmapHeartbeatMeterNeedle.createBitmap(bitmapHeartbeatMeterNeedle,0,0, imageWidth, imageHeight, matrix, true);
+                    imageHeartbeatMeterNeedle.setImageBitmap(bitmapSet);
                 }
             });
         }
     }
 
-    //test
+    //自機の移動
     public class MoveMeTask implements Runnable {
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    //再生終了時に死ぬ原因がここにあります
+                    //おいおい直す
                     float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 480;//barのpx数
-                    getPlayTime = 480 - getPlayTime;
+                    getPlayTime = 450 - getPlayTime;
                     getPlayTime = getPlayTime + 45;
                     imageMe.setY(getPlayTime);
 
@@ -899,26 +936,56 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-/*
-    //自機を動かす用のタスク
-    class OldMoveMeTask extends TimerTask {
-        @Override
-        public void run() {
-            // handlerを使って処理をキューイングする
-            handler.post(new Runnable() {
-                public void run() {
-                    imageX = imageMe.getX();
-                    imageY = imageMe.getY();
-                    imageY -= 20;
-                    //y方向は20pixづつ、画像の横縦幅はそのまま維持
-                    imageMe.layout((int)imageX, (int)imageY, (int)imageX + imageMe.getWidth(), (int)imageY + imageMe.getHeight());
-                    Log.d("imageXY", "X:" + imageX + " Y:" + imageY);
+    //
+    public void PauseProcess(){
+        speedMeterAngle = -158;
+        heartbeatMeterAngle = -158;
+        Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(speedMeterAngle));
+        SetNeedletoZero.start();
+        Thread setHeartbeatToZero = new Thread(new HeartbeatMeterNeedle(heartbeatMeterAngle));
+        setHeartbeatToZero.start();
 
+        usb_flg = true;
+        future.cancel(true);//タイマー一時停止
+        seekbarfuture.cancel(true);
+        speedcount = 0;
+        params.setSpeed((float) speedcount);
+        mp.setPlaybackParams(params);
+        tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
+        tSpeedInt.setText("0");
+        tSpeedDec.setText(".0");
+
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
+        alertDialog.setTitle("ポーズ");
+        alertDialog.setMessage("一時停止中です");
+        alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //VideoSelectに戻る処理
+                timerscheduler.shutdown();//タイマー終了
+                seekbarscheduler.shutdown();//タイマー終了
+                if (mp != null) {
+                    mp.release();
+                    mp = null;
                 }
-            });
-        }
+                Intent intent = new Intent(getApplication(), VideoSelect.class);
+                startActivity(intent);
+            }
+        });
+        alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
+                seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
+                usb_flg = false;
+            }
+        });
+        AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
     }
-*/
+
     private int getFirmwareProtocol(String version) {
 
         String major = "0";

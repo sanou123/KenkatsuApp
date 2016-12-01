@@ -120,7 +120,7 @@ public class MenuSelect extends AppCompatActivity {
         });
 
         //user_selectボタンを押した時UserSelectへ移動
-        Button btnDisp5 = (Button) findViewById(R.id.user_serect);
+        Button btnDisp5 = (Button) findViewById(R.id.buttonBack);
         btnDisp5.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Sub 画面を起動

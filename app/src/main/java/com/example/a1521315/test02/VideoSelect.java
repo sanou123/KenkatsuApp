@@ -53,7 +53,7 @@ public class VideoSelect extends AppCompatActivity {
             }
         });
 
-        Button btnBack = (Button)findViewById(R.id.menu_serect);
+        Button btnBack = (Button)findViewById(R.id.buttonBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent();
