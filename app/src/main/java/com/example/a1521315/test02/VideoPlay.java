@@ -639,8 +639,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 }
                 Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
                 SetNeedleUp.start();
-                Thread setHeartbeatToZero = new Thread(new HeartbeatMeterNeedle(speedMeterAngle));
-                setHeartbeatToZero.start();
+
                 Thread SpeedUp = new Thread(new SpeedMeterTask((float)speedcount));
                 SpeedUp.start();
                 return true;
@@ -660,8 +659,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 }
                 Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
                 SetNeedleDown.start();
-                Thread setHeartbeatToZero = new Thread(new HeartbeatMeterNeedle(speedMeterAngle));
-                setHeartbeatToZero.start();
                 Thread SpeedDown = new Thread(new SpeedMeterTask((float)speedcount));
                 SpeedDown.start();
                 return true;
@@ -790,12 +787,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
-                    /*
-                    Thread MoveMe = new Thread(new MoveMeTask());
-                    MoveMe.start();
-                    Thread TestMileageTask = new Thread(new MileageTask());
-                    TestMileageTask.start();
-                    */
+
+                    //Thread MoveMe = new Thread(new MoveMeTask());
+                    //MoveMe.start();
+                    //Thread TestMileageTask = new Thread(new MileageTask());
+                    //TestMileageTask.start();
+
 
                 }
             });

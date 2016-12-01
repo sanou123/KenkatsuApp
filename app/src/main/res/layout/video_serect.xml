@@ -1,58 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".VideoSelect">
+    tools:context=".VideoSelect"
+    android:id="@+id/CourseSelectLayout">
 
     <TextView
         android:id="@+id/title_course_serect2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="トレーニングするコースを選んでください" />
+        android:text="トレーニングするコースを選んでください"
+        android:textSize="40sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:layout_height="50dp" />
 
-    <Button
-        android:id="@+id/course0"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="ポリテクから大地家(約10km)"/>
-
-    <Button
-        android:text="東京IC→御殿場IC(約84km)"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/course1" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="80dp"
+        android:id="@+id/BackKeyLayout">
 
-    <Button
-        android:text="鳴子(約1.3km)"
+        <Button
+            android:text="もどる"
+            android:id="@+id/menu_serect"
+            android:layout_gravity="right"
+            android:textSize="50sp"
+            android:layout_marginEnd="12dp"
+            android:layout_height="80dp"
+            android:layout_width="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/CourseLayout"
+        android:orientation="horizontal"
+        android:layout_below="@+id/title_course_serect2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/course2" />
+        android:layout_height="500dp">
 
-    <Button
-        android:text="デバッグ用(rawフォルダ)"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/course3" />
+        <LinearLayout
+            android:id="@+id/CourseLayoutLeft"
+            android:orientation="vertical"
+            android:layout_below="@+id/title_course_serect2"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
+            android:layout_marginLeft="13dp"
+            android:gravity="left">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="メニュー選択画面へ"
-        android:id="@+id/menu_serect"
-        android:layout_gravity="right" />
+            <Button
+                android:id="@+id/course0"
+                android:text="ポリテクから大地家(約10km)"
+                android:textSize="30sp"
+                android:layout_width="500dp"
+                android:layout_height="100dp" />
 
-    <Button
-        android:id="@+id/testtest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test"
-        android:layout_gravity="center_horizontal" />
+            <Button
+                android:id="@+id/course1"
+                android:text="東京IC→御殿場IC(約84km)"
+                android:textSize="30sp"
+                android:layout_width="500dp"
+                android:layout_height="100dp" />
+
+            <Button
+                android:id="@+id/course2"
+                android:text="鳴子(約1.3km)"
+                android:textSize="30sp"
+                android:layout_width="500dp"
+                android:layout_height="100dp" />
+
+            <Button
+                android:id="@+id/course3"
+                android:text="デバッグ用(rawフォルダ)"
+                android:textSize="30sp"
+                android:layout_width="500dp"
+                android:layout_height="100dp" />
+
+            <Button
+                android:id="@+id/course4"
+                android:text="コース4"
+                android:textSize="30sp"
+                android:layout_width="500dp"
+                android:layout_height="100dp"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/CourseLayoutRight"
+            android:orientation="vertical"
+            android:layout_below="@+id/title_course_serect2"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
+            >
+
+            <Button
+                android:id="@+id/course5"
+                android:text="コース5"
+                android:textSize="30sp"
+                android:layout_width="500dp"
+                android:layout_height="100dp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/course6"
+                android:text="コース6"
+                android:textSize="30sp"
+                android:layout_width="500dp"
+                android:layout_height="100dp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/course7"
+                android:text="コース7"
+                android:textSize="30sp"
+                android:layout_width="500dp"
+                android:layout_height="100dp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/course8"
+                android:text="コース8"
+                android:textSize="30sp"
+                android:layout_width="500dp"
+                android:layout_height="100dp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/testtest"
+                android:layout_height="100dp"
+                android:text="test"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:textSize="30sp" />
+        </LinearLayout>
+    </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
