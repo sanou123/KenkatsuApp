@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -40,6 +42,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import static com.example.a1521315.test02.R.id.ConnectCheak;
+import static com.example.a1521315.test02.R.id.buttonPlay;
 
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener,View.OnClickListener {
@@ -178,8 +182,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(-158));//2つの針を0に戻す
         SetBothNeedlesToZero.start();
 
-        findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
-        findViewById(R.id.buttonPause).setOnClickListener(PauseClickListener);
+        findViewById(buttonPlay).setOnClickListener(PlayClickListener);
+        //findViewById(R.id.buttonPause).setOnClickListener(PauseClickListener);
         findViewById(R.id.buttonResult).setOnClickListener(ResultClickListener);
 
         //コース番号受け取り
@@ -222,7 +226,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-        /*
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -244,7 +248,21 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //**********************************************************************************
-*/
+
+    }
+    //画面タップでユーザ選択に遷移
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.d("", "ACTION_DOWN");
+                if( findViewById(buttonPlay).getVisibility() == View.INVISIBLE &&  findViewById(ConnectCheak).getVisibility() == View.INVISIBLE) {
+                    //トレーニングが始まっているときのみ画面タップでポーズする
+                    PauseProcess();
+                }
+                break;
+        }
+        return true;
     }
 /***********************今は使ってない(今後使う予定)
     public void ConnectCheckDialog(){
@@ -288,8 +306,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //USB通信の切断(停止がないため)
         accessoryManager.disable(this);
         disconnectAccessory();//################################       あやしいかもよ～
-        Button BtnPauseView2 = (Button) findViewById(R.id.buttonPause);
-        BtnPauseView2.setVisibility(View.INVISIBLE);
+        ////Button BtnPauseView2 = (Button) findViewById(R.id.buttonPause);
+        ////BtnPauseView2.setVisibility(View.INVISIBLE);
         timerscheduler.shutdown();//タイマー止める
         seekbarscheduler.shutdown();
         //リザルトボタンを表示
@@ -508,12 +526,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     View.OnClickListener PlayClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+
+
             speedMeterAngle = -158;
             heartbeatMeterAngle = -158;
             Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(-158));//2つの針を0に戻す
             SetBothNeedlesToZero.start();
-            findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
-            findViewById(R.id.buttonPause).setVisibility(View.VISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
+            findViewById(buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
+            //findViewById(R.id.buttonPause).setVisibility(View.VISIBLE);//PLAYボタンを押したらPAUSEボタンを出す
             speedcount = 0.0;
             tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
             tSpeedInt.setText("0");
@@ -532,52 +553,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     View.OnClickListener PauseClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            speedMeterAngle = -158;
-            heartbeatMeterAngle = -158;
-            Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-            SetNeedletoZero.start();
-            Thread setHeartbeatToZero = new Thread(new HeartbeatMeterNeedle(heartbeatMeterAngle));
-            setHeartbeatToZero.start();
-
-            usb_flg = true;
-            future.cancel(true);//タイマー一時停止
-            seekbarfuture.cancel(true);
-            speedcount = 0;
-            params.setSpeed((float) speedcount);
-            mp.setPlaybackParams(params);
-            tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
-            tSpeedInt.setText("0");
-            tSpeedDec.setText(".0");
-
-            // ポップアップメニュー表示
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
-            alertDialog.setTitle("ポーズ");
-            alertDialog.setMessage("一時停止中です");
-            alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //VideoSelectに戻る処理
-                    timerscheduler.shutdown();//タイマー終了
-                    seekbarscheduler.shutdown();//タイマー終了
-                    if (mp != null) {
-                        mp.release();
-                        mp = null;
-                    }
-                    Intent intent = new Intent(getApplication(), VideoSelect.class);
-                    startActivity(intent);
-                }
-            });
-            alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
-                    seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
-                    usb_flg = false;
-                }
-            });
-            AlertDialog myDialog = alertDialog.create();
-            myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
-            myDialog.show();
+            PauseProcess();
         }
     };
 
@@ -615,7 +591,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             case R.id.buttonNo:
                 Log.d("No","no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                findViewById(buttonPlay).setVisibility(View.VISIBLE);
                 tHeartbeat.setText("- ");
                 break;
         }
@@ -949,14 +925,65 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    //再生終了時に死ぬ原因がここにあります
+                    //おいおい直す
                     float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 480;//barのpx数
-                    getPlayTime = 480 - getPlayTime;
+                    getPlayTime = 450 - getPlayTime;
                     getPlayTime = getPlayTime + 45;
                     imageMe.setY(getPlayTime);
 
                 }
             });
         }
+    }
+    //
+    public void PauseProcess(){
+        speedMeterAngle = -158;
+        heartbeatMeterAngle = -158;
+        Thread SetNeedletoZero = new Thread(new SpeedMeterNeedle(speedMeterAngle));
+        SetNeedletoZero.start();
+        Thread setHeartbeatToZero = new Thread(new HeartbeatMeterNeedle(heartbeatMeterAngle));
+        setHeartbeatToZero.start();
+
+        usb_flg = true;
+        future.cancel(true);//タイマー一時停止
+        seekbarfuture.cancel(true);
+        speedcount = 0;
+        params.setSpeed((float) speedcount);
+        mp.setPlaybackParams(params);
+        tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
+        tSpeedInt.setText("0");
+        tSpeedDec.setText(".0");
+
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
+        alertDialog.setTitle("ポーズ");
+        alertDialog.setMessage("一時停止中です");
+        alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //VideoSelectに戻る処理
+                timerscheduler.shutdown();//タイマー終了
+                seekbarscheduler.shutdown();//タイマー終了
+                if (mp != null) {
+                    mp.release();
+                    mp = null;
+                }
+                Intent intent = new Intent(getApplication(), VideoSelect.class);
+                startActivity(intent);
+            }
+        });
+        alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
+                seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
+                usb_flg = false;
+            }
+        });
+        AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
     }
 
     private int getFirmwareProtocol(String version) {
