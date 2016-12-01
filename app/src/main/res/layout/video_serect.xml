@@ -9,48 +9,48 @@
     android:id="@+id/CourseSelectLayout">
 
     <TextView
-        android:id="@+id/title_course_serect2"
-        android:layout_width="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:id="@+id/textMSG"
         android:text="トレーニングするコースを選んでください"
         android:textSize="40sp"
         android:textColor="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:gravity="center"
-        android:layout_height="50dp" />
+        />
 
     <RelativeLayout
+        android:id="@+id/BackKeyLayout"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_height="80dp"
-        android:id="@+id/BackKeyLayout">
+        android:layout_height="80dp">
 
         <Button
+            android:id="@+id/buttonBack"
             android:text="もどる"
-            android:id="@+id/menu_serect"
-            android:layout_gravity="right"
             android:textSize="50sp"
-            android:layout_marginEnd="12dp"
-            android:layout_height="80dp"
+            android:layout_gravity="right"
             android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="12dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true" />
-
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/CourseLayout"
         android:orientation="horizontal"
-        android:layout_below="@+id/title_course_serect2"
+        android:layout_below="@+id/textMSG"
         android:layout_width="match_parent"
         android:layout_height="500dp">
 
         <LinearLayout
             android:id="@+id/CourseLayoutLeft"
             android:orientation="vertical"
-            android:layout_below="@+id/title_course_serect2"
+            android:layout_below="@+id/textMSG"
             android:layout_width="500dp"
             android:layout_height="500dp"
             android:layout_marginLeft="13dp"
@@ -97,7 +97,7 @@
         <LinearLayout
             android:id="@+id/CourseLayoutRight"
             android:orientation="vertical"
-            android:layout_below="@+id/title_course_serect2"
+            android:layout_below="@+id/textMSG"
             android:layout_width="500dp"
             android:layout_height="500dp"
             >

@@ -224,7 +224,7 @@
                 android:layout_gravity="center">
 
                 <TextView
-                    android:id="@+id/textConnectMsg1"
+                    android:id="@+id/textMSG"
                     android:text="心拍数を測定しながら走行しますか？"
                     android:layout_width="600dp"
                     android:layout_height="40dp"
@@ -235,7 +235,7 @@
                     android:layout_alignParentStart="true" />
 
                 <TextView
-                    android:layout_below="@+id/textConnectMsg1"
+                    android:layout_below="@+id/textMSG"
                     android:id="@+id/textConnectMsg2"
                     android:text="接続する場合は接続を押して接続確立させてから続行。"
                     android:layout_width="600dp"
