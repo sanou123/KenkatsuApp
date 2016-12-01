@@ -102,6 +102,26 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true" />
 
+                <RelativeLayout
+                    android:id="@+id/HariLayout2"
+                    android:layout_height="200dp"
+                    android:layout_width="230dp"
+                    android:layout_marginTop="0px"
+                    android:gravity="bottom|right">
+
+                    <ImageView
+                        android:id="@+id/image_Hari2"
+                        app:srcCompat="@drawable/hari4_45"
+                        android:visibility="visible"
+                        android:scaleType="centerInside"
+                        android:layout_marginRight="22px"
+                        android:layout_width="208dp"
+                        android:layout_height="208dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="26dp"/>
+                </RelativeLayout>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -164,16 +184,15 @@
                     android:layout_toEndOf="@+id/textMileageInt" />
 
 
-
                 <RelativeLayout
-                    android:id="@+id/HariLayout"
+                    android:id="@+id/HariLayout1"
                     android:layout_height="200dp"
                     android:layout_width="230dp"
                     android:layout_marginTop="0px"
                     android:gravity="bottom|right">
 
                     <ImageView
-                        android:id="@+id/image_Hari"
+                        android:id="@+id/image_Hari1"
                         app:srcCompat="@drawable/hari4_45"
                         android:visibility="visible"
                         android:scaleType="centerInside"
