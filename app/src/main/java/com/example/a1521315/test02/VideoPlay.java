@@ -57,6 +57,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tMileageDec;//走行距離の変数　小数
     TextView tMileageInt;//走行距離の変数　整数
     TextView tHeartbeat;//心拍の変数
+    TextView tTargetHeartbeat;//目標心拍数の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース番号
     TextView tDebug1;
@@ -158,6 +159,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tMileageInt.setText("0");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
         tHeartbeat.setText("000");
+        tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
+        tTargetHeartbeat.setText("000");
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
         imageMe = (ImageView)findViewById(R.id.image_view_me);
@@ -226,7 +229,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -247,10 +250,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 mDevice = device;
             }
         }
-        //**********************************************************************************
-
+        //******************************************************************************************
+*/
+        ConnectCheckDialog();
     }
-    //画面タップでユーザ選択に遷移
+    //画面タップでポーズ
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -264,41 +268,69 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         return true;
     }
-/***********************今は使ってない(今後使う予定)
+
+    //Bluetooth接続の確認メニュー
     public void ConnectCheckDialog(){
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
         // ポップアップメニュー表示
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
-        alertDialog.setTitle("接続確認");
-        alertDialog.setMessage("Bluetoothで心拍センサとの通信をしますか？");
-        alertDialog.setPositiveButton("接続", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder connectCheckDialog = new AlertDialog.Builder(VideoPlay.this);
+        connectCheckDialog.setTitle("接続確認");
+        connectCheckDialog.setMessage("Bluetoothで心拍センサとの通信をしますか？");
+        connectCheckDialog.setPositiveButton("はい", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //接続処理
+                ConnectingBlutoothDialog();
+                /*
                 if (!connectFlg) {
                     mStatusTextView.setText("try connect");
                     mThread = new Thread(VideoPlay.this);
                     // Threadを起動し、Bluetooth接続
                     isRunning = true;
                     mThread.start();
-                }
+                }*/
             }
         });
-        alertDialog.setNegativeButton("続行", new DialogInterface.OnClickListener() {
+        connectCheckDialog.setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //続行処理
                 Log.d("No","no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
                 findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
-                tHeartbeat.setText("-");
+                tTargetHeartbeat.setText("-  ");
+                tHeartbeat.setText("- ");
+
             }
         });
-        AlertDialog myDialog = alertDialog.create();
+        AlertDialog myDialog = connectCheckDialog.create();
         myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
         myDialog.show();
     }
-*/
+    //接続中のポップアップ
+    public void ConnectingBlutoothDialog(){
+        mStatusTextView.setText("try connect");
+        // ポップアップメニュー表示
+        AlertDialog.Builder connectingDialog = new AlertDialog.Builder(VideoPlay.this);
+        connectingDialog.setTitle("Bluetooth-心拍センサ");
+        connectingDialog.setMessage(mStatusTextView.getText());
+        if (!connectFlg) {
+            mStatusTextView.setText("try connect");
+            mThread = new Thread(this);
+            // Threadを起動し、Bluetooth接続
+            isRunning = true;
+            mThread.start();
+        }
+        connectingDialog.setNegativeButton("中止", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("No","no");
+                ConnectCheckDialog();
+            }
+        });
+        AlertDialog myDialog = connectingDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
+    }
     // 再生完了時の処理
     @Override
     public void onCompletion(MediaPlayer agr0) {
@@ -505,6 +537,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     /**
      * 描画処理はHandlerでおこなう
+     *
      */
     Handler mHandler = new Handler() {
         @Override
