@@ -229,7 +229,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-/*
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -251,8 +251,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
-*/
-        ConnectCheckDialog();
+
+        //ConnectCheckDialog();//ポップアップでBluetooth接続するメニューを表示
     }
     //画面タップでポーズ
     @Override
@@ -268,7 +268,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         return true;
     }
-
+/*
     //Bluetooth接続の確認メニュー
     public void ConnectCheckDialog(){
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -279,21 +279,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         connectCheckDialog.setPositiveButton("はい", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ConnectingBlutoothDialog();
-                /*
-                if (!connectFlg) {
-                    mStatusTextView.setText("try connect");
-                    mThread = new Thread(VideoPlay.this);
-                    // Threadを起動し、Bluetooth接続
-                    isRunning = true;
-                    mThread.start();
-                }*/
+                ConnectingBlutoothDialog();//接続中のポップアップメニュー
             }
         });
         connectCheckDialog.setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //続行処理
                 Log.d("No","no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
                 findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
@@ -308,7 +299,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
     //接続中のポップアップ
     public void ConnectingBlutoothDialog(){
-        mStatusTextView.setText("try connect");
+        mStatusTextView.setText("a");
         // ポップアップメニュー表示
         AlertDialog.Builder connectingDialog = new AlertDialog.Builder(VideoPlay.this);
         connectingDialog.setTitle("Bluetooth-心拍センサ");
@@ -331,6 +322,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
         myDialog.show();
     }
+*/
     // 再生完了時の処理
     @Override
     public void onCompletion(MediaPlayer agr0) {
@@ -594,15 +586,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     View.OnClickListener ResultClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            globals.coursename = tCourse.getText().toString();//コース名
-            globals.mileage = tMileage.getText().toString();//走行距離
-            globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-            globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
-            globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
-            globals.time = tTimer.getText().toString();//運動時間
-            globals.cal = "1234";//消費カロリー
-            Intent intent = new Intent(getApplication(), Result.class);
-            startActivity(intent);
+            GoToResult();
         }
     };
 
@@ -969,7 +953,20 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-    //
+    //リザルトに行く処理
+    public void GoToResult(){
+        globals.coursename = tCourse.getText().toString();//コース名
+        globals.mileage = tMileage.getText().toString();//走行距離
+        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
+        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.time = tTimer.getText().toString();//運動時間
+        globals.cal = "1234";//消費カロリー
+        Intent intent = new Intent(getApplication(), Result.class);
+        startActivity(intent);
+    }
+
+    //ポーズ押したときの処理
     public void PauseProcess(){
         speedMeterAngle = -158;
         heartbeatMeterAngle = -158;
@@ -1012,6 +1009,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                 seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
                 usb_flg = false;
+            }
+        });
+        alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                GoToResult();
             }
         });
         AlertDialog myDialog = alertDialog.create();

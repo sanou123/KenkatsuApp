@@ -229,7 +229,7 @@
             android:orientation="vertical"
             android:layout_width="600dp"
             android:layout_height="300dp"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:background="@android:color/holo_red_dark"
             android:layout_centerInParent="true">
 
