@@ -97,14 +97,25 @@ public class Result extends Activity {
         Log.v("時間", simpleDateFormat.format(date));
         globals.date = simpleDateFormat.format(date);
 
-        //int iWeight = Integer.parseInt(globals.weight);
+
+        ///////////////////////////////////////////////////////////////////
+        if(globals.total_time != null){
+            globals.total_time = globals.total_time + globals.time;
+        }else {
+            globals.total_time = globals.time;
+        }
+        globals.total_mileage = globals.mileage;
+/////////////////////////////////////////////////////////////////////////
+
+
+        int name_id = Integer.parseInt(globals.name_id);
 
        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);
 
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);
         dbAdapter.openDB();                                         // DBの読み書き
-        dbAdapter.saveDB_DATA(globals.name_id, globals.now_user, globals.date, globals.maxheartbeat,
+        dbAdapter.saveDB_DATA(name_id, globals.now_user, globals.date, globals.maxheartbeat,
                 globals.cal, globals.total_time, globals.total_mileage, globals.coursename,
                 globals.time, globals.avg, globals.max, globals.mileage);   // DBに登録
         dbAdapter.closeDB();                                        // DBを閉じる

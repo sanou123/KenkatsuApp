@@ -102,11 +102,11 @@ public class SelectSheetTable1 extends AppCompatActivity {
         // TableLayoutにrowHeaderを追加
         mTableLayout04List.addView(rowHeader);
 
-        String column = "name";          //検索対象のカラム名
-        String[] name = {globals.now_user};            //検索対象の文字
+        String column = "name_id";          //検索対象のカラム名
+        String[] name_id = {globals.name_id};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
-        Cursor c = dbAdapter.searchDB(null, column, name);
+        Cursor c = dbAdapter.searchDB(null, column, name_id);
 
         if (c.moveToFirst()) {
             do {
@@ -121,7 +121,7 @@ public class SelectSheetTable1 extends AppCompatActivity {
                 // 消費カロリー
                 TextView textCalorie_consumption = setTextItem(c.getString(5)+" [cal]", GCH);      // TextViewのカスタマイズ処理
                 // 総走行時間
-                TextView textTotal_time = setTextItem(c.getString(9)+" [分]", GCH);      // TextViewのカスタマイズ処理
+                TextView textTotal_time = setTextItem(c.getString(6), GCH);      // TextViewのカスタマイズ処理
                 // 総走行距離
                 TextView textTotal_distance = setTextItem(c.getString(12)+" [km]", GCH);      // TextViewのカスタマイズ処理
                 // コース名

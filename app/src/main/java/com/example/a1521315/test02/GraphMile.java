@@ -21,12 +21,12 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 
 
-public class Graph extends AppCompatActivity {
+public class GraphMile extends AppCompatActivity {
 
     private DBAdapter dbAdapter;                // DBAdapter
 
     Globals globals;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,24 +89,24 @@ public class Graph extends AppCompatActivity {
         //items = new ArrayList<>();
         ArrayList<String> xValues = new ArrayList<>();
 
-        String column = "name";          //検索対象のカラム名
-        String[] name = {globals.now_user};            //検索対象の文字
+        String column = "name_id";          //検索対象のカラム名
+        String[] name_id = {globals.name_id};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
-        Cursor c = dbAdapter.searchDB(null, column, name);
+        Cursor c = dbAdapter.searchDB(null, column, name_id);
 
         // DBのデータを取得
+        /*
         String[] xColumns = {DBAdapter.COL_DATE};     // DBのカラム：品名
         Cursor xc = dbAdapter.getDB1(xColumns);
+        */
 
-
-        if (xc.moveToFirst()) {
+        if (c.moveToFirst()) {
             do {
-                xValues.add(xc.getString(0));
-                Log.d("取得したCursor:", xc.getString(0));
-            } while (xc.moveToNext());
+                xValues.add(c.getString(3));
+                Log.d("取得したCursor:", c.getString(3));
+            } while (c.moveToNext());
         }
-
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -122,27 +122,21 @@ public class Graph extends AppCompatActivity {
         ArrayList<BarEntry> valuesA = new ArrayList<>();
 
         // DBのデータを取得
-        String[] yColumns = {DBAdapter.COL_DISTANCE};     // DBのカラム：品名
+        /*String[] yColumns = {DBAdapter.COL_DISTANCE};     // DBのカラム：品名
         Cursor yc = dbAdapter.getDB1(yColumns);
 
         String[] yColumns_Num = {DBAdapter.COL_ID_DATA};     // DBのカラム：品名
-        Cursor yc_num = dbAdapter.getDB1(yColumns_Num);
+        Cursor yc_num = dbAdapter.getDB1(yColumns_Num);*/
 
-
-        // DBのデータを取得
-        /*String[] columns = {DBAdapter.COL_NAME};     // DBのカラム：品名
-        Cursor c = dbAdapter.getDB1(columns);*/
-
-        if (yc.moveToFirst() && yc_num.moveToFirst()) {
+        if (c.moveToFirst()) {
+            int Num = 0;
             do {
-                //xValues.add(c.getString(0));
-                int Num = Integer.parseInt(yc_num.getString(0)) - 1;
-                valuesA.add(new BarEntry(Float.parseFloat(yc.getString(0)), Num));
-                Log.d("取得したCursor:", yc_num.getString(0));
-            } while (yc.moveToNext() && yc_num.moveToNext());
+                valuesA.add(new BarEntry(Float.parseFloat(c.getString(12)), Num));
+                Log.d("取得したCursor:", c.getString(12));
+                Num = Num +1;
+            } while (c.moveToNext()/* && yc_num.moveToNext()*/);
         }
-        xc.close();
-        yc.close();
+        c.close();
         dbAdapter.closeDB();    // DBを閉じる
 
         //////////////////////////////////////////////////////////////////////////////

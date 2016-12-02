@@ -323,6 +323,9 @@ public class MainResult extends AppCompatActivity implements
             int iBMI = Integer.parseInt(strBMI);
 */
 
+            int name_id = Integer.parseInt(globals.name_id);
+
+
             long currentTimeMillis = System.currentTimeMillis();
 
             Date date = new Date(currentTimeMillis);
@@ -333,7 +336,7 @@ public class MainResult extends AppCompatActivity implements
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.saveDB_DATA(globals.name_id, globals.now_user, simpleDateFormat.format(date), globals.maxheartbeat,
+            dbAdapter.saveDB_DATA(name_id, globals.now_user, simpleDateFormat.format(date), globals.maxheartbeat,
                     globals.cal, globals.total_time, globals.total_mileage, globals.coursename,
                     globals.time, globals.avg, globals.max, globals.mileage);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる

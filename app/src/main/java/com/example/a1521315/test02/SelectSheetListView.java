@@ -80,7 +80,7 @@ public class SelectSheetListView extends AppCompatActivity {
                 //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
                 //intent.putExtra("SELECTED_DATA",listName);
                 globals.now_user = listName;
-                globals.name_id = NameID;
+                globals.name_id = String.valueOf(NameID);
                 globals.sex = Sex;
                 globals.weight = Weight;
                 globals.height = Height;
