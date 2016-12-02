@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+
 /**
  * メイン画面に関連するクラス
  * MainActivity
@@ -160,10 +162,18 @@ public class UserUpdate extends AppCompatActivity {
             int iHeight = Integer.parseInt(strHeight);
             int iWeight = Integer.parseInt(strWeight);
 
+            double dbmi = iWeight / (iHeight * iHeight);
+            double ideal_weight = ((iHeight * 0.01) * (iHeight * 0.01)) * 22;
+
+            //元データをBigDecimal型にする
+            BigDecimal bd = new BigDecimal(dbmi);
+            //四捨五入する
+            BigDecimal bmi = bd.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.updateDB(globals.now_user, iAge, globals.sex, iHeight, iWeight);   // DBに登録
+            dbAdapter.updateDB(globals.now_user, iAge, globals.sex, iHeight, iWeight,bmi.doubleValue(),ideal_weight);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定

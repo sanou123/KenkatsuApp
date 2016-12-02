@@ -16,11 +16,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+
 /**
  * メイン画面に関連するクラス
  * MainActivity
  */
 public class MainUser extends AppCompatActivity {
+
+    Globals globals;
 
     private EditText mEditText01Name;        // 名前
     private EditText mEditText01Age;         // 年齢
@@ -188,13 +192,20 @@ public class MainUser extends AppCompatActivity {
             int iHeight = Integer.parseInt(strHeight);
             int iWeight = Integer.parseInt(strWeight);
 
+            //BMIの算出
+            double dbmi = iWeight / ((iHeight * 0.01) * (iHeight * 0.01));
+            //理想体重の算出
+            double ideal_weight = ((iHeight * 0.01) * (iHeight * 0.01)) * 22;
 
+            //元データをBigDecimal型にする
+            BigDecimal bd = new BigDecimal(dbmi);
+            //四捨五入する
+            BigDecimal bmi = bd.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
 
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.saveDB(strName, iAge, strSex, iHeight, iWeight
-            );   // DBに登録
+            dbAdapter.saveDB(strName, iAge, strSex, iHeight, iWeight, bmi.doubleValue() , ideal_weight);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定

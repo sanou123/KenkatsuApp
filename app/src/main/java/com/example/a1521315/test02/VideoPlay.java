@@ -2,6 +2,9 @@ package com.example.a1521315.test02;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -13,9 +16,9 @@ import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,20 +30,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Set;
 import java.util.TimerTask;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.UUID;
 
 import static com.example.a1521315.test02.R.id.ConnectCheak;
 import static com.example.a1521315.test02.R.id.buttonPlay;
@@ -567,7 +568,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
             globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
             globals.time = tTimer.getText().toString();//運動時間
-            globals.cal = "1234";//消費カロリー
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/*
+            int iWeight = Integer.parseInt(globals.weight);
+
+            globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
+*/
+/////////////////////////////////////////////////////////////////////////////////////////////
             Intent intent = new Intent(getApplication(), Result.class);
             startActivity(intent);
         }

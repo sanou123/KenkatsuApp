@@ -14,15 +14,18 @@ public class Globals extends Application {
     static String avg;
     static String max;
     static String time;
-    static String cal;
+    static double cal = 12.3;
     static String now_user;
-    String total_time = "10";
-    String total_mileage = "55";
-    static int name_id;
+    static String total_time ;
+    static String total_mileage;
+    static String name_id;
     static double bmi;
     static String weight;
     static String height;
     static String sex;
-
+    static double ideal_weight;
+    static String date;
+    static String age;
+    static String deal_weight;
 
 }

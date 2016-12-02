@@ -37,28 +37,44 @@ public class MenuSelect extends AppCompatActivity {
 
         //Degree of obesity(肥満度)
         if(globals.bmi < 18.5){
-            String Doo = "低体重";
-            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+
+            String Doo = "(低体重)\n";
+            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
+                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
             textView1.setText(columns1);
-        }else if(globals.bmi >= 18.5 || globals.bmi < 25){
-            String Doo = new String("普通体重");
-            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+
+        }else if(globals.bmi >= 18.5 && globals.bmi < 25){
+
+            String Doo = new String("(普通体重)\n");
+            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
+                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
             textView1.setText(columns1);
-        }else if(globals.bmi >= 25 || globals.bmi < 30){
-            String Doo = new String("肥満(1度)");
-            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+
+        }else if(globals.bmi >= 25 && globals.bmi < 30){
+
+            String Doo = new String("(肥満(1度))\n");
+            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
+                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
             textView1.setText(columns1);
-        }else if(globals.bmi >= 30 || globals.bmi < 35){
-            String Doo = new String("肥満(2度)");
-            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+
+        }else if(globals.bmi >= 30 && globals.bmi < 35){
+
+            String Doo = new String("(肥満(2度))\n");
+            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
+                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
             textView1.setText(columns1);
-        }else if(globals.bmi >= 35 || globals.bmi < 40){
-            String Doo = new String("肥満(3度)");
-            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+
+        }else if(globals.bmi >= 35 && globals.bmi < 40){
+
+            String Doo = new String("(肥満(3度))\n");
+            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
+                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
             textView1.setText(columns1);
         }else if(globals.bmi >= 40){
-            String Doo = new String("肥満(4度)");
-            String columns1 = globals.now_user + "さんのBMIは" + globals.bmi + Doo;
+
+            String Doo = new String("(肥満(4度))\n");
+            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
+                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
             textView1.setText(columns1);
         }
 
@@ -91,7 +107,7 @@ public class MenuSelect extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.Graph");
+                        "com.example.a1521315.test02.GraphSelect");
                 startActivity(intent);
             }
         });
