@@ -83,7 +83,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //タイムに関する奴
     private ScheduledExecutorService timerscheduler;
     ScheduledFuture future;
-    Runnable myTimerTask = new TimerTask();
+    Runnable myTimerTask = new CntTimerTask();
 
     //シークバーに関する奴
     private ScheduledExecutorService seekbarscheduler;
@@ -578,6 +578,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     }; //handler
 
+    //
     private int getFirmwareProtocol(String version) {
 
         String major = "0";
@@ -770,7 +771,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     /*非同期処理関連*/
     //カウントアップタイマタスク
-    public class TimerTask implements Runnable {
+    public class CntTimerTask implements Runnable {
         //private Handler handler = new Handler();
         private long timerCount = 0;
         public void run() {
