@@ -2,11 +2,7 @@ package com.example.a1521315.test02;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.text.method.MovementMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -72,8 +68,7 @@ public class Result extends Activity {
         btn_tweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text="+"コース名："+coursename+"%0a"+"走行距離："+mileage+"%0a"+"最大心拍："+maxheartbeat+"%0a"+"平均速度："+avg+"%0a"+"最高速度："+max+"%0a"+"運動時間："+time+"%0a"+"消費カロリー："+cal+"%0a"));
+                Intent i = new Intent(getApplication(), Resulttweet.class);
                 startActivity(i);
             }
         });
