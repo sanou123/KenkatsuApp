@@ -66,6 +66,23 @@ public class SelectSheetListView extends AppCompatActivity {
                 // IDを取得する
                 myListItem = items.get(position);
                 String listName = myListItem.getName();
+
+                globals.now_user = listName;
+
+
+                // アラートダイアログ表示
+                AlertDialog.Builder builder = new AlertDialog.Builder(SelectSheetListView.this);
+                builder.setTitle("ログイン確認");
+                builder.setMessage(listName + "さんですか？");
+                // OKの時の処理
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        // IDを取得する
+                        //myListItem = items.get(position);
+                        //String listName = myListItem.getName();
                 int NameID = myListItem.getUser_id();
                 String Sex = myListItem.getSex();
                 String Weight = myListItem.getWeight();
@@ -75,19 +92,32 @@ public class SelectSheetListView extends AppCompatActivity {
 
 
                 //int listId =  myListItem.getUser_id();//################
-                String columns = listName + "さんが選択されました";
-                Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
+                //String columns = listName + "さんが選択されました";
+                //Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
                 //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
                 //intent.putExtra("SELECTED_DATA",listName);
-                globals.now_user = listName;
+                //globals.now_user = listName;
                 globals.name_id = String.valueOf(NameID);
                 globals.sex = Sex;
                 globals.weight = Weight;
                 globals.height = Height;
                 globals.bmi = Bmi;
                 globals.ideal_weight = ideal_weight;
-                Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
-                startActivity(intent);
+
+                    }
+                });
+
+                builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(SelectSheetListView.this, Login.class);
+                        startActivity(intent);
+                    }
+                });
+                // ダイアログの表示
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
             }
         });
 
