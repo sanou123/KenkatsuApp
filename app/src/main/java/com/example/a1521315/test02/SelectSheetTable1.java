@@ -59,7 +59,7 @@ public class SelectSheetTable1 extends AppCompatActivity {
      */
     private void findViews() {
         mTableLayout04List = (TableLayout) findViewById(R.id.tableLayout03List);    //データ表示用TableLayout
-        mButton03AllDelete = (Button) findViewById(R.id.button02AllDelete);         // 全削除ボタン
+        //mButton03AllDelete = (Button) findViewById(R.id.button02AllDelete);         // 全削除ボタン
     }
 
 
@@ -115,36 +115,40 @@ public class SelectSheetTable1 extends AppCompatActivity {
                 row.setPadding(16, 12, 16, 12);             // 行のパディングを指定(左, 上, 右, 下)
 
                 // 日時
-                TextView textDate = setTextItem(c.getString(3), GCH);     // TextViewのカスタマイズ処理
+                TextView textDate = setTextItem(c.getString(3)+c.getString(4)+c.getString(5)+'\n'
+                        +c.getString(6), GCH);     // TextViewのカスタマイズ処理
                 // 最大心拍数
-                TextView textHeart_rate = setTextItem(c.getString(4)+" [bpm]", GCH);     // TextViewのカスタマイズ処理
+                TextView textHeart_rate = setTextItem(c.getString(7)+" [bpm]", GCH);     // TextViewのカスタマイズ処理
                 // 消費カロリー
-                TextView textCalorie_consumption = setTextItem(c.getString(5)+" [cal]", GCH);      // TextViewのカスタマイズ処理
+                TextView textCalorie_consumption = setTextItem(c.getString(8)+" [cal]", GCH);      // TextViewのカスタマイズ処理
                 // 総走行時間
-                TextView textTotal_time = setTextItem(c.getString(6), GCH);      // TextViewのカスタマイズ処理
+                TextView textTotal_time = setTextItem(c.getString(9), GCH);      // TextViewのカスタマイズ処理
                 // 総走行距離
-                TextView textTotal_distance = setTextItem(c.getString(12)+" [km]", GCH);      // TextViewのカスタマイズ処理
+                TextView textTotal_distance = setTextItem(c.getString(15)+" [km]", GCH);      // TextViewのカスタマイズ処理
                 // コース名
-                TextView textCourse = setTextItem(c.getString(8), GCH);      // TextViewのカスタマイズ処理
+                TextView textCourse = setTextItem(c.getString(11), GCH);      // TextViewのカスタマイズ処理
 
                 /* getString()参考
                 Log.d("取得したCursor(DATA_ID):", String.valueOf(c.getString(0)));
                 Log.d("取得したCursor(名前に対するID):", String.valueOf(c.getString(1)));
                 Log.d("取得したCursor(名前):", String.valueOf(c.getString(2)));
-                Log.d("取得したCursor(日時):", c.getString(3));
-                Log.d("取得したCursor(心拍数):", c.getString(4));
-                Log.d("取得したCursor(消費カロリー):", c.getString(5));
-                Log.d("取得したCursor(総走行時間):", c.getString(6));
-                Log.d("取得したCursor(総走行距離):", c.getString(7));
-                Log.d("取得したCursor(コース名):", c.getString(8));
-                Log.d("取得したCursor(タイム):", c.getString(9));
-                Log.d("取得したCursor(平均速度):", c.getString(10));
-                Log.d("取得したCursor(最高速度):", c.getString(11));
-                Log.d("取得したCursor(走行距離):", c.getString(12));
+                Log.d("取得したCursor(年):", c.getString(3));
+                Log.d("取得したCursor(月):", c.getString(4));
+                Log.d("取得したCursor(日):", c.getString(5));
+                Log.d("取得したCursor(時間):", c.getString(6));
+                Log.d("取得したCursor(心拍数):", c.getString(7));
+                Log.d("取得したCursor(消費カロリー):", c.getString(8));
+                Log.d("取得したCursor(総走行時間):", c.getString(9));
+                Log.d("取得したCursor(総走行距離):", c.getString(10));
+                Log.d("取得したCursor(コース名):", c.getString(11));
+                Log.d("取得したCursor(タイム):", c.getString(12));
+                Log.d("取得したCursor(平均速度):", c.getString(13));
+                Log.d("取得したCursor(最高速度):", c.getString(14));
+                Log.d("取得したCursor(走行距離):", c.getString(15));
                 */
 
 
-                // rowHeaderに各項目(DBから取得した産地,個数,単価)を追加
+                // rowHeaderに各項目(DBから取得した各項目)を追加
                 row.addView(textDate, paramsDate);      // 日時
                 row.addView(textHeart_rate, paramsHeart_rate);      // 最大心拍数
                 row.addView(textCalorie_consumption, paramsCalorie_consumption);      // 消費カロリー

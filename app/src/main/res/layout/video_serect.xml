@@ -134,13 +134,6 @@
                 android:layout_height="100dp"
                 android:visibility="invisible" />
 
-            <Button
-                android:id="@+id/testtest"
-                android:layout_height="100dp"
-                android:text="test"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="match_parent"
-                android:textSize="30sp" />
         </LinearLayout>
     </LinearLayout>
 

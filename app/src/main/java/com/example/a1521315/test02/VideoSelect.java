@@ -63,15 +63,6 @@ public class VideoSelect extends AppCompatActivity {
             }
         });
 
-        Button btnTest = (Button)findViewById(R.id.testtest);
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.MainResult");
-                startActivity(intent);
-            }
-        });
     }
 
     @Override

@@ -30,7 +30,7 @@ public class GraphMile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chart);
+        setContentView(R.layout.distance_barchart);
         //横画面に固定
 
         createBarChart();
@@ -103,8 +103,10 @@ public class GraphMile extends AppCompatActivity {
 
         if (c.moveToFirst()) {
             do {
-                xValues.add(c.getString(3));
-                Log.d("取得したCursor:", c.getString(3));
+                xValues.add(c.getString(3)+c.getString(4)+c.getString(5)+'\n'
+                        +c.getString(6));
+                Log.d("取得したCursor:", c.getString(3)+c.getString(4)+c.getString(5)+'\n'
+                        +c.getString(6));
             } while (c.moveToNext());
         }
 
@@ -131,8 +133,8 @@ public class GraphMile extends AppCompatActivity {
         if (c.moveToFirst()) {
             int Num = 0;
             do {
-                valuesA.add(new BarEntry(Float.parseFloat(c.getString(12)), Num));
-                Log.d("取得したCursor:", c.getString(12));
+                valuesA.add(new BarEntry(Float.parseFloat(c.getString(15)), Num));
+                Log.d("取得したCursor:", c.getString(15));
                 Num = Num +1;
             } while (c.moveToNext()/* && yc_num.moveToNext()*/);
         }

@@ -71,9 +71,6 @@
             android:name=".Result" />
         <activity
             android:screenOrientation="landscape"
-            android:name=".MainResult" />
-        <activity
-            android:screenOrientation="landscape"
             android:name=".SelectSheetTable1"
             android:label="@string/name_selectsheet_tabel" />
         <activity

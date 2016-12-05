@@ -24,7 +24,10 @@ public class Globals extends Application {
     static String height;
     static String sex;
     static double ideal_weight;
-    static String date;
+    static String year;
+    static String month;
+    static String day;
+    static String times_of_day;
     static String age;
     static String deal_weight;
 

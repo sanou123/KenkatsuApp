@@ -24,9 +24,9 @@ public class GraphSelect extends AppCompatActivity {
         textView.setText(columns);
         */
 
-        //buttonBackを押した時MenuSelectへ移動
-        Button btnNml = (Button) findViewById(R.id.graph_time);
-        btnNml.setOnClickListener(new View.OnClickListener() {
+        //graph_timeを押した時MenuSelectへ移動
+        Button graph_time = (Button) findViewById(R.id.graph_time);
+        graph_time.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
@@ -36,14 +36,26 @@ public class GraphSelect extends AppCompatActivity {
             }
         });
 
-        //buttonBackを押した時MenuSelectへ移動
-        Button btnBack = (Button) findViewById(R.id.graph_mile);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        //graph_mileを押した時MenuSelectへ移動
+        Button graph_mile = (Button) findViewById(R.id.graph_mile);
+        graph_mile.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
                         "com.example.a1521315.test02.GraphMile");
+                startActivity(intent);
+            }
+        });
+
+        //buttonBackを押した時MenuSelectへ移動
+        Button btnBack = (Button) findViewById(R.id.buttonBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Sub 画面を起動
+                Intent intent = new Intent();
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.MenuSelect");
                 startActivity(intent);
             }
         });

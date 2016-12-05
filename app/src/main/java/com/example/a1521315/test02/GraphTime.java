@@ -47,10 +47,10 @@ public class GraphTime extends AppCompatActivity {
         */
 
         if (c.moveToFirst()) {
-            int Num = 0;
+            int  Num = 0;
             do {
-                //entries.add(c.getString(5),Num);
-                Log.d("取得したCursor:", c.getString(5));
+                entries.add(new Entry(c.getInt(12),Num));
+                Log.d("取得したCursor:", c.getString(12));
                 Num = Num + 1;
             } while (c.moveToNext());
         }
@@ -62,9 +62,10 @@ public class GraphTime extends AppCompatActivity {
 
         if (c.moveToFirst()) {
             do {
-                labels.add(new String (c.getString(12)));
+                labels.add(new String (c.getString(3)+c.getString(4)+c.getString(5)+'\n'
+                        +c.getString(6)));
                 Log.d("取得したCursor:", c.getString(12));
-            } while (c.moveToNext()/* && yc_num.moveToNext()*/);
+            } while (c.moveToNext());
         }
         c.close();
         dbAdapter.closeDB();    // DBを閉じる

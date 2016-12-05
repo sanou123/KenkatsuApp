@@ -36,7 +36,11 @@ public class DBAdapter {
 
     public final static String COL_ID_DATA = "data_id";             // id
     public final static String COL_NAME_ID = "name_id";         //名前に対するID
-    public final static String COL_DATE = "date";                //日時
+    public final static String COL_YEAR = "year";                //日時
+    public final static String COL_MONTH = "month";                //日時
+    public final static String COL_DAY = "day";                //日時
+    public final static String COL_TIMES_OF_DAY = "times_of_day";                //日時
+
     public final static String COL_HEART_RATE = "heart_rate";    // 心拍数
     public final static String COL_CALORIE_CONSUMPTION = "calorie_consumption";      // 消費カロリー
     public final static String COL_TOTAL_TIME = "total_time";        // 総走行時間
@@ -138,7 +142,8 @@ public class DBAdapter {
     }
 
 
-    public void saveDB_DATA(int name_id, String name ,String date, String heart_rate, double calorie_consumption,
+    public void saveDB_DATA(int name_id, String name ,String year, String month, String day,
+                            String times_of_day, String heart_rate, double calorie_consumption,
                             String total_time, String total_distance, String course_name, String time,
                             String avg_speed, String max_speed, String distance) {
 
@@ -148,7 +153,10 @@ public class DBAdapter {
             ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
             values.put(COL_NAME_ID, name_id);
             values.put(COL_NAME, name);
-            values.put(COL_DATE, date);
+            values.put(COL_YEAR, year);
+            values.put(COL_MONTH, month);
+            values.put(COL_DAY, day);
+            values.put(COL_TIMES_OF_DAY, times_of_day);
             values.put(COL_HEART_RATE, heart_rate);
             values.put(COL_CALORIE_CONSUMPTION, calorie_consumption);
             values.put(COL_TOTAL_TIME, total_time);
@@ -344,7 +352,11 @@ public class DBAdapter {
                     + COL_ID_DATA + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + COL_NAME_ID + " INTEGER NOT NULL,"
                     + COL_NAME + " TEXT NOT NULL ,"
-                    + COL_DATE + " TEXT NOT NULL ,"
+                    + COL_YEAR + " TEXT NOT NULL ,"
+                    + COL_MONTH + " TEXT NOT NULL ,"
+                    + COL_DAY + " TEXT NOT NULL ,"
+                    + COL_TIMES_OF_DAY + " TEXT NOT NULL ,"
+
                     + COL_HEART_RATE + " INTEGER NOT NULL,"
                     + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL,"
                     + COL_TOTAL_TIME + " INTEGER NOT NULL,"
