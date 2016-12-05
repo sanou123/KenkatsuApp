@@ -57,6 +57,27 @@ public class Dictionary extends AppCompatActivity {
             if(i == 6) {
                 parentData.put("title", "METs（めっつ）");
             }
+            if(i == 7) {
+                parentData.put("title", "最大心拍（さいだいしんぱく）");
+            }
+            if(i == 8) {
+                parentData.put("title", "BMI指数（びーえむあいしすう）");
+            }
+            if(i == 9) {
+                parentData.put("title", "メタボリックシンドローム");
+            }
+            if(i == 10) {
+                parentData.put("title", "ロコモティブシンドローム");
+            }
+            if(i == 11) {
+                parentData.put("title", "中性脂肪（ちゅうせいしぼう）");
+            }
+            if(i == 12) {
+                parentData.put("title", "生活習慣病（生活習慣病）");
+            }
+            if(i == 13) {
+                parentData.put("title", "高トリグリセライド血症（こうとりぐりせらいどけっしょう）");
+            }
             // 親ノードのリストに内容を格納
             parentList.add(parentData);
         }
@@ -90,7 +111,28 @@ public class Dictionary extends AppCompatActivity {
                     childData.put("TITLE", "運動後心拍によって運動の種類が変わります。\n軽い運動は心拍数が110bpmほど、110～149bpmほどでは有酸素運動、150以上で無酸素運動と言われています。");
                 }
                 if(i == 6) {
-                    childData.put("TITLE", "MITS");
+                    childData.put("TITLE", "「Metabolic equivalents」の略で、活動・運動を行った時に安静状態の何倍の代謝（カロリー消費）をしているかを表します。");
+                }
+                if(i == 7) {
+                    childData.put("TITLE", "最大心拍数の上限のことです。年齢ごとにおおよその上限があり220-年齢で求めることがでできます。最大値の6割ほどの心拍数がダイエットに効果的です。");
+                }
+                if(i == 8) {
+                    childData.put("TITLE", "[体重(kg)]÷[身長(m)の2乗]で算出される値です。肥満や低体重（やせ）の判定に用いられます。正常値は18.5以上25未満です。");
+                }
+                if(i == 9) {
+                    childData.put("TITLE", "内臓脂肪型肥満（内臓肥満・腹部肥満）に高血糖・高血圧・脂質異常症のうち2つ以上の症状が一度に出ている状態です。");
+                }
+                if(i == 10) {
+                    childData.put("TITLE", "骨、関節、筋肉などの運動器の働きが衰えることで自立した生活を送れなくなる状態です。");
+                }
+                if(i == 11) {
+                    childData.put("TITLE", "肉や魚、食用油など食品中の脂質や、体脂肪の大部分を占める物質です。エネルギー源になりますが摂りすぎると生活習慣病を引き起こします。");
+                }
+                if(i == 12) {
+                    childData.put("TITLE", "食事や運動・喫煙・飲酒・ストレスなどの生活習慣が深く関与し、発症の原因となる疾患の総称です。");
+                }
+                if(i == 13) {
+                    childData.put("TITLE", "血液中の中性脂肪の値が150mg/dl以上の状態のことです。メタボリックシンドロームの診断基準でもあります。");
                 }
                 // 子ノードのリストに文字を格納
                 childList.add(childData);

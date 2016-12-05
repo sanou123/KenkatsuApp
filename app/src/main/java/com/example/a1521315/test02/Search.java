@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 /**
@@ -21,7 +23,14 @@ public class Search extends Activity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             setContentView(R.layout.search);
 
-            TextView textView = (TextView)findViewById(R.id.textView);
+            TextView tv = (TextView)findViewById(R.id.tv);
+            tv.setText("ツイート検索結果");
+
+            WebView myWebView = (WebView) findViewById(R.id.web1);
+            myWebView.setWebViewClient(new WebViewClient());
+            myWebView.loadUrl("https://twitter.com/search?q=＃けんかつAPP");
+
+            /*TextView textView = (TextView)findViewById(R.id.textView);
             textView.setText("ツイッター検索準備中");
 
             Intent intent = new Intent( this, MenuSelect.class );//kaede_jishoブランチでSelectに変更したらエラー起きたから戻した
@@ -29,7 +38,7 @@ public class Search extends Activity {
 
             Uri uri = Uri.parse("https://twitter.com/search?q=＃けんかつAPP");
             Intent i = new Intent(Intent.ACTION_VIEW,uri);
-            startActivity(i);
+            startActivity(i);*/
 
         }
 
