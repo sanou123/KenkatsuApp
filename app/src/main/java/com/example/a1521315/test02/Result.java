@@ -21,7 +21,7 @@ public class Result extends Activity {
     String avg;
     String max;
     String time;
-    String cal;
+    double cal;
 
     /** Called when the activity is first created. */
     @Override
@@ -54,7 +54,8 @@ public class Result extends Activity {
         TextView texttime = (TextView)findViewById(R.id.time);
         texttime.setText(time);
         TextView textcal = (TextView)findViewById(R.id.cal);
-        textcal.setText(cal);
+        String stringal = new Double(cal).toString();
+        textcal.setText(stringal);
 
 
         btn_back.setOnClickListener(new View.OnClickListener() {

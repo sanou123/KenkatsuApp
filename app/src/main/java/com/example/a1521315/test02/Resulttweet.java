@@ -19,7 +19,7 @@ public class Resulttweet extends Activity{
     String avg;
     String max;
     String time;
-    String cal;
+    double cal;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
