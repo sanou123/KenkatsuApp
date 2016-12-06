@@ -172,6 +172,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         holder.addCallback(this);
 
         globals = (Globals)this.getApplication();
+        globals.DriveDataInit();//グローバル変数初期化
 
         tSpeedDec = (TextView) findViewById(R.id.textSpeedDec);
         tSpeedDec.setText(".0");
@@ -192,7 +193,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tSpeed = (TextView) findViewById(R.id.textSpeed);
         tSpeed.setText("0.0");
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText("デバッグ用テキスト1");
+        tDebug1.setText(globals.maxheartbeat.toString());
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
         tDebug2.setText("デバッグ用テキスト2");
 
@@ -282,6 +283,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
+
     }//onCreateここまで
 
 
