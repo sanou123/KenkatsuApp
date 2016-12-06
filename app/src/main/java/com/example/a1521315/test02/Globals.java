@@ -31,4 +31,14 @@ public class Globals extends Application {
     static String age;
     static String deal_weight;
 
+    public void DriveDataInit(){
+        coursename = "Init";
+        mileage = "0";
+        maxheartbeat = "0";
+        avg = "0";
+        max = "0";
+        time = "0";
+        cal = 0.0;
+    }
+
 }
