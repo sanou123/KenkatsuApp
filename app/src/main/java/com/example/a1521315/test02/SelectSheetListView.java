@@ -17,7 +17,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,26 +82,28 @@ public class SelectSheetListView extends AppCompatActivity {
                         // IDを取得する
                         //myListItem = items.get(position);
                         //String listName = myListItem.getName();
-                int NameID = myListItem.getUser_id();
-                String Sex = myListItem.getSex();
-                String Weight = myListItem.getWeight();
-                String Height = myListItem.getHeight();
-                double Bmi = myListItem.getBmi();
-                double ideal_weight = myListItem.getIdeal_weight();
+                        int NameID = myListItem.getUser_id();
+                        String Sex = myListItem.getSex();
+                        String Weight = myListItem.getWeight();
+                        String Height = myListItem.getHeight();
+                        double Bmi = myListItem.getBmi();
+                        double ideal_weight = myListItem.getIdeal_weight();
 
 
-                //int listId =  myListItem.getUser_id();//################
-                //String columns = listName + "さんが選択されました";
-                //Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
-                //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
-                //intent.putExtra("SELECTED_DATA",listName);
-                //globals.now_user = listName;
-                globals.name_id = String.valueOf(NameID);
-                globals.sex = Sex;
-                globals.weight = Weight;
-                globals.height = Height;
-                globals.bmi = Bmi;
-                globals.ideal_weight = ideal_weight;
+                        //int listId =  myListItem.getUser_id();//################
+                        //String columns = listName + "さんが選択されました";
+                        //Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
+                        //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
+                        //intent.putExtra("SELECTED_DATA",listName);
+                        //globals.now_user = listName;
+                        globals.name_id = String.valueOf(NameID);
+                        globals.sex = Sex;
+                        globals.weight = Weight;
+                        globals.height = Height;
+                        globals.bmi = Bmi;
+                        globals.ideal_weight = ideal_weight;
+                        Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
+                        startActivity(intent);
 
                     }
                 });
@@ -142,7 +143,7 @@ public class SelectSheetListView extends AppCompatActivity {
 
                         dbAdapter.openDB();     // DBの読み込み(読み書きの方)
                         dbAdapter.selectDelete(String.valueOf(listId));     // DBから取得したIDが入っているデータを削除する
-                       // dbAdapter.delete("MyList", "_id=1", null);
+                        // dbAdapter.delete("MyList", "_id=1", null);
                         dbAdapter.allDelete();
                         Log.d("Long click : ", String.valueOf(listId));
                         dbAdapter.closeDB();    // DBを閉じる
@@ -177,10 +178,10 @@ public class SelectSheetListView extends AppCompatActivity {
                 Cursor c = dbAdapter.getDB(columns);
                 c.moveToFirst();
                 if ( c.getInt(0)  < 6) {    */
-                    Intent intent = new Intent();
-                    intent.setClassName("com.example.a1521315.test02",
-                            "com.example.a1521315.test02.MainUser");
-                    startActivity(intent);
+                Intent intent = new Intent();
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.MainUser");
+                startActivity(intent);
 
          /*           c.close();
                     dbAdapter.closeDB();    // DBを閉じる
