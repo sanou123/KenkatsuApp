@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
@@ -898,13 +897,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
-
-                    //Thread MoveMe = new Thread(new MoveMeTask());
-                    //MoveMe.start();
-                    //Thread TestMileageTask = new Thread(new MileageTask());
-                    //TestMileageTask.start();
-
-
                 }
             });
         }
@@ -946,7 +938,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //走行距離タスク
+    //走行距離タスク//菅原if間違っての変更
     public class MileageTask implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -957,16 +949,16 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     tMileage.setText(String.format("%.2f",f3));
                     if(f3 < 10.00) {
                         //0.00~9.99までの処理
-                        tMileageInt.setText(String.format("%.2f",f3).substring(0,1));
-                        tMileageDec.setText(String.format("%.2f",f3).substring(1,4));
+                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 1));
+                        tMileageDec.setText(String.format("%.2f",f3).substring(1, 4));
                     }else if(f3 < 100.00){
                         //10.00~99.99までの処理
-                        tMileageInt.setText(String.format("%.1f", (float) (speedCount * 10)).substring(0, 2));
-                        tMileageDec.setText(String.format("%.1f", (float) (speedCount * 10)).substring(2, 5));
+                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 2));
+                        tMileageDec.setText(String.format("%.2f",f3).substring(2, 5));
                     }else{
                         //110.00~999.99までの処理
-                        tMileageInt.setText(String.format("%.1f", (float) (speedCount * 10)).substring(0,3));
-                        tMileageDec.setText(String.format("%.1f", (float) (speedCount * 10)).substring(3, 6));
+                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 3));
+                        tMileageDec.setText(String.format("%.2f",f3).substring(3, 6));
                     }
                 }
             });
@@ -1000,7 +992,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //針を0にするタスク//菅原変更
+    //針を0にするタスク
     public class BothNeedlesToZero implements Runnable {
         private double angle = 0.0;
         public BothNeedlesToZero(double angle){
@@ -1017,7 +1009,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //速度の針のタスク//菅原変更
+    //速度の針のタスク
     public class SpeedMeterNeedle implements Runnable {
         private double angle = 0.0;
         public SpeedMeterNeedle(double angle){
@@ -1033,7 +1025,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //心拍の針のタスク//菅原変更
+    //心拍の針のタスク
     public class HeartbeatMeterNeedle implements Runnable {
         private double angle = 0.0;
         public HeartbeatMeterNeedle(double angle){
@@ -1049,46 +1041,49 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原変更
+    //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
-                if(speedCount < 0.1){
-                    speedCount = speedCount + 0.1;
-                    speedMeterAngle = speedMeterAngle + 4.52;
-                }else if(speedCount < 5){
-                    speedCount = speedCount + 0.01;
-                    speedMeterAngle = speedMeterAngle + 0.452;
-                }else if(speedCount >= 5){
-                    //意味わからないほど早くされるとクラッシュする対策
-                    speedCount = 5.00;
-                    speedMeterAngle = maxNeedle;
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = speedCount + 0.1;
+                        speedMeterAngle = speedMeterAngle + 4.52;
+                    } else if (speedCount < 5) {
+                        speedCount = speedCount + 0.01;
+                        speedMeterAngle = speedMeterAngle + 0.452;
+                    } else if (speedCount >= 5) {
+                        //意味わからないほど早くされるとクラッシュする対策
+                        speedCount = 5.00;
+                        speedMeterAngle = maxNeedle;
+                    }
+                    Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
+                    SetNeedleUp.start();
+                    Thread SpeedUp = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedUp.start();
                 }
-                Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-                SetNeedleUp.start();
-                Thread SpeedUp = new Thread(new SpeedMeterTask((float)speedCount));
-                SpeedUp.start();
                 return true;
             }
         }
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                if(speedCount < 0.1){
-                    speedCount = 0.00;
-                    speedMeterAngle = zeroNeedle;
-                } else if(speedCount <= 0.1){
-                    speedCount = speedCount - 0.1;
-                    speedMeterAngle = speedMeterAngle - 4.52;
-
-                }else if(speedCount >= 0.1){
-                    speedCount = speedCount - 0.01;
-                    speedMeterAngle = speedMeterAngle - 0.452;
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = 0.00;
+                        speedMeterAngle = zeroNeedle;
+                    } else if (speedCount <= 0.1) {
+                        speedCount = speedCount - 0.1;
+                        speedMeterAngle = speedMeterAngle - 4.52;
+                    } else if (speedCount >= 0.1) {
+                        speedCount = speedCount - 0.01;
+                        speedMeterAngle = speedMeterAngle - 0.452;
+                    }
+                    Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
+                    SetNeedleDown.start();
+                    Thread SpeedDown = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedDown.start();
                 }
-                Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-                SetNeedleDown.start();
-                Thread SpeedDown = new Thread(new SpeedMeterTask((float)speedCount));
-                SpeedDown.start();
                 return true;
             }
         }

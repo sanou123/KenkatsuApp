@@ -946,7 +946,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
     }
 
-    //走行距離タスク
+    //走行距離タスク//菅原if間違っての変更
     public class MileageTask implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -957,21 +957,16 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     tMileage.setText(String.format("%.2f",f3));
                     if(f3 < 10.00) {
                         //0.00~9.99までの処理
-                        tMileageInt.setText(String.format("%.2f",f3).substring(0,1));
-                        tMileageDec.setText(String.format("%.2f",f3).substring(1,4));
+                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 1));
+                        tMileageDec.setText(String.format("%.2f",f3).substring(1, 4));
                     }else if(f3 < 100.00){
                         //10.00~99.99までの処理
-                        tMileageInt.setText(String.format("%.1f", (float) (speedCount * 10)).substring(0, 2));
-                        tMileageDec.setText(String.format("%.1f", (float) (speedCount * 10)).substring(2, 5));
+                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 2));
+                        tMileageDec.setText(String.format("%.2f",f3).substring(2, 5));
                     }else{
                         //110.00~999.99までの処理
-                        tMileageInt.setText(String.format("%.1f", (float) (speedCount * 10)).substring(0,3));
-                        tMileageDec.setText(String.format("%.1f", (float) (speedCount * 10)).substring(3, 6));
-                    }
-                    if(globals.timflg1 == 0){
-                        if(f3 >= 1){
-                            globals.timflg1 = 1;
-                        }
+                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 3));
+                        tMileageDec.setText(String.format("%.2f",f3).substring(3, 6));
                     }
                 }
             });
@@ -1059,41 +1054,44 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
-                if(speedCount < 0.1){
-                    speedCount = speedCount + 0.1;
-                    speedMeterAngle = speedMeterAngle + 4.52;
-                }else if(speedCount < 5){
-                    speedCount = speedCount + 0.01;
-                    speedMeterAngle = speedMeterAngle + 0.452;
-                }else if(speedCount >= 5){
-                    //意味わからないほど早くされるとクラッシュする対策
-                    speedCount = 5.00;
-                    speedMeterAngle = maxNeedle;
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = speedCount + 0.1;
+                        speedMeterAngle = speedMeterAngle + 4.52;
+                    } else if (speedCount < 5) {
+                        speedCount = speedCount + 0.01;
+                        speedMeterAngle = speedMeterAngle + 0.452;
+                    } else if (speedCount >= 5) {
+                        //意味わからないほど早くされるとクラッシュする対策
+                        speedCount = 5.00;
+                        speedMeterAngle = maxNeedle;
+                    }
+                    Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
+                    SetNeedleUp.start();
+                    Thread SpeedUp = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedUp.start();
                 }
-                Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-                SetNeedleUp.start();
-                Thread SpeedUp = new Thread(new SpeedMeterTask((float)speedCount));
-                SpeedUp.start();
                 return true;
             }
         }
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                if(speedCount < 0.1){
-                    speedCount = 0.00;
-                    speedMeterAngle = zeroNeedle;
-                } else if(speedCount <= 0.1){
-                    speedCount = speedCount - 0.1;
-                    speedMeterAngle = speedMeterAngle - 4.52;
-
-                }else if(speedCount >= 0.1){
-                    speedCount = speedCount - 0.01;
-                    speedMeterAngle = speedMeterAngle - 0.452;
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = 0.00;
+                        speedMeterAngle = zeroNeedle;
+                    } else if (speedCount <= 0.1) {
+                        speedCount = speedCount - 0.1;
+                        speedMeterAngle = speedMeterAngle - 4.52;
+                    } else if (speedCount >= 0.1) {
+                        speedCount = speedCount - 0.01;
+                        speedMeterAngle = speedMeterAngle - 0.452;
+                    }
+                    Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
+                    SetNeedleDown.start();
+                    Thread SpeedDown = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedDown.start();
                 }
-                Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-                SetNeedleDown.start();
-                Thread SpeedDown = new Thread(new SpeedMeterTask((float)speedCount));
-                SpeedDown.start();
                 return true;
             }
         }
