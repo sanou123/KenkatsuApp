@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.net.Uri;
@@ -55,6 +56,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tMileageDec;//走行距離の変数　小数
     TextView tMileageInt;//走行距離の変数　整数
     TextView tHeartbeat;//心拍の変数
+    TextView tTargetHeartbeat;//目標心拍数の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
 
@@ -170,13 +172,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tSpeedDec = (TextView) findViewById(R.id.textSpeedDec);
         tSpeedDec.setText(".0");
         tSpeedInt = (TextView) findViewById(R.id.textSpeedInt);
-        tSpeedInt.setText("0");
+        tSpeedInt.setText("00");
         tMileageDec = (TextView) findViewById(R.id.textMileageDec);
         tMileageDec.setText(".00");
         tMileageInt = (TextView) findViewById(R.id.textMileageInt);
-        tMileageInt.setText("0");
+        tMileageInt.setText("000");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
         tHeartbeat.setText("000");
+        tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
+        tTargetHeartbeat.setText("000");
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
 
@@ -186,9 +190,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tSpeed = (TextView) findViewById(R.id.textSpeed);
         tSpeed.setText("0.0");
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText(globals.maxheartbeat.toString());
+        tDebug1.setText("歳");
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        tDebug2.setText("デバッグ用テキスト2");
+        tDebug2.setText("デバッグ用2");
+
+         Change7Seg();//7セグフォントに変換
 
         /*シークバーに関する奴*/
         imageMe = (ImageView)findViewById(R.id.image_view_me);
@@ -211,8 +217,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         ImageView timeDisplay = (ImageView)findViewById(R.id.image_TimeDisplay);
         timeDisplay.setImageResource(R.drawable.time);
 
-        Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(zeroNeedle));           //変えた
-        SetBothNeedlesToZero.start();//2つの針をメーター0に戻す                                     //変えた
+        //針をメーター0に戻す
+        Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(zeroNeedle));
+        SetBothNeedlesToZero.start();//2つの針をメーター0に戻す
 
         //ボタン押したときメソッドの宣言
         findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
@@ -276,8 +283,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //******************************************************************************************
 
     }//onCreateここまで
-
-
 
     // 再生完了時の処理
     @Override
@@ -1039,6 +1044,36 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 }
             });
         }
+    }
+
+    //フォントを7セグにする
+    public void Change7Seg(){
+        /*7セグ表示にする処理*/
+        // フォントを取得
+        Typeface tf = Typeface.createFromAsset(getAssets(), "dseg7classic-bold.ttf");//7セグフォント
+        tTimer.setTypeface(tf);
+        tTimer.setTextSize(32.0f);
+        tTimer.setPadding(0,0,0,15);
+        //心拍メーター
+        tTargetHeartbeat.setTypeface(tf);
+        tTargetHeartbeat.setTextSize(30.0f);
+        tTargetHeartbeat.setPadding(2,0,0,14);
+        tHeartbeat.setTypeface(tf);
+        tHeartbeat.setTextSize(40.0f);
+        tHeartbeat.setPadding(0,0,12,30);
+        //スピードメーター
+        tMileageDec.setTypeface(tf);
+        tMileageDec.setTextSize(18.0f);
+        tMileageDec.setPadding(0,0,14,24);
+        tMileageInt.setTypeface(tf);
+        tMileageInt.setTextSize(38.0f);
+        tMileageInt.setPadding(4,0,0,14);
+        tSpeedDec.setTypeface(tf);
+        tSpeedDec.setTextSize(26.0f);
+        tSpeedDec.setPadding(0,0,50,15);
+        tSpeedInt.setTypeface(tf);
+        tSpeedInt.setTextSize(45.0f);
+        tSpeedInt.setPadding(2,0,0,8);
     }
 
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
