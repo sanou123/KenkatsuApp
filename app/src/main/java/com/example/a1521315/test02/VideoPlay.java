@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.NumberFormat;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -67,12 +68,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
     String mediaPath = null;//動画データ
     private ImageView imageMe;//自機イメージ用の変数
-    double TotalMileage = 0;//総走行距離用,選択されたコースごとに変わる
-    double speedcount = 0.0;//速度用
+    double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
+    double speedCount = 0.0;//速度用
 
-    Bitmap bitmapSpeedMeterNeedle;//bitmap形式にして針を回すので必要
     ImageView imageSpeedMeterNeedle;//針用のimageView
-    Bitmap bitmapHeartbeatMeterNeedle;//bitmap形式にして針を回すので必要
     ImageView imageHeartbeatMeterNeedle;//針用のimageView
 
     private static final String TAG = "VideoPlayer";
@@ -191,8 +190,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tDebug1.setText(globals.maxheartbeat.toString());
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
         tDebug2.setText("デバッグ用テキスト2");
-        findViewById(R.id.buttonPlus).setOnClickListener(PlusClickListener);
-        findViewById(R.id.buttonMinus).setOnClickListener(MinusClickListener);
 
         /*シークバーに関する奴*/
         imageMe = (ImageView)findViewById(R.id.image_view_me);
@@ -230,22 +227,22 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         if(CourseNum.equals("0")) {
             tCourse.setText("ポリテク→大地");
             mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
-            TotalMileage = 10.4;
+            totalMileage = 10.4;
             raw = 0;
         }else if(CourseNum.equals("1")) {
             tCourse.setText("東京→御殿場");
             mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
-            TotalMileage = 83.7;
+            totalMileage = 83.7;
             raw = 0;
         }else if(CourseNum.equals("2")) {
             tCourse.setText("鳴子");
             mediaPath = "/_naruko.mp4";//実機9のストレージにあるファイルを指定
-            TotalMileage = 1.3;
+            totalMileage = 1.3;
             raw = 0;
         }else if(CourseNum.equals("3")) {
             tCourse.setText("デバッグ用");
             mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
-            TotalMileage = 10.0;
+            totalMileage = 10.0;
             raw = 1;
         }
 
@@ -261,7 +258,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-/*
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -278,7 +275,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
-*/
+
     }//onCreateここまで
 
 
@@ -742,65 +739,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     };
 
-    View.OnClickListener PlusClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(speedcount < 0){
-                speedcount = 0.00;
-                speedMeterAngle = zeroNeedle;
-            } else if(speedcount < 0.1){
-                speedcount = speedcount + 0.1;
-                speedMeterAngle = speedMeterAngle + 4.52;
-            }else if(speedcount <= 5){
-                speedcount = speedcount + 0.01;
-                speedMeterAngle = speedMeterAngle + 0.452;
-            }else{
-                speedcount = 5.00;
-                speedMeterAngle = maxNeedle;
-            }
-            if (speedcount > 5){//意味わからないほど早くされるとクラッシュする対策
-                speedcount = 5;
-            }
-            Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-            SetNeedleUp.start();
-            Thread SetNeedleUp2 = new Thread(new HeartbeatMeterNeedle(speedMeterAngle));
-            SetNeedleUp2.start();
-            if((speedcount * 10) < 10.0) {
-                tSpeedInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0, 1));
-                tSpeedDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(1, 3));
-            }else{
-                tSpeedInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0, 2));
-                tSpeedDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(2, 4));
-            }
-            //Thread SpeedUp = new Thread(new SpeedMeterTask((float)speedcount));
-            //SpeedUp.start();
-        }
-    };
-    View.OnClickListener MinusClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            speedcount = speedcount - 0.01;
-            speedMeterAngle = speedMeterAngle - 0.452;
-
-            if (speedcount <= 0.01) {
-                speedcount = 0.00;
-            }
-            Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-            SetNeedleDown.start();
-            Thread SetNeedleDown2 = new Thread(new HeartbeatMeterNeedle(speedMeterAngle));
-            SetNeedleDown2.start();
-            if((speedcount * 10) < 10.0) {
-                tSpeedInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0, 1));
-                tSpeedDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(1, 3));
-            }else{
-                tSpeedInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0, 2));
-                tSpeedDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(2, 4));
-            }
-            //Thread SpeedDown = new Thread(new SpeedMeterTask((float)speedcount));
-            //SpeedDown.start();
-        }
-    };
-
     //Connectボタンを押したときの処理
     @Override
     public void onClick(View v) {
@@ -850,8 +788,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(zeroNeedle));           //変えた菅原
         SetBothNeedlesToZero.start();//2つの針を0に戻す                                             //変えた菅原
         findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
-        speedcount = 0.0;
-        tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
+        speedCount = 0.0;
+        tSpeed.setText(String.format("%.1f", (float) (speedCount*10)));
         tSpeedInt.setText("0");
         tSpeedDec.setText(".0");
         mp.setPlaybackParams(params);
@@ -881,10 +819,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         seekbarfuture.cancel(true);
-        speedcount = 0;
-        params.setSpeed((float) speedcount);
+        speedCount = 0.0;
+        params.setSpeed((float) speedCount);
         mp.setPlaybackParams(params);
-        tSpeed.setText(String.format("%.1f", (float) (speedcount*10)));
+        tSpeed.setText(String.format("%.1f", (float) (speedCount*10)));
         tSpeedInt.setText("0");
         tSpeedDec.setText(".0");
 
@@ -988,17 +926,19 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //自機の移動
+    //自機の移動//菅原変更
     public class MoveMeTask implements Runnable {
+        final int marginTopMe = 545;//video_play.xmlのスタート地点にmeがいる
+        final int marginTopGhost = 45;//video_play.xmlのスタート地点にghostがいる
+        //meとghostのMarginTopの値を入れてください↑
+        final  int barDistance = marginTopMe-marginTopGhost;//560-45=515
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    //再生終了時に死ぬ原因がここにあります
-                    //おいおい直す
-                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * 480;//barのpx数
-                    getPlayTime = 450 - getPlayTime;
-                    getPlayTime = getPlayTime + 45;
+                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * barDistance;//barのpx数
+                    getPlayTime = barDistance - getPlayTime;
+                    getPlayTime = getPlayTime + marginTopGhost;//画像レイアウトの高さの都合上MarginTop=0はゴール地点ではないので調整しなくてはいけない　
                     imageMe.setY(getPlayTime);
 
                 }
@@ -1013,7 +953,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void run() {
                     //走行距離表示↓
-                    double f3 = TotalMileage / ( (double)mp.getDuration() / (double)mp.getCurrentPosition());
+                    double f3 = totalMileage / ( (double)mp.getDuration() / (double)mp.getCurrentPosition());
                     tMileage.setText(String.format("%.2f",f3));
                     if(f3 < 10.00) {
                         //0.00~9.99までの処理
@@ -1021,12 +961,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         tMileageDec.setText(String.format("%.2f",f3).substring(1,4));
                     }else if(f3 < 100.00){
                         //10.00~99.99までの処理
-                        tMileageInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0, 2));
-                        tMileageDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(2, 5));
+                        tMileageInt.setText(String.format("%.1f", (float) (speedCount * 10)).substring(0, 2));
+                        tMileageDec.setText(String.format("%.1f", (float) (speedCount * 10)).substring(2, 5));
                     }else{
                         //110.00~999.99までの処理
-                        tMileageInt.setText(String.format("%.1f", (float) (speedcount * 10)).substring(0,3));
-                        tMileageDec.setText(String.format("%.1f", (float) (speedcount * 10)).substring(3, 6));
+                        tMileageInt.setText(String.format("%.1f", (float) (speedCount * 10)).substring(0,3));
+                        tMileageDec.setText(String.format("%.1f", (float) (speedCount * 10)).substring(3, 6));
                     }
                 }
             });
@@ -1060,7 +1000,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //針を0にするタスク
+    //針を0にするタスク//菅原変更
     public class BothNeedlesToZero implements Runnable {
         private double angle = 0.0;
         public BothNeedlesToZero(double angle){
@@ -1077,7 +1017,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //速度の針のタスク
+    //速度の針のタスク//菅原変更
     public class SpeedMeterNeedle implements Runnable {
         private double angle = 0.0;
         public SpeedMeterNeedle(double angle){
@@ -1093,7 +1033,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //心拍の針のタスク
+    //心拍の針のタスク//菅原変更
     public class HeartbeatMeterNeedle implements Runnable {
         private double angle = 0.0;
         public HeartbeatMeterNeedle(double angle){
@@ -1109,45 +1049,45 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //ボリュームキーの操作(完成版はここで速度変更はできなくする)
+    //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原変更
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
-                if(speedcount < 0.1){
-                    speedcount = speedcount + 0.1;
+                if(speedCount < 0.1){
+                    speedCount = speedCount + 0.1;
                     speedMeterAngle = speedMeterAngle + 4.52;
-                }else if(speedcount < 5){
-                    speedcount = speedcount + 0.01;
+                }else if(speedCount < 5){
+                    speedCount = speedCount + 0.01;
                     speedMeterAngle = speedMeterAngle + 0.452;
-                }else if(speedcount >= 5){
+                }else if(speedCount >= 5){
                     //意味わからないほど早くされるとクラッシュする対策
-                    speedcount = 5.00;
+                    speedCount = 5.00;
                     speedMeterAngle = maxNeedle;
                 }
                 Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
                 SetNeedleUp.start();
-                Thread SpeedUp = new Thread(new SpeedMeterTask((float)speedcount));
+                Thread SpeedUp = new Thread(new SpeedMeterTask((float)speedCount));
                 SpeedUp.start();
                 return true;
             }
         }
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                if(speedcount < 0.1){
-                    speedcount = 0.00;
+                if(speedCount < 0.1){
+                    speedCount = 0.00;
                     speedMeterAngle = zeroNeedle;
-                } else if(speedcount <= 0.1){
-                    speedcount = speedcount - 0.1;
+                } else if(speedCount <= 0.1){
+                    speedCount = speedCount - 0.1;
                     speedMeterAngle = speedMeterAngle - 4.52;
 
-                }else if(speedcount >= 0.1){
-                    speedcount = speedcount - 0.01;
+                }else if(speedCount >= 0.1){
+                    speedCount = speedCount - 0.01;
                     speedMeterAngle = speedMeterAngle - 0.452;
                 }
                 Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
                 SetNeedleDown.start();
-                Thread SpeedDown = new Thread(new SpeedMeterTask((float)speedcount));
+                Thread SpeedDown = new Thread(new SpeedMeterTask((float)speedCount));
                 SpeedDown.start();
                 return true;
             }
