@@ -105,6 +105,9 @@
         <activity
             android:screenOrientation="landscape"
             android:name=".Login"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".TimeAttackVideoPlay"/>
     </application>
 
 </manifest>
