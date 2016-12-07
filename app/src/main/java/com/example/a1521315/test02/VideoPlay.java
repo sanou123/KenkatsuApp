@@ -920,17 +920,17 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //自機の移動//菅原変更
     public class MoveMeTask implements Runnable {
-        final int marginTopMe = 545;//video_play.xmlのスタート地点にmeがいる
-        final int marginTopGhost = 45;//video_play.xmlのスタート地点にghostがいる
+        final int startPoint = 545;//スタート地点の座標
+        final int endPoint = 45;//エンド地点の座標
         //meとghostのMarginTopの値を入れてください↑
-        final  int barDistance = marginTopMe-marginTopGhost;//560-45=515
+        final  int barDistance = startPoint - endPoint;//560-45=515
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * barDistance;//barのpx数
                     getPlayTime = barDistance - getPlayTime;
-                    getPlayTime = getPlayTime + marginTopGhost;//画像レイアウトの高さの都合上MarginTop=0はゴール地点ではないので調整しなくてはいけない　
+                    getPlayTime = getPlayTime + endPoint;//画像レイアウトの高さの都合上MarginTop=0はゴール地点ではないので調整しなくてはいけない　
                     imageMe.setY(getPlayTime);
 
                 }
