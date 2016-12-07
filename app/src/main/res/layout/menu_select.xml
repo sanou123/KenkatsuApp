@@ -8,6 +8,43 @@
 
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/TextLayout">
+
+        <TextView
+            android:id="@+id/title_user_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            android:text="-----さんのメニュー" />
+
+        <TextView
+            android:id="@+id/text_bmi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textColor="@android:color/black"
+            android:text="-----さんのBMIは-----"
+            android:layout_below="@+id/title_user_select"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="デバッグ用(なにか表示したいものがあればここにどうぞ)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_debug"
+            android:textSize="30sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@+id/text_bmi"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/BackKeyLayout"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
@@ -46,39 +83,6 @@
             android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:id="@+id/TextLayout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_height="50dp">
-
-    <TextView
-        android:id="@+id/title_user_select"
-        android:layout_width="0dip"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
-        tools:text="~さんのメニュー" />
-
-    <TextView
-        android:id="@+id/text_bmi"
-        android:layout_width="0dip"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/title_user_select"
-        android:textSize="30sp"
-        android:textColor="@android:color/black"
-        android:background="#00000000"
-        tools:text="～さんのBMIは～～～～" />
-
-    </LinearLayout>
 
     <GridLayout
         android:id="@+id/Menulayout"
