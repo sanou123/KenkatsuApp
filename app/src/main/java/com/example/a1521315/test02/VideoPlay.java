@@ -897,13 +897,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
-
-                    //Thread MoveMe = new Thread(new MoveMeTask());
-                    //MoveMe.start();
-                    //Thread TestMileageTask = new Thread(new MileageTask());
-                    //TestMileageTask.start();
-
-
                 }
             });
         }
@@ -945,7 +938,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //走行距離タスク
+    //走行距離タスク//菅原if間違っての変更
     public class MileageTask implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -956,16 +949,16 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     tMileage.setText(String.format("%.2f",f3));
                     if(f3 < 10.00) {
                         //0.00~9.99までの処理
-                        tMileageInt.setText(String.format("%.2f",f3).substring(0,1));
-                        tMileageDec.setText(String.format("%.2f",f3).substring(1,4));
+                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 1));
+                        tMileageDec.setText(String.format("%.2f",f3).substring(1, 4));
                     }else if(f3 < 100.00){
                         //10.00~99.99までの処理
-                        tMileageInt.setText(String.format("%.1f", (float) (speedCount * 10)).substring(0, 2));
-                        tMileageDec.setText(String.format("%.1f", (float) (speedCount * 10)).substring(2, 5));
+                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 2));
+                        tMileageDec.setText(String.format("%.2f",f3).substring(2, 5));
                     }else{
                         //110.00~999.99までの処理
-                        tMileageInt.setText(String.format("%.1f", (float) (speedCount * 10)).substring(0,3));
-                        tMileageDec.setText(String.format("%.1f", (float) (speedCount * 10)).substring(3, 6));
+                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 3));
+                        tMileageDec.setText(String.format("%.2f",f3).substring(3, 6));
                     }
                 }
             });
@@ -999,7 +992,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //針を0にするタスク//菅原変更
+    //針を0にするタスク
     public class BothNeedlesToZero implements Runnable {
         private double angle = 0.0;
         public BothNeedlesToZero(double angle){
@@ -1016,7 +1009,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //速度の針のタスク//菅原変更
+    //速度の針のタスク
     public class SpeedMeterNeedle implements Runnable {
         private double angle = 0.0;
         public SpeedMeterNeedle(double angle){
@@ -1032,7 +1025,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //心拍の針のタスク//菅原変更
+    //心拍の針のタスク
     public class HeartbeatMeterNeedle implements Runnable {
         private double angle = 0.0;
         public HeartbeatMeterNeedle(double angle){
@@ -1048,7 +1041,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原変更
+    //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
