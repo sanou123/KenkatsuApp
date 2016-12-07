@@ -193,7 +193,7 @@
 
                     <ImageView
                         android:id="@+id/image_Hari1"
-                        app:srcCompat="@drawable/hari4_45"
+                        app:srcCompat="@drawable/hari4"
                         android:visibility="visible"
                         android:scaleType="centerInside"
                         android:layout_marginRight="22px"
@@ -380,28 +380,6 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textG"
-                android:text="G"
-                android:textSize="50px"
-                android:textColor="@android:color/holo_orange_light"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginTop="0px"
-                android:layout_centerHorizontal="true"
-                android:visibility="invisible" />
-
-            <TextView
-                android:id="@+id/textS"
-                android:text="S"
-                android:textSize="50px"
-                android:textColor="@android:color/holo_orange_light"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginTop="560px"
-                android:layout_centerHorizontal="true"
-                android:visibility="invisible"/>
-
 
         </RelativeLayout>
 
@@ -465,6 +443,7 @@
                 android:layout_width="200dp"
                 android:layout_height="40dp"
                 android:layout_alignParentBottom="true" />
+
         </RelativeLayout>
 
     </RelativeLayout>
