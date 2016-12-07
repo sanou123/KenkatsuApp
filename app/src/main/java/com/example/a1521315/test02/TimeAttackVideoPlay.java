@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.net.Uri;
@@ -56,6 +57,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     TextView tMileageDec;//走行距離の変数　小数
     TextView tMileageInt;//走行距離の変数　整数
     TextView tHeartbeat;//心拍の変数
+    TextView tTargetHeartbeat;//目標心拍数の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
 
@@ -171,13 +173,15 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         tSpeedDec = (TextView) findViewById(R.id.textSpeedDec);
         tSpeedDec.setText(".0");
         tSpeedInt = (TextView) findViewById(R.id.textSpeedInt);
-        tSpeedInt.setText("0");
+        tSpeedInt.setText("00");
         tMileageDec = (TextView) findViewById(R.id.textMileageDec);
         tMileageDec.setText(".00");
         tMileageInt = (TextView) findViewById(R.id.textMileageInt);
-        tMileageInt.setText("0");
+        tMileageInt.setText("000");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
         tHeartbeat.setText("000");
+        tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
+        tTargetHeartbeat.setText("000");
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
 
@@ -190,6 +194,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         tDebug1.setText(globals.maxheartbeat.toString());
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
         tDebug2.setText("デバッグ用テキスト2");
+
+        Change7Seg();//7セグフォントに変換
 
         /*シークバーに関する奴*/
         imageMe = (ImageView)findViewById(R.id.image_view_me);
@@ -928,17 +934,17 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //自機の移動//菅原変更
     public class MoveMeTask implements Runnable {
-        final int marginTopMe = 545;//video_play.xmlのスタート地点にmeがいる
-        final int marginTopGhost = 45;//video_play.xmlのスタート地点にghostがいる
+        final int startPoint = 545;//スタート地点の座標
+        final int endPoint = 45;//エンド地点の座標
         //meとghostのMarginTopの値を入れてください↑
-        final  int barDistance = marginTopMe-marginTopGhost;//560-45=515
+        final  int barDistance = startPoint - endPoint;//560-45=515
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * barDistance;//barのpx数
                     getPlayTime = barDistance - getPlayTime;
-                    getPlayTime = getPlayTime + marginTopGhost;//画像レイアウトの高さの都合上MarginTop=0はゴール地点ではないので調整しなくてはいけない　
+                    getPlayTime = getPlayTime + endPoint;//画像レイアウトの高さの都合上MarginTop=0はゴール地点ではないので調整しなくてはいけない　
                     imageMe.setY(getPlayTime);
 
                 }
@@ -983,17 +989,19 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    if(mp != null) {
                     /*動画の再生速度を変えるのに必要なプログラム↓*/
-                    params.setSpeed((float)pSpeedCount);//再生速度変更
-                    mp.setPlaybackParams(params);
-                    //mp.start();
-                    tSpeed.setText(String.format("%.1f", (float) (pSpeedCount*10)));
-                    if((pSpeedCount * 10) < 10.0) {
-                        tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 1));
-                        tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(1, 3));
-                    }else{
-                        tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 2));
-                        tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(2, 4));
+                        params.setSpeed(pSpeedCount);//再生速度変更
+                        mp.setPlaybackParams(params);
+                        //mp.start();
+                        tSpeed.setText(String.format("%.1f", (float) (pSpeedCount * 10)));
+                        if ((pSpeedCount * 10) < 10.0) {
+                            tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 1));
+                            tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(1, 3));
+                        } else {
+                            tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 2));
+                            tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(2, 4));
+                        }
                     }
                 }
             });
@@ -1047,6 +1055,36 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 }
             });
         }
+    }
+
+    //フォントを7セグにする
+    public void Change7Seg(){
+        /*7セグ表示にする処理*/
+        // フォントを取得
+        Typeface tf = Typeface.createFromAsset(getAssets(), "dseg7classic-bold.ttf");//7セグフォント
+        tTimer.setTypeface(tf);
+        tTimer.setTextSize(32.0f);
+        tTimer.setPadding(0,0,0,15);
+        //心拍メーター
+        tTargetHeartbeat.setTypeface(tf);
+        tTargetHeartbeat.setTextSize(30.0f);
+        tTargetHeartbeat.setPadding(2,0,0,14);
+        tHeartbeat.setTypeface(tf);
+        tHeartbeat.setTextSize(40.0f);
+        tHeartbeat.setPadding(0,0,12,30);
+        //スピードメーター
+        tMileageDec.setTypeface(tf);
+        tMileageDec.setTextSize(18.0f);
+        tMileageDec.setPadding(0,0,14,24);
+        tMileageInt.setTypeface(tf);
+        tMileageInt.setTextSize(38.0f);
+        tMileageInt.setPadding(4,0,0,14);
+        tSpeedDec.setTypeface(tf);
+        tSpeedDec.setTextSize(26.0f);
+        tSpeedDec.setPadding(0,0,50,15);
+        tSpeedInt.setTypeface(tf);
+        tSpeedInt.setTextSize(45.0f);
+        tSpeedInt.setPadding(2,0,0,8);
     }
 
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)
