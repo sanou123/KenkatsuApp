@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
@@ -1054,41 +1053,44 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
-                if(speedCount < 0.1){
-                    speedCount = speedCount + 0.1;
-                    speedMeterAngle = speedMeterAngle + 4.52;
-                }else if(speedCount < 5){
-                    speedCount = speedCount + 0.01;
-                    speedMeterAngle = speedMeterAngle + 0.452;
-                }else if(speedCount >= 5){
-                    //意味わからないほど早くされるとクラッシュする対策
-                    speedCount = 5.00;
-                    speedMeterAngle = maxNeedle;
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = speedCount + 0.1;
+                        speedMeterAngle = speedMeterAngle + 4.52;
+                    } else if (speedCount < 5) {
+                        speedCount = speedCount + 0.01;
+                        speedMeterAngle = speedMeterAngle + 0.452;
+                    } else if (speedCount >= 5) {
+                        //意味わからないほど早くされるとクラッシュする対策
+                        speedCount = 5.00;
+                        speedMeterAngle = maxNeedle;
+                    }
+                    Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
+                    SetNeedleUp.start();
+                    Thread SpeedUp = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedUp.start();
                 }
-                Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-                SetNeedleUp.start();
-                Thread SpeedUp = new Thread(new SpeedMeterTask((float)speedCount));
-                SpeedUp.start();
                 return true;
             }
         }
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                if(speedCount < 0.1){
-                    speedCount = 0.00;
-                    speedMeterAngle = zeroNeedle;
-                } else if(speedCount <= 0.1){
-                    speedCount = speedCount - 0.1;
-                    speedMeterAngle = speedMeterAngle - 4.52;
-
-                }else if(speedCount >= 0.1){
-                    speedCount = speedCount - 0.01;
-                    speedMeterAngle = speedMeterAngle - 0.452;
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = 0.00;
+                        speedMeterAngle = zeroNeedle;
+                    } else if (speedCount <= 0.1) {
+                        speedCount = speedCount - 0.1;
+                        speedMeterAngle = speedMeterAngle - 4.52;
+                    } else if (speedCount >= 0.1) {
+                        speedCount = speedCount - 0.01;
+                        speedMeterAngle = speedMeterAngle - 0.452;
+                    }
+                    Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
+                    SetNeedleDown.start();
+                    Thread SpeedDown = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedDown.start();
                 }
-                Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-                SetNeedleDown.start();
-                Thread SpeedDown = new Thread(new SpeedMeterTask((float)speedCount));
-                SpeedDown.start();
                 return true;
             }
         }

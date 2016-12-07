@@ -83,11 +83,26 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true">
 
+
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/heartbeatmeter2"
                     android:id="@+id/image_HeartBeatMeter"/>
+                <TextView
+                    android:id="@+id/textTargetHeartbeat"
+                    android:text="128"
+                    android:textSize="90px"
+                    android:textColor="@android:color/holo_green_light"
+                    android:gravity="bottom|right"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="180px"
+                    android:layout_marginStart="150px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                     />
 
                 <TextView
                     android:id="@+id/textHeartbeat"
@@ -381,24 +396,6 @@
             </RelativeLayout>
 
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/PauseLayout"
-            android:layout_width="150dp"
-            android:layout_height="80dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true">
-
-            <Button
-                android:id="@+id/buttonPause"
-                android:text="ポーズ"
-                android:textSize="80px"
-                android:layout_width="150dp"
-                android:layout_height="80dp"
-                android:visibility="invisible"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true" />
         </RelativeLayout>
 
         <RelativeLayout
