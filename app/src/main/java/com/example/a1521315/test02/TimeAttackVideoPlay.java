@@ -989,17 +989,19 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    if(mp != null) {
                     /*動画の再生速度を変えるのに必要なプログラム↓*/
-                    params.setSpeed((float)pSpeedCount);//再生速度変更
-                    mp.setPlaybackParams(params);
-                    //mp.start();
-                    tSpeed.setText(String.format("%.1f", (float) (pSpeedCount*10)));
-                    if((pSpeedCount * 10) < 10.0) {
-                        tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 1));
-                        tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(1, 3));
-                    }else{
-                        tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 2));
-                        tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(2, 4));
+                        params.setSpeed(pSpeedCount);//再生速度変更
+                        mp.setPlaybackParams(params);
+                        //mp.start();
+                        tSpeed.setText(String.format("%.1f", (float) (pSpeedCount * 10)));
+                        if ((pSpeedCount * 10) < 10.0) {
+                            tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 1));
+                            tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(1, 3));
+                        } else {
+                            tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 2));
+                            tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(2, 4));
+                        }
                     }
                 }
             });

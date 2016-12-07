@@ -69,6 +69,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
     String mediaPath = null;//動画データ
     private ImageView imageMe;//自機イメージ用の変数
+    private ImageView imageGhost;
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
 
@@ -199,6 +200,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         /*シークバーに関する奴*/
         imageMe = (ImageView)findViewById(R.id.image_view_me);
         imageMe.setImageResource(R.drawable.me);
+        imageGhost = (ImageView)findViewById(R.id.image_view_ghost);
+        imageGhost.setImageResource(R.drawable.ghost);
         ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
         imageView1.setImageResource(R.drawable.bar0);
 
@@ -943,7 +946,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //走行距離タスク//菅原if間違っての変更
+    //走行距離タスク
     public class MileageTask implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -980,17 +983,19 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    if(mp != null) {
                     /*動画の再生速度を変えるのに必要なプログラム↓*/
-                    params.setSpeed(pSpeedCount);//再生速度変更
-                    mp.setPlaybackParams(params);
-                    //mp.start();
-                    tSpeed.setText(String.format("%.1f", (float) (pSpeedCount*10)));
-                    if((pSpeedCount * 10) < 10.0) {
-                        tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 1));
-                        tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(1, 3));
-                    }else{
-                        tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 2));
-                        tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(2, 4));
+                        params.setSpeed(pSpeedCount);//再生速度変更
+                        mp.setPlaybackParams(params);
+                        //mp.start();
+                        tSpeed.setText(String.format("%.1f", (float) (pSpeedCount * 10)));
+                        if ((pSpeedCount * 10) < 10.0) {
+                            tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 1));
+                            tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(1, 3));
+                        } else {
+                            tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 2));
+                            tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(2, 4));
+                        }
                     }
                 }
             });
