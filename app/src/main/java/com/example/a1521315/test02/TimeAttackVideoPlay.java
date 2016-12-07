@@ -145,7 +145,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     private USBAccessoryManager accessoryManager;
 
 
-
     //bluetooth*************************************************************************************
     private BluetoothAdapter mAdapter;/* Bluetooth Adapter */
     private BluetoothDevice mDevice;/* Bluetoothデバイス */

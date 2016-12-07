@@ -31,6 +31,9 @@ public class Globals extends Application {
     static String age;
     static String deal_weight;
 
+    static String mode_flg;
+    int timflg1;
+
     public void DriveDataInit(){
         coursename = "Init";
         mileage = "0";
@@ -39,6 +42,8 @@ public class Globals extends Application {
         max = "0";
         time = "0";
         cal = 0.0;
+        mode_flg = "";
+        timflg1 = 0;
     }
 
 }

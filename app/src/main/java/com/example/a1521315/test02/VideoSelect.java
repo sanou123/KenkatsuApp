@@ -21,6 +21,7 @@ public class VideoSelect extends AppCompatActivity {
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Button btnDisp0 = (Button)findViewById(R.id.course0);
+        btnDisp0.setAllCaps(false);//小文を字使用可能にする
         btnDisp0.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(),VideoPlay.class);
@@ -29,6 +30,7 @@ public class VideoSelect extends AppCompatActivity {
             }
         });
         Button btnDisp1 = (Button)findViewById(R.id.course1);
+        btnDisp1.setAllCaps(false);
         btnDisp1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(),VideoPlay.class);
@@ -37,6 +39,7 @@ public class VideoSelect extends AppCompatActivity {
             }
         });
         Button btnDisp2 = (Button)findViewById(R.id.course2);
+        btnDisp2.setAllCaps(false);
         btnDisp2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(),VideoPlay.class);
@@ -45,6 +48,7 @@ public class VideoSelect extends AppCompatActivity {
             }
         });
         Button btnDisp3 = (Button)findViewById(R.id.course3);
+        btnDisp3.setAllCaps(false);
         btnDisp3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(),VideoPlay.class);
