@@ -230,6 +230,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         //ボタン押したときメソッドの宣言
         findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
         findViewById(R.id.buttonResult).setOnClickListener(ResultClickListener);
+        findViewById(R.id.buttonGAMEOVER).setOnClickListener(TimeoutResultClickListener);
 
         //コース番号受け取り
         Intent i = getIntent();
@@ -735,6 +736,14 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
     };
 
+    //Timeout用Result
+    View.OnClickListener TimeoutResultClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            TimeoutResultProcess();
+        }
+    };
+
     //Pauseボタンを押したときの処理
     View.OnClickListener PauseClickListener = new View.OnClickListener() {
         @Override
@@ -773,7 +782,10 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("", "ACTION_DOWN");
-                if( findViewById(R.id.buttonPlay).getVisibility() == View.INVISIBLE &&  findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
+                if( findViewById(R.id.buttonPlay).getVisibility() == View.INVISIBLE &&
+                        findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE &&
+                        findViewById(R.id.buttonResult).getVisibility() == View.INVISIBLE &&
+                        findViewById(R.id.buttonGAMEOVER).getVisibility() == View.INVISIBLE) {
                     //トレーニングが始まっているときのみ画面タップでポーズする
                     PauseProcess();
                 }
@@ -860,7 +872,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ResultProcess();
+                PauseResultProcess();
             }
         });
         AlertDialog myDialog = alertDialog.create();
@@ -868,7 +880,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         myDialog.show();
     }
 
-    //Resultボタンを押したときの処理の中身
+    //走り終わったとき
     public void ResultProcess(){
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
@@ -879,7 +891,35 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         //int iWeight = Integer.parseInt(globals.weight);
         //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
         globals.cal = 123.32;
-        Intent intent = new Intent(getApplication(), Result.class);
+        Intent intent = new Intent(getApplication(), NormalResult.class);
+        startActivity(intent);
+    }
+    //ポーズしたとき
+    public void PauseResultProcess(){
+        globals.coursename = tCourse.getText().toString();//コース名
+        globals.mileage = tMileage.getText().toString();//走行距離
+        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
+        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.time = tTimer.getText().toString();//運動時間
+        //int iWeight = Integer.parseInt(globals.weight);
+        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
+        globals.cal = 123.32;
+        Intent intent = new Intent(getApplication(), PauseResult.class);
+        startActivity(intent);
+    }
+    //時間が0になったとき
+    public void TimeoutResultProcess(){
+        globals.coursename = tCourse.getText().toString();//コース名
+        globals.mileage = tMileage.getText().toString();//走行距離
+        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
+        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.time = tTimer.getText().toString();//運動時間
+        //int iWeight = Integer.parseInt(globals.weight);
+        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
+        globals.cal = 123.32;
+        Intent intent = new Intent(getApplication(), TimeoutResult.class);
         startActivity(intent);
     }
 
@@ -887,7 +927,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     //カウントアップタイマタスク
     public class CntTimerTask implements Runnable {
         //private Handler handler = new Handler();
-        private long timerCount = 3000;//初期値5分
+        private long timerCount = 30;//初期値5分
         public void run() {
             // handlerを使って処理をキューイングする
             handler.post(new Runnable() {
@@ -908,7 +948,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     if(timerCount == 0){
                         mp.pause();
                         //リザルトボタンを表示
-                        Button BtnResultView = (Button) findViewById(R.id.buttonResult);
+                        Button BtnResultView = (Button) findViewById(R.id.buttonGAMEOVER);
                         BtnResultView.setVisibility(View.VISIBLE);
                     }
                     //残り時間を増やす
@@ -921,11 +961,12 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     //表示時間のカウント
                     if(globals.timflg1 == 2){
                         globals.time_disp_cnt++;
-                        globals.timflg1 = 3;
                     }
                     //残り時間を表示する
-                    if(globals.time_disp_cnt){
+                    if(globals.time_disp_cnt == 20){
                         textaddtimer.setVisibility(View.INVISIBLE);
+                        globals.time_disp_cnt = 0;
+                        globals.timflg1 = 3;
                     }
                 }
             });
@@ -989,6 +1030,11 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         //110.00~999.99までの処理
                         tMileageInt.setText(String.format("%.2f",f3).substring(0, 3));
                         tMileageDec.setText(String.format("%.2f",f3).substring(3, 6));
+                    }
+                    if(globals.timflg1 == 0) {
+                        if (f3 >= 1) {
+                            globals.timflg1 = 1;
+                        }
                     }
                 }
             });
@@ -1081,6 +1127,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         tTimer.setTypeface(tf);
         tTimer.setTextSize(32.0f);
         tTimer.setPadding(0,0,0,15);
+        textaddtimer.setTypeface(tf);
+        textaddtimer.setTextSize(32.0f);
+        textaddtimer.setPadding(0,0,0,15);
         //心拍メーター
         tTargetHeartbeat.setTypeface(tf);
         tTargetHeartbeat.setTextSize(30.0f);
