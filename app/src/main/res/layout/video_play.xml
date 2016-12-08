@@ -49,6 +49,7 @@
             android:layout_height="150dp"
             android:layout_centerInParent="true"
             android:id="@+id/PlayResultLayout">
+
             <Button
                 android:id="@+id/buttonPlay"
                 android:text="プレイ"
@@ -58,6 +59,7 @@
                 android:visibility="invisible"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
+
             <Button
                 android:id="@+id/buttonResult"
                 android:text="リザルト"
@@ -67,6 +69,18 @@
                 android:visibility="invisible"
                 android:layout_alignTop="@+id/buttonPlay"
                 android:layout_alignStart="@+id/buttonPlay" />
+
+            <Button
+                android:id="@+id/buttonGAMEOVER"
+                android:text="GAMEOVER"
+                android:textSize="100sp"
+                android:layout_width="500dp"
+                android:layout_height="150dp"
+                android:visibility="invisible"
+                android:layout_alignTop="@+id/buttonPlay"
+                android:layout_alignStart="@+id/buttonPlay"
+                 />
+
         </RelativeLayout>
 
         <RelativeLayout
