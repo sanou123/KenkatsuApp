@@ -230,25 +230,9 @@
 
             //コース番号受け取り
             Intent i = getIntent();
-            String CourseNum = i.getStringExtra("course");
+            //String CourseNum = i.getStringExtra("course");
             tCourse = (TextView)findViewById(R.id.textCourse);
-            tCourse.setText("コース"+CourseNum);
-            if(CourseNum.equals("0")) {
-                tCourse.setText("ポリテク→大地");
-                mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
-                totalMileage = 10.4;
-                raw = 0;
-            }else if(CourseNum.equals("1")) {
-                tCourse.setText("東京→御殿場");
-                mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
-                totalMileage = 83.7;
-                raw = 0;
-            }else if(CourseNum.equals("2")) {
-                tCourse.setText("鳴子");
-                mediaPath = "/_naruko.mp4";//実機9のストレージにあるファイルを指定
-                totalMileage = 1.3;
-                raw = 0;
-            }else if(CourseNum.equals("3")) {
+            if(true) {
                 tCourse.setText("デバッグ用");
                 mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
                 totalMileage = 10.0;
