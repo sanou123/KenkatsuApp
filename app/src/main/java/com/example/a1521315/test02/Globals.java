@@ -33,6 +33,7 @@ public class Globals extends Application {
 
     static String mode_flg;
     int timflg1;
+    int time_disp_cnt;
 
     public void DriveDataInit(){
         coursename = "Init";
@@ -44,6 +45,7 @@ public class Globals extends Application {
         cal = 0.0;
         mode_flg = "";
         timflg1 = 0;
+        time_disp_cnt = 0;
     }
 
 }

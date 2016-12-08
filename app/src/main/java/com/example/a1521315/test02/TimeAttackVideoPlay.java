@@ -29,6 +29,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,6 +63,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     TextView tTargetHeartbeat;//目標心拍数の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
+    TextView textaddtimer;
 
     /*デバッグ用の関数*/
     TextView tSpeed;//時速の変数
@@ -184,6 +188,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         tTargetHeartbeat.setText("000");
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
+        textaddtimer = (TextView) findViewById(R.id.textAddTimer);
 
         /*デバッグ用のやつ*/
         tMileage = (TextView) findViewById(R.id.textMileage);
@@ -910,6 +915,17 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     if(globals.timflg1 == 1){
                         timerCount += 6000;//10分追加
                         globals.timflg1 = 2;
+                        textaddtimer.setVisibility(View.VISIBLE);
+                        textaddtimer.setText("+00:10:00.0");
+                    }
+                    //表示時間のカウント
+                    if(globals.timflg1 == 2){
+                        globals.time_disp_cnt++;
+                        globals.timflg1 = 3;
+                    }
+                    //残り時間を表示する
+                    if(globals.time_disp_cnt){
+                        textaddtimer.setVisibility(View.INVISIBLE);
                     }
                 }
             });
