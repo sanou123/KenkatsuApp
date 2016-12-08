@@ -112,7 +112,10 @@
             android:screenOrientation="landscape" />
         <activity android:name=".NormalResult" />
         <activity android:name=".PauseResult" />
-        <activity android:name=".TimeoutResult"></activity>
+        <activity android:name=".TimeoutResult" />
+        <activity android:name=".EndlessRun"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

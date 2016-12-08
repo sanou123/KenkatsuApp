@@ -48,6 +48,18 @@ public class TrainingSelect extends AppCompatActivity {
             }
         });
 
+        //buttonEnduranceを押したときの挙動
+        Button btnEndR = (Button) findViewById(R.id.buttonEndurance);
+        btnEndR.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Sub 画面を起動
+                Intent intent = new Intent();
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.EndlessRun");
+                startActivity(intent);
+            }
+        });
+
         //buttonBackを押した時MenuSerectへ移動
         Button btnBack = (Button) findViewById(R.id.buttonBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
