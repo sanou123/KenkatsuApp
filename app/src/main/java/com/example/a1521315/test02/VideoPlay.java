@@ -46,11 +46,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     Globals globals;
     /*メーター関連の関数*/
-    double debugByousoku;//ゴースト動かす用のデバッグ変数
-    final double zeroNeedle = -113.000;//メーター0の場所                                       //変えた菅原
-    final double maxNeedle = 113.000;//メーターMAXの場所                                       //変えた菅原
-    double speedMeterAngle      = zeroNeedle;                                                 //変えた菅原
-    double heartbeatMeterAngle  = zeroNeedle;                                                //変えた菅原
+    final double zeroNeedle = -113.000;//メーター0の場所
+    final double maxNeedle = 113.000;//メーターMAXの場所
+    double speedMeterAngle      = zeroNeedle;
+    double heartbeatMeterAngle  = zeroNeedle;
 
     TextView tSpeedDec;//時速の変数　少数
     TextView tSpeedInt;//時速の変数　整数
@@ -192,7 +191,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tSpeed = (TextView) findViewById(R.id.textSpeed);
         tSpeed.setText("0.0");
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText(globals.time);
+        tDebug1.setText(":"+PerSecond(10.4,356));
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
         tDebug2.setText("デバッグ用2");
 
@@ -211,12 +210,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         ImageView imageSpeedMeter = (ImageView)findViewById(R.id.image_SpeedMeter);
         imageSpeedMeter.setImageResource(R.drawable.meter0);
         imageSpeedMeterNeedle = (ImageView)findViewById(R.id.image_Hari1);
-        imageSpeedMeterNeedle.setImageResource(R.drawable.hari4);                               //変えた
+        imageSpeedMeterNeedle.setImageResource(R.drawable.hari4);
         /*心拍メーター*/
         ImageView imageHeartBeatMeter = (ImageView)findViewById(R.id.image_HeartBeatMeter);
         imageHeartBeatMeter.setImageResource(R.drawable.heartbeatmeter2);
         imageHeartbeatMeterNeedle = (ImageView)findViewById(R.id.image_Hari2);
-        imageHeartbeatMeterNeedle.setImageResource(R.drawable.hari4);                          //変えた
+        imageHeartbeatMeterNeedle.setImageResource(R.drawable.hari4);
 
         ImageView timeDisplay = (ImageView)findViewById(R.id.image_TimeDisplay);
         timeDisplay.setImageResource(R.drawable.time);
@@ -285,7 +284,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
-        //debugByousoku = PerSecond(10400,256);ゴースト動かす用
+
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -612,6 +611,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 else{
                                                     //加算された距離とタイマーの時間で、時速割り出し(現在の時速)
                                                     speed_Value = my_dist_Value / (time_tmp / 3600);//my_distを使いたい
+                                                    //↓メーターに反映
+                                                    /*
+                                                    Thread SetNeedle = new Thread(new SpeedMeterNeedle(speedMeterAngle));
+                                                    SetNeedle.start();
+                                                    Thread Speed = new Thread(new SpeedMeterTask((float) speed_Value));
+                                                    Speed.start();
+                                                    */
                                                 }
                                             }
                                             else{
@@ -918,8 +924,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    //Thread MoveGhost = new Thread(new MoveGhostTask(debugByousoku));
-                    //MoveGhost.start();
+                    Thread MoveGhost = new Thread(new MoveGhostTask(PerSecond(10.4,356)));
+                    MoveGhost.start();
                     Thread MoveMe = new Thread(new MoveMeTask());
                     MoveMe.start();
                     Thread TestMileageTask = new Thread(new MileageTask());
@@ -950,19 +956,20 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
 
 
-    //ゴーストの移動/
+    //ゴーストの移動 ↓1秒あたりに進むpx数//菅原
     public double PerSecond(double kilometers, int byou){
         int meters = 0;
         double byousoku = 0.0;
         meters = (int)(kilometers * 1000);
         byousoku = meters / byou;
-        byousoku = byousoku /500;
+        byousoku = (byousoku / meters);
         return byousoku;
     }
     public class MoveGhostTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
         final int endPoint = 45;//エンド地点の座標
-        double byou = 0.0;
+        double byou;
+        double ghostPos = imageGhost.getY();
         MoveGhostTask(double byou){
             this.byou = byou;
         }
@@ -972,10 +979,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    float getPlayTime = (float)byou;
-                    getPlayTime = barDistance - getPlayTime;
-                    getPlayTime = getPlayTime + endPoint;
+                    float getPlayTime = (float)ghostPos - ((float)byou* barDistance);
                     imageGhost.setY(getPlayTime);
+                    tDebug2.setText(imageGhost.getY()+"");
                     /*
                     float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * barDistance;//barのpx数
                     getPlayTime = barDistance - getPlayTime;
@@ -989,6 +995,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //走行距離タスク
     public class MileageTask implements Runnable {
+        /*
+        private float taskMileage = (float) 0.0;
+        public MileageTask(float taskMileage){
+            this.taskMileage = taskMileage;
+        }*/
         public void run() {
             handler.post(new Runnable() {
                 @Override
@@ -1016,9 +1027,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //スピードメータータスク
     public class SpeedMeterTask implements Runnable {
-        private float pSpeedCount = (float) 0.0;
-        public SpeedMeterTask(float pSpeedCount){
-            this.pSpeedCount = pSpeedCount;
+        private float taskSpeedCount = (float) 0.0;
+        public SpeedMeterTask(float taskSpeedCount){
+            this.taskSpeedCount = taskSpeedCount;
         }
         public void run() {
             handler.post(new Runnable() {
@@ -1026,16 +1037,44 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 public void run() {
                     if(mp != null) {
                     /*動画の再生速度を変えるのに必要なプログラム↓*/
-                        params.setSpeed(pSpeedCount);//再生速度変更
+                        params.setSpeed(taskSpeedCount);//再生速度変更
                         mp.setPlaybackParams(params);
                         //mp.start();
-                        tSpeed.setText(String.format("%.1f", (float) (pSpeedCount * 10)));
-                        if ((pSpeedCount * 10) < 10.0) {
-                            tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 1));
-                            tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(1, 3));
+                        tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
+                        if ((taskSpeedCount * 10) < 10.0) {
+                            tSpeedInt.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(0, 1));
+                            tSpeedDec.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(1, 3));
                         } else {
-                            tSpeedInt.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(0, 2));
-                            tSpeedDec.setText(String.format("%.1f", (float) (pSpeedCount * 10)).substring(2, 4));
+                            tSpeedInt.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(0, 2));
+                            tSpeedDec.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(2, 4));
+                        }
+                    }
+                }
+            });
+        }
+    }
+    //スピードメータータスク2
+    public class SpeedMeterTask2 implements Runnable {
+        private float taskSpeedCount = (float) 0.0;
+        public SpeedMeterTask2(float taskSpeedCount){
+            this.taskSpeedCount = taskSpeedCount;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(mp != null) {
+                    /*動画の再生速度を変えるのに必要なプログラム↓*/
+                        //params.setSpeed(taskSpeedCount);//再生速度変更
+                        //mp.setPlaybackParams(params);
+                        //mp.start();
+                        tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
+                        if ((taskSpeedCount * 10) < 10.0) {
+                            tSpeedInt.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(0, 1));
+                            tSpeedDec.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(1, 3));
+                        } else {
+                            tSpeedInt.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(0, 2));
+                            tSpeedDec.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(2, 4));
                         }
                     }
                 }
