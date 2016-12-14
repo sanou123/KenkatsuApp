@@ -116,7 +116,7 @@ public class GraphMile extends Activity {
                 }
                 if (id == R.id.heart_rate) {
                     Toast.makeText(GraphMile.this,"心拍数を表示します!!",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(GraphMile.this, GraphMile.class);
+                    Intent intent = new Intent(GraphMile.this, GraphHeartRate.class);
                     startActivity(intent);
                     return true;
                 }
