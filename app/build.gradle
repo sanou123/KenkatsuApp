@@ -33,4 +33,9 @@ repositories {
 
 dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.5'
+    compile 'com.android.support:design:24.2.1'
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:21.0.+'
 }

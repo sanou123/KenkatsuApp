@@ -1,5 +1,9 @@
 package com.example.a1521315.test02;
 
+/**
+ * Created by 1521315 on 2016/12/08.
+ */
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +17,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
-public class GraphTime extends AppCompatActivity {
+public class GraphHeartRate extends AppCompatActivity {
 
     private DBAdapter dbAdapter;                // DBAdapter
 
@@ -23,7 +27,7 @@ public class GraphTime extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.time_linechart);
+        setContentView(R.layout.heart_rate_linechart);
 
         LineChart lineChart = (LineChart) findViewById(R.id.chart);
 
@@ -49,8 +53,8 @@ public class GraphTime extends AppCompatActivity {
         if (c.moveToFirst()) {
             int  Num = 0;
             do {
-                entries.add(new Entry(c.getFloat(12),Num));
-                Log.d("取得したCursor:", c.getString(12));
+                entries.add(new Entry(c.getFloat(0),Num));
+                Log.d("取得したCursor:", c.getString(0));
                 Num = Num + 1;
             } while (c.moveToNext());
         }

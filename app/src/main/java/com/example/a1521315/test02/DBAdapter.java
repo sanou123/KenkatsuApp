@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "asdfghjkl1.db";      // DB名
+    private final static String DB_NAME = "asdfghjkl5.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
     private final static int DB_VERSION = 1;                // DBのバージョン
@@ -32,6 +32,7 @@ public class DBAdapter {
     public final static String COL_WEIGHT = "weight";        // 体重
     public final static String COL_BMI = "bmi";           //BMI指数
     public final static String COL_IDEAL_WEIGHT = "ideal_weight";           //理想体重
+    public final static String COL_LOGIN = "login";           //ログイン
 
 
     public final static String COL_ID_DATA = "data_id";             // id
@@ -112,7 +113,7 @@ public class DBAdapter {
      *
      */
     public void saveDB(String name, int age, String sex, int height,
-                       int weight, double bmi, double ideal_weight) {
+                       int weight, double bmi, double ideal_weight, String login) {
 
         db.beginTransaction();          // トランザクション開始
 
@@ -125,6 +126,7 @@ public class DBAdapter {
             values.put(COL_WEIGHT, weight);
             values.put(COL_BMI, bmi);
             values.put(COL_IDEAL_WEIGHT, ideal_weight);
+            values.put(COL_LOGIN, login);
 
 
             // insertメソッド データ登録
@@ -227,6 +229,28 @@ public class DBAdapter {
     }
 
     /**
+     * DBのデータを取得
+     * getDB3()
+     *
+     * @param columns String[] 取得するカラム名 nullの場合は全カラムを取得
+     * @return DBのデータ
+     */
+    public Cursor getDB3(String[] columns) {
+
+        // queryメソッド DBのデータを取得
+        // 第1引数：DBのテーブル名
+        // 第2引数：取得するカラム名
+        // 第3引数：選択条件(WHERE句)
+        // 第4引数：第3引数のWHERE句において?を使用した場合に使用
+        // 第5引数：集計条件(GROUP BY句)
+        // 第6引数：選択条件(HAVING句)
+        // 第7引数：ソート条件(ODERBY句)
+        return db.query(DB_TABLE_USER, columns, null, null, null, null, "DESC");
+
+    }
+
+
+    /**
      * DBの検索したデータを取得
      * searchDB()
      *
@@ -280,7 +304,7 @@ public class DBAdapter {
     }
 
     public void updateDB(String strName, int strAge,String strSex, int strHeight,
-                         int strWeight, double strBmi, double ideal_weight) {
+                         int strWeight, double strBmi, double ideal_weight, String login) {
         db.beginTransaction();          // トランザクション開始
 
         try {
@@ -292,6 +316,7 @@ public class DBAdapter {
             values.put(COL_WEIGHT, strWeight);
             values.put(COL_BMI, strBmi);
             values.put(COL_IDEAL_WEIGHT, ideal_weight);
+            values.put(COL_LOGIN, login);
 
             // insertメソッド データ登録
             // 第1引数：DBのテーブル名
@@ -344,7 +369,8 @@ public class DBAdapter {
                     + COL_HEIGHT + " INTEGER NOT NULL,"
                     + COL_WEIGHT + " INTEGER NOT NULL,"
                     + COL_BMI +" INTEGER NOT NULL,"
-                    + COL_IDEAL_WEIGHT +" INTEGER NOT NULL"
+                    + COL_IDEAL_WEIGHT +" INTEGER NOT NULL,"
+                    + COL_LOGIN +" TEXT NOT NULL"
                     + ");";
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける

@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/times"
+        android:icon="@drawable/bar0"
+        android:title="走行時間表示"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/distance"
+        android:icon="@drawable/bar0"
+        android:title="走行距離表示"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/heart_rate"
+        android:icon="@drawable/bar0"
+        android:title="心拍数表示"
+        app:showAsAction="always" />
+</menu>
