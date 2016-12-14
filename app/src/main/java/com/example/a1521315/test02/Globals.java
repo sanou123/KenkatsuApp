@@ -20,7 +20,7 @@ public class Globals extends Application {
 
     static String total_time ;
     static String total_mileage;
-    static int name_id;
+    static String name_id;
     static double bmi;
     static String weight;
     static String height;

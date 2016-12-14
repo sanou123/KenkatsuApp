@@ -186,10 +186,13 @@ public class Result extends Activity {
         globals.total_mileage = globals.mileage;
         /////////////////////////////////////////////////////////////////////////
 
+        /////////////////////////////////////////////////////////////////////////
+        int name_id = Integer.parseInt(globals.name_id);
+        /////////////////////////////////////////////////////////////////////////
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);
         dbAdapter.openDB();                                         // DBの読み書き
-        dbAdapter.saveDB_DATA(globals.name_id, globals.now_user, globals.year, globals.month,
+        dbAdapter.saveDB_DATA(name_id, globals.now_user, globals.year, globals.month,
                 globals.day,globals.times_of_day, globals.maxheartbeat,
                 globals.cal, globals.total_time, globals.total_mileage, globals.coursename,
                 globals.time, globals.avg, globals.max, globals.mileage);   // DBに登録
