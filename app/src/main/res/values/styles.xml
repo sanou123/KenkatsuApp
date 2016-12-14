@@ -12,5 +12,12 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="toolbarSpinnerStyle" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
+        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="android:dropDownSelector">?android:selectableItemBackground</item>
+        <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+        <item name="overlapAnchor">true</item>
+    </style>
 
 </resources>

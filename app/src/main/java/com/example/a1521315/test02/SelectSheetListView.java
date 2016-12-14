@@ -83,11 +83,13 @@ public class SelectSheetListView extends AppCompatActivity {
                         //myListItem = items.get(position);
                         //String listName = myListItem.getName();
                         int NameID = myListItem.getUser_id();
+                        String Age = myListItem.getAge();
                         String Sex = myListItem.getSex();
                         String Weight = myListItem.getWeight();
                         String Height = myListItem.getHeight();
                         double Bmi = myListItem.getBmi();
-                        double ideal_weight = myListItem.getIdeal_weight();
+                        double Ideal_weight = myListItem.getIdeal_weight();
+                        String  Login = myListItem.getLogin();
 
 
                         //int listId =  myListItem.getUser_id();//################
@@ -96,12 +98,14 @@ public class SelectSheetListView extends AppCompatActivity {
                         //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
                         //intent.putExtra("SELECTED_DATA",listName);
                         //globals.now_user = listName;
-                        globals.name_id = String.valueOf(NameID);
+                        globals.name_id = NameID;
+                        globals.age = Age;
                         globals.sex = Sex;
                         globals.weight = Weight;
                         globals.height = Height;
                         globals.bmi = Bmi;
-                        globals.ideal_weight = ideal_weight;
+                        globals.ideal_weight = Ideal_weight;
+                        globals.login = Login;
                         Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
                         startActivity(intent);
 
@@ -223,7 +227,8 @@ public class SelectSheetListView extends AppCompatActivity {
                         c.getString(4),
                         c.getString(5),
                         c.getDouble(6),
-                        c.getDouble(7)
+                        c.getDouble(7),
+                        c.getString(8)
                 );
 
                 Log.d("取得したCursor(USER_ID):", String.valueOf(c.getInt(0)));
@@ -234,6 +239,7 @@ public class SelectSheetListView extends AppCompatActivity {
                 Log.d("取得したCursor(体重):", c.getString(5));
                 Log.d("取得したCursor(BMI):", c.getString(6));
                 Log.d("取得したCursor(理想体重):", c.getString(7));
+                Log.d("取得したCursor(最終ログイン):", c.getString(8));
 
 
                 items.add(myListItem);          // 取得した要素をitemsに追加
@@ -261,8 +267,8 @@ public class SelectSheetListView extends AppCompatActivity {
             TextView text05Name;
             TextView text05Age;
             TextView text05Sex;
-            TextView text05Height;
-            TextView text05Weight;
+            TextView text05Login;
+
         }
 
         // コンストラクタの生成
@@ -308,8 +314,7 @@ public class SelectSheetListView extends AppCompatActivity {
                 TextView text05Name = (TextView) view.findViewById(R.id.text05Name);      // 名前のTextView
                 TextView text05Age = (TextView) view.findViewById(R.id.text05Age);        // 年齢のTextView
                 TextView text05Sex = (TextView) view.findViewById(R.id.text05Sex);        // 性別のTextView
-                TextView text05Height = (TextView) view.findViewById(R.id.text05Height);        // 身長のTextView
-                TextView text05Weight = (TextView) view.findViewById(R.id.text05Weight);          // 体重のTextView
+                TextView text05Login = (TextView) view.findViewById(R.id.text05Login);        // 性別のTextView
 
 
                 // holderにviewを持たせておく
@@ -317,8 +322,7 @@ public class SelectSheetListView extends AppCompatActivity {
                 holder.text05Name = text05Name;
                 holder.text05Age = text05Age;
                 holder.text05Sex = text05Sex;
-                holder.text05Height = text05Height;
-                holder.text05Weight = text05Weight;
+                holder.text05Login = text05Login;
 
                 view.setTag(holder);
 
@@ -331,8 +335,7 @@ public class SelectSheetListView extends AppCompatActivity {
             holder.text05Name.setText(myListItem.getName());
             holder.text05Age.setText(myListItem.getAge());
             holder.text05Sex.setText(myListItem.getSex());
-            holder.text05Height.setText(myListItem.getHeight());
-            holder.text05Weight.setText(myListItem.getWeight());
+            holder.text05Login.setText(myListItem.getLogin());
 
 
             return view;

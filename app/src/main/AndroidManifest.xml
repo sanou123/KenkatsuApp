@@ -95,13 +95,13 @@
             android:label="@string/name_training_select"/>
         <activity
             android:screenOrientation="landscape"
-            android:name=".GraphSelect"/>
-        <activity
-            android:screenOrientation="landscape"
             android:name=".GraphMile"/>
         <activity
             android:screenOrientation="landscape"
             android:name=".GraphTime"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".GraphHeartRate"/>
         <activity
             android:screenOrientation="landscape"
             android:name=".Login"/>
