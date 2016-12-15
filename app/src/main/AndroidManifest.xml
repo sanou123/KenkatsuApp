@@ -105,14 +105,14 @@
             android:label="@string/name_training_select"
             android:screenOrientation="landscape" />
         <activity
-            android:screenOrientation="landscape"
-            android:name=".GraphMile"/>
+            android:name=".GraphMile"
+            android:screenOrientation="landscape" />
         <activity
-            android:screenOrientation="landscape"
-            android:name=".GraphTime"/>
+            android:name=".GraphTime"
+            android:screenOrientation="landscape" />
         <activity
-            android:screenOrientation="landscape"
-            android:name=".GraphHeartRate"/>
+            android:name=".GraphHeartRate"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".Login"
             android:screenOrientation="landscape" />
@@ -121,14 +121,16 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".NormalResultTweet"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".PauseResultTweet"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".TimeoutResultTweet"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".EndlessRunVideoPlay"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
