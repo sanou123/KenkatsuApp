@@ -113,7 +113,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     double speed_Value = 0.0;
     double dist_Value = 0.0;
     double my_dist_Value = 0.0;
-    public float plus_dist_Value = 0.0005F;//0.0015F
+    //public float plus_dist_Value = 0.0005F;//0.0015F
+    public float plus_dist_Value = 0.00005F;//0.0015F
 
     double old_dist_Value = 0.0;
     public float resist_Level = (float)1.0;//負荷のレベルによる係数
@@ -172,7 +173,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
         globals = (Globals)this.getApplication();
         globals.DriveDataInit();//グローバル変数初期化
-        globals.mode_flg = "fit";
+
 
         tSpeedDec = (TextView) findViewById(R.id.textSpeedDec);
         tSpeedDec.setText(".0");
@@ -927,7 +928,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     //カウントアップタイマタスク
     public class CntTimerTask implements Runnable {
         //private Handler handler = new Handler();
-        private long timerCount = 30;//初期値5分
+        private long timerCount = 600;//初期値1分
         public void run() {
             // handlerを使って処理をキューイングする
             handler.post(new Runnable() {
@@ -951,22 +952,59 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         Button BtnResultView = (Button) findViewById(R.id.buttonGAMEOVER);
                         BtnResultView.setVisibility(View.VISIBLE);
                     }
-                    //残り時間を増やす
+                    //残り時間を増やす2km
                     if(globals.timflg1 == 1){
-                        timerCount += 6000;//10分追加
+                        timerCount += 600;//1分追加
                         globals.timflg1 = 2;
                         textaddtimer.setVisibility(View.VISIBLE);
-                        textaddtimer.setText("+00:10:00.0");
+                        textaddtimer.setText("+00:01:00.0");
                     }
+                    //残り時間を増やす4km
+                    if(globals.timflg2 == 1){
+                        timerCount += 600;//1分追加
+                        globals.timflg2 = 2;
+                        textaddtimer.setVisibility(View.VISIBLE);
+                        textaddtimer.setText("+00:01:00.0");
+                    }
+                    //残り時間を増やす6km
+                    if(globals.timflg3 == 1){
+                        timerCount += 600;//1分追加
+                        globals.timflg3 = 2;
+                        textaddtimer.setVisibility(View.VISIBLE);
+                        textaddtimer.setText("+00:01:00.0");
+                    }
+                    //残り時間を増やす8km
+                    if(globals.timflg4 == 1){
+                        timerCount += 600;//1分追加
+                        globals.timflg4 = 2;
+                        textaddtimer.setVisibility(View.VISIBLE);
+                        textaddtimer.setText("+00:01:00.0");
+                    }
+
                     //表示時間のカウント
-                    if(globals.timflg1 == 2){
+                    if(globals.timflg1 ==2 || globals.timflg2 == 2 || globals.timflg3 ==2 || globals.timflg4 == 2){
                         globals.time_disp_cnt++;
                     }
                     //残り時間を表示する
-                    if(globals.time_disp_cnt == 20){
+                    if(globals.time_disp_cnt == 20 && globals.timflg1 == 2){
                         textaddtimer.setVisibility(View.INVISIBLE);
                         globals.time_disp_cnt = 0;
                         globals.timflg1 = 3;
+                    }
+                    if(globals.time_disp_cnt == 20 && globals.timflg2 == 2){
+                        textaddtimer.setVisibility(View.INVISIBLE);
+                        globals.time_disp_cnt = 0;
+                        globals.timflg2 = 3;
+                    }
+                    if(globals.time_disp_cnt == 20 && globals.timflg3 == 2){
+                        textaddtimer.setVisibility(View.INVISIBLE);
+                        globals.time_disp_cnt = 0;
+                        globals.timflg3 = 3;
+                    }
+                    if(globals.time_disp_cnt == 20 && globals.timflg4 == 2){
+                        textaddtimer.setVisibility(View.INVISIBLE);
+                        globals.time_disp_cnt = 0;
+                        globals.timflg4 = 3;
                     }
                 }
             });
@@ -1031,9 +1069,28 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         tMileageInt.setText(String.format("%.2f",f3).substring(0, 3));
                         tMileageDec.setText(String.format("%.2f",f3).substring(3, 6));
                     }
+                    //2kmでチェックポイント
                     if(globals.timflg1 == 0) {
-                        if (f3 >= 1) {
+                        if (f3 >= 2) {
                             globals.timflg1 = 1;
+                        }
+                    }
+                    //4km
+                    if(globals.timflg2 == 0) {
+                        if (f3 >= 4) {
+                            globals.timflg2 = 1;
+                        }
+                    }
+                    //6km
+                    if(globals.timflg3 == 0) {
+                        if (f3 >= 6) {
+                            globals.timflg3 = 1;
+                        }
+                    }
+                    //8km
+                    if(globals.timflg4 == 0) {
+                        if (f3 >= 8) {
+                            globals.timflg4 = 1;
                         }
                     }
                 }

@@ -70,8 +70,8 @@ public class Result extends Activity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), VideoSelect.class);
-                startActivity( intent );
+                    Intent intent = new Intent(getApplication(), VideoSelect.class);
+                    startActivity( intent );
             }
         });
 

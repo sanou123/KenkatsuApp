@@ -37,9 +37,12 @@ public class Globals extends Application {
     static long ms;
     static String  twitter_user;
 
-    static String mode_flg;
-    int timflg1;
+    int timflg1;//2
+    int timflg2;//4
+    int timflg3;//6
+    int timflg4;//8
     int time_disp_cnt;
+    static String rank;
 
     public void DriveDataInit(){
         coursename = "Init";
@@ -49,9 +52,12 @@ public class Globals extends Application {
         max = "0";
         time = "0";
         cal = 0.0;
-        mode_flg = "";
         timflg1 = 0;
+        timflg2 = 0;
+        timflg3 = 0;
+        timflg4 = 0;
         time_disp_cnt = 0;
+        rank = "";
     }
 
 }
