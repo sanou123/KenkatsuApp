@@ -72,6 +72,15 @@
             android:name=".Result"
             android:screenOrientation="landscape" />
         <activity
+            android:name=".PauseResult"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".TimeoutResult"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".NormalResult"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".SelectSheetTable1"
             android:label="@string/name_selectsheet_tabel"
             android:screenOrientation="landscape" />
@@ -110,10 +119,14 @@
         <activity
             android:name=".TimeAttackVideoPlay"
             android:screenOrientation="landscape" />
-        <activity android:name=".NormalResult" />
-        <activity android:name=".PauseResult" />
-        <activity android:name=".TimeoutResult" />
-        <activity android:name=".EndlessRun"
+        <activity
+            android:name=".NormalResultTweet"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".PauseResultTweet"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".TimeoutResultTweet"
             android:screenOrientation="landscape">
         </activity>
     </application>
