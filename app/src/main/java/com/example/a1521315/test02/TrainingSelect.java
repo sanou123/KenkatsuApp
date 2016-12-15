@@ -55,7 +55,7 @@ public class TrainingSelect extends AppCompatActivity {
                 // Sub 画面を起動
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.EndlessRun");
+                        "com.example.a1521315.test02.EndlessRunVideoPlay");
                 startActivity(intent);
             }
         });
