@@ -17,7 +17,6 @@ public class Globals extends Application {
     static double cal;
 
     static String now_user;
-
     static String total_time ;
     static String total_mileage;
     static String name_id;
