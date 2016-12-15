@@ -1,8 +1,10 @@
 package com.example.a1521315.test02;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -38,10 +40,11 @@ public class Result extends Activity {
 
         globals = (Globals)this.getApplication();
 
+        saveList();
+
         coursename = globals.coursename;
         mileage = globals.mileage;
-        //maxheartbeat = globals.maxheartbeat;
-        maxheartbeat = globals.mode_flg;
+        maxheartbeat = globals.maxheartbeat;
         avg = globals.avg;
         max = globals.max;
         time = globals.time;
@@ -64,31 +67,75 @@ public class Result extends Activity {
         textcal.setText(stringal);
 
 
-
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(globals.mode_flg == "fit") {
-                            Intent intent = new Intent(getApplication(), TrainingSelect.class);
-                            startActivity( intent );
-                }else{
-                    Intent intent = new Intent(getApplication(), VideoSelect.class);
-                    startActivity( intent );
-                }
-
+                Intent intent = new Intent(getApplication(), VideoSelect.class);
+                startActivity( intent );
             }
         });
 
         btn_tweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplication(), Resulttweet.class);
-                startActivity(i);
-            }
+                    // IDを取得する
+                /*String listName = myListItem.getName();
+
+                globals.now_user = listName;
+*/
+
+                    // アラートダイアログ表示
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Result.this);
+                    builder.setTitle("ログイン確認");
+                    builder.setMessage(globals.now_user + "さんですか？");
+                    // OKの時の処理
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dbLogin();
+
+                            Intent intent = new Intent(Result.this, Resulttweet.class);
+                            startActivity(intent);
+
+                        }
+                    });
+
+                    builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Result.this, MenuSelect.class);
+                            startActivity(intent);
+                        }
+                    });
+                    // ダイアログの表示
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                }
         });
 
-        saveList();
+    }
+    private void dbLogin() {
 
+        long currentTimeMillis = System.currentTimeMillis();
+
+        Date date = new Date(currentTimeMillis);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日HH時mm分ss秒");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+        Log.v("時間", dateFormat.format(date));
+        globals.login = dateFormat.format(date);
+
+        int age = Integer.parseInt(globals.age);
+        int height = Integer.parseInt(globals.height);
+        int weight = Integer.parseInt(globals.weight);
+
+
+        // DBへの登録処理
+        DBAdapter dbAdapter = new DBAdapter(this);
+        dbAdapter.openDB();                                         // DBの読み書き
+        dbAdapter.updateDB(globals.now_user, age, globals.sex, height, weight, globals.bmi , globals.ideal_weight, globals.login);   // DBに登録
+        dbAdapter.closeDB();                                        // DBを閉じる
     }
 
     private void saveList() {
@@ -129,13 +176,11 @@ public class Result extends Activity {
             globals.total_time = globals.time;
         }
         globals.total_mileage = globals.mileage;
-/////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////
 
-
+        /////////////////////////////////////////////////////////////////////////
         int name_id = Integer.parseInt(globals.name_id);
-
-        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);
-
+        /////////////////////////////////////////////////////////////////////////
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);
         dbAdapter.openDB();                                         // DBの読み書き

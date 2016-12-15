@@ -49,22 +49,23 @@ public class GraphTime extends AppCompatActivity {
         if (c.moveToFirst()) {
             int  Num = 0;
             do {
-                entries.add(new Entry(c.getInt(12),Num));
+                entries.add(new Entry(c.getFloat(12),Num));
                 Log.d("取得したCursor:", c.getString(12));
                 Num = Num + 1;
             } while (c.moveToNext());
         }
 
-        LineDataSet dataset = new LineDataSet(entries, "# of Calls");
+        LineDataSet dataset = new LineDataSet(entries, "time");
 
         // ArrayListを生成
         ArrayList<String> labels = new ArrayList<String>();
 
         if (c.moveToFirst()) {
             do {
-                labels.add(new String (c.getString(3)+c.getString(4)+c.getString(5)+'\n'
+                labels.add(new String (c.getString(3)+c.getString(4)+c.getString(5)
                         +c.getString(6)));
-                Log.d("取得したCursor:", c.getString(12));
+                Log.d("取得したCursor:", c.getString(3)+c.getString(4)+c.getString(5)
+                        +c.getString(6));
             } while (c.moveToNext());
         }
         c.close();

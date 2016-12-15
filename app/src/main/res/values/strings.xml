@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xsl="http://schemas.android.com/tools">
 
     <string name="action_settings">Settings</string>
 
@@ -49,6 +49,8 @@
     <string name="text05_title_sex">性別：</string>
     <string name="text05_title_height">身長：</string>
     <string name="text05_title_weight">体重：</string>
+    <string name="text05_title_login">最終ログイン：</string>
+
 
     <string name="text05_title_date">日時：</string>
     <string name="text05_title_heart_rate">心拍数：</string>
@@ -85,5 +87,61 @@
     <string name="error_missing_open_accessory_framework">The Android OS version that you are running is missing the com.android.future.usb library that is required to run this demo.  The OS version that you are running should contain these libraries.  Please contact androidsupport@microchip.com so that we can work to correct this issue for this device. </string>
     <string name="error_firmware_protocol">The firmware version on the attached device requires a protocol that is not supported by this version of the application.  Please check the Android Marketplace to see if there is an update available for this application.  If you are using the source version, please check www.microchip.com/mal for the latest application source code.</string>
 
+    <string-array name="year_planets_array">
+        <item>2016</item>
+
+    </string-array>
+
+
+    <string-array name="month_planets_array">
+        <item>選択なし</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+
+    </string-array>
+    <string-array name="day_planets_array">
+        <item>選択なし</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+    </string-array>
 
 </resources>
