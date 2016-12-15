@@ -46,23 +46,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     Globals globals;
     /*メーター関連の関数*/
-    final double zeroNeedle = -113.000;//メーター0の場所
-    final double maxNeedle = 113.000;//メーターMAXの場所
-    double speedMeterAngle      = zeroNeedle;
-    double heartbeatMeterAngle  = zeroNeedle;
-
-    TextView tSpeedDec;//時速の変数　少数
-    TextView tSpeedInt;//時速の変数　整数
-    TextView tMileageDec;//走行距離の変数　小数
-    TextView tMileageInt;//走行距離の変数　整数
-    TextView tHeartbeat;//心拍の変数
-    TextView tTargetHeartbeat;//目標心拍数の変数
+    TextView tBPM,tHeartbeat;//心拍の変数
+    TextView tTargetBPM,tTargetHeartbeat;//目標心拍数の変数
+    TextView tKPH,tSpeed;//時速の変数
+    TextView tKM,tMileage;//走行距離の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
 
     /*デバッグ用の関数*/
-    TextView tSpeed;//時速の変数
-    TextView tMileage;//走行距離の変数
     TextView tDebug1;
     TextView tDebug2;
 
@@ -73,8 +64,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
 
-    ImageView imageSpeedMeterNeedle;//針用のimageView
-    ImageView imageHeartbeatMeterNeedle;//針用のimageView
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -161,7 +150,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.video_play);
+        setContentView(R.layout.activity_video_play);
         getWindow().setFormat(PixelFormat.TRANSPARENT);
         mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
         holder = mPreview.getHolder();
@@ -170,30 +159,26 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         globals = (Globals)this.getApplication();
         globals.DriveDataInit();//グローバル変数初期化
 
-        tSpeedDec = (TextView) findViewById(R.id.textSpeedDec);
-        tSpeedDec.setText(".0");
-        tSpeedInt = (TextView) findViewById(R.id.textSpeedInt);
-        tSpeedInt.setText("00");
-        tMileageDec = (TextView) findViewById(R.id.textMileageDec);
-        tMileageDec.setText(".00");
-        tMileageInt = (TextView) findViewById(R.id.textMileageInt);
-        tMileageInt.setText("000");
-        tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
-        tHeartbeat.setText("000");
+        tMileage = (TextView) findViewById(R.id.textMileage);
+        tMileage.setText("999.88");
+        tKM = (TextView) findViewById(R.id.textKM);
+        tKM.setText("Mileage              km");
+        tSpeed = (TextView) findViewById(R.id.textSpeed);
+        tSpeed.setText("49.99");
+        tKPH = (TextView) findViewById(R.id.textKPH);
+        tKPH.setText("Speed              km/h");
+
         tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
         tTargetHeartbeat.setText("000");
+        tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
+        tTargetBPM.setText("Target BPM");
+        tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
+        tHeartbeat.setText("000");
+        tBPM = (TextView) findViewById(R.id.textBPM);
+        tBPM.setText("BPM");
+
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
-
-        /*デバッグ用のやつ*/
-        tMileage = (TextView) findViewById(R.id.textMileage);
-        tMileage.setText("0.00");
-        tSpeed = (TextView) findViewById(R.id.textSpeed);
-        tSpeed.setText("0.0");
-        tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText(":"+PerSecond(10.4,356));
-        tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        tDebug2.setText("デバッグ用2");
 
          Change7Seg();//7セグフォントに変換
 
@@ -205,28 +190,29 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
         imageView1.setImageResource(R.drawable.bar0);
 
-        /*メーター*/
-        /*速度メーター*/
-        ImageView imageSpeedMeter = (ImageView)findViewById(R.id.image_SpeedMeter);
-        imageSpeedMeter.setImageResource(R.drawable.meter0);
-        imageSpeedMeterNeedle = (ImageView)findViewById(R.id.image_Hari1);
-        imageSpeedMeterNeedle.setImageResource(R.drawable.hari4);
-        /*心拍メーター*/
-        ImageView imageHeartBeatMeter = (ImageView)findViewById(R.id.image_HeartBeatMeter);
-        imageHeartBeatMeter.setImageResource(R.drawable.heartbeatmeter2);
-        imageHeartbeatMeterNeedle = (ImageView)findViewById(R.id.image_Hari2);
-        imageHeartbeatMeterNeedle.setImageResource(R.drawable.hari4);
-
+        /*タイム表示*/
         ImageView timeDisplay = (ImageView)findViewById(R.id.image_TimeDisplay);
         timeDisplay.setImageResource(R.drawable.time);
+        /*コースネーム*/
+        ImageView CoursenameDisplay = (ImageView) findViewById(R.id.image_Coursenamedisplay);
+        CoursenameDisplay.setImageResource(R.drawable.coursename);
 
-        //針をメーター0に戻す
-        Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(zeroNeedle));
-        SetBothNeedlesToZero.start();//2つの針をメーター0に戻す
+        //各種ディスプレイ
+        ImageView SpeedDisplay = (ImageView) findViewById(R.id.imageSpeedDisplay);
+        SpeedDisplay.setImageResource(R.drawable.display);
+        SpeedDisplay.setAlpha(150);
+        ImageView MileageDisplay = (ImageView) findViewById(R.id.imageMileageDisplay);
+        MileageDisplay.setImageResource(R.drawable.display);
+        MileageDisplay.setAlpha(150);
+        ImageView TargetBPMDisplay = (ImageView) findViewById(R.id.imageTargetBPMDisplay);
+        TargetBPMDisplay.setImageResource(R.drawable.display);
+        TargetBPMDisplay.setAlpha(150);
+        ImageView BPMDisplay = (ImageView) findViewById(R.id.imageBPMDisplay);
+        BPMDisplay.setImageResource(R.drawable.display);
+        BPMDisplay.setAlpha(150);
 
         //ボタン押したときメソッドの宣言
         findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
-        findViewById(R.id.buttonResult).setOnClickListener(ResultClickListener);
 
         //コース番号受け取り
         Intent i = getIntent();
@@ -267,7 +253,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -284,7 +270,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
-
+*/
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -296,9 +282,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //disconnectAccessory();//################################       あやしいかもよ～
         timerscheduler.shutdown();//タイマー止める
         seekbarscheduler.shutdown();
-        //リザルトボタンを表示
-        Button BtnResultView = (Button) findViewById(R.id.buttonResult);
-        BtnResultView.setVisibility(View.VISIBLE);
+        //リザルトダイアログを表示
+        ResultDialog();
         if (mp != null) {
             mp.release();
             mp = null;
@@ -784,8 +769,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             case MotionEvent.ACTION_DOWN:
                 Log.d("", "ACTION_DOWN");
                 if( findViewById(R.id.buttonPlay).getVisibility() == View.INVISIBLE &&
-                        findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE &&
-                        findViewById(R.id.buttonResult).getVisibility() == View.INVISIBLE) {
+                        findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
                     //トレーニングが始まっているときのみ画面タップでポーズする
                     PauseProcess();
                 }
@@ -797,15 +781,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     /*処理の中身*/
     //Playボタンを押したときの処理の中身
     public void PlayProcess(){
-        speedMeterAngle = zeroNeedle;//針の位置をメーター0に合わせる                           //変えた菅原
-        heartbeatMeterAngle = zeroNeedle;//針の位置をメーター0に合わせる                      //変えた菅原
-        Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(zeroNeedle));           //変えた菅原
-        SetBothNeedlesToZero.start();//2つの針を0に戻す                                             //変えた菅原
+
         findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
-        speedCount = 0.0;
-        tSpeed.setText(String.format("%.1f", (float) (speedCount*10)));
-        tSpeedInt.setText("0");
-        tSpeedDec.setText(".0");
+        speedCount = 0.00;
+        tSpeed.setText(String.format("%.2f", (float) (speedCount*10)));
         mp.setPlaybackParams(params);
         mp.seekTo(0);
 
@@ -826,20 +805,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //Pauseボタンを押したときの処理の中身
     public void PauseProcess(){
-        speedMeterAngle = zeroNeedle;
-        heartbeatMeterAngle = zeroNeedle;
-        Thread SetBothNeedlesToZero = new  Thread(new BothNeedlesToZero(zeroNeedle));
-        SetBothNeedlesToZero.start();//2つの針を0に戻す
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         seekbarfuture.cancel(true);
-        speedCount = 0.0;
+        speedCount = 0.00;
         params.setSpeed((float) speedCount);
         mp.setPlaybackParams(params);
-        tSpeed.setText(String.format("%.1f", (float) (speedCount*10)));
-        tSpeedInt.setText("0");
-        tSpeedDec.setText(".0");
-
+        tSpeed.setText(String.format("%.2f", (float) (speedCount*10)));
         // ポップアップメニュー表示
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
         alertDialog.setTitle("ポーズ");
@@ -890,6 +862,23 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         globals.cal = 123.32;
         Intent intent = new Intent(getApplication(), Result.class);
         startActivity(intent);
+    }
+
+    public void ResultDialog(){
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
+        alertDialog.setTitle("トレーニング終了");
+        alertDialog.setMessage("リザルトを押して結果を確認しましょう。");
+        alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ResultProcess();
+            }
+        });
+
+        AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
     }
 
     /*非同期処理関連*/
@@ -985,7 +974,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 public void run() {
                     float getPlayTime = (float)ghostPos - ((float)byou* barDistance);
                     imageGhost.setY(getPlayTime);
-                    tDebug2.setText(imageGhost.getY()+"");
+                   // tDebug2.setText(imageGhost.getY()+"");
                     /*
                     float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * barDistance;//barのpx数
                     getPlayTime = barDistance - getPlayTime;
@@ -1011,19 +1000,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     //走行距離表示↓
                     double f3 = totalMileage / ( (double)mp.getDuration() / (double)mp.getCurrentPosition());
                     tMileage.setText(String.format("%.2f",f3));
-                    if(f3 < 10.00) {
-                        //0.00~9.99までの処理
-                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 1));
-                        tMileageDec.setText(String.format("%.2f",f3).substring(1, 4));
-                    }else if(f3 < 100.00){
-                        //10.00~99.99までの処理
-                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 2));
-                        tMileageDec.setText(String.format("%.2f",f3).substring(2, 5));
-                    }else{
-                        //110.00~999.99までの処理
-                        tMileageInt.setText(String.format("%.2f",f3).substring(0, 3));
-                        tMileageDec.setText(String.format("%.2f",f3).substring(3, 6));
-                    }
                 }
             });
         }
@@ -1045,13 +1021,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         mp.setPlaybackParams(params);
                         //mp.start();
                         tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
-                        if ((taskSpeedCount * 10) < 10.0) {
-                            tSpeedInt.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(0, 1));
-                            tSpeedDec.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(1, 3));
-                        } else {
-                            tSpeedInt.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(0, 2));
-                            tSpeedDec.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(2, 4));
-                        }
                     }
                 }
             });
@@ -1073,96 +1042,56 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         //mp.setPlaybackParams(params);
                         //mp.start();
                         tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
-                        if ((taskSpeedCount * 10) < 10.0) {
-                            tSpeedInt.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(0, 1));
-                            tSpeedDec.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(1, 3));
-                        } else {
-                            tSpeedInt.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(0, 2));
-                            tSpeedDec.setText(String.format("%.1f", (float) (taskSpeedCount * 10)).substring(2, 4));
-                        }
                     }
                 }
             });
         }
     }
 
-    //針を0にするタスク
-    public class BothNeedlesToZero implements Runnable {
-        private double angle = 0.0;
-        public BothNeedlesToZero(double angle){
-            this.angle = angle;
-        }
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    imageSpeedMeterNeedle.setRotation((float) angle);
-                    imageHeartbeatMeterNeedle.setRotation((float)angle);
-                }
-            });
-        }
-    }
-
-    //速度の針のタスク
-    public class SpeedMeterNeedle implements Runnable {
-        private double angle = 0.0;
-        public SpeedMeterNeedle(double angle){
-            this.angle = angle;
-        }
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    imageSpeedMeterNeedle.setRotation((float)angle);
-                }
-            });
-        }
-    }
-
-    //心拍の針のタスク
-    public class HeartbeatMeterNeedle implements Runnable {
-        private double angle = 0.0;
-        public HeartbeatMeterNeedle(double angle){
-            this.angle = angle;
-        }
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    imageHeartbeatMeterNeedle.setRotation((float)angle);
-                }
-            });
-        }
-    }
 
     //フォントを7セグにする
     public void Change7Seg(){
         /*7セグ表示にする処理*/
         // フォントを取得
         Typeface tf = Typeface.createFromAsset(getAssets(), "dseg7classic-bold.ttf");//7セグフォント
+        Typeface tf2 = Typeface.createFromAsset(getAssets(), "digitalword.ttf");//7セグフォント
+        /*タイマー*/
         tTimer.setTypeface(tf);
         tTimer.setTextSize(32.0f);
-        tTimer.setPadding(0,0,0,15);
-        //心拍メーター
+        tTimer.setPadding(0, 0, 0, 15);
+
+        /*走行距離*/
+        tMileage.setTypeface(tf);
+        tMileage.setTextSize(45.0f);
+        tMileage.setPadding(0, 0, 5, 0);
+        tKM.setTypeface(tf2);
+        tKM.setTextSize(25.0f);
+        tKM.setPadding(0, 0, 10, 7);
+
+        /*スピード*/
+        tSpeed.setTypeface(tf);
+        tSpeed.setTextSize(45.0f);
+        tSpeed.setPadding(0, 0, 5, 0);
+        tKPH.setTypeface(tf2);
+        tKPH.setTextSize(25.0f);
+        tKPH.setPadding(0, 0, 10, 7);
+
+        /*ターゲット心拍*/
         tTargetHeartbeat.setTypeface(tf);
-        tTargetHeartbeat.setTextSize(30.0f);
-        tTargetHeartbeat.setPadding(2,0,0,14);
+        tTargetHeartbeat.setTextSize(45.0f);
+        tTargetHeartbeat.setPadding(0, 0, 5, 0);
+        tTargetBPM.setTypeface(tf2);
+        tTargetBPM.setTextSize(25.0f);
+        tTargetBPM.setPadding(0, 0, 10, 7);
+
+        /*心拍*/
         tHeartbeat.setTypeface(tf);
-        tHeartbeat.setTextSize(40.0f);
-        tHeartbeat.setPadding(0,0,12,30);
-        //スピードメーター
-        tMileageDec.setTypeface(tf);
-        tMileageDec.setTextSize(18.0f);
-        tMileageDec.setPadding(0,0,14,24);
-        tMileageInt.setTypeface(tf);
-        tMileageInt.setTextSize(38.0f);
-        tMileageInt.setPadding(4,0,0,14);
-        tSpeedDec.setTypeface(tf);
-        tSpeedDec.setTextSize(26.0f);
-        tSpeedDec.setPadding(0,0,50,15);
-        tSpeedInt.setTypeface(tf);
-        tSpeedInt.setTextSize(45.0f);
-        tSpeedInt.setPadding(2,0,0,8);
+        tHeartbeat.setTextSize(45.0f);
+        tHeartbeat.setPadding(0, 0, 5, 0);
+        tBPM.setTypeface(tf2);
+        tBPM.setTextSize(25.0f);
+        tBPM.setPadding(0, 0, 10, 7);
+
     }
 
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
@@ -1173,17 +1102,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 if (mp != null) {
                     if (speedCount < 0.1) {
                         speedCount = speedCount + 0.1;
-                        speedMeterAngle = speedMeterAngle + 4.52;
                     } else if (speedCount < 5) {
                         speedCount = speedCount + 0.01;
-                        speedMeterAngle = speedMeterAngle + 0.452;
                     } else if (speedCount >= 5) {
                         //意味わからないほど早くされるとクラッシュする対策
                         speedCount = 5.00;
-                        speedMeterAngle = maxNeedle;
                     }
-                    Thread SetNeedleUp = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-                    SetNeedleUp.start();
                     Thread SpeedUp = new Thread(new SpeedMeterTask((float) speedCount));
                     SpeedUp.start();
                 }
@@ -1195,16 +1119,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 if (mp != null) {
                     if (speedCount < 0.1) {
                         speedCount = 0.00;
-                        speedMeterAngle = zeroNeedle;
                     } else if (speedCount <= 0.1) {
                         speedCount = speedCount - 0.1;
-                        speedMeterAngle = speedMeterAngle - 4.52;
                     } else if (speedCount >= 0.1) {
                         speedCount = speedCount - 0.01;
-                        speedMeterAngle = speedMeterAngle - 0.452;
                     }
-                    Thread SetNeedleDown = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-                    SetNeedleDown.start();
                     Thread SpeedDown = new Thread(new SpeedMeterTask((float) speedCount));
                     SpeedDown.start();
                 }
