@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 /**
  * メイン画面に関連するクラス
- *  MainActivity
+ * MainActivity
  */
 public class UserUpdate extends AppCompatActivity {
 
