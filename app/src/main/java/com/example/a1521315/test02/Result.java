@@ -40,8 +40,7 @@ public class Result extends Activity {
 
         coursename = globals.coursename;
         mileage = globals.mileage;
-        //maxheartbeat = globals.maxheartbeat;
-        maxheartbeat = globals.mode_flg;
+        maxheartbeat = globals.maxheartbeat;
         avg = globals.avg;
         max = globals.max;
         time = globals.time;
@@ -68,14 +67,8 @@ public class Result extends Activity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(globals.mode_flg == "fit") {
-                            Intent intent = new Intent(getApplication(), TrainingSelect.class);
-                            startActivity( intent );
-                }else{
                     Intent intent = new Intent(getApplication(), VideoSelect.class);
                     startActivity( intent );
-                }
-
             }
         });
 
