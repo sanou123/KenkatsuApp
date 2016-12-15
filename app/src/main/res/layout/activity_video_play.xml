@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    tools:context="com.example.a1521315.test02.VideoPlay">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/SurfaceViewLayout">
+
+        <SurfaceView android:id="@+id/surfaceView1" android:layout_width="match_parent" android:layout_height="match_parent"></SurfaceView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/MileageBarLayout"
+            android:layout_width="138px"
+            android:layout_height="639px"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="150dp" >
+
+            <RelativeLayout
+                android:id="@+id/BarLayout"
+                android:layout_width="138px"
+                android:layout_height="639px"
+                android:layout_centerInParent="true">
+
+                <ImageView
+                    app:srcCompat="@drawable/bar0"
+                    android:id="@+id/image_view_bar"
+                    android:layout_width="138px"
+                    android:layout_height="639px"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
+
+                <ImageView
+                    app:srcCompat="@drawable/ghost"
+                    android:id="@+id/image_view_ghost"
+                    android:layout_width="50px"
+                    android:layout_height="50px"
+                    android:layout_marginTop="545px"
+                    android:layout_centerHorizontal="true" />
+
+                <ImageView
+                    app:srcCompat="@drawable/me"
+                    android:id="@+id/image_view_me"
+                    android:layout_width="50px"
+                    android:layout_height="50px"
+                    android:layout_marginTop="545px"
+                    android:layout_centerHorizontal="true" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/CoursenameLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_width="350dp"
+            android:layout_height="60dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/coursename"
+                android:id="@+id/image_Coursenamedisplay"/>
+
+            <TextView
+                android:id="@+id/textCourse"
+                android:text="コース名"
+                android:textSize="36sp"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:layout_width="350dp"
+                android:layout_height="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="500dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/PlayResultLayout">
+
+            <Button
+                android:id="@+id/buttonPlay"
+                android:text="プレイ"
+                android:textSize="100sp"
+                android:layout_width="500dp"
+                android:layout_height="150dp"
+                android:visibility="invisible"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ConnectCheak"
+            android:orientation="vertical"
+            android:layout_width="600dp"
+            android:layout_height="300dp"
+            android:visibility="visible"
+            android:background="@android:color/holo_red_dark"
+            android:layout_centerInParent="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/textMSG"
+                    android:text="心拍数を測定しながら走行しますか？"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_below="@+id/textMSG"
+                    android:id="@+id/textConnectMsg2"
+                    android:text="接続する場合は接続を押して接続確立させてから続行。"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true"
+                    />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg2"
+                    android:id="@+id/textConnectMsg3"
+                    android:text="続行を押す。"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg3"
+                    android:id="@+id/textConnectMsg4"
+                    android:text="接続しない場合はそのまま続行を押す。"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg4"
+                    android:id="@+id/textConnectStatus"
+                    android:text="connect. / not connected."
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:layout_alignParentStart="true" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="0dp"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/buttonYes"
+                    android:text="接続する"
+                    android:layout_width="300dp"
+                    android:layout_height="100dp"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/buttonNo"
+                    android:text="続行"
+                    android:layout_width="300dp"
+                    android:layout_height="100dp"
+                    android:textSize="30sp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/TimerLayout"
+            android:layout_width="350dp"
+            android:layout_height="130dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:id="@+id/textAddTimer"
+                android:text="＋00:00:00.0"
+                android:textSize="40dp"
+                android:textColor="@android:color/holo_red_dark"
+                android:gravity="bottom|right"
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="80dp"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/image_TimeDisplay"
+                app:srcCompat="@drawable/time"
+                android:layout_width="350dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                />
+
+            <TextView
+                android:id="@+id/textTimer"
+                android:text="00:00:00.0"
+                android:textSize="40dp"
+                android:textColor="@android:color/black"
+                android:gravity="bottom|right"
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="80dp"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/DataLayout"
+            android:layout_width="300dp"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/CoursenameLayout"
+            android:layout_height="150dp">
+
+            <TextView
+                android:text="デバッグ用テキストビュー1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDebug1"
+                android:textSize="20sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:text="デバッグ用テキストビュー2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDebug2"
+                android:textSize="20sp"
+                android:textColor="@android:color/holo_orange_dark"
+                android:layout_below="@+id/textDebug1"
+                android:layout_alignParentStart="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/MeterUI2Layout"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
+
+            <RelativeLayout
+                android:layout_width="190dp"
+                android:layout_height="90dp"
+                android:id="@+id/MIleageUILayout"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="110dp"
+                android:layout_marginStart="5dp">
+
+                <ImageView
+                    android:layout_width="190dp"
+                    android:layout_height="90dp"
+                    app:srcCompat="@drawable/display"
+                    android:id="@+id/imageMileageDisplay"
+                    android:scaleType="fitXY"/>
+
+                <TextView
+                    android:text="km"
+                    android:id="@+id/textKM"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="bottom|right"
+                    android:textColor="@android:color/white"
+                    android:layout_height="40dp"
+                    android:layout_width="190dp"/>
+
+                <TextView
+                    android:id="@+id/textMileage"
+                    android:text="900.00"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="200dp"
+                    android:gravity="bottom|right"
+                    android:layout_height="60dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/SpeedUILayout"
+                android:layout_width="190dp"
+                android:layout_height="90dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="5dp">
+
+                <ImageView
+                    android:layout_width="190dp"
+                    android:layout_height="90dp"
+                    app:srcCompat="@drawable/display"
+                    android:id="@+id/imageSpeedDisplay"
+                    android:scaleType="fitXY"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:text="km/h"
+                    android:id="@+id/textKPH"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="bottom|right"
+                    android:textColor="@android:color/white"
+                    android:layout_height="40dp"
+                    android:layout_width="190dp"/>
+
+                <TextView
+                    android:id="@+id/textSpeed"
+                    android:text="49.98"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="200dp"
+                    android:gravity="bottom|right"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_height="60dp"/>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/MeterUI3Layout"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true">
+
+            <RelativeLayout
+                android:layout_width="120dp"
+                android:layout_height="90dp"
+                android:id="@+id/targetBPMUILayout"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="110dp"
+                android:layout_marginEnd="5dp">
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="90dp"
+                    app:srcCompat="@drawable/display"
+                    android:id="@+id/imageTargetBPMDisplay"
+                    android:scaleType="fitXY"/>
+
+                <TextView
+                    android:text="Target BPM"
+                    android:id="@+id/textTargetBPM"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="bottom|right"
+                    android:textColor="@android:color/white"
+                    android:layout_height="40dp"
+                    android:layout_width="120dp"/>
+
+                <TextView
+                    android:id="@+id/textTargetHeartbeat"
+                    android:text="999"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="120dp"
+                    android:gravity="bottom|right"
+                    android:layout_height="60dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/BPMUILayout"
+                android:layout_width="120dp"
+                android:layout_height="90dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp">
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="90dp"
+                    app:srcCompat="@drawable/display"
+                    android:id="@+id/imageBPMDisplay"
+                    android:scaleType="fitXY"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"/>
+
+                <TextView
+                    android:text="BPM"
+                    android:id="@+id/textBPM"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="bottom|right"
+                    android:textColor="@android:color/white"
+                    android:layout_height="40dp"
+                    android:layout_width="120dp"/>
+
+                <TextView
+                    android:id="@+id/textHeartbeat"
+                    android:text="128"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="120dp"
+                    android:gravity="bottom|right"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_height="60dp"/>
+
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>
