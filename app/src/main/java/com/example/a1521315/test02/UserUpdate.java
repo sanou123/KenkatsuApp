@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 /**
  * メイン画面に関連するクラス
- * MainActivity
+ *  MainActivity
  */
 public class UserUpdate extends AppCompatActivity {
 
@@ -173,7 +173,8 @@ public class UserUpdate extends AppCompatActivity {
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.updateDB(globals.now_user, iAge, globals.sex, iHeight, iWeight,bmi.doubleValue(),ideal_weight);   // DBに登録
+            dbAdapter.updateDB(globals.now_user, iAge, globals.sex, iHeight, iWeight,
+                    bmi.doubleValue(),ideal_weight, globals.login);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定

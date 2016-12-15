@@ -15,6 +15,7 @@ public class MyListItem {
     protected String weight;     // 体重
     protected double bmi;       //BMI
     protected double ideal_weight;  //理想体重
+    protected String  login;  //最終ログイン
 
     /**
      * MyListItem()
@@ -27,10 +28,11 @@ public class MyListItem {
      * @param weight   String 体重
      * @param bmi       double BMI
      * @param ideal_weight double 理想体重
+     * @param login         String 最終ログイン
      *
      */
     public MyListItem(int user_id, String name, String age, String sex,String height,
-                      String weight, double bmi, double ideal_weight) {
+                      String weight, double bmi, double ideal_weight, String login) {
         this.user_id = user_id;
         this.name = name;
         this.age = age;
@@ -39,6 +41,8 @@ public class MyListItem {
         this.weight = weight;
         this.bmi = bmi;
         this.ideal_weight = ideal_weight;
+        this.login = login;
+
     }
 
     /**
@@ -120,5 +124,15 @@ public class MyListItem {
      */
     public double getIdeal_weight() {
         return ideal_weight;
+    }
+
+    /**
+     * 最終ログインを取得
+     * getLogin()
+     *
+     * @return login String 最終ログイン
+     */
+    public String getLogin() {
+        return login;
     }
 }

@@ -910,6 +910,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     long mm = timerCount * 100 / 1000 / 60 % 60;//分
                     long ss = timerCount * 100 / 1000 % 60;//秒
                     long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
+                    globals.hh = hh;
+                    globals.mm = mm;
+                    globals.ss = ss;
+                    globals.ms = ms;
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
                 }

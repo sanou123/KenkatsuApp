@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * メイン画面に関連するクラス
@@ -202,10 +206,20 @@ public class MainUser extends AppCompatActivity {
             //四捨五入する
             BigDecimal bmi = bd.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
 
+
+            //////////最終ログイン取得のための仮データ
+
+            long currentTimeMillis = System.currentTimeMillis();
+
+            Date date = new Date(currentTimeMillis);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日HH時mm分ss秒");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+            Log.v("時間", dateFormat.format(date));
+
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.saveDB(strName, iAge, strSex, iHeight, iWeight, bmi.doubleValue() , ideal_weight);   // DBに登録
+            dbAdapter.saveDB(strName, iAge, strSex, iHeight, iWeight, bmi.doubleValue() , ideal_weight, dateFormat.format(date));   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定

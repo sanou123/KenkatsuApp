@@ -59,39 +59,22 @@
 
         <!-- タイトル：身長 -->
         <TextView
-            android:id="@+id/text05TitleHeight"
+            android:id="@+id/text05TitleLogin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:text="@string/text05_title_height"
+            android:layout_weight="0.4"
+            android:text="@string/text05_title_login"
             android:textSize="14sp" />
 
-        <!-- データ表示用：身長 -->
+        <!-- データ表示用：最終ログイン -->
         <TextView
-            android:id="@+id/text05Height"
+            android:id="@+id/text05Login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_weight="0.7"
             android:textColor="#000000"
             android:textSize="14sp" />
 
-        <!-- タイトル：体重 -->
-        <TextView
-            android:id="@+id/text05TitleWeight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:text="@string/text05_title_weight"
-            android:textSize="14sp" />
-
-        <!-- データ表示用：体重 -->
-        <TextView
-            android:id="@+id/text05Weight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:textColor="#000000"
-            android:textSize="14sp" />
 
     </LinearLayout>
 </LinearLayout>

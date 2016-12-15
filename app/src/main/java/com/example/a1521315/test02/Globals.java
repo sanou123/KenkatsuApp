@@ -14,7 +14,8 @@ public class Globals extends Application {
     static String avg;
     static String max;
     static String time;
-    static double cal = 12.3;
+    static double cal;
+
     static String now_user;
     static String total_time ;
     static String total_mileage;
@@ -28,8 +29,13 @@ public class Globals extends Application {
     static String month;
     static String day;
     static String times_of_day;
+    static String login;
     static String age;
-    static String deal_weight;
+    static long hh;
+    static long mm;
+    static long ss;
+    static long ms;
+    static String  twitter_user;
 
     static String mode_flg;
     int timflg1;
