@@ -47,7 +47,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     Globals globals;
     /*メーター関連の関数*/
     final double zeroNeedle = -113.000;//メーター0の場所
-    final double maxNeedle = 113.000;//メーターMAXの場所
+    final double maxNeedle = 113.000;//メーターMAXの場 所
     double speedMeterAngle      = zeroNeedle;
     double heartbeatMeterAngle  = zeroNeedle;
 
