@@ -181,33 +181,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
 
-
-        //前回の走行データを色々するところ↓
-        if(globals.total_mileage == null) {
-            //前回のデータがないときはこっち
-            tDebug1 = (TextView) findViewById(R.id.textDebug1);
-            tDebug1.setText("とーたるみれあげはぬる");
-        }else{
-            tDebug1 = (TextView) findViewById(R.id.textDebug1);
-            tDebug1.setText(globals.total_mileage + "km");
-            psKilometers = Double.parseDouble(globals.total_mileage);
-        }
-        if(globals.total_time == null) {
-            //前回のデータがないときはこっち
-            tDebug2 = (TextView) findViewById(R.id.textDebug2);
-            tDebug2.setText("たいむはぬるだよー");
-        }else{
-            //秒速を求めるために時分秒を秒に変換
-            int hours = Integer.parseInt(globals.total_time.substring(0, 2));
-            int minutes = Integer.parseInt(globals.total_time.substring(3, 5));
-            double seconds = Double.parseDouble(globals.total_time.substring(6));
-            seconds = (hours * 3600) + (minutes * 60) + seconds;
-            tDebug2 = (TextView) findViewById(R.id.textDebug2);
-            tDebug2.setText(seconds + "seconds");
-            //tDebug2.setText(globals.total_time.substring(0, 2) + "時間" + globals.total_time.substring(3, 5) + "分" + globals.total_time.substring(6, 8) + "秒"+globals.total_time.substring(9));
-            psSeconds = seconds;
-        }
-         Change7Seg();//7セグフォントに変換
+        GetLastTrainingData();//前回のデータを色々やってる
+        Change7Seg();//7セグフォントに変換
 
         /*シークバーに関する奴*/
         imageMe = (ImageView)findViewById(R.id.image_view_me);
@@ -887,7 +862,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         // ポップアップメニュー表示
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
         alertDialog.setTitle("トレーニング終了");
-        alertDialog.setMessage("リザルトを押して結果を確認しましょう。");
+        alertDialog.setMessage("結果を確認しましょう。");
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -967,8 +942,35 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-
-    //ゴーストの移動 ↓1秒あたりに進むpx数//菅原
+    /*ゴースト関連*/
+    //前回の測定結果を変数に入れたりするメソッド　
+    public void GetLastTrainingData(){
+        //前回の走行データを色々するところ↓
+        if(globals.total_mileage == null) {
+            //前回のデータがないときはこっち
+            tDebug1 = (TextView) findViewById(R.id.textDebug1);
+            tDebug1.setText("とーたるみれあげはぬる");
+        }else{
+            tDebug1 = (TextView) findViewById(R.id.textDebug1);
+            tDebug1.setText(globals.total_mileage + "km");
+            psKilometers = Double.parseDouble(globals.total_mileage);
+        }
+        if(globals.total_time == null) {
+            //前回のデータがないときはこっち
+            tDebug2 = (TextView) findViewById(R.id.textDebug2);
+            tDebug2.setText("たいむはぬるだよー");
+        }else{
+            //秒速を求めるために時分秒を秒に変換
+            int hours = Integer.parseInt(globals.total_time.substring(0, 2));
+            int minutes = Integer.parseInt(globals.total_time.substring(3, 5));
+            double seconds = Double.parseDouble(globals.total_time.substring(6));
+            seconds = (hours * 3600) + (minutes * 60) + seconds;
+            tDebug2 = (TextView) findViewById(R.id.textDebug2);
+            tDebug2.setText(seconds + "seconds");
+            psSeconds = seconds;
+        }
+    }
+    //秒速の計算
     public double PerSecond(double kilometers, double seconds){
         int meters = 0;
         double perSeconds = 0.0;
@@ -977,6 +979,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         perSeconds = (perSeconds / meters);
         return perSeconds;
     }
+    //ゴースト用のタスク
     public class MoveGhostTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
         final int endPoint = 45;//エンド地点の座標
@@ -998,6 +1001,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
+
 
     //走行距離タスク
     public class MileageTask implements Runnable {
