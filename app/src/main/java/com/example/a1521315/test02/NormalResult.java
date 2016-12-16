@@ -140,7 +140,7 @@ public class NormalResult extends Activity {
         dbAdapter.saveDB_DATA(name_id, globals.now_user, globals.year, globals.month,
                 globals.day,globals.times_of_day, globals.maxheartbeat,
                 globals.cal, globals.total_time, globals.total_mileage, globals.coursename,
-                globals.time, globals.avg, globals.max, globals.mileage);   // DBに登録
+                globals.time, globals.avg, globals.max, globals.mileage,globals.training_name);   // DBに登録
         dbAdapter.closeDB();                                        // DBを閉じる
 
     }

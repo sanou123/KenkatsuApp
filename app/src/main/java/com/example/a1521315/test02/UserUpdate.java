@@ -162,19 +162,26 @@ public class UserUpdate extends AppCompatActivity {
             int iHeight = Integer.parseInt(strHeight);
             int iWeight = Integer.parseInt(strWeight);
 
-            double dbmi = iWeight / (iHeight * iHeight);
-            double ideal_weight = ((iHeight * 0.01) * (iHeight * 0.01)) * 22;
+            //BMIの算出
+            double dbmi = iWeight / ((iHeight * 0.01) * (iHeight * 0.01));
+            //理想体重の算出
+            double dideal_weight = ((iHeight * 0.01) * (iHeight * 0.01)) * 22;
 
             //元データをBigDecimal型にする
-            BigDecimal bd = new BigDecimal(dbmi);
+            BigDecimal bd_bmi = new BigDecimal(dbmi);
             //四捨五入する
-            BigDecimal bmi = bd.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+            BigDecimal bmi = bd_bmi.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+
+            //元データをBigDecimal型にする
+            BigDecimal bd_i_w = new BigDecimal(dideal_weight);
+            //四捨五入する
+            BigDecimal ideal_weight = bd_i_w.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
 
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
             dbAdapter.updateDB(globals.now_user, iAge, globals.sex, iHeight, iWeight,
-                    bmi.doubleValue(),ideal_weight, globals.login);   // DBに登録
+                    bmi.doubleValue(), ideal_weight.doubleValue(), globals.login);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定

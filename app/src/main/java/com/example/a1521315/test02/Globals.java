@@ -36,6 +36,7 @@ public class Globals extends Application {
     static long ss;
     static long ms;
     static String  twitter_user;
+    static String training_name;
 
     int timflg1;//2
     int timflg2;//4

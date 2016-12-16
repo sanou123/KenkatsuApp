@@ -128,7 +128,8 @@ public class SelectSheetListView1 extends AppCompatActivity {
                         c.getString(9),
                         c.getString(10),
                         c.getString(11),
-                        c.getString(12));
+                        c.getString(12),
+                        c.getString(13));
 
                 Log.d("取得したCursor(DATA_ID):", String.valueOf(c.getString(0)));
                 Log.d("取得したCursor(名前に対するID):", String.valueOf(c.getString(1)));
@@ -179,6 +180,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
             TextView text05Avg_speed;
             TextView text05Max_speed;
             TextView text05Distance;
+            TextView text05Training_name;
 
         }
 
@@ -233,6 +235,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
                 TextView text05Avg_speed = (TextView) view.findViewById(R.id.text05Avg_speed);      // 品名のTextView
                 TextView text05Max_speed = (TextView) view.findViewById(R.id.text05Max_speed);      // 品名のTextView
                 TextView text05Distance = (TextView) view.findViewById(R.id.text05Distance);      // 品名のTextView
+                TextView text05Training_name = (TextView) view.findViewById(R.id.text05Training_name);      // 品名のTextView
 
 
 
@@ -249,6 +252,7 @@ public class SelectSheetListView1 extends AppCompatActivity {
                 holder.text05Avg_speed = text05Avg_speed;
                 holder.text05Max_speed = text05Max_speed;
                 holder.text05Distance = text05Distance;
+                holder.text05Training_name = text05Training_name;
 
                 view.setTag(holder);
 
@@ -269,6 +273,8 @@ public class SelectSheetListView1 extends AppCompatActivity {
             holder.text05Avg_speed.setText(myListItem1.getAvg_speed());
             holder.text05Max_speed.setText(myListItem1.getMax_speed());
             holder.text05Distance.setText(myListItem1.getDistance());
+            holder.text05Training_name.setText(myListItem1.getTraining_name());
+
 
 
             return view;

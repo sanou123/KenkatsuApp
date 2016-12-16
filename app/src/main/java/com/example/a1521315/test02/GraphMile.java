@@ -313,9 +313,12 @@ public class GraphMile extends Activity {
 
         String column = "name_id";          //検索対象のカラム名
         String[] name_id = {globals.name_id};            //検索対象の文字
+        String column1 = "year";          //検索対象のカラム名
+        String[] year = {"2015"};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
         Cursor c = dbAdapter.searchDB(null, column, name_id);
+        Cursor c1 = dbAdapter.searchDB(null, column1, year);
 
         // DBのデータを取得
         /*
@@ -323,7 +326,7 @@ public class GraphMile extends Activity {
         Cursor xc = dbAdapter.getDB1(xColumns);
         */
 
-        if (c.moveToFirst()) {
+        if (c.moveToFirst() && c1.moveToFirst()) {
             do {
                 xValues.add(c.getString(3)+c.getString(4)+c.getString(5)+'\n'
                         +c.getString(6));
@@ -358,7 +361,7 @@ public class GraphMile extends Activity {
                 valuesA.add(new BarEntry(Float.parseFloat(c.getString(15)), Num));
                 Log.d("取得したCursor:", c.getString(15));
                 Num = Num +1;
-            } while (c.moveToNext()/* && yc_num.moveToNext()*/);
+            } while (c.moveToNext() && c1.moveToNext());
         }
         c.close();
         dbAdapter.closeDB();    // DBを閉じる

@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,8 +104,16 @@ public class SelectSheetListView extends AppCompatActivity {
                         globals.sex = Sex;
                         globals.weight = Weight;
                         globals.height = Height;
-                        globals.bmi = Bmi;
-                        globals.ideal_weight = Ideal_weight;
+                        //元データをBigDecimal型にする
+                        BigDecimal bd_bmi = new BigDecimal(Bmi);
+                        //四捨五入する
+                        BigDecimal bmi = bd_bmi.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+                        globals.bmi = bmi.doubleValue();
+                        //元データをBigDecimal型にする
+                        BigDecimal bd_ideal_weight = new BigDecimal(Ideal_weight);
+                        //四捨五入する
+                        BigDecimal ideal_weight = bd_ideal_weight.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+                        globals.ideal_weight = ideal_weight.doubleValue();
                         globals.login = Login;
                         Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
                         startActivity(intent);

@@ -81,7 +81,19 @@
             android:name=".NormalResult"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".SelectSheetTable1"
+            android:name=".SelectSheetTableNormal"
+            android:label="@string/name_selectsheet_tabel"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".SelectSheetTableTimeAttack"
+            android:label="@string/name_selectsheet_tabel"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".SelectSheetTableEndlessrun"
+            android:label="@string/name_selectsheet_tabel"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".TrainingHistorySelect"
             android:label="@string/name_selectsheet_tabel"
             android:screenOrientation="landscape" />
         <activity

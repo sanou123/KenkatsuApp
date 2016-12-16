@@ -6,11 +6,9 @@ package com.example.a1521315.test02;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -63,43 +61,19 @@ public class Login extends AppCompatActivity {
         }
 
     }
-
     // 結果を受け取るために onActivityResult を設置
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        dbAdapter = new DBAdapter(this);
-        dbAdapter.openDB();     // DBの読み込み(読み書きの方)
-        // DBのデータを取得
-        String[] Columns = {DBAdapter.COL_NAME};     // DBのカラム：品名
-        Cursor c = dbAdapter.getDB(Columns);
-
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             // 認識結果を ArrayList で取得
             ArrayList<String> candidates = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-            if (candidates.size() > 0) {
+            if(candidates.size() > 0) {
                 // 認識結果候補で一番有力なものを表示
-                //textView.setText( candidates.get(0));
-                if (candidates.get(0) == "佐野") {
-                    Intent intent = new Intent();
-                    intent.setClassName("com.example.a1521315.test02",
-                            "com.example.a1521315.test02.SelectSheetListView");
-                    startActivity(intent);
-                }
+                textView.setText( candidates.get(0));
             }
         }
-        c.close();
-        dbAdapter.closeDB();    // DBを閉じる
-    }
-
-    @Override
-    //戻るキーを無効にする
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

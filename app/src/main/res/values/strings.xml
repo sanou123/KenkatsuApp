@@ -49,7 +49,7 @@
     <string name="text05_title_sex">性別：</string>
     <string name="text05_title_height">身長：</string>
     <string name="text05_title_weight">体重：</string>
-    <string name="text05_title_login">最終ログイン：</string>
+    <string name="text05_title_login">twitter最終ログイン：</string>
 
 
     <string name="text05_title_date">日時：</string>
@@ -63,6 +63,7 @@
     <string name="text05_title_max_speed">最高速度：</string>
     <string name="text05_title_distance">走行距離：</string>
     <string name="text05_title_bmi">BMI：</string>
+    <string name="text05_title_training_name">トレーニング名：</string>
 
     <!-- ここまで -->
 
