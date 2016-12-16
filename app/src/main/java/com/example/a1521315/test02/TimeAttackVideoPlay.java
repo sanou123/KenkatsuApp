@@ -240,7 +240,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         tCourse.setText("コース"+CourseNum);
 
         tCourse.setText("体力測定コース");
-        mediaPath = "/izunuma2900meter.mp4";//実機9のストレージにあるファルを指定
+        mediaPath = "/izunuma2900meter_low.mp4";//実機9のストレージにあるファルを指定
         totalMileage = 2.9;
         raw = 0;
 
