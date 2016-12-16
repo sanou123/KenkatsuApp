@@ -876,7 +876,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 ResultProcess();
             }
         });
-
         AlertDialog myDialog = alertDialog.create();
         myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
         myDialog.show();
