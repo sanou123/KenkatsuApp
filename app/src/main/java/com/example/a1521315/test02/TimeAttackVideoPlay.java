@@ -113,8 +113,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     double speed_Value = 0.0;
     double dist_Value = 0.0;
     double my_dist_Value = 0.0;
-    //public float plus_dist_Value = 0.0005F;//0.0015F
-    public float plus_dist_Value = 0.00005F;//0.0015F
+    //public float plus_dist_Value = 0.05F;//0.0015F
+    public float plus_dist_Value = 0.0005F;//0.0015F
 
     double old_dist_Value = 0.0;
     public float resist_Level = (float)1.0;//負荷のレベルによる係数
@@ -239,10 +239,10 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         tCourse = (TextView)findViewById(R.id.textCourse);
         tCourse.setText("コース"+CourseNum);
 
-        tCourse.setText("デバッグ用");
-        mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
-        totalMileage = 10.0;
-        raw = 1;
+        tCourse.setText("体力測定コース");
+        mediaPath = "/izunuma2900meter.mp4";//実機9のストレージにあるファルを指定
+        totalMileage = 2.9;
+        raw = 0;
 
         //USBAccessoryManager の初期化
         accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
@@ -928,7 +928,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     //カウントアップタイマタスク
     public class CntTimerTask implements Runnable {
         //private Handler handler = new Handler();
-        private long timerCount = 600;//初期値1分
+        private long timerCount = 3000;//初期値5分
         public void run() {
             // handlerを使って処理をキューイングする
             handler.post(new Runnable() {
@@ -954,31 +954,31 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     }
                     //残り時間を増やす2km
                     if(globals.timflg1 == 1){
-                        timerCount += 600;//1分追加
+                        timerCount += 3000;//5分追加
                         globals.timflg1 = 2;
                         textaddtimer.setVisibility(View.VISIBLE);
-                        textaddtimer.setText("+00:01:00.0");
+                        textaddtimer.setText("+00:05:00.0");
                     }
                     //残り時間を増やす4km
                     if(globals.timflg2 == 1){
-                        timerCount += 600;//1分追加
+                        timerCount += 3000;//5分追加
                         globals.timflg2 = 2;
                         textaddtimer.setVisibility(View.VISIBLE);
-                        textaddtimer.setText("+00:01:00.0");
+                        textaddtimer.setText("+00:05:00.0");
                     }
                     //残り時間を増やす6km
                     if(globals.timflg3 == 1){
-                        timerCount += 600;//1分追加
+                        timerCount += 3000;//5分追加
                         globals.timflg3 = 2;
                         textaddtimer.setVisibility(View.VISIBLE);
-                        textaddtimer.setText("+00:01:00.0");
+                        textaddtimer.setText("+00:05:00.0");
                     }
                     //残り時間を増やす8km
                     if(globals.timflg4 == 1){
-                        timerCount += 600;//1分追加
+                        timerCount += 3000;//5分追加
                         globals.timflg4 = 2;
                         textaddtimer.setVisibility(View.VISIBLE);
-                        textaddtimer.setText("+00:01:00.0");
+                        textaddtimer.setText("+00:05:00.0");
                     }
 
                     //表示時間のカウント
@@ -1006,6 +1006,21 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         globals.time_disp_cnt = 0;
                         globals.timflg4 = 3;
                     }
+
+                    //タイムをグローバルに保存
+                    if(timerCount >= 9000){//10：00走破
+                        globals.rank = "S（アスリート並みの体力です！）";
+                    }
+                    else if(timerCount >= 7200){//10：01～13：00走破
+                        globals.rank = "A（体力は十分あるようです。Sランクを目指して頑張りましょう。）";
+                    }
+                    else if(timerCount >= 6000){//13：01～15：00走破
+                        globals.rank = "B（一般的な体力です。定期的なトレーニングで維持・向上を目指しましょう。）";
+                    }
+                    else{//15：01以下
+                        globals.rank = "C（体力があまりないようです。トレーニングモードで向上を目指しましょう。）";
+                    }
+
                 }
             });
         }
@@ -1069,27 +1084,27 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         tMileageInt.setText(String.format("%.2f",f3).substring(0, 3));
                         tMileageDec.setText(String.format("%.2f",f3).substring(3, 6));
                     }
-                    //2kmでチェックポイント
+                    //800mでチェックポイント
                     if(globals.timflg1 == 0) {
-                        if (f3 >= 2) {
+                        if (f3 >= 0.8) {
                             globals.timflg1 = 1;
                         }
                     }
-                    //4km
+                    //1.5km
                     if(globals.timflg2 == 0) {
-                        if (f3 >= 4) {
+                        if (f3 >= 1.5) {
                             globals.timflg2 = 1;
                         }
                     }
-                    //6km
+                    //2km
                     if(globals.timflg3 == 0) {
-                        if (f3 >= 6) {
+                        if (f3 >= 2) {
                             globals.timflg3 = 1;
                         }
                     }
-                    //8km
+                    //2.5km
                     if(globals.timflg4 == 0) {
-                        if (f3 >= 8) {
+                        if (f3 >= 2.5) {
                             globals.timflg4 = 1;
                         }
                     }

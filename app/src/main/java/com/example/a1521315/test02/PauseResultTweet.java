@@ -19,7 +19,6 @@ public class PauseResultTweet extends Activity{
     String avg;
     String max;
     String time;
-    String kuriarank;
     double cal;
 
     @Override
@@ -32,7 +31,6 @@ public class PauseResultTweet extends Activity{
         max = globals.max;
         time = globals.time;
         cal = globals.cal;
-        kuriarank = globals.rank;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
@@ -43,6 +41,6 @@ public class PauseResultTweet extends Activity{
         WebView myWebView = (WebView) findViewById(R.id.web1);
         myWebView.setWebViewClient(new WebViewClient());
         //myWebView.loadUrl("http://www.google.com");
-        myWebView.loadUrl("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text="+"コース名："+coursename+"%0a"+"走行距離："+mileage+"%0a"+"最大心拍："+maxheartbeat+"%0a"+"平均速度："+avg+"%0a"+"最高速度："+max+"%0a"+"運動時間："+time+"%0a"+"消費カロリー："+cal+"%0a"+"クリアランク："+kuriarank+"%0a");
+        myWebView.loadUrl("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text="+"コース名："+coursename+"%0a"+"走行距離："+mileage+"%0a"+"最大心拍："+maxheartbeat+"%0a"+"平均速度："+avg+"%0a"+"最高速度："+max+"%0a"+"運動時間："+time+"%0a"+"消費カロリー："+cal+"%0a"+"クリアランク："+"-（測定を中断しました。）"+"%0a");
     }
 }

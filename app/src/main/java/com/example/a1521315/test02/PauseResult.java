@@ -26,7 +26,6 @@ public class PauseResult extends Activity {
     String avg;
     String max;
     String time;
-    String kuriarank;
     double cal;
 
     /** Called when the activity is first created. */
@@ -46,7 +45,6 @@ public class PauseResult extends Activity {
         max = globals.max;
         time = globals.time;
         cal = globals.cal;
-        kuriarank = globals.rank;
 
         TextView textcoursename = (TextView)findViewById(R.id.coursename);
         textcoursename.setText(coursename);
@@ -64,7 +62,7 @@ public class PauseResult extends Activity {
         String stringal = new Double(cal).toString();
         textcal.setText(stringal);
         TextView rank = (TextView)findViewById(R.id.rank);
-        rank.setText(kuriarank);
+        rank.setText("-（測定を中断しました。）");
 
 
 
