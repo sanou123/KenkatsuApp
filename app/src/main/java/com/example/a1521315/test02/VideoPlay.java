@@ -64,6 +64,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
 
+    double psKilometers = 1 , psSeconds = 10;
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -181,20 +182,30 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer.setText("00:00:00.0");
 
 
-        tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText("とーたるみれあげ:"+globals.total_mileage);
-
+        //前回の走行データを色々するところ↓
+        if(globals.total_mileage == null) {
+            //前回のデータがないときはこっち
+            tDebug1 = (TextView) findViewById(R.id.textDebug1);
+            tDebug1.setText("とーたるみれあげはぬる");
+        }else{
+            tDebug1 = (TextView) findViewById(R.id.textDebug1);
+            tDebug1.setText(globals.total_mileage + "km");
+            psKilometers = Double.parseDouble(globals.total_mileage);
+        }
         if(globals.total_time == null) {
+            //前回のデータがないときはこっち
             tDebug2 = (TextView) findViewById(R.id.textDebug2);
             tDebug2.setText("たいむはぬるだよー");
         }else{
+            //秒速を求めるために時分秒を秒に変換
             int hours = Integer.parseInt(globals.total_time.substring(0, 2));
             int minutes = Integer.parseInt(globals.total_time.substring(3, 5));
             double seconds = Double.parseDouble(globals.total_time.substring(6));
-
+            seconds = (hours * 3600) + (minutes * 60) + seconds;
             tDebug2 = (TextView) findViewById(R.id.textDebug2);
+            tDebug2.setText(seconds + "seconds");
             //tDebug2.setText(globals.total_time.substring(0, 2) + "時間" + globals.total_time.substring(3, 5) + "分" + globals.total_time.substring(6, 8) + "秒"+globals.total_time.substring(9));
-            tDebug2.setText(hours + "←hours　" + minutes + "←minutes　" + seconds + "←seconds");
+            psSeconds = seconds;
         }
          Change7Seg();//7セグフォントに変換
 
@@ -925,7 +936,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Thread MoveGhost = new Thread(new MoveGhostTask(PerSecond(10.4,356)));
+                    Thread MoveGhost = new Thread(new MoveGhostTask(PerSecond(psKilometers,psSeconds)));
                     MoveGhost.start();
                     Thread MoveMe = new Thread(new MoveMeTask());
                     MoveMe.start();
@@ -958,37 +969,31 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
 
     //ゴーストの移動 ↓1秒あたりに進むpx数//菅原
-    public double PerSecond(double kilometers, int byou){
+    public double PerSecond(double kilometers, double seconds){
         int meters = 0;
-        double byousoku = 0.0;
+        double perSeconds = 0.0;
         meters = (int)(kilometers * 1000);
-        byousoku = meters / byou;
-        byousoku = (byousoku / meters);
-        return byousoku;
+        perSeconds = meters / seconds;
+        perSeconds = (perSeconds / meters);
+        return perSeconds;
     }
     public class MoveGhostTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
         final int endPoint = 45;//エンド地点の座標
-        double byou;
+        double perSeconds;
         double ghostPos = imageGhost.getY();
-        MoveGhostTask(double byou){
-            this.byou = byou;
+        MoveGhostTask(double perSeconds){
+            this.perSeconds = perSeconds;
         }
-        //meとghostのMarginTopの値を入れてください↑
         final  int barDistance = startPoint - endPoint;//545-45=500
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    float getPlayTime = (float)ghostPos - ((float)byou* barDistance);
-                    imageGhost.setY(getPlayTime);
-                   // tDebug2.setText(imageGhost.getY()+"");
-                    /*
-                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * barDistance;//barのpx数
-                    getPlayTime = barDistance - getPlayTime;
-                    getPlayTime = getPlayTime + endPoint;//画像レイアウトの高さの都合上MarginTop=0はゴール地点ではないので調整しなくてはいけない　
-                    imageMe.setY(getPlayTime);
-                    */
+                    if(ghostPos > endPoint){
+                        float setGhostPosition = (float)ghostPos - ((float)perSeconds * barDistance);
+                        imageGhost.setY(setGhostPosition);
+                    }
                 }
             });
         }
