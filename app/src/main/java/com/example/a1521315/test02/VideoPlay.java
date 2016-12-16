@@ -180,6 +180,20 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
 
+
+        tDebug1 = (TextView) findViewById(R.id.textDebug1);
+        tDebug1.setText("とーたるみれあげ:"+globals.total_mileage);
+
+        if(globals.total_time == null) {
+            tDebug2 = (TextView) findViewById(R.id.textDebug2);
+            tDebug2.setText("たいむはぬるだよー");
+        }else{
+            int hours = Integer.parseInt(globals.total_time.substring(0, 2));
+            int minutes = Integer.parseInt(globals.total_time.substring(3, 5));
+            double seconds = Double.parseDouble(globals.total_time.substring(6));
+            tDebug2 = (TextView) findViewById(R.id.textDebug2);
+            tDebug2.setText(globals.total_time.substring(0, 2) + "時間" + globals.total_time.substring(3, 5) + "分" + globals.total_time.substring(6, 8) + "秒"+globals.total_time.substring(9));
+        }
          Change7Seg();//7セグフォントに変換
 
         /*シークバーに関する奴*/
@@ -253,7 +267,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -270,7 +284,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
-
+*/
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -727,14 +741,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         @Override
         public void onClick(View v) {
             PlayProcess();
-        }
-    };
-
-    //Resultボタンを押したときの処理
-    View.OnClickListener ResultClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            ResultProcess();
         }
     };
 
