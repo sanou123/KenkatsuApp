@@ -948,26 +948,22 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //前回の走行データを色々するところ↓
         if(globals.total_mileage == null) {
             //前回のデータがないときはこっち
-            tDebug1 = (TextView) findViewById(R.id.textDebug1);
-            tDebug1.setText("とーたるみれあげはぬる");
+            Log.v("globals.total_mileage","null");
         }else{
-            tDebug1 = (TextView) findViewById(R.id.textDebug1);
-            tDebug1.setText(globals.total_mileage + "km");
             psKilometers = Double.parseDouble(globals.total_mileage);
+            Log.v("globals.total_mileage",globals.total_mileage);
         }
         if(globals.total_time == null) {
             //前回のデータがないときはこっち
-            tDebug2 = (TextView) findViewById(R.id.textDebug2);
-            tDebug2.setText("たいむはぬるだよー");
+            Log.v("globals.total_time","null");
         }else{
             //秒速を求めるために時分秒を秒に変換
             int hours = Integer.parseInt(globals.total_time.substring(0, 2));
             int minutes = Integer.parseInt(globals.total_time.substring(3, 5));
             double seconds = Double.parseDouble(globals.total_time.substring(6));
             seconds = (hours * 3600) + (minutes * 60) + seconds;
-            tDebug2 = (TextView) findViewById(R.id.textDebug2);
-            tDebug2.setText(seconds + "seconds");
             psSeconds = seconds;
+            Log.v("globals.total_time",String.valueOf(seconds));
         }
     }
     //秒速の計算
