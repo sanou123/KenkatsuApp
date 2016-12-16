@@ -170,11 +170,8 @@ public class Result extends Activity {
 
 
         ///////////////////////////////////////////////////////////////////
-        if(globals.total_time != null){
-            globals.total_time = globals.total_time + globals.time;
-        }else {
-            globals.total_time = globals.time;
-        }
+        globals.total_time =  globals.time;
+
         globals.total_mileage = globals.mileage;
         /////////////////////////////////////////////////////////////////////////
 

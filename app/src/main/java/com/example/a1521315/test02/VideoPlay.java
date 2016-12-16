@@ -24,10 +24,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -188,7 +188,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
         /*グローバル変数にバグあるので前回のデータは取得しない↓ゴーストは1kmを10秒で走る設定で固定
         下のメソッドのコメントアウトを消せば前回のデータでゴーストが動くよ*/
-        //GetLastTrainingData();//前回のデータを色々やってる
+        GetLastTrainingData();//前回のデータを色々やってる
         Change7Seg();//7セグフォントに変換
 
         /*シークバーに関する奴*/
