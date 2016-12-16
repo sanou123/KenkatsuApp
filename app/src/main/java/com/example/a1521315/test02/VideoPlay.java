@@ -181,6 +181,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
 
+        tDebug1 = (TextView) findViewById(R.id.textDebug1);
+        tDebug1.setText(globals.height+"");
+        tDebug2 = (TextView) findViewById(R.id.textDebug2);
+        tDebug2.setText(globals.weight+"");
+
         /*グローバル変数にバグあるので前回のデータは取得しない↓ゴーストは1kmを10秒で走る設定で固定
         下のメソッドのコメントアウトを消せば前回のデータでゴーストが動くよ*/
         //GetLastTrainingData();//前回のデータを色々やってる
