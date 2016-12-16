@@ -16,10 +16,10 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "asdfghjkl5.db";      // DB名
+    private final static String DB_NAME = "qwer.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
-    private final static int DB_VERSION = 1;                // DBのバージョン
+    private final static int DB_VERSION = 2;                // DBのバージョン
 
     /**
      * DBのカラム名
@@ -51,6 +51,7 @@ public class DBAdapter {
     public final static String COL_AVG_SPEED = "avg_speed";         //平均速度
     public final static String COL_MAX_SPEED = "max_speed";         //最高速度
     public final static String COL_DISTANCE = "distance";           //走行距離
+    public final static String COL_TRAINING_NAME = "training_name";           //走行距離
 
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
@@ -147,7 +148,7 @@ public class DBAdapter {
     public void saveDB_DATA(int name_id, String name ,String year, String month, String day,
                             String times_of_day, String heart_rate, double calorie_consumption,
                             String total_time, String total_distance, String course_name, String time,
-                            String avg_speed, String max_speed, String distance) {
+                            String avg_speed, String max_speed, String distance,String training_name) {
 
         db.beginTransaction();          // トランザクション開始
 
@@ -168,6 +169,8 @@ public class DBAdapter {
             values.put(COL_AVG_SPEED, avg_speed);
             values.put(COL_MAX_SPEED, max_speed);
             values.put(COL_DISTANCE, distance);
+            values.put(COL_TRAINING_NAME, training_name);
+
 
 
 
@@ -364,34 +367,35 @@ public class DBAdapter {
             String createTbl_user = "CREATE TABLE " + DB_TABLE_USER + " ("
                     + COL_ID_USER + " INTEGER PRIMARY KEY ,"
                     + COL_NAME + " TEXT NOT NULL ,"
-                    + COL_AGE + " INTEGER NOT NULL,"
-                    + COL_SEX + " TEXT NOT NULL,"
-                    + COL_HEIGHT + " INTEGER NOT NULL,"
-                    + COL_WEIGHT + " INTEGER NOT NULL,"
-                    + COL_BMI +" INTEGER NOT NULL,"
-                    + COL_IDEAL_WEIGHT +" INTEGER NOT NULL,"
+                    + COL_AGE + " INTEGER NOT NULL ,"
+                    + COL_SEX + " TEXT NOT NULL ,"
+                    + COL_HEIGHT + " INTEGER NOT NULL ,"
+                    + COL_WEIGHT + " INTEGER NOT NULL ,"
+                    + COL_BMI +" INTEGER NOT NULL ,"
+                    + COL_IDEAL_WEIGHT +" INTEGER NOT NULL ,"
                     + COL_LOGIN +" TEXT NOT NULL"
                     + ");";
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_data = "CREATE TABLE " + DB_TABLE_DATA + " ("
-                    + COL_ID_DATA + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + COL_NAME_ID + " INTEGER NOT NULL,"
+                    + COL_ID_DATA + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                    + COL_NAME_ID + " INTEGER NOT NULL ,"
                     + COL_NAME + " TEXT NOT NULL ,"
                     + COL_YEAR + " TEXT NOT NULL ,"
                     + COL_MONTH + " TEXT NOT NULL ,"
                     + COL_DAY + " TEXT NOT NULL ,"
                     + COL_TIMES_OF_DAY + " TEXT NOT NULL ,"
 
-                    + COL_HEART_RATE + " INTEGER NOT NULL,"
-                    + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL,"
-                    + COL_TOTAL_TIME + " INTEGER NOT NULL,"
-                    + COL_TOTAL_DISTANCE + " INTEGER NOT NULL,"
+                    + COL_HEART_RATE + " INTEGER NOT NULL ,"
+                    + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL ,"
+                    + COL_TOTAL_TIME + " INTEGER NOT NULL ,"
+                    + COL_TOTAL_DISTANCE + " INTEGER NOT NULL ,"
                     + COL_COURSE_NAME + " TEXT NOT NULL ,"
                     + COL_TIME + " INTEGER NOT NULL ,"
                     + COL_AVG_SPEED + " INTEGER NOT NULL ,"
                     + COL_MAX_SPEED + " INTEGER NOT NULL ,"
                     + COL_DISTANCE + " INTEGER NOT NULL ,"
+                    + COL_TRAINING_NAME + " TEXT NOT NULL ,"
                     + "FOREIGN KEY(name_id) REFERENCES DB_TABLE_USER(COL_ID_USER) ON DELETE CASCADE"
                     + ");";
             db.execSQL(createTbl_user);      //SQL文の実行

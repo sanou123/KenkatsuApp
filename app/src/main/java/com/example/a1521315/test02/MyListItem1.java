@@ -20,6 +20,7 @@ public class MyListItem1 {
     protected String avg_speed;          //平均速度
     protected String max_speed;          //最高速度
     protected String distance;          //走行距離
+    protected String training_name;          //トレーニング名
 
 
 
@@ -40,12 +41,13 @@ public class MyListItem1 {
      * @param avg_speed  String 平均速度
      * @param max_speed  String 最高速度
      * @param distance   String 走行距離
+     * @param training_name String トレーニング名
      *
      */
     public MyListItem1(int data_id, int name_id, String name,String date, String heart_rate,
                        String calorie_consumption, String total_time, String total_distance,
                        String course_name, String time,String avg_speed, String max_speed,
-                       String distance) {
+                       String distance, String training_name) {
 
         this.data_id = data_id;
         this.name_id = name_id;
@@ -60,6 +62,7 @@ public class MyListItem1 {
         this.avg_speed = avg_speed;
         this.max_speed = max_speed;
         this.distance = distance;
+        this.training_name = training_name;
 
 
     }
@@ -190,4 +193,12 @@ public class MyListItem1 {
      * @return price String 走行距離
      */
     public String getDistance() { return distance;  }
+
+    /**
+     * トレーニング名を取得
+     * getTraining_name()
+     *
+     * @return price String トレーニング名
+     */
+    public String getTraining_name() { return training_name;  }
 }

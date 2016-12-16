@@ -9,6 +9,8 @@ import android.widget.Button;
 
 public class TrainingSelect extends AppCompatActivity {
 
+    Globals globals;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,12 +26,13 @@ public class TrainingSelect extends AppCompatActivity {
         textView.setText(columns);
         */
 
-        //buttonBackを押した時MenuSerectへ移動
+        //buttonBackを押した時MenuSelectへ移動
         Button btnNml = (Button) findViewById(R.id.buttonNormal);
         btnNml.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
+                globals.training_name = "Normal";
                 intent.setClassName("com.example.a1521315.test02",
                         "com.example.a1521315.test02.VideoSelect");
                 startActivity(intent);
@@ -42,6 +45,7 @@ public class TrainingSelect extends AppCompatActivity {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
+                globals.training_name = "TimeAttack";
                 intent.setClassName("com.example.a1521315.test02",
                         "com.example.a1521315.test02.TimeAttackVideoPlay");
                 startActivity(intent);
@@ -54,6 +58,7 @@ public class TrainingSelect extends AppCompatActivity {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
+                globals.training_name = "EndlessRun";
                 intent.setClassName("com.example.a1521315.test02",
                         "com.example.a1521315.test02.EndlessRun");
                 startActivity(intent);

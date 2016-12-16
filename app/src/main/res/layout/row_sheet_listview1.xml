@@ -218,5 +218,23 @@
             android:textColor="#000000"
             android:textSize="14sp" />
 
+        <!-- タイトル：走行距離 -->
+        <TextView
+            android:id="@+id/text05Title_Training_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="@string/text05_title_training_name"
+            android:textSize="14sp" />
+
+        <!-- データ表示用：走行距離 -->
+        <TextView
+            android:id="@+id/text05Training_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
     </LinearLayout>
 </LinearLayout>
