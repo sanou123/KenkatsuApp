@@ -64,6 +64,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
 
+    double psKilometers = 1 , psSeconds = 10;
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -180,7 +181,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
 
-         Change7Seg();//7セグフォントに変換
+        tDebug1 = (TextView) findViewById(R.id.textDebug1);
+        tDebug1.setText(globals.height+"");
+        tDebug2 = (TextView) findViewById(R.id.textDebug2);
+        tDebug2.setText(globals.weight+"");
+
+        /*グローバル変数にバグあるので前回のデータは取得しない↓ゴーストは1kmを10秒で走る設定で固定
+        下のメソッドのコメントアウトを消せば前回のデータでゴーストが動くよ*/
+        //GetLastTrainingData();//前回のデータを色々やってる
+        Change7Seg();//7セグフォントに変換
 
         /*シークバーに関する奴*/
         imageMe = (ImageView)findViewById(R.id.image_view_me);
@@ -730,14 +739,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     };
 
-    //Resultボタンを押したときの処理
-    View.OnClickListener ResultClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            ResultProcess();
-        }
-    };
-
     //Connectボタンを押したときの処理
     @Override
     public void onClick(View v) {
@@ -868,7 +869,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         // ポップアップメニュー表示
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
         alertDialog.setTitle("トレーニング終了");
-        alertDialog.setMessage("リザルトを押して結果を確認しましょう。");
+        alertDialog.setMessage("結果を確認しましょう。");
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -917,7 +918,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Thread MoveGhost = new Thread(new MoveGhostTask(PerSecond(10.4,356)));
+                    Thread MoveGhost = new Thread(new MoveGhostTask(PerSecond(psKilometers,psSeconds)));
                     MoveGhost.start();
                     Thread MoveMe = new Thread(new MoveMeTask());
                     MoveMe.start();
@@ -948,43 +949,62 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-
-    //ゴーストの移動 ↓1秒あたりに進むpx数//菅原
-    public double PerSecond(double kilometers, int byou){
-        int meters = 0;
-        double byousoku = 0.0;
-        meters = (int)(kilometers * 1000);
-        byousoku = meters / byou;
-        byousoku = (byousoku / meters);
-        return byousoku;
+    /*ゴースト関連*/
+    //前回の測定結果を変数に入れたりするメソッド　
+    public void GetLastTrainingData(){
+        //前回の走行データを色々するところ↓
+        if(globals.total_mileage == null) {
+            //前回のデータがないときはこっち
+            Log.v("globals.total_mileage","null");
+        }else{
+            psKilometers = Double.parseDouble(globals.total_mileage);
+            Log.v("globals.total_mileage",globals.total_mileage);
+        }
+        if(globals.total_time == null) {
+            //前回のデータがないときはこっち
+            Log.v("globals.total_time","null");
+        }else{
+            //秒速を求めるために時分秒を秒に変換
+            int hours = Integer.parseInt(globals.total_time.substring(0, 2));
+            int minutes = Integer.parseInt(globals.total_time.substring(3, 5));
+            double seconds = Double.parseDouble(globals.total_time.substring(6));
+            seconds = (hours * 3600) + (minutes * 60) + seconds;
+            psSeconds = seconds;
+            Log.v("globals.total_time",String.valueOf(seconds));
+        }
     }
+    //秒速の計算
+    public double PerSecond(double kilometers, double seconds){
+        int meters = 0;
+        double perSeconds = 0.0;
+        meters = (int)(kilometers * 1000);
+        perSeconds = meters / seconds;
+        perSeconds = (perSeconds / meters);
+        return perSeconds;
+    }
+    //ゴースト用のタスク
     public class MoveGhostTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
         final int endPoint = 45;//エンド地点の座標
-        double byou;
+        double perSeconds;
         double ghostPos = imageGhost.getY();
-        MoveGhostTask(double byou){
-            this.byou = byou;
+        MoveGhostTask(double perSeconds){
+            this.perSeconds = perSeconds;
         }
-        //meとghostのMarginTopの値を入れてください↑
         final  int barDistance = startPoint - endPoint;//545-45=500
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    float getPlayTime = (float)ghostPos - ((float)byou* barDistance);
-                    imageGhost.setY(getPlayTime);
-                   // tDebug2.setText(imageGhost.getY()+"");
-                    /*
-                    float getPlayTime = ((float)mp.getCurrentPosition() / (float)mp.getDuration()) * barDistance;//barのpx数
-                    getPlayTime = barDistance - getPlayTime;
-                    getPlayTime = getPlayTime + endPoint;//画像レイアウトの高さの都合上MarginTop=0はゴール地点ではないので調整しなくてはいけない　
-                    imageMe.setY(getPlayTime);
-                    */
+                    if(ghostPos > endPoint){
+                        float setGhostPosition = (float)ghostPos - ((float)perSeconds * barDistance);
+                        imageGhost.setY(setGhostPosition);
+                    }
                 }
             });
         }
     }
+
 
     //走行距離タスク
     public class MileageTask implements Runnable {
