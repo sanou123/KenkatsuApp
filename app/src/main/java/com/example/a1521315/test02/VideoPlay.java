@@ -191,8 +191,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             int hours = Integer.parseInt(globals.total_time.substring(0, 2));
             int minutes = Integer.parseInt(globals.total_time.substring(3, 5));
             double seconds = Double.parseDouble(globals.total_time.substring(6));
+
             tDebug2 = (TextView) findViewById(R.id.textDebug2);
-            tDebug2.setText(globals.total_time.substring(0, 2) + "時間" + globals.total_time.substring(3, 5) + "分" + globals.total_time.substring(6, 8) + "秒"+globals.total_time.substring(9));
+            //tDebug2.setText(globals.total_time.substring(0, 2) + "時間" + globals.total_time.substring(3, 5) + "分" + globals.total_time.substring(6, 8) + "秒"+globals.total_time.substring(9));
+            tDebug2.setText(hours + "←hours　" + minutes + "←minutes　" + seconds + "←seconds");
         }
          Change7Seg();//7セグフォントに変換
 
