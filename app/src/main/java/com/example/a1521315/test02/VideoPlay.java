@@ -181,7 +181,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
 
-        GetLastTrainingData();//前回のデータを色々やってる
+        /*グローバル変数にバグあるので前回のデータは取得しない↓ゴーストは1kmを10秒で走る設定で固定
+        下のメソッドのコメントアウトを消せば前回のデータでゴーストが動くよ*/
+        //GetLastTrainingData();//前回のデータを色々やってる
         Change7Seg();//7セグフォントに変換
 
         /*シークバーに関する奴*/
@@ -255,7 +257,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-/*
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -272,7 +274,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
-*/
+
     }//onCreateここまで
 
     // 再生完了時の処理
