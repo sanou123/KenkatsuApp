@@ -170,7 +170,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tKPH.setText("Speed              km/h");
 
         tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
-        tTargetHeartbeat.setText("000");
+        tTargetHeartbeat.setText( "" + TargetBPM(Integer.parseInt(globals.age)) );
         tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
         tTargetBPM.setText("Target BPM");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
@@ -182,9 +182,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer.setText("00:00:00.0");
 
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText(globals.height+"");
+        tDebug1.setText("age:"+globals.age);
+        TargetBPM(Integer.parseInt(globals.age));
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        tDebug2.setText(globals.weight+"");
+        tDebug2.setText("TargetBPM:" + TargetBPM(Integer.parseInt(globals.age)) );
 
         /*グローバル変数にバグあるので前回のデータは取得しない↓ゴーストは1kmを10秒で走る設定で固定
         下のメソッドのコメントアウトを消せば前回のデータでゴーストが動くよ*/
@@ -262,7 +263,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -279,7 +280,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
-
+*/
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -1110,7 +1111,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tBPM.setTypeface(tf2);
         tBPM.setTextSize(25.0f);
         tBPM.setPadding(0, 0, 10, 7);
+    }
 
+    public int TargetBPM(int age){
+        int targetBPM;
+        targetBPM = (int)((220 - age) * 0.6);
+        return targetBPM;
     }
 
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
