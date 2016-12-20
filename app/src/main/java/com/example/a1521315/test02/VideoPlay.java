@@ -1102,18 +1102,18 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
 
     //平均速度を計算する
-    public double AverageSpeed(double totalMileage, String time){
+    public String AverageSpeed(double totalMileage, String time){
         Log.v("aaaaaaaaaaaaTIME",time);
         double hours = Double.parseDouble(time.substring(0, 2));
         double minutes = Double.parseDouble(time.substring(3, 5));
         double seconds = Double.parseDouble(time.substring(6));
-        double totalHours = (hours * 60) + minutes + (seconds / 3600);
+        double totalHours = hours + (minutes/60) + (seconds/3600);
         Log.v("mileage",String.valueOf(totalMileage) );
         Log.v("HOURS",String.valueOf(hours) );
         Log.v("MINUTES",String.valueOf(minutes) );
         Log.v("SECONDS",String.valueOf(seconds) );
         Log.v("TOTAL",String.valueOf(totalHours) );
-        double avg = totalMileage / totalHours;
+        String avg = String.format("%.2f",(totalMileage / totalHours));
         return avg;
     }
 
