@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Set;
 import java.util.Timer;
@@ -246,8 +247,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             raw = 0;
         }else if(CourseNum.equals("3")) {
             tCourse.setText("デバッグ用");
-            mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
-            totalMileage = 10.0;
+            mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test03;//rawフォルダから指定する場合
+            totalMileage = 2.9;
             raw = 1;
         }
 
@@ -856,7 +857,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
         globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
+
+        globals.avg = String.valueOf(AverageSpeed(totalMileage,tTimer.getText().toString()));//平均速度(これも計算する処理が必要)
         globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
         globals.time = tTimer.getText().toString();//運動時間
         //int iWeight = Integer.parseInt(globals.weight);
@@ -968,9 +970,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             int hours = Integer.parseInt(globals.total_time.substring(0, 2));
             int minutes = Integer.parseInt(globals.total_time.substring(3, 5));
             double seconds = Double.parseDouble(globals.total_time.substring(6));
-            seconds = (hours * 3600) + (minutes * 60) + seconds;
-            psSeconds = seconds;
-            Log.v("globals.total_time",String.valueOf(seconds));
+            double totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+            psSeconds = totalSeconds;
+            Log.v("globals.total_time",String.valueOf(totalSeconds));
         }
     }
     //秒速の計算
@@ -1046,27 +1048,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-    //スピードメータータスク2
-    public class SpeedMeterTask2 implements Runnable {
-        private float taskSpeedCount = (float) 0.0;
-        public SpeedMeterTask2(float taskSpeedCount){
-            this.taskSpeedCount = taskSpeedCount;
-        }
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(mp != null) {
-                    /*動画の再生速度を変えるのに必要なプログラム↓*/
-                        //params.setSpeed(taskSpeedCount);//再生速度変更
-                        //mp.setPlaybackParams(params);
-                        //mp.start();
-                        tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
-                    }
-                }
-            });
-        }
-    }
 
 
     //フォントを7セグにする
@@ -1113,10 +1094,27 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tBPM.setPadding(0, 0, 10, 7);
     }
 
+    //目標心拍を計算する
     public int TargetBPM(int age){
         int targetBPM;
         targetBPM = (int)((220 - age) * 0.6);
         return targetBPM;
+    }
+
+    //平均速度を計算する
+    public double AverageSpeed(double totalMileage, String time){
+        Log.v("aaaaaaaaaaaaTIME",time);
+        double hours = Double.parseDouble(time.substring(0, 2));
+        double minutes = Double.parseDouble(time.substring(3, 5));
+        double seconds = Double.parseDouble(time.substring(6));
+        double totalHours = (hours * 60) + minutes + (seconds / 3600);
+        Log.v("mileage",String.valueOf(totalMileage) );
+        Log.v("HOURS",String.valueOf(hours) );
+        Log.v("MINUTES",String.valueOf(minutes) );
+        Log.v("SECONDS",String.valueOf(seconds) );
+        Log.v("TOTAL",String.valueOf(totalHours) );
+        double avg = totalMileage / totalHours;
+        return avg;
     }
 
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
