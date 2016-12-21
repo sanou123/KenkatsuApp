@@ -858,7 +858,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         globals.mileage = tMileage.getText().toString();//走行距離
         globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
 
-        globals.avg = String.valueOf(AverageSpeed(totalMileage,tTimer.getText().toString()));//平均速度(これも計算する処理が必要)
+        globals.avg = String.valueOf(AverageSpeed(totalMileage,tTimer.getText().toString()));//平均速度(要再検討)
         globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
         globals.time = tTimer.getText().toString();//運動時間
         //int iWeight = Integer.parseInt(globals.weight);
