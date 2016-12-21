@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Login extends AppCompatActivity {
 
@@ -50,7 +51,7 @@ public class Login extends AppCompatActivity {
             // 英語
 //            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH.toString() );
             // 日本語
-//            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,Locale.JAPAN.toString() );
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.JAPAN.toString() );
 
             intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 100);
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "音声を入力");

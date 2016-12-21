@@ -6,6 +6,7 @@ package com.example.a1521315.test02;
 
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,10 +14,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -29,6 +29,11 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 
 
 public class GraphMile extends Activity {
@@ -36,6 +41,8 @@ public class GraphMile extends Activity {
     private DBAdapter dbAdapter;                // DBAdapter
     private ArrayList<String> items;            // ArrayList
     Globals globals;
+    private DatePickerDialog.OnDateSetListener varDateSetListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,51 +52,55 @@ public class GraphMile extends Activity {
         // ArrayListを生成
         items = new ArrayList<>();
 
-        /*
-         * 表示
-         */
-        final Spinner yearspinner = (Spinner) findViewById(R.id.year_spinner);
-        // ArrayAdapter を、string-array とデフォルトのレイアウトを引数にして生成
-        //int planets_array = Integer.parseInt("2016");
-        ArrayAdapter<CharSequence> yearadapter = ArrayAdapter.createFromResource(this, R.array.year_planets_array, android.R.layout.simple_spinner_item);
-        //ArrayAdapter<CharSequence> yearadapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
-        // 選択肢が表示された時に使用するレイアウトを指定
-        yearadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // スピナーにアダプターを設定
-        yearspinner.setAdapter(yearadapter);
+        final EditText editText = (EditText)findViewById(R.id.editText01);
 
-        final Spinner monthspinner = (Spinner) findViewById(R.id.month_spinner);
-        // ArrayAdapter を、string-array とデフォルトのレイアウトを引数にして生成
-        ArrayAdapter<CharSequence> monthadapter = ArrayAdapter.createFromResource(this, R.array.month_planets_array, android.R.layout.simple_spinner_item);
-        // 選択肢が表示された時に使用するレイアウトを指定
-        monthadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // スピナーにアダプターを設定
-        monthspinner.setAdapter(monthadapter);
-
-        final Spinner dayspinner = (Spinner) findViewById(R.id.day_spinner);
-        // ArrayAdapter を、string-array とデフォルトのレイアウトを引数にして生成
-        ArrayAdapter<CharSequence> dayadapter = ArrayAdapter.createFromResource(this, R.array.day_planets_array, android.R.layout.simple_spinner_item);
-        // 選択肢が表示された時に使用するレイアウトを指定
-        dayadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // スピナーにアダプターを設定
-        dayspinner.setAdapter(dayadapter);
-
-        /*
-         * イベントリスナー
-         */
-        yearspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        varDateSetListener = new DatePickerDialog.OnDateSetListener(){
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // スピナー要素の文字列を取得
-                String selectedItemString = (String) parent.getItemAtPosition(position);
+            public void onDateSet(DatePicker view , int year , int monthOfYear , int dayOfMonth){
+                editText.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+                globals.year = year +"年";
+                globals.month = (monthOfYear + 1) + "月";
+                globals.day = dayOfMonth + "日";
 
+                Log.v(TAG,globals.year);
             }
+        };
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+        ((Button)findViewById(R.id.button1))
+                .setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view){
+                        Calendar calendar = Calendar.getInstance();
+                        DatePickerDialog dateDialog = new DatePickerDialog(
+                                GraphMile.this,
+                                varDateSetListener,
+                                calendar.get(YEAR),
+                                calendar.get(MONTH),
+                                calendar.get(DAY_OF_MONTH)
+                        );
+
+                        dateDialog.show();
+                    }
+                });
+
+        ((Button)findViewById(R.id.button2))
+                .setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view){
+                        createBarChartYear();
+                    }
+                });
+        ((Button)findViewById(R.id.button3))
+                .setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view){
+                        createBarChartMonth();
+                    }
+                });
+        ((Button)findViewById(R.id.button4))
+                .setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view){
+                        createBarChartDay();
+                    }
+                });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -125,19 +136,7 @@ public class GraphMile extends Activity {
             }
         });
 
-        //graphボタンを押した時UserSelectへ移動
-        Button btnDisp = (Button) findViewById(R.id.graph_button);
-        btnDisp.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if(dayspinner == null) {
-                    createBarChartDay();
-                }else if(monthspinner == null) {
-                    createBarChartDataMonth();
-                }else if(yearspinner != null) {
-                    createBarChartYear();
-                }
-            }
-        });
+
 
     }
 
@@ -189,15 +188,22 @@ public class GraphMile extends Activity {
         dbAdapter = new DBAdapter(this);
         dbAdapter.openDB();     // DBの読み込み(読み書きの方)
 
+        //string.xmlのyear_planets_arrayを取得
+        int[] year_label = getResources().getIntArray(R.array.year_planets_array);
+        //TypedArray year_label = getResources().obtainTypedArray(R.array.year_planets_array);
+
         // ArrayListを生成
         //items = new ArrayList<>();
         ArrayList<String> xValues = new ArrayList<>();
 
-        String column = "name_id";          //検索対象のカラム名
+        String column_name_id = "name_id";          //検索対象のカラム名
+        String column_year = "year";          //検索対象のカラム名
         String[] name_id = {globals.name_id};            //検索対象の文字
+        String[] year = {globals.year};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
-        Cursor c = dbAdapter.searchDB(null, column, name_id);
+        Cursor c_name_id = dbAdapter.searchDB(null, column_name_id, name_id);
+        Cursor c_year = dbAdapter.searchDB(null, column_year, year);
 
         // DBのデータを取得
         /*
@@ -205,13 +211,14 @@ public class GraphMile extends Activity {
         Cursor xc = dbAdapter.getDB1(xColumns);
         */
 
-        if (c.moveToFirst()) {
+        if (c_name_id.moveToFirst() && c_year.moveToFirst()) {
             do {
-                xValues.add(c.getString(3)+c.getString(4)+c.getString(5)+'\n'
-                        +c.getString(6));
-                Log.d("取得したCursor:", c.getString(3)+c.getString(4)+c.getString(5)+'\n'
-                        +c.getString(6));
-            } while (c.moveToNext());
+                String crlf = System.getProperty("line.separator");
+                xValues.add(c_name_id.getString(3)+c_name_id.getString(4)+c_name_id.getString(5)+ crlf
+                        +c_name_id.getString(6));
+                Log.d("取得したCursor:", c_name_id.getString(3)+c_name_id.getString(4)+c_name_id.getString(5)+ crlf
+                        +c_name_id.getString(6));
+            } while (c_name_id.moveToNext() && c_year.moveToNext());
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -234,15 +241,15 @@ public class GraphMile extends Activity {
         String[] yColumns_Num = {DBAdapter.COL_ID_DATA};     // DBのカラム：品名
         Cursor yc_num = dbAdapter.getDB1(yColumns_Num);*/
 
-        if (c.moveToFirst()) {
+        if (c_name_id.moveToFirst() && c_year.moveToFirst()) {
             int Num = 0;
             do {
-                valuesA.add(new BarEntry(Float.parseFloat(c.getString(15)), Num));
-                Log.d("取得したCursor:", c.getString(15));
+                valuesA.add(new BarEntry(Float.parseFloat(c_name_id.getString(15)), Num));
+                Log.d("取得したCursor:", c_name_id.getString(15));
                 Num = Num +1;
-            } while (c.moveToNext()/* && yc_num.moveToNext()*/);
+            } while (c_name_id.moveToNext() && c_year.moveToNext());
         }
-        c.close();
+        c_name_id.close();
         dbAdapter.closeDB();    // DBを閉じる
 
         //////////////////////////////////////////////////////////////////////////////
@@ -311,14 +318,18 @@ public class GraphMile extends Activity {
         //items = new ArrayList<>();
         ArrayList<String> xValues = new ArrayList<>();
 
-        String column = "name_id";          //検索対象のカラム名
+        String column_name_id = "name_id";          //検索対象のカラム名
+        String column_year = "year";          //検索対象のカラム名
+        String column_month = "month";          //検索対象のカラム名
         String[] name_id = {globals.name_id};            //検索対象の文字
-        String column1 = "year";          //検索対象のカラム名
-        String[] year = {"2015"};            //検索対象の文字
+        String[] year = {globals.year};            //検索対象の文字
+        String[] month = {globals.month};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
-        Cursor c = dbAdapter.searchDB(null, column, name_id);
-        Cursor c1 = dbAdapter.searchDB(null, column1, year);
+        Cursor c_name_id = dbAdapter.searchDB(null, column_name_id, name_id);
+        Cursor c_year = dbAdapter.searchDB(null, column_year, year);
+        Cursor c_month = dbAdapter.searchDB(null, column_month, month);
+
 
         // DBのデータを取得
         /*
@@ -326,13 +337,13 @@ public class GraphMile extends Activity {
         Cursor xc = dbAdapter.getDB1(xColumns);
         */
 
-        if (c.moveToFirst() && c1.moveToFirst()) {
+        if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()) {
             do {
-                xValues.add(c.getString(3)+c.getString(4)+c.getString(5)+'\n'
-                        +c.getString(6));
-                Log.d("取得したCursor:", c.getString(3)+c.getString(4)+c.getString(5)+'\n'
-                        +c.getString(6));
-            } while (c.moveToNext());
+                xValues.add(c_name_id.getString(3)+c_name_id.getString(4)+c_name_id.getString(5)+
+                        '\n' +c_name_id.getString(6));
+                Log.d("取得したCursor:", c_name_id.getString(3)+c_name_id.getString(4)+
+                        c_name_id.getString(5)+'\n' +c_name_id.getString(6));
+            } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext());
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -355,15 +366,15 @@ public class GraphMile extends Activity {
         String[] yColumns_Num = {DBAdapter.COL_ID_DATA};     // DBのカラム：品名
         Cursor yc_num = dbAdapter.getDB1(yColumns_Num);*/
 
-        if (c.moveToFirst()) {
+        if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()) {
             int Num = 0;
             do {
-                valuesA.add(new BarEntry(Float.parseFloat(c.getString(15)), Num));
-                Log.d("取得したCursor:", c.getString(15));
+                valuesA.add(new BarEntry(Float.parseFloat(c_name_id.getString(15)), Num));
+                Log.d("取得したCursor:", c_name_id.getString(15));
                 Num = Num +1;
-            } while (c.moveToNext() && c1.moveToNext());
+            } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext());
         }
-        c.close();
+        c_name_id.close();
         dbAdapter.closeDB();    // DBを閉じる
 
         //////////////////////////////////////////////////////////////////////////////
@@ -432,11 +443,20 @@ public class GraphMile extends Activity {
         //items = new ArrayList<>();
         ArrayList<String> xValues = new ArrayList<>();
 
-        String column = "name_id";          //検索対象のカラム名
+        String column_name_id = "name_id";          //検索対象のカラム名
+        String column_year = "year";          //検索対象のカラム名
+        String column_month = "month";          //検索対象のカラム名
+        String column_day = "day";          //検索対象のカラム名
         String[] name_id = {globals.name_id};            //検索対象の文字
+        String[] year = {globals.year};            //検索対象の文字
+        String[] month = {globals.month};            //検索対象の文字
+        String[] day = {globals.day};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
-        Cursor c = dbAdapter.searchDB(null, column, name_id);
+        Cursor c_name_id = dbAdapter.searchDB(null, column_name_id, name_id);
+        Cursor c_year = dbAdapter.searchDB(null, column_year, year);
+        Cursor c_month = dbAdapter.searchDB(null, column_month, month);
+        Cursor c_day = dbAdapter.searchDB(null, column_day, day);
 
         // DBのデータを取得
         /*
@@ -444,13 +464,15 @@ public class GraphMile extends Activity {
         Cursor xc = dbAdapter.getDB1(xColumns);
         */
 
-        if (c.moveToFirst()) {
+        if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()
+                && c_day.moveToFirst()) {
             do {
-                xValues.add(c.getString(3)+c.getString(4)+c.getString(5)+'\n'
-                        +c.getString(6));
-                Log.d("取得したCursor:", c.getString(3)+c.getString(4)+c.getString(5)+'\n'
-                        +c.getString(6));
-            } while (c.moveToNext());
+                xValues.add(c_name_id.getString(3)+c_name_id.getString(4)+c_name_id.getString(5)+
+                        '\n' +c_name_id.getString(6));
+                Log.d("取得したCursor:", c_name_id.getString(3)+c_name_id.getString(4)+
+                        c_name_id.getString(5)+'\n' +c_name_id.getString(6));
+            } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext()
+                    && c_day.moveToNext());
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -473,15 +495,17 @@ public class GraphMile extends Activity {
         String[] yColumns_Num = {DBAdapter.COL_ID_DATA};     // DBのカラム：品名
         Cursor yc_num = dbAdapter.getDB1(yColumns_Num);*/
 
-        if (c.moveToFirst()) {
+        if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()
+                && c_day.moveToFirst()) {
             int Num = 0;
             do {
-                valuesA.add(new BarEntry(Float.parseFloat(c.getString(15)), Num));
-                Log.d("取得したCursor:", c.getString(15));
+                valuesA.add(new BarEntry(Float.parseFloat(c_name_id.getString(15)), Num));
+                Log.d("取得したCursor:", c_name_id.getString(15));
                 Num = Num +1;
-            } while (c.moveToNext()/* && yc_num.moveToNext()*/);
+            } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext()
+                    && c_day.moveToNext());
         }
-        c.close();
+        c_name_id.close();
         dbAdapter.closeDB();    // DBを閉じる
 
         //////////////////////////////////////////////////////////////////////////////
