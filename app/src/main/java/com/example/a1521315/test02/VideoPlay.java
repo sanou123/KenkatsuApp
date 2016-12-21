@@ -135,6 +135,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private BluetoothDevice mDevice;/* Bluetoothデバイス */
     private final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");/* Bluetooth UUID */
     private final String DEVICE_NAME = "RNBT-C46F";/* デバイス名 */
+    private final String DEVICE_NAME1 = "HC-05";/* デバイス名 */
     private BluetoothSocket mSocket; /* Soket */
     private Thread mThread; /* Thread */
     private boolean isRunning; /* Threadの状態を表す */
@@ -274,6 +275,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         Set< BluetoothDevice > devices = mAdapter.getBondedDevices();
         for ( BluetoothDevice device : devices){
             if(device.getName().equals(DEVICE_NAME)){
+                mStatusTextView.setText("find: " + device.getName());
+                mDevice = device;
+            } else if(device.getName().equals(DEVICE_NAME1)){
                 mStatusTextView.setText("find: " + device.getName());
                 mDevice = device;
             }
