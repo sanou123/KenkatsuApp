@@ -207,15 +207,6 @@ public class MainUser extends AppCompatActivity {
             //四捨五入する
             BigDecimal ideal_weight = bd_i_w.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
 
-            //////////最終ログイン取得のための仮データ
-           /* long currentTimeMillis = System.currentTimeMillis();
-
-            Date date = new Date(currentTimeMillis);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日HH時mm分ss秒");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
-            Log.v("時間", dateFormat.format(date));
-            */
-
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
