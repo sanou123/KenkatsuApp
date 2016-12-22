@@ -832,6 +832,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     mp.release();
                     mp = null;
                 }
+                Thread StopBGM = new Thread(new StopBGM());
+                StopBGM.start();
                 Intent intent = new Intent(getApplication(), VideoSelect.class);
                 startActivity(intent);
             }
