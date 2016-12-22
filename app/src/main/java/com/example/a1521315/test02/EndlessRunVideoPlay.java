@@ -832,7 +832,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         //int iWeight = Integer.parseInt(globals.weight);
         //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
         globals.cal = 123.32;
-        Intent intent = new Intent(getApplication(), Result.class);
+        Intent intent = new Intent(getApplication(), EndlessRunResult.class);
         startActivity(intent);
     }
 
