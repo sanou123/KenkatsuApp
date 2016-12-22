@@ -71,6 +71,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private SurfaceHolder holder;
     private SurfaceView mPreview;
     private MediaPlayer mp = null;
+    private MediaPlayer mpBGM = null;
 
     //タイムに関する奴
     private ScheduledExecutorService timerscheduler;
@@ -247,7 +248,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             raw = 0;
         }else if(CourseNum.equals("3")) {
             tCourse.setText("デバッグ用");
-            mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test03;//rawフォルダから指定する場合
+            mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
             totalMileage = 2.9;
             raw = 1;
         }
@@ -804,6 +805,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
         seekbarscheduler = Executors.newSingleThreadScheduledExecutor();
         seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
+        Thread StartBGM = new Thread(new StartBGM());
+        StartBGM.start();
     }
 
     //Pauseボタンを押したときの処理の中身
@@ -829,6 +832,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     mp.release();
                     mp = null;
                 }
+                Thread StopBGM = new Thread(new StopBGM());
+                StopBGM.start();
                 Intent intent = new Intent(getApplication(), VideoSelect.class);
                 startActivity(intent);
             }
@@ -854,6 +859,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //Resultボタンを押したときの処理の中身
     public void ResultProcess(){
+        Thread StopBGM = new Thread(new StopBGM());
+        StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
         globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
@@ -1044,6 +1051,35 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         //mp.start();
                         tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
                     }
+                }
+            });
+        }
+    }
+
+    //BGM
+    public class StartBGM implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mpBGM == null) {
+                        mpBGM = MediaPlayer.create(getApplicationContext(), R.raw.zangyousenshi);
+                        mpBGM.start();
+                    }
+                }
+            });
+        }
+    }
+    public class StopBGM implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("stopBGM", "STOP");
+                    mpBGM.stop();
+                    mpBGM.reset();
+                    mpBGM.release();
+                    mpBGM = null;
                 }
             });
         }

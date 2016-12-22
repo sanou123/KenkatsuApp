@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 
 public class MainActivity extends Activity {
     /** Called when the activity is first created. */
-    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,19 +21,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         playBGM();
     }
-    //BGM再生
-    private void playBGM() {
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.mattarikibun);
-        mediaPlayer.start();
-    }
-
     //画面タップでユーザ選択に遷移
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.d("", "ACTION_DOWN");
-                mediaPlayer.stop();
+                Log.d("Top", "ACTION_DOWN");
+                stopBGM();
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
                         "com.example.a1521315.test02.SelectSheetListView");
@@ -41,5 +35,22 @@ public class MainActivity extends Activity {
                 break;
         }
         return true;
+    }
+
+    //BGM再生
+    private void playBGM() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.mattarikibun);
+            mediaPlayer.start();
+        }
+    }
+
+    //BGM停止
+    private void stopBGM(){
+        Log.d("stopBGM", "STOP");
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+        mediaPlayer.release();
+        mediaPlayer = null;
     }
 }
