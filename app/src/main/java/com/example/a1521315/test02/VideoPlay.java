@@ -607,9 +607,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                         //各テキストに値を反映
                                         tDebug2.setText(format2.format(my_dist_Value) + "km/h");
-                                        //tDebug2.setText(String.format("%.4f",dist_Value)+ "km");
-                                        //tSpeed.setText(format2.format(speed_Value));
-                                        //tSpeed.setText(String.format("%.2f",speed_Value));
 
                                         //メディアプレイヤーの再生速度を設定
                                         if(speed_Value <= 50 && speed_Value >= 1){
@@ -682,7 +679,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //表示更新
     public void MeterShow(double sp_value){
         tSpeed.setText(String.format("%.2f",sp_value));
-
     }
 
     //時間の余韻をなくす----------------------------------------
@@ -1010,6 +1006,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             Log.v("globals.total_time",String.valueOf(totalSeconds));
         }
     }
+
     //秒速の計算
     public double PerSecond(double kilometers, double seconds){
         int meters = 0;
@@ -1019,6 +1016,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         perSeconds = (perSeconds / meters);
         return perSeconds;
     }
+
     //ゴースト用のタスク
     public class MoveGhostTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
@@ -1041,7 +1039,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-
 
     //走行距離タスク
     public class MileageTask implements Runnable {
@@ -1112,7 +1109,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-
 
     //フォントを7セグにする
     public void Change7Seg(){
@@ -1219,8 +1215,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         return super.dispatchKeyEvent(event);
     }
-    @Override
+
     //戻るキーを無効にする
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             return true;

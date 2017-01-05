@@ -102,7 +102,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     double speed_Value = 0.0;
     double dist_Value = 0.0;
     double my_dist_Value = 0.0;
-    //public float plus_dist_Value = 0.05F;//0.0015F
     public float plus_dist_Value = 0.0005F;//0.0015F
 
     double old_dist_Value = 0.0;
@@ -117,13 +116,18 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     public boolean usb_Flg = false;
     public boolean chSpd_Flg = false;
     public boolean clear_Flg = false;
+    public boolean clear_Flg2 = true;
     public int null_Cnt = 0;
 
     long my_mm = 0;
     long my_ss = 0;
+    double delay_ss = 0.0;
 
     public Timer watchMeTimer;
     public WatchMeTask watchMeTask;
+
+    public Timer delayedTimer;
+    public DelayedTask delayTask;
 
     public int sensor_value = 0;
     private enum ErrorMessageCode {
@@ -271,11 +275,13 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     @Override
     public void onCompletion(MediaPlayer agr0) {
         Log.v("MediaPlayer", "onCompletion");
-        //USB通信の切断(停止がないため)
-        accessoryManager.disable(this);
-        //disconnectAccessory();//################################       あやしいかもよ～
+        watchMeTimer.cancel();//#
+        delayedTimer.cancel();//#
         timerscheduler.shutdown();//タイマー止める
         seekbarscheduler.shutdown();
+        //USB通信の切断(停止がないため)
+        accessoryManager.disable(this);
+        disconnectAccessory();//#
         ResultDialog();//リザルトダイアログを表示
         if (mp != null) {
             mp.release();
@@ -484,14 +490,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     };
     //bluetooth*************************************************************************************
 
-
-
-
-
-
-
-
-
     // USB通信のタスク
     private Handler handler = new Handler() {
 
@@ -505,11 +503,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         return;
                     }
 
-                    /* LED初期化 */
-                    /*commandPacket[0] = UPDATE_LED_SETTING;
-                    commandPacket[1] = 0;
-                    accessoryManager.write(commandPacket);
-                    */
                     break;
 
                 case USBAccessoryWhat:
@@ -550,8 +543,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = true;
                                                 chSpd_Flg = true;
-                                                clear_Flg = false;//
-                                                null_Cnt = 0;
+                                                clear_Flg2 = true;
                                             }
 
                                             //距離の加算(径分)
@@ -560,24 +552,12 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = false;
                                                 chSpd_Flg = true;
-                                                clear_Flg = false;//
-                                                null_Cnt = 0;
+                                                clear_Flg2 = true;//
                                             }
                                             //一定値以上の場合、停止したとみなす①
                                             else{
-                                                null_Cnt++;
-                                            }
 
-                                            //一定値以上の場合、停止したとみなす②(cnt上限は適当)
-                                            if(null_Cnt >= 1400){
-                                                null_Cnt = 1500;
-                                                my_dist_Value = 0.0;
-                                                chSpd_Flg = false;
-                                                clear_Flg = true;
                                             }
-
-                                            //時間の取得
-                                            //float time_tmp = (float)((mm*60) + ss);
 
                                             //距離が進んだ場合
                                             if(chSpd_Flg == true){
@@ -601,20 +581,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
                                         }
 
-                                        //初回時のInfinity回避
-                                             /*   if(Double.isNaN(speed_Value) || Double.isInfinite(speed_Value)){
-                                                    speed_Value = 0.0;
-                                                    dist_Value = 0.0;
-                                                    my_dist_Value = 0.0;
-                                                }
-                                                */
-
                                         //各テキストに値を反映
-                                        tHeartbeat.setText("debug_value:"+String.format("%.4f",my_dist_Value));//my_dist_Value
-                                        //tSpeed.setText(format2.format(speed_Value) + "km/h");
-                                        //tMileage.setText(String.format("%.4f",dist_Value)+ "km");
-                                        tDebug1.setText(format2.format(speed_Value) + "km/h");
-                                        tDebug2.setText(String.format("%.4f",dist_Value)+ "km");
+                                        tDebug2.setText(format2.format(my_dist_Value) + "km/h");
 
                                         //メディアプレイヤーの再生速度を設定
                                         if(speed_Value <= 50 && speed_Value >= 1){
@@ -684,6 +652,47 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         return new Integer(major).intValue();
     }
 
+    //表示更新
+    public void MeterShow(double sp_value){
+        tSpeed.setText(String.format("%.2f",sp_value));
+    }
+
+    //時間の余韻をなくす----------------------------------------
+    public class DelayedTask extends TimerTask {
+
+        long t_cnt = 0;
+
+        @Override
+        public void run() {
+            // handlerを使って処理をキューイングする
+            handler.post(new Runnable() {
+                public void run() {
+                    t_cnt++;
+
+                    delay_ss = (double)(t_cnt) * 0.01;
+                    tDebug1.setText(String.format("%.2f",delay_ss)+ "sec");
+
+                    if(t_cnt >= 200){
+                        t_cnt = 0;
+                        delay_ss = 0;
+                        speed_Value = 0;
+                        my_dist_Value = 0;
+                        MeterShow(speed_Value);
+                        params.setSpeed((float)0);
+                        mp.setPlaybackParams(params);
+                        clear_Flg = true;
+                    }
+
+                    if( usb_Flg == true || clear_Flg2 == true){
+                        t_cnt = 0;
+                        delay_ss = 0;
+                        clear_Flg2 = false;
+                    }
+                }
+            });
+        }
+    }
+
     //プレイヤーが止まらずに進んだ時間(止まるたびにリセット)
     public class WatchMeTask extends TimerTask {
 
@@ -699,6 +708,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     my_ss = t_cnt * 100 / 1000 % 60;
                     if(clear_Flg == true){
                         t_cnt = 0;
+                        clear_Flg = false;
+                        speed_Value = 0;
+                        my_dist_Value = 0;
                     }
                 }
             });
@@ -773,6 +785,17 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         watchMeTimer = new Timer();//Timerインスタンスを生成
         watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
         watchMeTimer.schedule(watchMeTask,0,100);
+
+        //#
+        if (null != delayedTimer) {
+            delayedTimer.cancel();
+            delayedTimer = null;
+        }
+
+        delayedTimer = new Timer();//Timerインスタンスを生成
+        delayTask = new DelayedTask();//TimerTaskインスタンスを生成
+        delayedTimer.schedule(delayTask,0,10);
+        //#
 
         timerscheduler = Executors.newSingleThreadScheduledExecutor();
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
@@ -971,6 +994,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     if(globals.timflg1 ==2 || globals.timflg2 == 2 || globals.timflg3 ==2 || globals.timflg4 == 2){
                         globals.time_disp_cnt++;
                     }
+
                     //残り時間を表示する
                     if(globals.time_disp_cnt == 20 && globals.timflg1 == 2){
                         textaddtimer.setVisibility(View.INVISIBLE);
