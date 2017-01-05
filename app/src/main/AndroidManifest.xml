@@ -143,9 +143,10 @@
         <activity
             android:name=".EndlessRunVideoPlay"
             android:screenOrientation="landscape" />
+        <activity android:name=".twitter_logout"></activity>
+            android:screenOrientation="landscape" />
         <activity android:name=".EndlessRunResult"></activity>
             android:screenOrientation="landscape" />
-        <activity android:name=".twitter_logout"></activity>
     </application>
 
 </manifest>
