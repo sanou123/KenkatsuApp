@@ -139,10 +139,11 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".TimeoutResultTweet"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".EndlessRunVideoPlay"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
+        <activity android:name=".twitter_logout"></activity>
     </application>
 
 </manifest>

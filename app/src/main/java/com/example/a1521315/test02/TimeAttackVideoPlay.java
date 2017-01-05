@@ -915,8 +915,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     //カウントアップタイマタスク
     public class CntTimerTask implements Runnable {
         //private Handler handler = new Handler();
-        private long timerCount = 5400;//初期値9分
-        //private long timerCount = 50;//初期値9分
+        private long timerCount = 6000;//初期値10分
         public void run() {
             // handlerを使って処理をキューイングする
             handler.post(new Runnable() {
@@ -939,33 +938,33 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         //ゲームオーバーのダイアログを表示
                         TimeoutResultDialog();
                     }
-                    //残り時間を増やす2km
+                    //残り時間を増やす800km
                     if(globals.timflg1 == 1){
-                        timerCount += 3600;//6分追加
+                        timerCount += 3000;//5分追加
                         globals.timflg1 = 2;
                         textaddtimer.setVisibility(View.VISIBLE);
-                        textaddtimer.setText("+00:06:00.0");
+                        textaddtimer.setText("+00:05:00.0");
                     }
-                    //残り時間を増やす4km
+                    //残り時間を増やす1.5km
                     if(globals.timflg2 == 1){
-                        timerCount += 2700;//4.5分追加
+                        timerCount += 2100;//3.5分追加
                         globals.timflg2 = 2;
                         textaddtimer.setVisibility(View.VISIBLE);
-                        textaddtimer.setText("+00:05:00.0");
+                        textaddtimer.setText("+00:03:30.0");
                     }
-                    //残り時間を増やす6km
+                    //残り時間を増やす2km
                     if(globals.timflg3 == 1){
-                        timerCount += 2100;//3.5分追加
+                        timerCount += 1500;//2.5分追加
                         globals.timflg3 = 2;
                         textaddtimer.setVisibility(View.VISIBLE);
-                        textaddtimer.setText("+00:05:00.0");
+                        textaddtimer.setText("+00:02:30.0");
                     }
                     //残り時間を増やす8km
                     if(globals.timflg4 == 1){
-                        timerCount += 1200;//2分追加
+                        timerCount += 600;//1分追加
                         globals.timflg4 = 2;
                         textaddtimer.setVisibility(View.VISIBLE);
-                        textaddtimer.setText("+00:05:00.0");
+                        textaddtimer.setText("+00:01:00.0");
                     }
 
                     //表示時間のカウント
@@ -995,13 +994,13 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     }
 
                     //タイムをグローバルに保存
-                    if(timerCount >= 9000){//10：00走破
+                    if(timerCount >= 6000){//10分残し
                         globals.rank = "S（アスリート並みの体力です！）";
                     }
-                    else if(timerCount >= 7200){//10：01～13：00走破
+                    else if(timerCount >= 4800){//8分残し
                         globals.rank = "A（体力は十分あるようです。Sランクを目指して頑張りましょう。）";
                     }
-                    else if(timerCount >= 6000){//13：01～15：00走破
+                    else if(timerCount >= 3600){//6分残し
                         globals.rank = "B（一般的な体力です。定期的なトレーニングで維持・向上を目指しましょう。）";
                     }
                     else{//15：01以下
@@ -1076,9 +1075,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                             globals.timflg3 = 1;
                         }
                     }
-                    //2.5km
+                    //2.3km
                     if(globals.timflg4 == 0) {
-                        if (f3 >= 2.5) {
+                        if (f3 >= 2.3) {
                             globals.timflg4 = 1;
                         }
                     }
