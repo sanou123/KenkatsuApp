@@ -167,6 +167,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         globals = (Globals)this.getApplication();
         globals.DriveDataInit();//グローバル変数初期化
 
+        format1.setMaximumFractionDigits(1);
+        format2.setMaximumFractionDigits(2);
+
         tMileage = (TextView) findViewById(R.id.textMileage);
         tMileage.setText("999.88");
         tKM = (TextView) findViewById(R.id.textKM);
@@ -294,11 +297,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     @Override
     public void onCompletion(MediaPlayer agr0) {
         Log.v("MediaPlayer", "onCompletion");
+        watchMeTimer.cancel();//#
+        delayedTimer.cancel();//#
+        timerscheduler.shutdown();//タイマー止める
+        seekbarscheduler.shutdown();
         //USB通信の切断(停止がないため)
         accessoryManager.disable(this);
         disconnectAccessory();//#
-        timerscheduler.shutdown();//タイマー止める
-        seekbarscheduler.shutdown();
         //リザルトダイアログを表示
         ResultDialog();
         if (mp != null) {
@@ -601,13 +606,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                         }
 
                                         //各テキストに値を反映
-                                        //tHeartbeat.setText("debug_value:"+String.format("%.4f",my_dist_Value));//my_dist_Value
-                                        //tSpeed.setText(format2.format(speed_Value) + "km/h");
-                                        //tMileage.setText(String.format("%.4f",dist_Value)+ "km");
-                                        //tDebug1.setText(format2.format(speed_Value) + "km/h");
                                         tDebug2.setText(format2.format(my_dist_Value) + "km/h");
                                         //tDebug2.setText(String.format("%.4f",dist_Value)+ "km");
-                                        tSpeed.setText(format2.format(speed_Value));
+                                        //tSpeed.setText(format2.format(speed_Value));
+                                        //tSpeed.setText(String.format("%.2f",speed_Value));
 
                                         //メディアプレイヤーの再生速度を設定
                                         if(speed_Value <= 50 && speed_Value >= 1){
@@ -679,7 +681,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //表示更新
     public void MeterShow(double sp_value){
-        tSpeed.setText(format2.format(sp_value));
+        tSpeed.setText(String.format("%.2f",sp_value));
 
     }
 
@@ -896,8 +898,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //int iWeight = Integer.parseInt(globals.weight);
         //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
         globals.cal = 123.32;
-        watchMeTimer.cancel();//#
-        delayedTimer.cancel();//#
         Intent intent = new Intent(getApplication(), Result.class);
         startActivity(intent);
     }
