@@ -311,7 +311,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //Activity の　基本ライフサイクル
+    //Activity の　基本ライフサイクル//
     @Override
     public void onStart() {
         super.onStart();
