@@ -90,8 +90,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
     public static final int HOLE_SENSOR_CHANGE = 3;
-    public static final int RESISTANCE_LEVEL = 4;
-    public static final int ALERT_MORTER = 5;
+    public static final int UPDATE_RESISTANCE = 5;
     public static final int APP_CONNECT = (int) 0xFE;
     public static final int APP_DISCONNECT = (int) 0xFF;
     private boolean deviceAttached = false;
@@ -622,6 +621,32 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                         //過去の値を更新
                                         old_hole_Value = hole_Value;
                                         old_dist_Value = dist_Value;
+                                        break;
+
+                                    //抵抗値の受け取り
+                                    case UPDATE_RESISTANCE:
+
+                                        //センサー値取得
+                                        int resist_Value = (int) (commandPacket[1] & 0xFF);
+
+                                        //抵抗値の割り出し
+                                        switch (resist_Value){
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                            case 5:
+                                                break;
+                                            case 6:
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
                                         break;
                                 }
                             }
