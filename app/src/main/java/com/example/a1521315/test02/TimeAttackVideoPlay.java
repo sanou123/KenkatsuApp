@@ -86,7 +86,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
     PlaybackParams params = new PlaybackParams();
 
-
     //USB通信関連の変数　初期化
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
@@ -98,29 +97,28 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     private int firmwareProtocol = 0;
 
     //センサー、動画再生関連の変数　初期化
-    double speed_Value = 0.0;
-    double dist_Value = 0.0;
+    double speed_Value = 0.0;//速度の値
     double my_dist_Value = 0.0;
     public float plus_dist_Value = 0.0005F;//0.0015F
 
-    double old_dist_Value = 0.0;
+    //double dist_Value = 0.0;//ペダルレベルでの距離
+    //double old_dist_Value = 0.0;//ペダルレベルでの距離
+
     public float resist_Level = (float)1.0;//負荷のレベルによる係数
-    NumberFormat format1 = NumberFormat.getInstance();
     NumberFormat format2 = NumberFormat.getInstance();
 
     public int hole_Value = 0;
     public int old_hole_Value = 0;
 
-    public boolean run_Flg = false;
-    public boolean usb_Flg = false;
-    public boolean chSpd_Flg = false;
+    public boolean run_Flg = false;//ON OFF で順番にセンサーの値を受け取るため
+    public boolean usb_Flg = false;//pause画面で速度を変化させない
+    public boolean chSpd_Flg = false;//speed_valueを更新するか否か
     public boolean clear_Flg = false;
     public boolean clear_Flg2 = true;
-    public int null_Cnt = 0;
 
+    //止まらずに進んでる時間
     long my_mm = 0;
     long my_ss = 0;
-    double delay_ss = 0.0;
 
     public Timer watchMeTimer;
     public WatchMeTask watchMeTask;
@@ -128,13 +126,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     public Timer delayedTimer;
     public DelayedTask delayTask;
 
-    public int sensor_value = 0;
-    private enum ErrorMessageCode {
-        ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING,
-        ERROR_FIRMWARE_PROTOCOL
-    };
     private USBAccessoryManager accessoryManager;
-
 
     //bluetooth*************************************************************************************
     private BluetoothAdapter mAdapter;/* Bluetooth Adapter */
@@ -538,7 +530,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
                                             //距離の加算(径分)
                                             if(hole_Value == 1 && old_hole_Value == 0 && run_Flg == false) {
-                                                dist_Value += plus_dist_Value;
+                                                //dist_Value += plus_dist_Value;
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = true;
                                                 chSpd_Flg = true;
@@ -547,7 +539,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
                                             //距離の加算(径分)
                                             else if(hole_Value == 0 && old_hole_Value == 1 && run_Flg == true){
-                                                dist_Value += plus_dist_Value;
+                                                //dist_Value += plus_dist_Value;
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = false;
                                                 chSpd_Flg = true;
@@ -596,7 +588,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
                                         //過去の値を更新
                                         old_hole_Value = hole_Value;
-                                        old_dist_Value = dist_Value;
+                                        //old_dist_Value = dist_Value;
                                         break;
 
                                     //抵抗値の受け取り
@@ -694,12 +686,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 public void run() {
                     t_cnt++;
 
-                    delay_ss = (double)(t_cnt) * 0.01;
-                    tDebug1.setText(String.format("%.2f",delay_ss)+ "sec");
-
                     if(t_cnt >= 200){
                         t_cnt = 0;
-                        delay_ss = 0;
                         speed_Value = 0;
                         my_dist_Value = 0;
                         MeterShow(speed_Value);
@@ -710,7 +698,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
                     if( usb_Flg == true || clear_Flg2 == true){
                         t_cnt = 0;
-                        delay_ss = 0;
                         clear_Flg2 = false;
                     }
                 }

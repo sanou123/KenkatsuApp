@@ -97,14 +97,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private int firmwareProtocol = 0;
 
     //センサー、動画再生関連の変数　初期化
-    double speed_Value = 0.0;
-    double dist_Value = 0.0;
+    double speed_Value = 0.0;//速度の値
     double my_dist_Value = 0.0;
     public float plus_dist_Value = 0.0005F;//0.0015F
 
-    double old_dist_Value = 0.0;
+    //double dist_Value = 0.0;//ペダルレベルでの距離
+    //double old_dist_Value = 0.0;//ペダルレベルでの距離
+
     public float resist_Level = (float)1.0;//負荷のレベルによる係数
-    NumberFormat format1 = NumberFormat.getInstance();
     NumberFormat format2 = NumberFormat.getInstance();
 
     public int hole_Value = 0;
@@ -116,6 +116,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public boolean clear_Flg = false;
     public boolean clear_Flg2 = true;
 
+    //止まらずに進んでる時間
     long my_mm = 0;
     long my_ss = 0;
 
@@ -125,11 +126,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public Timer delayedTimer;
     public DelayedTask delayTask;
 
-    public int sensor_value = 0;
-    private enum ErrorMessageCode {
-        ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING,
-        ERROR_FIRMWARE_PROTOCOL
-    };
     private USBAccessoryManager accessoryManager;
 
 
@@ -164,7 +160,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         globals = (Globals)this.getApplication();
         globals.DriveDataInit();//グローバル変数初期化
 
-        format1.setMaximumFractionDigits(1);
         format2.setMaximumFractionDigits(2);
 
         tMileage = (TextView) findViewById(R.id.textMileage);
@@ -552,7 +547,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                         else
                                         {
-                                            //時間の取得
+                                            //時間の取得(秒に直す)
                                             float time_tmp = (float)((my_mm*60) + my_ss);
 
                                             //センサー値取得
@@ -560,7 +555,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                             //距離の加算(径分)
                                             if(hole_Value == 1 && old_hole_Value == 0 && run_Flg == false) {
-                                                dist_Value += plus_dist_Value;
+                                                //dist_Value += plus_dist_Value;
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = true;
                                                 chSpd_Flg = true;
@@ -569,7 +564,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                             //距離の加算(径分)
                                             else if(hole_Value == 0 && old_hole_Value == 1 && run_Flg == true){
-                                                dist_Value += plus_dist_Value;
+                                                //dist_Value += plus_dist_Value;
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = false;
                                                 chSpd_Flg = true;
@@ -585,14 +580,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                                 //0秒時の処理
                                                 if(time_tmp <= 0){
-                                                    speed_Value = 1.8;//plus_dist_Value / (1 / 3600);//my_distを使いたい
+                                                    speed_Value = 1.8;
                                                 }
                                                 else{
-                                                    //加算された距離とタイマーの時間で、時速割り出し(現在の時速)
-                                                    speed_Value = my_dist_Value / (time_tmp / 3600);//my_distを使いたい
+                                                    //加算された距離とタイマーの時間(秒)で、時速割り出し(現在の時速)
+                                                    speed_Value = my_dist_Value / (time_tmp / 3600);
                                                 }
                                             }
 
+                                            //予防措置
                                             if(my_dist_Value == 0){
                                                 speed_Value = 0.0;
                                             }
@@ -615,7 +611,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                         //過去の値を更新
                                         old_hole_Value = hole_Value;
-                                        old_dist_Value = dist_Value;
+                                        //old_dist_Value = dist_Value;
                                         break;
 
                                     //抵抗値の受け取り
@@ -748,8 +744,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     if(usb_Flg || clear_Flg == true){
                         t_cnt = 0;
                         clear_Flg = false;
-                        speed_Value = 0;
-                        my_dist_Value = 0;
+                        //speed_Value = 0;
+                        //my_dist_Value = 0;
                     }
                 }
             });
