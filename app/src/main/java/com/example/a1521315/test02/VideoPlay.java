@@ -118,7 +118,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     long my_mm = 0;
     long my_ss = 0;
-    double delay_ss = 0.0;
 
     public Timer watchMeTimer;
     public WatchMeTask watchMeTask;
@@ -714,12 +713,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 public void run() {
                     t_cnt++;
 
-                    delay_ss = (double)(t_cnt) * 0.01;
-                    tDebug1.setText(String.format("%.2f",delay_ss)+ "sec");
-
                     if(t_cnt >= 200){
                         t_cnt = 0;
-                        delay_ss = 0;
                         speed_Value = 0;
                         my_dist_Value = 0;
                         MeterShow(speed_Value);
@@ -730,7 +725,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                     if( usb_Flg == true || clear_Flg2 == true){
                         t_cnt = 0;
-                        delay_ss = 0;
                         clear_Flg2 = false;
                     }
                 }
