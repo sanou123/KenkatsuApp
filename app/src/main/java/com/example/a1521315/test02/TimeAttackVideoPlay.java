@@ -731,7 +731,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     t_cnt++;
                     my_mm = t_cnt * 100 / 1000 / 60;
                     my_ss = t_cnt * 100 / 1000 % 60;
-                    if(clear_Flg == true){
+                    if(usb_Flg || clear_Flg == true){
                         t_cnt = 0;
                         clear_Flg = false;
                         speed_Value = 0;

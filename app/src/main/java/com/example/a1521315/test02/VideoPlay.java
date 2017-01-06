@@ -110,12 +110,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public int hole_Value = 0;
     public int old_hole_Value = 0;
 
-    public boolean run_Flg = false;
-    public boolean usb_Flg = false;
-    public boolean chSpd_Flg = false;
+    public boolean run_Flg = false;//ON OFF で順番にセンサーの値を受け取るため
+    public boolean usb_Flg = false;//pause画面で速度を変化させない
+    public boolean chSpd_Flg = false;//speed_valueを更新するか否か
     public boolean clear_Flg = false;
     public boolean clear_Flg2 = true;
-    public int null_Cnt = 0;
 
     long my_mm = 0;
     long my_ss = 0;
@@ -575,9 +574,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = false;
                                                 chSpd_Flg = true;
-                                                clear_Flg2 = true;//
+                                                clear_Flg2 = true;
                                             }
-                                            //一定値以上の場合、停止したとみなす①
+
                                             else{
 
                                             }
@@ -594,9 +593,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                     speed_Value = my_dist_Value / (time_tmp / 3600);//my_distを使いたい
                                                 }
                                             }
-                                            else{
-                                                //speed_Value = 0.0;
-                                            }
 
                                             if(my_dist_Value == 0){
                                                 speed_Value = 0.0;
@@ -612,7 +608,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                             params.setSpeed( (float) ( speed_Value / 10 ) );//再生速度変更
                                             mp.setPlaybackParams(params);
                                         }
-                                        //0速度
+                                        //速度が0のとき
                                         else{
                                             params.setSpeed((float)0);
                                             mp.setPlaybackParams(params);
@@ -755,7 +751,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     t_cnt++;
                     my_mm = t_cnt * 100 / 1000 / 60;
                     my_ss = t_cnt * 100 / 1000 % 60;
-                    if(clear_Flg == true){
+                    if(usb_Flg || clear_Flg == true){
                         t_cnt = 0;
                         clear_Flg = false;
                         speed_Value = 0;
