@@ -90,37 +90,35 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
     public static final int HOLE_SENSOR_CHANGE = 3;
-    public static final int RESISTANCE_LEVEL = 4;
-    public static final int ALERT_MORTER = 5;
+    public static final int UPDATE_RESISTANCE = 5;
     public static final int APP_CONNECT = (int) 0xFE;
     public static final int APP_DISCONNECT = (int) 0xFF;
     private boolean deviceAttached = false;
     private int firmwareProtocol = 0;
 
     //センサー、動画再生関連の変数　初期化
-    double speed_Value = 0.0;
-    double dist_Value = 0.0;
+    double speed_Value = 0.0;//速度の値
     double my_dist_Value = 0.0;
-    public float plus_dist_Value = 0.0005F;//0.0015F
+    public float plus_dist_Value = 0.001F;//0.0015F
 
-    double old_dist_Value = 0.0;
+    //double dist_Value = 0.0;//ペダルレベルでの距離
+    //double old_dist_Value = 0.0;//ペダルレベルでの距離
+
     public float resist_Level = (float)1.0;//負荷のレベルによる係数
-    NumberFormat format1 = NumberFormat.getInstance();
     NumberFormat format2 = NumberFormat.getInstance();
 
     public int hole_Value = 0;
     public int old_hole_Value = 0;
 
-    public boolean run_Flg = false;
-    public boolean usb_Flg = false;
-    public boolean chSpd_Flg = false;
+    public boolean run_Flg = false;//ON OFF で順番にセンサーの値を受け取るため
+    public boolean usb_Flg = false;//pause画面で速度を変化させない
+    public boolean chSpd_Flg = false;//speed_valueを更新するか否か
     public boolean clear_Flg = false;
     public boolean clear_Flg2 = true;
-    public int null_Cnt = 0;
 
+    //止まらずに進んでる時間
     long my_mm = 0;
     long my_ss = 0;
-    double delay_ss = 0.0;
 
     public Timer watchMeTimer;
     public WatchMeTask watchMeTask;
@@ -128,11 +126,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public Timer delayedTimer;
     public DelayedTask delayTask;
 
-    public int sensor_value = 0;
-    private enum ErrorMessageCode {
-        ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING,
-        ERROR_FIRMWARE_PROTOCOL
-    };
     private USBAccessoryManager accessoryManager;
 
 
@@ -167,7 +160,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         globals = (Globals)this.getApplication();
         globals.DriveDataInit();//グローバル変数初期化
 
-        format1.setMaximumFractionDigits(1);
         format2.setMaximumFractionDigits(2);
 
         tMileage = (TextView) findViewById(R.id.textMileage);
@@ -360,8 +352,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        accessoryManager.disable(this);//!
-        disconnectAccessory();//!
+
 
         //bluetooth***********
         isRunning = false;
@@ -555,7 +546,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                         else
                                         {
-                                            //時間の取得
+                                            //時間の取得(秒に直す)
                                             float time_tmp = (float)((my_mm*60) + my_ss);
 
                                             //センサー値取得
@@ -563,7 +554,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                             //距離の加算(径分)
                                             if(hole_Value == 1 && old_hole_Value == 0 && run_Flg == false) {
-                                                dist_Value += plus_dist_Value;
+                                                //dist_Value += plus_dist_Value;
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = true;
                                                 chSpd_Flg = true;
@@ -572,13 +563,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                             //距離の加算(径分)
                                             else if(hole_Value == 0 && old_hole_Value == 1 && run_Flg == true){
-                                                dist_Value += plus_dist_Value;
+                                                //dist_Value += plus_dist_Value;
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = false;
                                                 chSpd_Flg = true;
-                                                clear_Flg2 = true;//
+                                                clear_Flg2 = true;
                                             }
-                                            //一定値以上の場合、停止したとみなす①
+
                                             else{
 
                                             }
@@ -588,17 +579,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                                 //0秒時の処理
                                                 if(time_tmp <= 0){
-                                                    speed_Value = 1.8;//plus_dist_Value / (1 / 3600);//my_distを使いたい
+                                                    speed_Value = 1.8;
                                                 }
                                                 else{
-                                                    //加算された距離とタイマーの時間で、時速割り出し(現在の時速)
-                                                    speed_Value = my_dist_Value / (time_tmp / 3600);//my_distを使いたい
+                                                    //加算された距離とタイマーの時間(秒)で、時速割り出し(現在の時速)
+                                                    speed_Value = my_dist_Value / (time_tmp / 3600);
                                                 }
                                             }
-                                            else{
-                                                //speed_Value = 0.0;
-                                            }
 
+                                            //予防措置
                                             if(my_dist_Value == 0){
                                                 speed_Value = 0.0;
                                             }
@@ -607,16 +596,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                         //各テキストに値を反映
                                         tDebug2.setText(format2.format(my_dist_Value) + "km/h");
-                                        //tDebug2.setText(String.format("%.4f",dist_Value)+ "km");
-                                        //tSpeed.setText(format2.format(speed_Value));
-                                        //tSpeed.setText(String.format("%.2f",speed_Value));
 
                                         //メディアプレイヤーの再生速度を設定
                                         if(speed_Value <= 50 && speed_Value >= 1){
                                             params.setSpeed( (float) ( speed_Value / 10 ) );//再生速度変更
                                             mp.setPlaybackParams(params);
                                         }
-                                        //0速度
+                                        //速度が0のとき
                                         else{
                                             params.setSpeed((float)0);
                                             mp.setPlaybackParams(params);
@@ -624,7 +610,33 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                         //過去の値を更新
                                         old_hole_Value = hole_Value;
-                                        old_dist_Value = dist_Value;
+                                        //old_dist_Value = dist_Value;
+                                        break;
+
+                                    //抵抗値の受け取り
+                                    case UPDATE_RESISTANCE:
+
+                                        //センサー値取得
+                                        int resist_Value = (int) (commandPacket[1] & 0xFF);
+
+                                        //抵抗値の割り出し
+                                        switch (resist_Value){
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                            case 5:
+                                                break;
+                                            case 6:
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
                                         break;
                                 }
                             }
@@ -682,7 +694,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //表示更新
     public void MeterShow(double sp_value){
         tSpeed.setText(String.format("%.2f",sp_value));
+    }
 
+    //数値を0にリセットする
+    public void ResetValue(){
+        speed_Value = 0;
+        my_dist_Value = 0;
     }
 
     //時間の余韻をなくす----------------------------------------
@@ -697,23 +714,17 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 public void run() {
                     t_cnt++;
 
-                    delay_ss = (double)(t_cnt) * 0.01;
-                    tDebug1.setText(String.format("%.2f",delay_ss)+ "sec");
-
-                    if(t_cnt >= 200){
+                    if(usb_Flg == true || t_cnt >= 200){
                         t_cnt = 0;
-                        delay_ss = 0;
-                        speed_Value = 0;
-                        my_dist_Value = 0;
+                        ResetValue();
                         MeterShow(speed_Value);
                         params.setSpeed((float)0);
                         mp.setPlaybackParams(params);
                         clear_Flg = true;
                     }
 
-                    if( usb_Flg == true || clear_Flg2 == true){
+                    if(clear_Flg2 == true){
                         t_cnt = 0;
-                        delay_ss = 0;
                         clear_Flg2 = false;
                     }
                 }
@@ -734,11 +745,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     t_cnt++;
                     my_mm = t_cnt * 100 / 1000 / 60;
                     my_ss = t_cnt * 100 / 1000 % 60;
+                    MeterShow(speed_Value);
                     if(clear_Flg == true){
                         t_cnt = 0;
                         clear_Flg = false;
-                        speed_Value = 0;
-                        my_dist_Value = 0;
                     }
                 }
             });
@@ -839,6 +849,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         seekbarfuture.cancel(true);
+        delayedTimer.cancel();
+        watchMeTimer.cancel();
+        ResetValue();
         speedCount = 0.00;
         params.setSpeed((float) speedCount);
         mp.setPlaybackParams(params);
@@ -857,6 +870,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     mp.release();
                     mp = null;
                 }
+                accessoryManager.disable(getApplication());//#
+                disconnectAccessory();//#
                 Thread StopBGM = new Thread(new StopBGM());
                 StopBGM.start();
 
@@ -869,12 +884,27 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             public void onClick(DialogInterface dialog, int which) {
                 future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                 seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
+                delayedTimer = new Timer();//Timerインスタンスを生成
+                delayTask = new DelayedTask();//TimerTaskインスタンスを生成
+                delayedTimer.schedule(delayTask,0,10);
+                watchMeTimer = new Timer();//Timerインスタンスを生成
+                watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
+                watchMeTimer.schedule(watchMeTask,0,100);
                 usb_Flg = false;
             }
         });
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //VideoSelectに戻る処理
+                timerscheduler.shutdown();//タイマー終了
+                seekbarscheduler.shutdown();//タイマー終了
+                if (mp != null) {
+                    mp.release();
+                    mp = null;
+                }
+                accessoryManager.disable(getApplication());//!
+                disconnectAccessory();//!
                 ResultProcess();
             }
         });
@@ -1010,6 +1040,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             Log.v("globals.total_time",String.valueOf(totalSeconds));
         }
     }
+
     //秒速の計算
     public double PerSecond(double kilometers, double seconds){
         int meters = 0;
@@ -1019,6 +1050,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         perSeconds = (perSeconds / meters);
         return perSeconds;
     }
+
     //ゴースト用のタスク
     public class MoveGhostTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
@@ -1041,7 +1073,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-
 
     //走行距離タスク
     public class MileageTask implements Runnable {
@@ -1112,7 +1143,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-
 
     //フォントを7セグにする
     public void Change7Seg(){
@@ -1219,8 +1249,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         return super.dispatchKeyEvent(event);
     }
-    @Override
+
     //戻るキーを無効にする
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             return true;
