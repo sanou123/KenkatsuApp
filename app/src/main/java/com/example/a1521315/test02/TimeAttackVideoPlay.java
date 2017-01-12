@@ -115,6 +115,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     public boolean chSpd_Flg = false;//speed_valueを更新するか否か
     public boolean clear_Flg = false;
     public boolean clear_Flg2 = true;
+    public boolean start_Flg = false;
 
     //止まらずに進んでる時間
     long my_mm = 0;
@@ -600,16 +601,22 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                         //抵抗値の割り出し
                                         switch (resist_Value){
                                             case 1:
+                                                start_Flg = false;
                                                 break;
                                             case 2:
+                                                start_Flg = false;
                                                 break;
                                             case 3:
+                                                start_Flg = true;
                                                 break;
                                             case 4:
+                                                start_Flg = false;
                                                 break;
                                             case 5:
+                                                start_Flg = false;
                                                 break;
                                             case 6:
+                                                start_Flg = false;
                                                 break;
                                             default:
                                                 break;
@@ -741,7 +748,12 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     View.OnClickListener PlayClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            PlayProcess();
+            if(start_Flg == true){
+                PlayProcess();
+            }
+            else{
+                Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG);
+            }
         }
     };
 
