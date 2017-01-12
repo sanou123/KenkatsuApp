@@ -75,52 +75,46 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
     PlaybackParams params = new PlaybackParams();
 
-
     //USB通信関連の変数　初期化
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
     public static final int HOLE_SENSOR_CHANGE = 3;
-    public static final int RESISTANCE_LEVEL = 4;
-    public static final int ALERT_MORTER = 5;
+    public static final int UPDATE_RESISTANCE = 5;
     public static final int APP_CONNECT = (int) 0xFE;
     public static final int APP_DISCONNECT = (int) 0xFF;
     private boolean deviceAttached = false;
     private int firmwareProtocol = 0;
 
     //センサー、動画再生関連の変数　初期化
-    double speed_Value = 0.0;
-    double dist_Value = 0.0;
+    double speed_Value = 0.0;//速度の値
     double my_dist_Value = 0.0;
-    public float plus_dist_Value = 0.0005F;//0.0015F
+    public float plus_dist_Value = 0.001F;//0.0015F
 
-    double old_dist_Value = 0.0;
-    public float resist_Level = (float) 1.0;//負荷のレベルによる係数
-    NumberFormat format1 = NumberFormat.getInstance();
+    //double dist_Value = 0.0;//ペダルレベルでの距離
+    //double old_dist_Value = 0.0;//ペダルレベルでの距離
+
+    public float resist_Level = (float)1.0;//負荷のレベルによる係数
     NumberFormat format2 = NumberFormat.getInstance();
 
     public int hole_Value = 0;
     public int old_hole_Value = 0;
 
-    public boolean run_Flg = false;
-    public boolean usb_Flg = false;
-    public boolean chSpd_Flg = false;
+    public boolean run_Flg = false;//ON OFF で順番にセンサーの値を受け取るため
+    public boolean usb_Flg = false;//pause画面で速度を変化させない
+    public boolean chSpd_Flg = false;//speed_valueを更新するか否か
     public boolean clear_Flg = false;
-    public int null_Cnt = 0;
+    public boolean clear_Flg2 = true;
 
+    //止まらずに進んでる時間
     long my_mm = 0;
     long my_ss = 0;
 
     public Timer watchMeTimer;
     public WatchMeTask watchMeTask;
 
-    public int sensor_value = 0;
+    public Timer delayedTimer;
+    public DelayedTask delayTask;
 
-    private enum ErrorMessageCode {
-        ERROR_OPEN_ACCESSORY_FRAMEWORK_MISSING,
-        ERROR_FIRMWARE_PROTOCOL
-    }
-
-    ;
     private USBAccessoryManager accessoryManager;
 
 
@@ -266,14 +260,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     @Override
     public void onCompletion(MediaPlayer agr0) {
         Log.v("MediaPlayer", "onCompletion");
-        //USB通信の切断(停止がないため)
-        accessoryManager.disable(this);
-        //disconnectAccessory();//################################       あやしいかもよ～
-        /*
-        if (mp != null) {
-            mp.release();
-            mp = null;
-        }*/
         params.setSpeed((float)speedCount);//再生速度変更
         mp.setPlaybackParams(params);
         mp.seekTo(0);
@@ -498,11 +484,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                         return;
                     }
 
-                    /* LED初期化 */
-                    /*commandPacket[0] = UPDATE_LED_SETTING;
-                    commandPacket[1] = 0;
-                    accessoryManager.write(commandPacket);
-                    */
                     break;
 
                 case USBAccessoryWhat:
@@ -525,106 +506,103 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
                                     case HOLE_SENSOR_CHANGE:
                                         //一時停止時
-                                        if (usb_Flg == true) {
+                                        if( usb_Flg == true ) {
                                             speed_Value = 0.0;
-                                        } else {
-                                            //時間の取得
-                                            float time_tmp = (float) ((my_mm * 60) + my_ss);
+                                        }
+
+                                        else
+                                        {
+                                            //時間の取得(秒に直す)
+                                            float time_tmp = (float)((my_mm*60) + my_ss);
 
                                             //センサー値取得
                                             hole_Value = (int) (commandPacket[1] & 0xFF);
 
                                             //距離の加算(径分)
-                                            if (hole_Value == 1 && old_hole_Value == 0 && run_Flg == false) {
-                                                dist_Value += plus_dist_Value;
+                                            if(hole_Value == 1 && old_hole_Value == 0 && run_Flg == false) {
+                                                //dist_Value += plus_dist_Value;
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = true;
                                                 chSpd_Flg = true;
-                                                clear_Flg = false;//
-                                                null_Cnt = 0;
+                                                clear_Flg2 = true;
                                             }
 
                                             //距離の加算(径分)
-                                            else if (hole_Value == 0 && old_hole_Value == 1 && run_Flg == true) {
-                                                dist_Value += plus_dist_Value;
+                                            else if(hole_Value == 0 && old_hole_Value == 1 && run_Flg == true){
+                                                //dist_Value += plus_dist_Value;
                                                 my_dist_Value += plus_dist_Value;
                                                 run_Flg = false;
                                                 chSpd_Flg = true;
-                                                clear_Flg = false;//
-                                                null_Cnt = 0;
-                                            }
-                                            //一定値以上の場合、停止したとみなす①
-                                            else {
-                                                null_Cnt++;
+                                                clear_Flg2 = true;
                                             }
 
-                                            //一定値以上の場合、停止したとみなす②(cnt上限は適当)
-                                            if (null_Cnt >= 1400) {
-                                                null_Cnt = 1500;
-                                                my_dist_Value = 0.0;
-                                                chSpd_Flg = false;
-                                                clear_Flg = true;
-                                            }
+                                            else{
 
-                                            //時間の取得
-                                            //float time_tmp = (float)((mm*60) + ss);
+                                            }
 
                                             //距離が進んだ場合
-                                            if (chSpd_Flg == true) {
+                                            if(chSpd_Flg == true){
 
                                                 //0秒時の処理
-                                                if (time_tmp <= 0) {
-                                                    speed_Value = 1.8;//plus_dist_Value / (1 / 3600);//my_distを使いたい
-                                                } else {
-                                                    //加算された距離とタイマーの時間で、時速割り出し(現在の時速)
-                                                    speed_Value = my_dist_Value / (time_tmp / 3600);//my_distを使いたい
-                                                    //↓メーターに反映
-                                                    /*
-                                                    Thread SetNeedle = new Thread(new SpeedMeterNeedle(speedMeterAngle));
-                                                    SetNeedle.start();
-                                                    Thread Speed = new Thread(new SpeedMeterTask((float) speed_Value));
-                                                    Speed.start();
-                                                    */
+                                                if(time_tmp <= 0){
+                                                    speed_Value = 1.8;
                                                 }
-                                            } else {
-                                                //speed_Value = 0.0;
+                                                else{
+                                                    //加算された距離とタイマーの時間(秒)で、時速割り出し(現在の時速)
+                                                    speed_Value = my_dist_Value / (time_tmp / 3600);
+                                                }
                                             }
 
-                                            if (my_dist_Value == 0) {
+                                            //予防措置
+                                            if(my_dist_Value == 0){
                                                 speed_Value = 0.0;
                                             }
 
                                         }
 
-                                        //初回時のInfinity回避
-                                             /*   if(Double.isNaN(speed_Value) || Double.isInfinite(speed_Value)){
-                                                    speed_Value = 0.0;
-                                                    dist_Value = 0.0;
-                                                    my_dist_Value = 0.0;
-                                                }
-                                                */
-
                                         //各テキストに値を反映
-                                        tHeartbeat.setText("debug_value:" + String.format("%.4f", my_dist_Value));//my_dist_Value
-                                        //tSpeed.setText(format2.format(speed_Value) + "km/h");
-                                        //tMileage.setText(String.format("%.4f",dist_Value)+ "km");
-                                        tDebug1.setText(format2.format(speed_Value) + "km/h");
-                                        tDebug2.setText(String.format("%.4f", dist_Value) + "km");
+                                        tDebug2.setText(format2.format(my_dist_Value) + "km/h");
 
                                         //メディアプレイヤーの再生速度を設定
-                                        if (speed_Value <= 50 && speed_Value >= 1) {
-                                            params.setSpeed((float) (speed_Value / 10));//再生速度変更
+                                        if(speed_Value <= 50 && speed_Value >= 1){
+                                            params.setSpeed( (float) ( speed_Value / 10 ) );//再生速度変更
                                             mp.setPlaybackParams(params);
                                         }
-                                        //0速度
-                                        else {
-                                            params.setSpeed((float) 0);
+                                        //速度が0のとき
+                                        else{
+                                            params.setSpeed((float)0);
                                             mp.setPlaybackParams(params);
                                         }
 
                                         //過去の値を更新
                                         old_hole_Value = hole_Value;
-                                        old_dist_Value = dist_Value;
+                                        //old_dist_Value = dist_Value;
+                                        break;
+
+                                    //抵抗値の受け取り
+                                    case UPDATE_RESISTANCE:
+
+                                        //センサー値取得
+                                        int resist_Value = (int) (commandPacket[1] & 0xFF);
+
+                                        //抵抗値の割り出し
+                                        switch (resist_Value){
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                            case 5:
+                                                break;
+                                            case 6:
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
                                         break;
                                 }
                             }
@@ -679,6 +657,47 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         return new Integer(major).intValue();
     }
 
+    //表示更新
+    public void MeterShow(double sp_value){
+        tSpeed.setText(String.format("%.2f",sp_value));
+    }
+
+    //数値を0にリセットする
+    public void ResetValue(){
+        speed_Value = 0;
+        my_dist_Value = 0;
+    }
+
+    //時間の余韻をなくす----------------------------------------
+    public class DelayedTask extends TimerTask {
+
+        long t_cnt = 0;
+
+        @Override
+        public void run() {
+            // handlerを使って処理をキューイングする
+            handler.post(new Runnable() {
+                public void run() {
+                    t_cnt++;
+
+                    if(usb_Flg == true || t_cnt >= 200){
+                        t_cnt = 0;
+                        ResetValue();
+                        MeterShow(speed_Value);
+                        params.setSpeed((float)0);
+                        mp.setPlaybackParams(params);
+                        clear_Flg = true;
+                    }
+
+                    if(clear_Flg2 == true){
+                        t_cnt = 0;
+                        clear_Flg2 = false;
+                    }
+                }
+            });
+        }
+    }
+
     //プレイヤーが止まらずに進んだ時間(止まるたびにリセット)
     public class WatchMeTask extends TimerTask {
 
@@ -692,13 +711,16 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                     t_cnt++;
                     my_mm = t_cnt * 100 / 1000 / 60;
                     my_ss = t_cnt * 100 / 1000 % 60;
-                    if (clear_Flg == true) {
+                    MeterShow(speed_Value);
+                    if(clear_Flg == true){
                         t_cnt = 0;
+                        clear_Flg = false;
                     }
                 }
             });
         }
     }
+
 
     //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
@@ -772,6 +794,16 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
         watchMeTimer.schedule(watchMeTask, 0, 100);
 
+        if (null != delayedTimer) {
+            delayedTimer.cancel();
+            delayedTimer = null;
+        }
+
+        delayedTimer = new Timer();//Timerインスタンスを生成
+        delayTask = new DelayedTask();//TimerTaskインスタンスを生成
+        delayedTimer.schedule(delayTask,0,10);
+        //#
+
         timerscheduler = Executors.newSingleThreadScheduledExecutor();
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
     }
@@ -780,6 +812,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     public void PauseProcess() {
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
+        delayedTimer.cancel();
+        watchMeTimer.cancel();
+        ResetValue();
         speedCount = 0.0;
         params.setSpeed((float) speedCount);
         mp.setPlaybackParams(params);
@@ -798,6 +833,8 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                     mp.release();
                     mp = null;
                 }
+                accessoryManager.disable(getApplication());//#
+                disconnectAccessory();//#
                 Intent intent = new Intent(getApplication(), TrainingSelect.class);
                 startActivity(intent);
             }
@@ -806,13 +843,20 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
-
+                delayedTimer = new Timer();//Timerインスタンスを生成
+                delayTask = new DelayedTask();//TimerTaskインスタンスを生成
+                delayedTimer.schedule(delayTask,0,10);
+                watchMeTimer = new Timer();//Timerインスタンスを生成
+                watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
+                watchMeTimer.schedule(watchMeTask,0,100);
                 usb_Flg = false;
             }
         });
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                accessoryManager.disable(getApplication());//#
+                disconnectAccessory();//#
                 ResultProcess();
             }
         });

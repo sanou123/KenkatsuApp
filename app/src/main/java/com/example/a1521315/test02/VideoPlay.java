@@ -99,7 +99,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //センサー、動画再生関連の変数　初期化
     double speed_Value = 0.0;//速度の値
     double my_dist_Value = 0.0;
-    public float plus_dist_Value = 0.0005F;//0.0015F
+    public float plus_dist_Value = 0.001F;//0.0015F
 
     //double dist_Value = 0.0;//ペダルレベルでの距離
     //double old_dist_Value = 0.0;//ペダルレベルでの距離
@@ -352,8 +352,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        accessoryManager.disable(this);//!
-        disconnectAccessory();//!
+
 
         //bluetooth***********
         isRunning = false;
@@ -697,6 +696,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tSpeed.setText(String.format("%.2f",sp_value));
     }
 
+    //数値を0にリセットする
+    public void ResetValue(){
+        speed_Value = 0;
+        my_dist_Value = 0;
+    }
+
     //時間の余韻をなくす----------------------------------------
     public class DelayedTask extends TimerTask {
 
@@ -709,17 +714,16 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 public void run() {
                     t_cnt++;
 
-                    if(t_cnt >= 200){
+                    if(usb_Flg == true || t_cnt >= 200){
                         t_cnt = 0;
-                        speed_Value = 0;
-                        my_dist_Value = 0;
+                        ResetValue();
                         MeterShow(speed_Value);
                         params.setSpeed((float)0);
                         mp.setPlaybackParams(params);
                         clear_Flg = true;
                     }
 
-                    if( usb_Flg == true || clear_Flg2 == true){
+                    if(clear_Flg2 == true){
                         t_cnt = 0;
                         clear_Flg2 = false;
                     }
@@ -741,11 +745,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     t_cnt++;
                     my_mm = t_cnt * 100 / 1000 / 60;
                     my_ss = t_cnt * 100 / 1000 % 60;
-                    if(usb_Flg || clear_Flg == true){
+                    MeterShow(speed_Value);
+                    if(clear_Flg == true){
                         t_cnt = 0;
                         clear_Flg = false;
-                        //speed_Value = 0;
-                        //my_dist_Value = 0;
                     }
                 }
             });
@@ -846,6 +849,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         seekbarfuture.cancel(true);
+        delayedTimer.cancel();
+        watchMeTimer.cancel();
+        ResetValue();
         speedCount = 0.00;
         params.setSpeed((float) speedCount);
         mp.setPlaybackParams(params);
@@ -864,6 +870,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     mp.release();
                     mp = null;
                 }
+                accessoryManager.disable(getApplication());//#
+                disconnectAccessory();//#
                 Thread StopBGM = new Thread(new StopBGM());
                 StopBGM.start();
 
@@ -876,12 +884,27 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             public void onClick(DialogInterface dialog, int which) {
                 future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                 seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
+                delayedTimer = new Timer();//Timerインスタンスを生成
+                delayTask = new DelayedTask();//TimerTaskインスタンスを生成
+                delayedTimer.schedule(delayTask,0,10);
+                watchMeTimer = new Timer();//Timerインスタンスを生成
+                watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
+                watchMeTimer.schedule(watchMeTask,0,100);
                 usb_Flg = false;
             }
         });
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //VideoSelectに戻る処理
+                timerscheduler.shutdown();//タイマー終了
+                seekbarscheduler.shutdown();//タイマー終了
+                if (mp != null) {
+                    mp.release();
+                    mp = null;
+                }
+                accessoryManager.disable(getApplication());//!
+                disconnectAccessory();//!
                 ResultProcess();
             }
         });
