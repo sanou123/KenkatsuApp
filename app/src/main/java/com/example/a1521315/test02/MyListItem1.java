@@ -21,12 +21,16 @@ public class MyListItem1 {
     protected String max_speed;          //最高速度
     protected String distance;          //走行距離
     protected String training_name;          //トレーニング名
+    protected String year;
+    protected String month;
+    protected String day;
+    protected long graph_time;
 
 
 
 
     /**
-     * MyListItem()
+     * MyListItem1()
      *
      * @param data_id      int DATA_ID
      * @param name_id      int 名前に対するID
@@ -41,13 +45,17 @@ public class MyListItem1 {
      * @param avg_speed  String 平均速度
      * @param max_speed  String 最高速度
      * @param distance   String 走行距離
-     * @param training_name String トレーニング名
-     *
+     * @param training_name　Stringトレーニング名
+     * @param year String 年
+     * @param month String 月
+     * @param day String 日
+     * @param graph_time long グラフ用時間
      */
     public MyListItem1(int data_id, int name_id, String name,String date, String heart_rate,
                        String calorie_consumption, String total_time, String total_distance,
                        String course_name, String time,String avg_speed, String max_speed,
-                       String distance, String training_name) {
+                       String distance, String training_name,String year,String month,
+                       String day, long graph_time) {
 
         this.data_id = data_id;
         this.name_id = name_id;
@@ -63,7 +71,10 @@ public class MyListItem1 {
         this.max_speed = max_speed;
         this.distance = distance;
         this.training_name = training_name;
-
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.graph_time = graph_time;
 
     }
 
@@ -146,7 +157,7 @@ public class MyListItem1 {
      * 総走行距離を取得
      * getTotal_distance()
      *
-     * @return price String 総走行距離
+     * @return total_distance String 総走行距離
      */
     public String getTotal_distance() {
         return total_distance;
@@ -158,7 +169,7 @@ public class MyListItem1 {
      * コース名を取得
      * getCourse_name()
      *
-     * @return price String コース名
+     * @return course_name String コース名
      */
     public String getCourse_name() { return course_name;  }
 
@@ -166,7 +177,7 @@ public class MyListItem1 {
      * タイムを取得
      * getTime()
      *
-     * @return price String タイム
+     * @return time String タイム
      */
     public String getTime() { return time;  }
 
@@ -174,7 +185,7 @@ public class MyListItem1 {
      * 平均速度を取得
      * getAvg_speed()
      *
-     * @return price String 平均速度
+     * @return avg_speed String 平均速度
      */
     public String getAvg_speed() { return avg_speed;  }
 
@@ -182,7 +193,7 @@ public class MyListItem1 {
      * 最高速度を取得
      * getMax_speed()
      *
-     * @return price String 最高速度
+     * @return max_speed String 最高速度
      */
     public String getMax_speed() { return max_speed;  }
 
@@ -190,7 +201,7 @@ public class MyListItem1 {
      * 走行距離を取得
      * getDistance()
      *
-     * @return price String 走行距離
+     * @return distance String 走行距離
      */
     public String getDistance() { return distance;  }
 
@@ -198,7 +209,39 @@ public class MyListItem1 {
      * トレーニング名を取得
      * getTraining_name()
      *
-     * @return price String トレーニング名
+     * @return training_name String トレーニング名
      */
     public String getTraining_name() { return training_name;  }
+
+    /**
+     * 年を取得
+     * getYear()
+     *
+     * @return year String 年
+     */
+    public String getYear() { return year;  }
+
+    /**
+     * 月を取得
+     * getMonth()
+     *
+     * @return month String 月
+     */
+    public String getMonth() { return month;  }
+
+    /**
+     * 日を取得
+     * getDay()
+     *
+     * @return day String 日
+     */
+    public String getDay() { return day;  }
+
+    /**
+     * グラフ用時間を取得
+     * getGraph_time()
+     *
+     * @return graph_time long グラフ用時間
+     */
+    public long getGraph_time() { return graph_time;  }
 }

@@ -7,18 +7,11 @@ package com.example.a1521315.test02;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -29,11 +22,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
 
 
 public class GraphMile extends Activity {
@@ -50,7 +38,7 @@ public class GraphMile extends Activity {
         setContentView(R.layout.distance_barchart);
 
         // ArrayListを生成
-        items = new ArrayList<>();
+        /*items = new ArrayList<>();
 
         final EditText editText = (EditText)findViewById(R.id.editText01);
 
@@ -101,8 +89,8 @@ public class GraphMile extends Activity {
                         createBarChartDay();
                     }
                 });
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+*/
+/*        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         toolbar.setTitle("走行距離");
 
@@ -135,9 +123,8 @@ public class GraphMile extends Activity {
                 return true;
             }
         });
-
-
-
+*/
+        createBarChartDay();
     }
 
     private void createBarChartYear() {
