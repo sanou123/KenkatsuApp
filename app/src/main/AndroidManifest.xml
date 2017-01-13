@@ -138,6 +138,7 @@
         <activity
             android:name=".TimeoutResultTweet"
             android:screenOrientation="landscape"></activity>
+
         <activity
             android:name=".EndlessRunVideoPlay"
             android:screenOrientation="landscape"></activity>
