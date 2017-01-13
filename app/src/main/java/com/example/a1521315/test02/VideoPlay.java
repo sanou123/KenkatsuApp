@@ -77,7 +77,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
     private SurfaceView mPreview;
+    //動画
     private MediaPlayer mp = null;
+    //BGM
     private MediaPlayer mpBGM = null;
 
     //タイムに関する奴
@@ -928,7 +930,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
         globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数をそのまま代入しているので実際最大心拍を取得する処理を書いてから代入する)
-
         globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度
         globals.max = String.format("%.2f",maxSpeed);//最高速度
         globals.time = tTimer.getText().toString();//運動時間
@@ -998,7 +999,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     MoveMe.start();
                     Thread TestMileageTask = new Thread(new MileageTask());
                     TestMileageTask.start();
-                    //MaxSpeed(Double.parseDouble(tSpeed.toString()));
                 }
             });
         }
@@ -1233,15 +1233,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         averageSpeed = totalSpeed / totalSpeedCnt;
         String avg = String.format("%.2f",averageSpeed);
         return avg;
-    }
-
-    //最高速度
-    public void MaxSpeed(double speed){
-        if(speed > maxSpeed){
-            maxSpeed = speed;
-        }else{
-            ;
-        }
     }
 
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
