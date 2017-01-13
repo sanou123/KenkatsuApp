@@ -4,9 +4,11 @@ package com.example.a1521315.test02;
  * Created by Administrator on 2016/09/29.
  */
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -196,5 +198,17 @@ public class Dictionary extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    //戻るキーを無効にする
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.MenuSelect");
+            startActivity(intent);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

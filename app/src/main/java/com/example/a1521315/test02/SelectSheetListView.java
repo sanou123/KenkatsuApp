@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -350,5 +351,17 @@ public class SelectSheetListView extends AppCompatActivity {
             return view;
 
         }
+    }
+
+    @Override
+    //戻るキーを無効にする
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.MainActivity");
+            startActivity(intent);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

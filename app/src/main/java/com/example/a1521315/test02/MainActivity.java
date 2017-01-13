@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //activity_mainのレイアウトを使用
         setContentView(R.layout.activity_main);
-        playBGM();
+        //playBGM();
     }
     //画面タップでユーザ選択に遷移
     @Override
@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("Top", "ACTION_DOWN");
-                stopBGM();
+                //stopBGM();
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
                         "com.example.a1521315.test02.SelectSheetListView");

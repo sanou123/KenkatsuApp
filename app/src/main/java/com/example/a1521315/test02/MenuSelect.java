@@ -152,18 +152,7 @@ public class MenuSelect extends AppCompatActivity {
             }
         });
 
-        //user_selectボタンを押した時UserSelectへ移動
-        Button btnDisp5 = (Button) findViewById(R.id.buttonBack);
-        btnDisp5.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Sub 画面を起動
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.SelectSheetListView");
-                startActivity(intent);
-            }
-        });
-        ///////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////
         //searchボタンを押した時UserSelectへ移動
         Button btnDisp6 = (Button) findViewById(R.id.search);
         btnDisp6.setOnClickListener(new View.OnClickListener() {
@@ -249,7 +238,10 @@ public class MenuSelect extends AppCompatActivity {
     //戻るキーを無効にする
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.SelectSheetListView");
+            startActivity(intent);
         }
         return super.onKeyDown(keyCode, event);
     }

@@ -56,24 +56,16 @@ public class VideoSelect extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        Button btnBack = (Button)findViewById(R.id.buttonBack);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.TrainingSelect");
-                startActivity(intent);
-            }
-        });
-
     }
 
     @Override
     //戻るキーを無効にする
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.TrainingSelect");
+            startActivity(intent);
         }
         return super.onKeyDown(keyCode, event);
     }
