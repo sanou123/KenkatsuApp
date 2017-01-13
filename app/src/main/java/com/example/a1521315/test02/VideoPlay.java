@@ -53,6 +53,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tKM,tMileage;//走行距離の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
+    /*平均速度を出すのに必要な関数*/
+    double totalSpeed = 0.0;
+    int totalSpeedCnt = 0;
 
     /*デバッグ用の関数*/
     TextView tDebug1;
@@ -1208,6 +1211,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         Log.v("SECONDS",String.valueOf(seconds) );
         Log.v("TOTAL",String.valueOf(totalHours) );
         String avg = String.format("%.2f",(totalMileage / totalHours));
+        return avg;
+    }
+    //平均速度を計算する
+    public String AverageSpeed2(double totalSpeed, int totalSpeedCnt){
+        Log.v("TotalSpeed", String.valueOf(totalSpeed));
+        Log.v("TotalSpeedCnt", String.valueOf(totalSpeedCnt));
+        double averageSpeed;
+        averageSpeed = totalSpeed / totalSpeedCnt;
+        String avg = String.format("%.2f",averageSpeed);
         return avg;
     }
 
