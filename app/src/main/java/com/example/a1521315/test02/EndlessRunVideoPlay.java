@@ -185,7 +185,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         tKPH.setText("Speed              km/h");
 
         tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
-        tTargetHeartbeat.setText("000");
+        tTargetHeartbeat.setText( "" + TargetBPM(Integer.parseInt(globals.age)) );
         tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
         tTargetBPM.setText("Target BPM");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
