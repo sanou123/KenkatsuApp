@@ -53,6 +53,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tKM,tMileage;//走行距離の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
+
+    /*最高速度*/
+    double maxSpeed = 0.0;
+
     /*平均速度を出すのに必要な関数*/
     double totalSpeed = 0.0;
     int totalSpeedCnt = 0;
@@ -166,11 +170,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         format2.setMaximumFractionDigits(2);
 
         tMileage = (TextView) findViewById(R.id.textMileage);
-        tMileage.setText("999.88");
+        tMileage.setText("000.00");
         tKM = (TextView) findViewById(R.id.textKM);
         tKM.setText("Mileage              km");
         tSpeed = (TextView) findViewById(R.id.textSpeed);
-        tSpeed.setText("49.99");
+        tSpeed.setText("00.00");
         tKPH = (TextView) findViewById(R.id.textKPH);
         tKPH.setText("Speed              km/h");
 
@@ -923,10 +927,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
-        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数をそのまま代入しているので実際最大心拍を取得する処理を書いてから代入する)
 
-        globals.avg = String.valueOf(AverageSpeed(totalMileage,tTimer.getText().toString()));//平均速度(要再検討)
-        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度
+        globals.max = String.format("%.2f",maxSpeed);//最高速度
         globals.time = tTimer.getText().toString();//運動時間
         //int iWeight = Integer.parseInt(globals.weight);
         //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
@@ -994,6 +998,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     MoveMe.start();
                     Thread TestMileageTask = new Thread(new MileageTask());
                     TestMileageTask.start();
+                    //MaxSpeed(Double.parseDouble(tSpeed.toString()));
                 }
             });
         }
@@ -1112,6 +1117,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         mp.setPlaybackParams(params);
                         //mp.start();
                         tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
+                        totalSpeed = totalSpeed + (taskSpeedCount*10);
+                        totalSpeedCnt++;
+                        //最高速度の判断
+                        if((taskSpeedCount*10) > maxSpeed){
+                            maxSpeed = (taskSpeedCount*10);
+                        }
                     }
                 }
             });
@@ -1199,7 +1210,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
 
     //平均速度を計算する
-    public String AverageSpeed(double totalMileage, String time){
+    public String AverageSpeed2(double totalMileage, String time){
         Log.v("aaaaaaaaaaaaTIME",time);
         double hours = Double.parseDouble(time.substring(0, 2));
         double minutes = Double.parseDouble(time.substring(3, 5));
@@ -1213,14 +1224,24 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         String avg = String.format("%.2f",(totalMileage / totalHours));
         return avg;
     }
-    //平均速度を計算する
-    public String AverageSpeed2(double totalSpeed, int totalSpeedCnt){
+
+    //平均速度を計算する(ボリュームで速度調整するとき用)
+    public String AverageSpeed(double totalSpeed, int totalSpeedCnt){
         Log.v("TotalSpeed", String.valueOf(totalSpeed));
         Log.v("TotalSpeedCnt", String.valueOf(totalSpeedCnt));
         double averageSpeed;
         averageSpeed = totalSpeed / totalSpeedCnt;
         String avg = String.format("%.2f",averageSpeed);
         return avg;
+    }
+
+    //最高速度
+    public void MaxSpeed(double speed){
+        if(speed > maxSpeed){
+            maxSpeed = speed;
+        }else{
+            ;
+        }
     }
 
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
