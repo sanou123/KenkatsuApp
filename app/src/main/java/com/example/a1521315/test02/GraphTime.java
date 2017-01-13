@@ -7,18 +7,11 @@ package com.example.a1521315.test02;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -29,11 +22,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
 
 
 public class GraphTime extends Activity {
@@ -49,7 +37,7 @@ public class GraphTime extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.distance_barchart);
 
-        // ArrayListを生成
+  /*      // ArrayListを生成
         items = new ArrayList<>();
 
         final EditText editText = (EditText)findViewById(R.id.editText01);
@@ -102,7 +90,7 @@ public class GraphTime extends Activity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        toolbar.setTitle("走行距離");
+        toolbar.setTitle("走行時間");
 
 
         toolbar.inflateMenu(R.menu.toolbar_graph_select);
@@ -133,8 +121,8 @@ public class GraphTime extends Activity {
                 return true;
             }
         });
-
-
+*/
+        createBarChartDay();
     }
 
     private void createBarChartYear() {
@@ -203,12 +191,6 @@ public class GraphTime extends Activity {
         Cursor c_name_id = dbAdapter.searchDB(null, column_name_id, name_id);
         Cursor c_year = dbAdapter.searchDB(null, column_year, year);
 
-        // DBのデータを取得
-        /*
-        String[] xColumns = {DBAdapter.COL_DATE};     // DBのカラム：品名
-        Cursor xc = dbAdapter.getDB1(xColumns);
-        */
-
         if (c_name_id.moveToFirst() && c_year.moveToFirst()) {
             do {
                 String crlf = System.getProperty("line.separator");
@@ -232,18 +214,11 @@ public class GraphTime extends Activity {
         // ArrayListを生成
         ArrayList<BarEntry> valuesA = new ArrayList<>();
 
-        // DBのデータを取得
-        /*String[] yColumns = {DBAdapter.COL_DISTANCE};     // DBのカラム：品名
-        Cursor yc = dbAdapter.getDB1(yColumns);
-
-        String[] yColumns_Num = {DBAdapter.COL_ID_DATA};     // DBのカラム：品名
-        Cursor yc_num = dbAdapter.getDB1(yColumns_Num);*/
-
         if (c_name_id.moveToFirst() && c_year.moveToFirst()) {
             int Num = 0;
             do {
-                valuesA.add(new BarEntry(Float.parseFloat(c_name_id.getString(12)), Num));
-                Log.d("取得したCursor:", c_name_id.getString(12));
+                valuesA.add(new BarEntry(Float.parseFloat(c_name_id.getString(17)), Num));
+                Log.d("取得したCursor:", c_name_id.getString(17));
                 Num = Num +1;
             } while (c_name_id.moveToNext() && c_year.moveToNext());
         }
@@ -330,13 +305,6 @@ public class GraphTime extends Activity {
         Cursor c_year = dbAdapter.searchDB(null, column_year, year);
         Cursor c_month = dbAdapter.searchDB(null, column_month, month);
 
-
-        // DBのデータを取得
-        /*
-        String[] xColumns = {DBAdapter.COL_DATE};     // DBのカラム：品名
-        Cursor xc = dbAdapter.getDB1(xColumns);
-        */
-
         if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()) {
             do {
                 xValues.add(c_name_id.getString(3)+c_name_id.getString(4)+c_name_id.getString(5)+
@@ -369,8 +337,8 @@ public class GraphTime extends Activity {
         if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()) {
             int Num = 0;
             do {
-                valuesA.add(new BarEntry(Float.parseFloat(c_name_id.getString(12)), Num));
-                Log.d("取得したCursor:", c_name_id.getString(12));
+                valuesA.add(new BarEntry(Float.parseFloat(c_name_id.getString(17)), Num));
+                Log.d("取得したCursor:", c_name_id.getString(17));
                 Num = Num +1;
             } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext());
         }
@@ -458,12 +426,6 @@ public class GraphTime extends Activity {
         Cursor c_month = dbAdapter.searchDB(null, column_month, month);
         Cursor c_day = dbAdapter.searchDB(null, column_day, day);
 
-        // DBのデータを取得
-        /*
-        String[] xColumns = {DBAdapter.COL_DATE};     // DBのカラム：品名
-        Cursor xc = dbAdapter.getDB1(xColumns);
-        */
-
         if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()
                 && c_day.moveToFirst()) {
             do {
@@ -488,19 +450,12 @@ public class GraphTime extends Activity {
         // ArrayListを生成
         ArrayList<BarEntry> valuesA = new ArrayList<>();
 
-        // DBのデータを取得
-        /*String[] yColumns = {DBAdapter.COL_DISTANCE};     // DBのカラム：品名
-        Cursor yc = dbAdapter.getDB1(yColumns);
-
-        String[] yColumns_Num = {DBAdapter.COL_ID_DATA};     // DBのカラム：品名
-        Cursor yc_num = dbAdapter.getDB1(yColumns_Num);*/
-
         if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()
                 && c_day.moveToFirst()) {
             int Num = 0;
             do {
-                valuesA.add(new BarEntry(Float.parseFloat(c_name_id.getString(12)), Num));
-                Log.d("取得したCursor:", c_name_id.getString(12));
+                valuesA.add(new BarEntry(Float.parseFloat(c_name_id.getString(17)), Num));
+                Log.d("取得したCursor:", c_name_id.getString(17));
                 Num = Num +1;
             } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext()
                     && c_day.moveToNext());

@@ -4,75 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
-
-    <EditText
-        android:id="@+id/editText01"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:hint="@string/text01_hintnumber"
-        android:inputType="number"
-        android:lines="1"
-        android:maxLength="24"
-        android:maxLines="1"
-        android:minLines="1"
-        android:singleLine="false"
-        android:textSize="16sp" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText01"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="日付を入力"
-            android:id="@+id/button1"
-            android:layout_weight="1" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="年　検索"
-            android:id="@+id/button2"
-            android:layout_weight="1" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="年/月　検索"
-            android:id="@+id/button3"
-            android:layout_weight="1" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="年/月/日　検索"
-            android:id="@+id/button4"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/bar_chart"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="16dp"
-                    />
-    </LinearLayout>
-
+    <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/bar_chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+        />
 
 </LinearLayout>

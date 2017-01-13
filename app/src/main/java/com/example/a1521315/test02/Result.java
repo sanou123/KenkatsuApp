@@ -174,13 +174,15 @@ public class Result extends Activity {
 
         int name_id = Integer.parseInt(globals.name_id);
 
+        globals.graph_time = (globals.hh*60) + globals.mm + (globals.ss/60) + (globals.ss%60);
+
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);
         dbAdapter.openDB();                                         // DBの読み書き
-        dbAdapter.saveDB_DATA(name_id, globals.now_user, globals.year, globals.month,
-                globals.day,globals.times_of_day, globals.maxheartbeat,
-                globals.cal, globals.total_time, globals.total_mileage, globals.coursename,
-                globals.time, globals.avg, globals.max, globals.mileage,globals.training_name);   // DBに登録
+        dbAdapter.saveDB_DATA(name_id, globals.now_user, globals.year, globals.month, globals.day,
+                globals.times_of_day, globals.maxheartbeat, globals.cal, globals.total_time,
+                globals.total_mileage, globals.coursename, globals.time, globals.avg, globals.max,
+                globals.mileage,globals.training_name, globals.graph_time);   // DBに登録
         dbAdapter.closeDB();                                        // DBを閉じる
 
     }

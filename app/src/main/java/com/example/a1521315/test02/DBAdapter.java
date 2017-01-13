@@ -52,6 +52,7 @@ public class DBAdapter {
     public final static String COL_MAX_SPEED = "max_speed";         //最高速度
     public final static String COL_DISTANCE = "distance";           //走行距離
     public final static String COL_TRAINING_NAME = "training_name";           //走行距離
+    public final static String COL_GRAPH_TIME = "graph_time";
 
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
@@ -148,7 +149,8 @@ public class DBAdapter {
     public void saveDB_DATA(int name_id, String name ,String year, String month, String day,
                             String times_of_day, String heart_rate, double calorie_consumption,
                             String total_time, String total_distance, String course_name, String time,
-                            String avg_speed, String max_speed, String distance,String training_name) {
+                            String avg_speed, String max_speed, String distance,String training_name,
+                            long graph_time) {
 
         db.beginTransaction();          // トランザクション開始
 
@@ -170,6 +172,7 @@ public class DBAdapter {
             values.put(COL_MAX_SPEED, max_speed);
             values.put(COL_DISTANCE, distance);
             values.put(COL_TRAINING_NAME, training_name);
+            values.put(COL_GRAPH_TIME, graph_time);
 
 
 
@@ -396,6 +399,7 @@ public class DBAdapter {
                     + COL_MAX_SPEED + " INTEGER NOT NULL ,"
                     + COL_DISTANCE + " INTEGER NOT NULL ,"
                     + COL_TRAINING_NAME + " TEXT NOT NULL ,"
+                    + COL_GRAPH_TIME +" TEXT NOT NULL ,"
                     + "FOREIGN KEY(name_id) REFERENCES DB_TABLE_USER(COL_ID_USER) ON DELETE CASCADE"
                     + ");";
             db.execSQL(createTbl_user);      //SQL文の実行

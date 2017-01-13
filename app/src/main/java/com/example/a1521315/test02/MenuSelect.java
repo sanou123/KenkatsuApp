@@ -124,7 +124,7 @@ public class MenuSelect extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.GraphMile");
+                        "com.example.a1521315.test02.GraphListView");
                 startActivity(intent);
             }
         });

@@ -62,9 +62,7 @@
             android:name=".SelectSheetListView"
             android:label="@string/name_selectsheet_listview"
             android:screenOrientation="landscape" />
-        <activity
-            android:name=".SelectSheetListView1"
-            android:screenOrientation="landscape" />
+
         <activity
             android:name=".SelectSheetProduct1"
             android:screenOrientation="landscape" />
@@ -140,9 +138,17 @@
         <activity
             android:name=".TimeoutResultTweet"
             android:screenOrientation="landscape"></activity>
+
         <activity
             android:name=".EndlessRunVideoPlay"
             android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".GraphListView"
+            android:screenOrientation="landscape" />
+
+        <activity
+            android:name=".GraphTab"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>
