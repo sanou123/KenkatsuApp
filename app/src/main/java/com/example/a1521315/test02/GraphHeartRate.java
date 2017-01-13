@@ -2,17 +2,9 @@ package com.example.a1521315.test02;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -21,11 +13,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
 
 public class GraphHeartRate extends Activity {
 
@@ -38,7 +25,7 @@ public class GraphHeartRate extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.time_linechart);
-
+/*
         final EditText editText = (EditText)findViewById(R.id.editText01);
 
         varDateSetListener = new DatePickerDialog.OnDateSetListener(){
@@ -74,10 +61,21 @@ public class GraphHeartRate extends Activity {
                         createLineChartYear();
                     }
                 });
-
+        ((Button)findViewById(R.id.button3))
+                .setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view){
+                        createLineChartMonth();
+                    }
+                });
+        ((Button)findViewById(R.id.button4))
+                .setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view){
+                        createLineChartDay();
+                    }
+                });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        toolbar.setTitle("走行距離");
+        toolbar.setTitle("最大心拍数");
 
 
         toolbar.inflateMenu(R.menu.toolbar_graph_select);
@@ -109,7 +107,8 @@ public class GraphHeartRate extends Activity {
             }
         });
 
-
+*/
+        createLineChartDay();
     }
 
     private void createLineChartYear() {
@@ -121,11 +120,14 @@ public class GraphHeartRate extends Activity {
         dbAdapter.openDB();     // DBの読み込み(読み書きの方)
 
         // ArrayListを生成
-        String column = "name_id";          //検索対象のカラム名
+        String column_name_id = "name_id";          //検索対象のカラム名
+        String column_year = "year";          //検索対象のカラム名
         String[] name_id = {globals.name_id};            //検索対象の文字
+        String[] year = {globals.year};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
-        Cursor c = dbAdapter.searchDB(null, column, name_id);
+        Cursor c_name_id = dbAdapter.searchDB(null, column_name_id, name_id);
+        Cursor c_year = dbAdapter.searchDB(null, column_year, year);
 
         // DBのデータを取得
         /*
@@ -133,13 +135,13 @@ public class GraphHeartRate extends Activity {
         Cursor xc = dbAdapter.getDB1(xColumns);
         */
 
-        if (c.moveToFirst()) {
+        if (c_name_id.moveToFirst() && c_year.moveToFirst()) {
             int Num = 0;
             do {
-                entries.add(new Entry(c.getFloat(7), Num));
-                Log.d("取得したCursor:", c.getString(7));
+                entries.add(new Entry(c_name_id.getFloat(7), Num));
+                Log.d("取得したCursor:", c_name_id.getString(7));
                 Num = Num + 1;
-            } while (c.moveToNext());
+            } while (c_name_id.moveToNext() && c_year.moveToNext());
         }
 
         LineDataSet dataset = new LineDataSet(entries, "心拍数");
@@ -147,15 +149,153 @@ public class GraphHeartRate extends Activity {
         // ArrayListを生成
         ArrayList<String> labels = new ArrayList<String>();
 
-        if (c.moveToFirst()) {
+        if (c_name_id.moveToFirst() && c_year.moveToFirst()) {
             do {
-                labels.add(new String(c.getString(3) + c.getString(4) + c.getString(5)
-                        + c.getString(6)));
-                Log.d("取得したCursor:", c.getString(3) + c.getString(4) + c.getString(5)
-                        + c.getString(6));
-            } while (c.moveToNext());
+                labels.add(new String(c_name_id.getString(3) + c_name_id.getString(4) + c_name_id.getString(5)
+                        + c_name_id.getString(6)));
+                Log.d("取得したCursor:", c_name_id.getString(3) + c_name_id.getString(4) + c_name_id.getString(5)
+                        + c_name_id.getString(6));
+            } while (c_name_id.moveToNext() && c_year.moveToNext());
         }
-        c.close();
+        c_name_id.close();
+        dbAdapter.closeDB();    // DBを閉じる
+
+
+        LineData data = new LineData(labels, dataset);
+        dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
+        dataset.setDrawCubic(true);
+        dataset.setDrawFilled(true);
+
+        lineChart.setData(data);
+        lineChart.animateY(5000);
+
+    }
+
+    private void createLineChartMonth() {
+        LineChart lineChart = (LineChart) findViewById(R.id.chart);
+
+        ArrayList<Entry> entries = new ArrayList<>();
+
+        dbAdapter = new DBAdapter(this);
+        dbAdapter.openDB();     // DBの読み込み(読み書きの方)
+
+        // ArrayListを生成
+        String column_name_id = "name_id";          //検索対象のカラム名
+        String column_year = "year";          //検索対象のカラム名
+        String column_month = "month";          //検索対象のカラム名
+        String[] name_id = {globals.name_id};            //検索対象の文字
+        String[] year = {globals.year};            //検索対象の文字
+        String[] month = {globals.month};            //検索対象の文字
+
+
+        // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
+        Cursor c_name_id = dbAdapter.searchDB(null, column_name_id, name_id);
+        Cursor c_year = dbAdapter.searchDB(null, column_year, year);
+        Cursor c_month = dbAdapter.searchDB(null, column_month, month);
+
+
+        // DBのデータを取得
+        /*
+        String[] xColumns = {DBAdapter.COL_DATE};     // DBのカラム：品名
+        Cursor xc = dbAdapter.getDB1(xColumns);
+        */
+
+        if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()) {
+            int Num = 0;
+            do {
+                entries.add(new Entry(c_name_id.getFloat(7), Num));
+                Log.d("取得したCursor:", c_name_id.getString(7));
+                Num = Num + 1;
+            } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext());
+        }
+
+        LineDataSet dataset = new LineDataSet(entries, "心拍数");
+
+        // ArrayListを生成
+        ArrayList<String> labels = new ArrayList<String>();
+
+        if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()) {
+            do {
+                labels.add(new String(c_name_id.getString(3) + c_name_id.getString(4) + c_name_id.getString(5)
+                        + c_name_id.getString(6)));
+                Log.d("取得したCursor:", c_name_id.getString(3) + c_name_id.getString(4) + c_name_id.getString(5)
+                        + c_name_id.getString(6));
+            } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext());
+        }
+        c_name_id.close();
+        dbAdapter.closeDB();    // DBを閉じる
+
+
+        LineData data = new LineData(labels, dataset);
+        dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
+        dataset.setDrawCubic(true);
+        dataset.setDrawFilled(true);
+
+        lineChart.setData(data);
+        lineChart.animateY(5000);
+
+    }
+
+    private void createLineChartDay() {
+        LineChart lineChart = (LineChart) findViewById(R.id.chart);
+
+        ArrayList<Entry> entries = new ArrayList<>();
+
+        dbAdapter = new DBAdapter(this);
+        dbAdapter.openDB();     // DBの読み込み(読み書きの方)
+
+        // ArrayListを生成
+        String column_name_id = "name_id";          //検索対象のカラム名
+        String column_year = "year";          //検索対象のカラム名
+        String column_month = "month";          //検索対象のカラム名
+        String column_day = "day";          //検索対象のカラム名
+        String[] name_id = {globals.name_id};            //検索対象の文字
+        String[] year = {globals.year};            //検索対象の文字
+        String[] month = {globals.month};            //検索対象の文字
+        String[] day = {globals.day};            //検索対象の文字
+
+
+
+        // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
+        Cursor c_name_id = dbAdapter.searchDB(null, column_name_id, name_id);
+        Cursor c_year = dbAdapter.searchDB(null, column_year, year);
+        Cursor c_month = dbAdapter.searchDB(null, column_month, month);
+        Cursor c_day = dbAdapter.searchDB(null, column_day, day);
+
+
+        // DBのデータを取得
+        /*
+        String[] xColumns = {DBAdapter.COL_DATE};     // DBのカラム：品名
+        Cursor xc = dbAdapter.getDB1(xColumns);
+        */
+
+        if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()
+                && c_day.moveToFirst()) {
+            int Num = 0;
+            do {
+                entries.add(new Entry(c_name_id.getFloat(7), Num));
+                Log.d("取得したCursor:", c_name_id.getString(7));
+                Num = Num + 1;
+            } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext()
+                    && c_day.moveToNext());
+        }
+
+        LineDataSet dataset = new LineDataSet(entries, "心拍数");
+
+        // ArrayListを生成
+        ArrayList<String> labels = new ArrayList<String>();
+
+        if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()
+                && c_day.moveToFirst()) {
+            do {
+                labels.add(new String(c_name_id.getString(3) + c_name_id.getString(4) + c_name_id.getString(5)
+                        + c_name_id.getString(6)));
+                Log.d("取得したCursor:", c_name_id.getString(3) + c_name_id.getString(4) + c_name_id.getString(5)
+                        + c_name_id.getString(6));
+            } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext()
+                    && c_day.moveToNext());
+        }
+        c_name_id.close();
         dbAdapter.closeDB();    // DBを閉じる
 
 

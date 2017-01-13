@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    tools:context=".MainUser">
+
+    <!-- 説明 -->
+    <TextView
+        android:id="@+id/text03TitleDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="トレーニングの履歴をグラフで閲覧できます。"
+        android:textColor="#333333" />
+
+    <!-- ListView -->
+    <ListView
+        android:id="@+id/listView03"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp" />
+
+</LinearLayout>
