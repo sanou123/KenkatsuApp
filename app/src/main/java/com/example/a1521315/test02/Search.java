@@ -3,8 +3,8 @@ package com.example.a1521315.test02;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -41,5 +41,17 @@ public class Search extends Activity {
             startActivity(i);*/
 
         }
+
+    @Override
+    //戻るキーを無効にする
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.MenuSelect");
+            startActivity(intent);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

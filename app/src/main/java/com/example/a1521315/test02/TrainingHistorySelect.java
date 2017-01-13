@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -66,17 +67,17 @@ public class TrainingHistorySelect extends AppCompatActivity {
             }
         });
 
-        //buttonBackを押した時MenuSelectへ移動
-        Button btnBack = (Button) findViewById(R.id.buttonBack);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Sub 画面を起動
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.MenuSelect");
-                startActivity(intent);
-            }
-        });
+    }
 
+    @Override
+    //戻るキーを無効にする
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.MenuSelect");
+            startActivity(intent);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

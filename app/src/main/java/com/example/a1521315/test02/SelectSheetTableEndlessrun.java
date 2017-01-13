@@ -1,11 +1,13 @@
 package com.example.a1521315.test02;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TableLayout;
@@ -200,5 +202,17 @@ public class SelectSheetTableEndlessrun extends AppCompatActivity {
         params.weight = f;      //weight(行内でのテキストごとの比率)
 
         return params;
+    }
+
+    @Override
+    //戻るキーを無効にする
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.TrainingHistorySelect");
+            startActivity(intent);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

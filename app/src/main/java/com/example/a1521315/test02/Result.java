@@ -191,7 +191,10 @@ public class Result extends Activity {
     //戻るキーを無効にする
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.VideoSelect");
+            startActivity(intent);
         }
         return super.onKeyDown(keyCode, event);
     }
