@@ -8,9 +8,85 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:id="@+id/TextLayout">
+        android:id="@+id/BackKeyLayout"
+        android:layout_width="900dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_height="80dp">
+
+        <Button
+            android:id="@+id/update"
+
+            android:text="ユーザ情報更新"
+            android:textSize="24sp"
+            android:layout_height="80dp"
+            android:layout_width="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp" />
+
+        <Button
+            android:id="@+id/graph"
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:text="グラフ表示"
+            android:textSize="20sp"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+    <GridLayout
+        android:id="@+id/Menulayout"
+        android:layout_width="900dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextLayout"
+        android:layout_marginTop="20dp"
+        android:layout_centerInParent="true">
+
+        <Button
+            android:id="@+id/training"
+            android:text="トレーニング"
+            android:textSize="50sp"
+            android:layout_width="450dp"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"/>
+
+        <Button
+            android:id="@+id/training_log"
+            android:text="トレーニング履歴"
+            android:textSize="50sp"
+            android:layout_width="450dp"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="1"/>
+
+        <Button
+            android:id="@+id/search"
+            android:text="ツイート検索"
+            android:textSize="50sp"
+            android:layout_width="450dp"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="1" />
+
+        <Button
+            android:id="@+id/dictionary"
+            android:text="健康辞典"
+            android:textSize="50sp"
+            android:layout_width="450dp"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="0" />
+
+    </GridLayout>
+
+    <RelativeLayout
+        android:layout_width="900dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/TextLayout"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true">
 
         <TextView
             android:id="@+id/title_user_select"
@@ -43,82 +119,5 @@
             android:layout_below="@+id/text_bmi"
             android:layout_alignParentStart="true" />
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/BackKeyLayout"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_height="80dp">
-
-        <Button
-            android:id="@+id/update"
-
-            android:text="ユーザ情報更新"
-            android:textSize="24sp"
-            android:layout_height="80dp"
-            android:layout_width="200dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="10dp" />
-
-        <Button
-            android:id="@+id/graph"
-            android:layout_width="150dp"
-            android:layout_height="80dp"
-            android:text="グラフ表示"
-            android:textSize="20sp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
-
-    <GridLayout
-        android:id="@+id/Menulayout"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="43dp"
-        android:layout_below="@+id/TextLayout"
-        android:layout_alignParentStart="true">
-
-        <Button
-            android:id="@+id/training"
-            android:text="トレーニング"
-            android:textSize="50sp"
-            android:layout_width="500dp"
-            android:layout_height="150dp"
-            android:layout_marginLeft="5dp"/>
-
-        <Button
-            android:id="@+id/training_log"
-            android:text="トレーニングの履歴"
-            android:textSize="50sp"
-            android:layout_width="500dp"
-            android:layout_height="150dp"
-            android:layout_marginLeft="10dp"/>
-
-        <Button
-            android:id="@+id/search"
-            android:text="ツイート検索"
-            android:textSize="50sp"
-            android:layout_width="500dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_row="1"
-            android:layout_column="1" />
-
-        <Button
-            android:id="@+id/dictionary"
-            android:text="健康辞典"
-            android:textSize="50sp"
-            android:layout_width="500dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_row="1"
-            android:layout_column="0" />
-
-    </GridLayout>
 
 </RelativeLayout>
