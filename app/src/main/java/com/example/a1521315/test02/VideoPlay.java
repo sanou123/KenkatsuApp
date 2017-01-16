@@ -1255,6 +1255,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 return true;
             }
         }
+
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
                 if (mp != null) {
