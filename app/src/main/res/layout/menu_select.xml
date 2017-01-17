@@ -17,7 +17,7 @@
         <Button
             android:id="@+id/update"
             android:text="ユーザ情報更新"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:layout_height="80dp"
             android:layout_width="0dip"
             android:layout_weight="1"/>
@@ -60,15 +60,6 @@
             android:layout_below="@+id/title_user_select"
             android:layout_alignParentStart="true" />
 
-        <TextView
-            android:text="デバッグ用"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_debug"
-            android:textSize="30sp"
-            android:textColor="@android:color/black"
-            android:layout_below="@+id/text_bmi"
-            android:layout_alignParentStart="true" />
     </RelativeLayout>
 
     <LinearLayout
