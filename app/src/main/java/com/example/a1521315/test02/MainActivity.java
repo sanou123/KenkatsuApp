@@ -23,12 +23,6 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         // ステータスバーを隠す
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        // 画面サイズをLog.vに出力
-        Display display = getWindowManager().getDefaultDisplay();
-        Point p = new Point();
-        display.getSize(p);
-        Log.v("width: ", String.valueOf(p.x));
-        Log.v("height: ", String.valueOf(p.y));
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //activity_mainのレイアウトを使用
