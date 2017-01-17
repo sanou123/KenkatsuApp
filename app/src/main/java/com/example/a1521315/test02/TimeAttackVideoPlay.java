@@ -68,7 +68,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     private ImageView imageMe;//自機イメージ用の変数
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
-    double cal=0; //カロリー計算用
+    double cal=0.0; //カロリー計算用
+    double weight = Double.parseDouble(globals.weight);
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -100,7 +101,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     //センサー、動画再生関連の変数　初期化
     double speed_Value = 0.0;//速度の値
     double my_dist_Value = 0.0;
-    public float plus_dist_Value = 0.0005F;//0.0015F
+    public float plus_dist_Value = 0.00005F;//0.0005F;//0.0015F
 
     //double dist_Value = 0.0;//ペダルレベルでの距離
     //double old_dist_Value = 0.0;//ペダルレベルでの距離
@@ -118,7 +119,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     public boolean clear_Flg2 = true;
     public boolean Gear1_Flg = false;
     public boolean Gear2_Flg = false;
-    public boolean Gear3_Flg = false;
+    public boolean Gear3_Flg = true;
     public boolean Gear4_Flg = false;
     public boolean Gear5_Flg = false;
     public boolean Gear6_Flg = false;
@@ -607,7 +608,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
                                         //抵抗値の割り出し
                                         switch (resist_Value){
-                                            case 1:
+                                            case 0:
                                                 Gear1_Flg = true;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -615,7 +616,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 2:
+                                            case 1:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = true;
                                                 Gear3_Flg = false;
@@ -623,7 +624,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 3:
+                                            case 2:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = true;
@@ -631,7 +632,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 4:
+                                            case 3:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -639,7 +640,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 5:
+                                            case 4:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -647,7 +648,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = true;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 6:
+                                            case 5:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -1093,41 +1094,44 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
 
                     //100msごとに負荷の確認
-                    if(Gear3_Flg == false) {
+                    /*if(Gear3_Flg == false) {
                         HukaProcess();
                         Toast.makeText(getApplication(), "負荷を3に設定してください", Toast.LENGTH_LONG);
-                    }
-
+                    }*/
+                    /*
                     if(Gear1_Flg == true){
-                        cal += (3.8*Double.parseDouble(globals.weight)*(1/36000)*1.05*(speed_Value/20));
-                        tDebug1.setText(cal+"kcal");
+                        cal += (3.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
                         tDebug2.setText("ギアの重さ：1");
                     }
                     if(Gear2_Flg == true){
-                        cal += (4.8*Double.parseDouble(globals.weight)*(1/36000)*1.05*(speed_Value/20));
-                        tDebug1.setText(cal+"kcal");
+                        cal += (4.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
                         tDebug2.setText("ギアの重さ：2");
-                    }
+                    }*/
                     if(Gear3_Flg == true){
-                        cal += (5.8*Double.parseDouble(globals.weight)*(1/36000)*1.05*(speed_Value/20));
-                        tDebug1.setText(cal+"kcal");
-                        tDebug2.setText("ギアの重さ：3");
+                        //cal = (5.8 * weight * (1 / 36000) * 1.05 * (speed_Value / 20) * 1000);
+                    cal += 5.8 * weight * 1 / 36000 * 1.05 * speed_Value / 20 * 1000;
+                        //tDebug1.setText(String.format("%.6f",cal)+"cal");
+                        tDebug1.setText(cal + "cal");
+                        tDebug2.setText("ギアの重さ：3"+"weight:"+weight+"speedValue:"+speed_Value);
                     }
+                    /*
                     if(Gear4_Flg == true){
-                        cal += (6.8*Double.parseDouble(globals.weight)*(1/36000)*1.05*(speed_Value/20));
-                        tDebug1.setText(cal+"kcal");
+                        cal += (6.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
                         tDebug2.setText("ギアの重さ：4");
                     }
                     if(Gear5_Flg == true){
-                        cal += (7.8*Double.parseDouble(globals.weight)*(1/36000)*1.05*(speed_Value/20));
-                        tDebug1.setText(cal+"kcal");
+                        cal += (7.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
                         tDebug2.setText("ギアの重さ：5");
                     }
                     if(Gear6_Flg == true){
-                        cal += (8.8*Double.parseDouble(globals.weight)*(1/36000)*1.05*(speed_Value/20));
-                        tDebug1.setText(cal+"kcal");
+                        cal += (8.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
                         tDebug2.setText("ギアの重さ：6");
-                    }
+                    }*/
 
 
                     //残り時間0で終了
