@@ -36,9 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -179,7 +177,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             setContentView(R.layout.activity_video_play);
         }else{
             //sそれ以外(nexus7 2013とか)
-            setContentView(R.layout.video_play);
+            setContentView(R.layout.activity_video_play_7);
         }
 
         getWindow().setFormat(PixelFormat.TRANSPARENT);
