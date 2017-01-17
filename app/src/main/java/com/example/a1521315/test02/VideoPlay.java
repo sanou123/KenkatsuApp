@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -160,7 +161,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_play);
+
+        // ステータスバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.video_play);
         getWindow().setFormat(PixelFormat.TRANSPARENT);
         mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
         holder = mPreview.getHolder();
