@@ -2,6 +2,8 @@ package com.example.a1521315.test02;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ public class NormalResultTweet extends Activity{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         globals = (Globals)this.getApplication();
         coursename = globals.coursename;
         mileage = globals.mileage;
@@ -33,8 +36,10 @@ public class NormalResultTweet extends Activity{
         time = globals.time;
         cal = globals.cal;
         kuriarank = globals.rank;
-
-        super.onCreate(savedInstanceState);
+        // タイトルバーを隠す
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // ステータスバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.search);
 
         TextView tv = (TextView)findViewById(R.id.tv);
