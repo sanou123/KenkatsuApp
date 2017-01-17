@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // タイトルバーを隠す場合
+        // タイトルバーを隠す
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         // ステータスバーを隠す
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
