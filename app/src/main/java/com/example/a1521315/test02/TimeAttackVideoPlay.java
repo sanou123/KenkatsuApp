@@ -69,7 +69,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
     double cal=0; //カロリー計算用
-    int gear = 0; //ギア監視
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -117,7 +116,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     public boolean chSpd_Flg = false;//speed_valueを更新するか否か
     public boolean clear_Flg = false;
     public boolean clear_Flg2 = true;
-    public boolean start_Flg = false;
     public boolean Gear1_Flg = false;
     public boolean Gear2_Flg = false;
     public boolean Gear3_Flg = false;
@@ -168,11 +166,11 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.DriveDataInit();//グローバル変数初期化
 
         tMileage = (TextView) findViewById(R.id.textMileage);
-        tMileage.setText("999.88");
+        tMileage.setText("000.00");
         tKM = (TextView) findViewById(R.id.textKM);
         tKM.setText("Mileage              km");
         tSpeed = (TextView) findViewById(R.id.textSpeed);
-        tSpeed.setText("49.99");
+        tSpeed.setText("00.00");
         tKPH = (TextView) findViewById(R.id.textKPH);
         tKPH.setText("Speed              km/h");
 
@@ -249,7 +247,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -266,7 +264,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             }
         }
         //******************************************************************************************
-
+*/
     }//onCreateここまで
 
 
@@ -606,10 +604,10 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                         //センサー値取得
                                         int resist_Value = (int) (commandPacket[1] & 0xFF);
 
+
                                         //抵抗値の割り出し
                                         switch (resist_Value){
                                             case 1:
-                                                start_Flg = false;
                                                 Gear1_Flg = true;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -618,7 +616,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear6_Flg = false;
                                                 break;
                                             case 2:
-                                                start_Flg = false;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = true;
                                                 Gear3_Flg = false;
@@ -627,7 +624,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear6_Flg = false;
                                                 break;
                                             case 3:
-                                                start_Flg = true;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = true;
@@ -636,7 +632,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear6_Flg = false;
                                                 break;
                                             case 4:
-                                                start_Flg = false;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -645,7 +640,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear6_Flg = false;
                                                 break;
                                             case 5:
-                                                start_Flg = false;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -654,7 +648,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear6_Flg = false;
                                                 break;
                                             case 6:
-                                                start_Flg = false;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -792,11 +785,12 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     View.OnClickListener PlayClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(start_Flg == true){
+            if(Gear3_Flg == true){
                 PlayProcess();
             }
             else{
-                Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG);
+                Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
+                Log.v("a","負荷を3に設定してください");
             }
         }
     };
@@ -1099,7 +1093,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
 
                     //100msごとに負荷の確認
-                    if(start_Flg == false) {
+                    if(Gear3_Flg == false) {
                         HukaProcess();
                         Toast.makeText(getApplication(), "負荷を3に設定してください", Toast.LENGTH_LONG);
                     }
