@@ -73,6 +73,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private ImageView imageGhost;
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
+    double cal=0.0; //カロリー計算用
+    double weight = Double.parseDouble(globals.weight);
 
     double psKilometers = 1 , psSeconds = 10;
 
@@ -126,6 +128,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public boolean chSpd_Flg = false;//speed_valueを更新するか否か
     public boolean clear_Flg = false;
     public boolean clear_Flg2 = true;
+    public boolean Gear1_Flg = false;
+    public boolean Gear2_Flg = false;
+    public boolean Gear3_Flg = true;
+    public boolean Gear4_Flg = false;
+    public boolean Gear5_Flg = false;
+    public boolean Gear6_Flg = false;
 
     //止まらずに進んでる時間
     long my_mm = 0;
@@ -649,17 +657,53 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                         //抵抗値の割り出し
                                         switch (resist_Value){
+                                            case 0:
+                                                Gear1_Flg = true;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = false;
+                                                break;
                                             case 1:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = true;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = false;
                                                 break;
                                             case 2:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = true;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = false;
                                                 break;
                                             case 3:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = true;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = false;
                                                 break;
                                             case 4:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = true;
+                                                Gear6_Flg = false;
                                                 break;
                                             case 5:
-                                                break;
-                                            case 6:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = true;
                                                 break;
                                             default:
                                                 break;
@@ -1000,6 +1044,37 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     globals.ms = ms;
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
+
+                    if(Gear1_Flg == true){
+                        cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tDebug2.setText("ギアの重さ：1");
+                    }
+                    if(Gear2_Flg == true){
+                        cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tDebug2.setText("ギアの重さ：2");
+                    }
+                    if(Gear3_Flg == true){
+                        cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tDebug2.setText("ギアの重さ：3");
+                    }
+                    if(Gear4_Flg == true){
+                        cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tDebug2.setText("ギアの重さ：4");
+                    }
+                    if(Gear5_Flg == true){
+                        cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tDebug2.setText("ギアの重さ：5");
+                    }
+                    if(Gear6_Flg == true){
+                        cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tDebug2.setText("ギアの重さ：6");
+                    }
                 }
             });
         }
