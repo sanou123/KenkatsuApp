@@ -130,7 +130,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     public boolean clear_Flg2 = true;
     public boolean Gear1_Flg = false;
     public boolean Gear2_Flg = false;
-    public boolean Gear3_Flg = true;
+    public boolean Gear3_Flg = false;
     public boolean Gear4_Flg = false;
     public boolean Gear5_Flg = false;
     public boolean Gear6_Flg = false;
@@ -657,7 +657,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                         //抵抗値の割り出し
                                         switch (resist_Value){
-                                            case 0:
+                                            case 1:
                                                 Gear1_Flg = true;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -665,7 +665,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 1:
+                                            case 2:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = true;
                                                 Gear3_Flg = false;
@@ -673,7 +673,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 2:
+                                            case 3:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = true;
@@ -681,7 +681,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 3:
+                                            case 4:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -689,7 +689,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 4:
+                                            case 5:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -697,7 +697,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear5_Flg = true;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
