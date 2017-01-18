@@ -1,17 +1,15 @@
 package com.example.a1521315.test02;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,7 +21,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 
-public class MenuSelect extends Activity {
+public class MenuSelect extends AppCompatActivity {
     private DBAdapter dbAdapter;
     private SelectSheetListView.MyBaseAdapter myBaseAdapter;
     private List<MyListItem> items;
@@ -41,12 +39,10 @@ public class MenuSelect extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // タイトルバーを隠す
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // ステータスバーを隠す
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         //menu_selectのレイアウトを使用
         setContentView(R.layout.menu_select);
 
@@ -200,6 +196,7 @@ public class MenuSelect extends Activity {
                     dialog.show();
                 }
 
+
             }
         });
         //////////////////////////////////////////////////////////////////////
@@ -207,6 +204,18 @@ public class MenuSelect extends Activity {
     }
 
     public void loginSort(){
+        dbAdapter.readDB();                         // DBの読み込み(読み込みの方)
+
+
+        String[] column_year = {"year"};          //検索対象のカラム名
+        Cursor c_year = dbAdapter.sortDB(column_year);
+        String[] column_month = {"month"};          //検索対象のカラム名
+        Cursor c_month = dbAdapter.sortDB(column_month);
+        String[] column_day = {"day"};          //検索対象のカラム名
+        Cursor c_day = dbAdapter.sortDB(column_day);
+        String[] column_times_of_day = {"times_of_day"};          //検索対象のカラム名
+        Cursor c_times_of_day = dbAdapter.sortDB(column_times_of_day);
+
 
     }
 

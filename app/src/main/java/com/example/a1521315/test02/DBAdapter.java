@@ -245,12 +245,12 @@ public class DBAdapter {
 
     /**
      * DBのデータを取得
-     * getDB3()
+     * sortDB()
      *
      * @param columns String[] 取得するカラム名 nullの場合は全カラムを取得
      * @return DBのデータ
      */
-    public Cursor getDB3(String[] columns) {
+    public Cursor sortDB(String[] columns) {
 
         // queryメソッド DBのデータを取得
         // 第1引数：DBのテーブル名

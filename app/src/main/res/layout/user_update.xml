@@ -18,51 +18,6 @@
         android:textColor="#000000"
         android:textSize="16sp" />
 
-    <!-- 年齢 -->
-    <LinearLayout
-        android:id="@+id/linearLayout01Age"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout01Name"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true">
-
-        <TextView
-            android:id="@+id/text01Age"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/text01_age"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/text01Kome02"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:text="@string/text01_kome"
-            android:textColor="#FF0000"
-            android:textSize="14sp" />
-
-        <!-- inputType：表示するキーボードを数値に指定 -->
-        <EditText
-            android:id="@+id/editText01Age"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ellipsize="end"
-            android:hint="@string/text01_hintnumber"
-            android:inputType="number"
-            android:lines="1"
-            android:maxLength="24"
-            android:maxLines="1"
-            android:minLines="1"
-            android:singleLine="true"
-            android:textSize="16sp" />
-    </LinearLayout>
 
     <!-- 身長 -->
     <LinearLayout
