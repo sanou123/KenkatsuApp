@@ -137,11 +137,13 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".TimeoutResultTweet"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape">
+        </activity>
 
         <activity
             android:name=".EndlessRunVideoPlay"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape">
+        </activity>
         <activity
             android:name=".GraphListView"
             android:screenOrientation="landscape" />
@@ -152,9 +154,9 @@
             android:name=".twitter_logout"
             android:label="@string/twitter_login">
         </activity>
-        android:screenOrientation="landscape" />
-        <activity android:name=".EndlessRunResult"></activity>
-        android:screenOrientation="landscape" />
+        <activity android:name=".EndlessRunResult"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>
