@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "qwer.db";      // DB名
+    private final static String DB_NAME = "poi.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
     private final static int DB_VERSION = 2;                // DBのバージョン
@@ -33,6 +33,11 @@ public class DBAdapter {
     public final static String COL_BMI = "bmi";           //BMI指数
     public final static String COL_IDEAL_WEIGHT = "ideal_weight";           //理想体重
     public final static String COL_LOGIN = "login";           //ログイン
+    public final static String COL_AGE_YEAR = "age_year";                //日時
+    public final static String COL_AGE_MONTH = "age_month";                //日時
+    public final static String COL_AGE_DAY = "age_day";                //日時
+
+
 
 
     public final static String COL_ID_DATA = "data_id";             // id
@@ -114,8 +119,8 @@ public class DBAdapter {
      * @param bmi   BMI
      *
      */
-    public void saveDB(String name, int age, String sex, int height,
-                       int weight, double bmi, double ideal_weight, String login) {
+    public void saveDB(String name, long age, String sex, int height, int weight, double bmi,
+                       double ideal_weight, String login, int age_year, int age_month, int age_day) {
 
         db.beginTransaction();          // トランザクション開始
 
@@ -129,6 +134,10 @@ public class DBAdapter {
             values.put(COL_BMI, bmi);
             values.put(COL_IDEAL_WEIGHT, ideal_weight);
             values.put(COL_LOGIN, login);
+            values.put(COL_AGE_YEAR, age_year);
+            values.put(COL_AGE_MONTH, age_month);
+            values.put(COL_AGE_DAY, age_day);
+
 
 
             // insertメソッド データ登録
@@ -309,8 +318,8 @@ public class DBAdapter {
         }
     }
 
-    public void updateDB(String strName, int strAge,String strSex, int strHeight,
-                         int strWeight, double strBmi, double ideal_weight, String login) {
+    public void updateDB(String strName, int strAge,String strSex, int strHeight, int strWeight,
+                         double strBmi, double ideal_weight, String login) {
         db.beginTransaction();          // トランザクション開始
 
         try {
@@ -376,7 +385,10 @@ public class DBAdapter {
                     + COL_WEIGHT + " INTEGER NOT NULL ,"
                     + COL_BMI +" INTEGER NOT NULL ,"
                     + COL_IDEAL_WEIGHT +" INTEGER NOT NULL ,"
-                    + COL_LOGIN +" TEXT NOT NULL"
+                    + COL_LOGIN +" TEXT NOT NULL,"
+                    + COL_AGE_YEAR + " INTEGER NOT NULL ,"
+                    + COL_AGE_MONTH + " INTEGER NOT NULL ,"
+                    + COL_AGE_DAY + " INTEGER NOT NULL "
                     + ");";
 
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける

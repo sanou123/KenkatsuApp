@@ -14,11 +14,12 @@
     <string name="name_update_user">ユーザ情報更新</string>
     <string name="dictionary">健康辞書</string>
     <string name="search">検索</string>
+    <string name="twitter_login">twitterログイン画面</string>
 
 
     <!-- ここからactivity_main 01関連 -->
     <string name="text01_name">名前</string>
-    <string name="text01_age">年齢</string>
+    <string name="text01_age">生年月日</string>
     <string name="text01_height">身長</string>
     <string name="text01_weight">体重</string>
     <string name="text01_sex">性別</string>

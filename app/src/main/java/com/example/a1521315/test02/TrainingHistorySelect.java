@@ -21,7 +21,7 @@ public class TrainingHistorySelect extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        setContentView(R.layout.training_select);
+        setContentView(R.layout.training_history_select);
 
 /*        // TextView インスタンス生成
         TextView textView = (TextView)findViewById(R.id.textView);
@@ -66,6 +66,19 @@ public class TrainingHistorySelect extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //buttonEnduranceを押したときの挙動
+        Button btnGraph = (Button) findViewById(R.id.buttonGraph);
+        btnGraph.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Sub 画面を起動
+                Intent intent = new Intent();
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.GraphListView");
+                startActivity(intent);
+            }
+        });
+
 
     }
 

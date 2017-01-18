@@ -1,19 +1,16 @@
 package com.example.a1521315.test02;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
 
 /**
  * Created by Administrator on 2016/09/29.
  */
 
-public class twitter_logout extends Activity {
+public class twitter_logout extends AppCompatActivity {
 
     /** Called when the activity is first created. */
     @Override
@@ -23,8 +20,8 @@ public class twitter_logout extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.search);
 
-        TextView tv = (TextView)findViewById(R.id.tv);
-        tv.setText("ツイッターログアウト");
+       /*TextView tv = (TextView)findVwById(R.id.tv);
+        tv.setText("ツイッターログアウト");*/
 
         WebView myWebView = (WebView) findViewById(R.id.web1);
         myWebView.setWebViewClient(new WebViewClient());

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -119,17 +120,6 @@ public class MenuSelect extends AppCompatActivity {
         });
 
         //updateボタンを押した時MainUserへ移動
-        Button btnDisp2 = (Button) findViewById(R.id.graph);
-        btnDisp2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.GraphListView");
-                startActivity(intent);
-            }
-        });
-
-        //updateボタンを押した時MainUserへ移動
         Button btnDisp3 = (Button) findViewById(R.id.update);
         btnDisp3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -164,34 +154,46 @@ public class MenuSelect extends AppCompatActivity {
 */
                 loginSort();
 
-                // アラートダイアログ表示
-                AlertDialog.Builder builder = new AlertDialog.Builder(MenuSelect.this);
-                builder.setTitle("ログイン確認");
-                builder.setMessage(globals.twitter_user + "さんですか？");
-                // OKの時の処理
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                if(globals.twitter_user == null){
 
-                        globals.twitter_user = globals.now_user;
-                        dbLogin();
+                    globals.twitter_user = globals.now_user;
+                    Intent intent = new Intent(MenuSelect.this, twitter_logout.class);
+                    startActivity(intent);
+                    Toast.makeText(MenuSelect.this, "ログインが必要です", Toast.LENGTH_LONG).show();
+                }else if(globals.twitter_user != null){
 
-                        Intent intent = new Intent(MenuSelect.this, Search.class);
-                        startActivity(intent);
+                    // アラートダイアログ表示
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MenuSelect.this);
+                    builder.setTitle("ログイン確認");
+                    builder.setMessage(globals.twitter_user + "さんですか？");
+                    // OKの時の処理
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                });
+                            globals.twitter_user = globals.now_user;
+                            dbLogin();
 
-                builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(MenuSelect.this, MenuSelect.class);
-                        startActivity(intent);
-                    }
-                });
-                // ダイアログの表示
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                            Intent intent = new Intent(MenuSelect.this, Search.class);
+                            startActivity(intent);
+
+                        }
+                    });
+
+                    builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            globals.twitter_user = globals.now_user;
+
+                            Intent intent = new Intent(MenuSelect.this, twitter_logout.class);
+                            startActivity(intent);
+                        }
+                    });
+                    // ダイアログの表示
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
 
             }
         });
