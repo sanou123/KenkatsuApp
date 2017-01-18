@@ -186,7 +186,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             setContentView(R.layout.activity_endless_run_video_play);
         }else{
             //sそれ以外(nexus7 2013とか)
-            setContentView(R.layout.activity_endless_run_video_play);
+            setContentView(R.layout.activity_endless_run_video_play_7);
         }
 
         getWindow().setFormat(PixelFormat.TRANSPARENT);
