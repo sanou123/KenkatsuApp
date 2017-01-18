@@ -68,6 +68,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     private ImageView imageMe;//自機イメージ用の変数
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
+    double cal=0.0; //カロリー計算用
+    double weight = Double.parseDouble(globals.weight);
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -99,7 +101,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     //センサー、動画再生関連の変数　初期化
     double speed_Value = 0.0;//速度の値
     double my_dist_Value = 0.0;
-    public float plus_dist_Value = 0.0005F;//0.0015F
+    public float plus_dist_Value = 0.00005F;//0.0005F;//0.0015F
 
     //double dist_Value = 0.0;//ペダルレベルでの距離
     //double old_dist_Value = 0.0;//ペダルレベルでの距離
@@ -115,6 +117,12 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     public boolean chSpd_Flg = false;//speed_valueを更新するか否か
     public boolean clear_Flg = false;
     public boolean clear_Flg2 = true;
+    public boolean Gear1_Flg = false;
+    public boolean Gear2_Flg = false;
+    public boolean Gear3_Flg = true;
+    public boolean Gear4_Flg = false;
+    public boolean Gear5_Flg = false;
+    public boolean Gear6_Flg = false;
 
     //止まらずに進んでる時間
     long my_mm = 0;
@@ -159,11 +167,11 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.DriveDataInit();//グローバル変数初期化
 
         tMileage = (TextView) findViewById(R.id.textMileage);
-        tMileage.setText("999.88");
+        tMileage.setText("000.00");
         tKM = (TextView) findViewById(R.id.textKM);
         tKM.setText("Mileage              km");
         tSpeed = (TextView) findViewById(R.id.textSpeed);
-        tSpeed.setText("49.99");
+        tSpeed.setText("00.00");
         tKPH = (TextView) findViewById(R.id.textKPH);
         tKPH.setText("Speed              km/h");
 
@@ -240,7 +248,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -257,7 +265,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             }
         }
         //******************************************************************************************
-
+*/
     }//onCreateここまで
 
 
@@ -597,19 +605,56 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                         //センサー値取得
                                         int resist_Value = (int) (commandPacket[1] & 0xFF);
 
+
                                         //抵抗値の割り出し
                                         switch (resist_Value){
+                                            case 0:
+                                                Gear1_Flg = true;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = false;
+                                                break;
                                             case 1:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = true;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = false;
                                                 break;
                                             case 2:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = true;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = false;
                                                 break;
                                             case 3:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = true;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = false;
                                                 break;
                                             case 4:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = true;
+                                                Gear6_Flg = false;
                                                 break;
                                             case 5:
-                                                break;
-                                            case 6:
+                                                Gear1_Flg = false;
+                                                Gear2_Flg = false;
+                                                Gear3_Flg = false;
+                                                Gear4_Flg = false;
+                                                Gear5_Flg = false;
+                                                Gear6_Flg = true;
                                                 break;
                                             default:
                                                 break;
@@ -741,7 +786,13 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     View.OnClickListener PlayClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            PlayProcess();
+            if(Gear3_Flg == true){
+                PlayProcess();
+            }
+            else{
+                Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
+                Log.v("a","負荷を3に設定してください");
+            }
         }
     };
 
@@ -818,6 +869,66 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
         seekbarscheduler = Executors.newSingleThreadScheduledExecutor();
         seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
+    }
+
+    //Pauseボタンを押したときの処理の中身
+    public void HukaProcess(){
+        usb_Flg = true;
+        future.cancel(true);//タイマー一時停止
+        seekbarfuture.cancel(true);
+        delayedTimer.cancel();
+        watchMeTimer.cancel();
+        ResetValue();
+        speedCount = 0;
+        params.setSpeed((float) speedCount);
+        mp.setPlaybackParams(params);
+        tSpeed.setText(String.format("%.1f", (float) (speedCount*10)));
+
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(TimeAttackVideoPlay.this);
+        alertDialog.setTitle("負荷を3に戻してから走行に戻ってください");
+        alertDialog.setMessage("一時停止中です");
+        alertDialog.setPositiveButton("トレーニングメニューに戻る", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //VideoSelectに戻る処理
+                timerscheduler.shutdown();//タイマー終了
+                seekbarscheduler.shutdown();//タイマー終了
+                if (mp != null) {
+                    mp.release();
+                    mp = null;
+                }
+                accessoryManager.disable(getApplication());//#
+                disconnectAccessory();//#
+                Intent intent = new Intent(getApplication(), TrainingSelect.class);
+                startActivity(intent);
+            }
+        });
+        alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
+                seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
+                delayedTimer = new Timer();//Timerインスタンスを生成
+                delayTask = new DelayedTask();//TimerTaskインスタンスを生成
+                delayedTimer.schedule(delayTask,0,10);
+                watchMeTimer = new Timer();//Timerインスタンスを生成
+                watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
+                watchMeTimer.schedule(watchMeTask,0,100);
+                usb_Flg = false;
+            }
+        });
+        alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                accessoryManager.disable(getApplication());//#
+                disconnectAccessory();//#
+                PauseResultProcess();
+            }
+        });
+        AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
     }
 
     //Pauseボタンを押したときの処理の中身
@@ -930,8 +1041,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
         globals.time = tTimer.getText().toString();//運動時間
         //int iWeight = Integer.parseInt(globals.weight);
-        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
-        globals.cal = 123.32;
+        globals.cal = cal;
         Intent intent = new Intent(getApplication(), NormalResult.class);
         startActivity(intent);
     }
@@ -944,8 +1054,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
         globals.time = tTimer.getText().toString();//運動時間
         //int iWeight = Integer.parseInt(globals.weight);
-        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
-        globals.cal = 123.32;
+        globals.cal = cal;
         Intent intent = new Intent(getApplication(), PauseResult.class);
         startActivity(intent);
     }
@@ -958,8 +1067,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
         globals.time = tTimer.getText().toString();//運動時間
         //int iWeight = Integer.parseInt(globals.weight);
-        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
-        globals.cal = 123.32;
+        globals.cal = cal;
         Intent intent = new Intent(getApplication(), TimeoutResult.class);
         startActivity(intent);
     }
@@ -984,6 +1092,47 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
+
+                    //100msごとに負荷の確認
+                    /*if(Gear3_Flg == false) {
+                        HukaProcess();
+                        Toast.makeText(getApplication(), "負荷を3に設定してください", Toast.LENGTH_LONG);
+                    }*/
+                    /*
+                    if(Gear1_Flg == true){
+                        cal += (3.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
+                        tDebug2.setText("ギアの重さ：1");
+                    }
+                    if(Gear2_Flg == true){
+                        cal += (4.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
+                        tDebug2.setText("ギアの重さ：2");
+                    }*/
+                    if(Gear3_Flg == true){
+                        //cal = (5.8 * weight * (1 / 36000) * 1.05 * (speed_Value / 20) * 1000);
+                    cal += 5.8 * weight * 1 / 36000 * 1.05 * speed_Value / 20 * 1000;
+                        //tDebug1.setText(String.format("%.6f",cal)+"cal");
+                        tDebug1.setText(cal + "cal");
+                        tDebug2.setText("ギアの重さ：3"+"weight:"+weight+"speedValue:"+speed_Value);
+                    }
+                    /*
+                    if(Gear4_Flg == true){
+                        cal += (6.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
+                        tDebug2.setText("ギアの重さ：4");
+                    }
+                    if(Gear5_Flg == true){
+                        cal += (7.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
+                        tDebug2.setText("ギアの重さ：5");
+                    }
+                    if(Gear6_Flg == true){
+                        cal += (8.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
+                        tDebug1.setText(cal+"cal");
+                        tDebug2.setText("ギアの重さ：6");
+                    }*/
+
 
                     //残り時間0で終了
                     if(timerCount == 0){

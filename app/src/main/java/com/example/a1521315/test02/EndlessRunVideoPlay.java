@@ -54,6 +54,13 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
 
+    /*最高速度*/
+    double maxSpeed = 0.0;
+
+    /*平均速度を出すのに必要な関数*/
+    double totalSpeed = 0.0;
+    int totalSpeedCnt = 0;
+
     /*デバッグ用の関数*/
     TextView tDebug1;
     TextView tDebug2;
@@ -66,7 +73,11 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
     private SurfaceView mPreview;
+    //動画
     private MediaPlayer mp = null;
+    //BGM
+    private MediaPlayer mpBGM = null;
+
 
     //タイムに関する奴
     private ScheduledExecutorService timerscheduler;
@@ -160,21 +171,21 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.DriveDataInit();//グローバル変数初期化
 
         tLapCount = (TextView) findViewById(R.id.textLapCount);
-        tLapCount.setText("999");
+        tLapCount.setText("000");
         tLAPS = (TextView) findViewById(R.id.textLAPS);
         tLAPS.setText("LAPS");
 
         tMileage = (TextView) findViewById(R.id.textMileage);
-        tMileage.setText("999.88");
+        tMileage.setText("000.00");
         tKM = (TextView) findViewById(R.id.textKM);
         tKM.setText("Mileage              km");
         tSpeed = (TextView) findViewById(R.id.textSpeed);
-        tSpeed.setText("49.99");
+        tSpeed.setText("00.00");
         tKPH = (TextView) findViewById(R.id.textKPH);
         tKPH.setText("Speed              km/h");
 
         tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
-        tTargetHeartbeat.setText("000");
+        tTargetHeartbeat.setText( "" + TargetBPM(Integer.parseInt(globals.age)) );
         tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
         tTargetBPM.setText("Target BPM");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
@@ -806,6 +817,8 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
         timerscheduler = Executors.newSingleThreadScheduledExecutor();
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
+        Thread StartBGM = new Thread(new EndlessRunVideoPlay.StartBGM());
+        StartBGM.start();
     }
 
     //Pauseボタンを押したときの処理の中身
@@ -835,6 +848,8 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                 }
                 accessoryManager.disable(getApplication());//#
                 disconnectAccessory();//#
+                Thread StopBGM = new Thread(new EndlessRunVideoPlay.StopBGM());
+                StopBGM.start();
                 Intent intent = new Intent(getApplication(), TrainingSelect.class);
                 startActivity(intent);
             }
@@ -867,11 +882,13 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //Resultボタンを押したときの処理の中身
     public void ResultProcess() {
+        Thread StopBGM = new Thread(new EndlessRunVideoPlay.StopBGM());
+        StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
         globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
-        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度
+        globals.max = String.format("%.2f",maxSpeed);//最高速度
         globals.time = tTimer.getText().toString();//運動時間
         //int iWeight = Integer.parseInt(globals.weight);
         //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
@@ -943,12 +960,46 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                         mp.setPlaybackParams(params);
                         //mp.start();
                         tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
+                        totalSpeed = totalSpeed + (taskSpeedCount*10);
+                        totalSpeedCnt++;
+                        //最高速度の判断
+                        if((taskSpeedCount*10) > maxSpeed){
+                            maxSpeed = (taskSpeedCount*10);
+                        }
                     }
                 }
             });
         }
     }
 
+    //BGM
+    public class StartBGM implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mpBGM == null) {
+                        mpBGM = MediaPlayer.create(getApplicationContext(), R.raw.zangyousenshi);
+                        mpBGM.start();
+                    }
+                }
+            });
+        }
+    }
+    public class StopBGM implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("stopBGM", "STOP");
+                    mpBGM.stop();
+                    mpBGM.reset();
+                    mpBGM.release();
+                    mpBGM = null;
+                }
+            });
+        }
+    }
 
 
     //フォントを7セグにする
@@ -995,6 +1046,39 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         tBPM.setTypeface(tf2);
         tBPM.setTextSize(25.0f);
         tBPM.setPadding(0, 0, 10, 7);
+    }
+
+    //目標心拍を計算する
+    public int TargetBPM(int age){
+        int targetBPM;
+        targetBPM = (int)((220 - age) * 0.6);
+        return targetBPM;
+    }
+
+    //平均速度を計算する
+    public String AverageSpeed2(double totalMileage, String time){
+        Log.v("aaaaaaaaaaaaTIME",time);
+        double hours = Double.parseDouble(time.substring(0, 2));
+        double minutes = Double.parseDouble(time.substring(3, 5));
+        double seconds = Double.parseDouble(time.substring(6));
+        double totalHours = hours + (minutes/60) + (seconds/3600);
+        Log.v("mileage",String.valueOf(totalMileage) );
+        Log.v("HOURS",String.valueOf(hours) );
+        Log.v("MINUTES",String.valueOf(minutes) );
+        Log.v("SECONDS",String.valueOf(seconds) );
+        Log.v("TOTAL",String.valueOf(totalHours) );
+        String avg = String.format("%.2f",(totalMileage / totalHours));
+        return avg;
+    }
+
+    //平均速度を計算する(ボリュームで速度調整するとき用)
+    public String AverageSpeed(double totalSpeed, int totalSpeedCnt){
+        Log.v("TotalSpeed", String.valueOf(totalSpeed));
+        Log.v("TotalSpeedCnt", String.valueOf(totalSpeedCnt));
+        double averageSpeed;
+        averageSpeed = totalSpeed / totalSpeedCnt;
+        String avg = String.format("%.2f",averageSpeed);
+        return avg;
     }
 
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた

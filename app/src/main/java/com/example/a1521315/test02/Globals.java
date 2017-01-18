@@ -63,6 +63,7 @@ public class Globals extends Application {
         timflg4 = 0;
         time_disp_cnt = 0;
         rank = "";
+        cal = 0;
     }
 
 }

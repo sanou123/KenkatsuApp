@@ -19,29 +19,20 @@
         android:gravity="center"/>
 
     <RelativeLayout
-        android:id="@+id/BackKeyLayout"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_height="80dp">
-
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/TariningMenuLayout"
         android:layout_below="@+id/textMSG"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_width="match_parent"
-        android:layout_height="500dp">
+        android:layout_height="match_parent">
 
 
         <Button
             android:id="@+id/buttonNormal"
             android:text="通常トレーニング"
             android:layout_width="500dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="30dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:textSize="50sp" />
@@ -49,20 +40,20 @@
             android:id="@+id/buttonEndurance"
             android:text="耐久トレーニング"
             android:layout_width="500dp"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_below="@+id/buttonNormal"
             android:layout_alignStart="@+id/buttonNormal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:textSize="50sp" />
 
         <Button
             android:id="@+id/buttonFitness"
             android:text="体力テスト"
             android:layout_width="500dp"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_below="@+id/buttonEndurance"
             android:layout_alignStart="@+id/buttonEndurance"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:textSize="50sp" />
 
 
