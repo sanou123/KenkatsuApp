@@ -51,6 +51,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     TextView tTargetBPM,tTargetHeartbeat;//目標心拍数の変数
     TextView tKPH,tSpeed;//時速の変数
     TextView tKM,tMileage;//走行距離の変数
+    TextView tCAL,tCal;//走行距離の変数
     TextView tLAPS,tLapCount;
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
@@ -201,6 +202,10 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         tLAPS = (TextView) findViewById(R.id.textLAPS);
         tLAPS.setText("LAPS");
 
+        tCal = (TextView) findViewById(R.id.textCal);
+        tCal.setText("000.00");
+        tCAL = (TextView) findViewById(R.id.textCAL);
+        tCAL.setText("Calorie              kcal");
         tMileage = (TextView) findViewById(R.id.textMileage);
         tMileage.setText("000.00");
         tKM = (TextView) findViewById(R.id.textKM);
@@ -237,12 +242,15 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         ImageView CoursenameDisplay = (ImageView) findViewById(R.id.image_Coursenamedisplay);
         CoursenameDisplay.setImageResource(R.drawable.coursename);
 
-        ImageView SpeedDisplay = (ImageView) findViewById(R.id.imageSpeedDisplay);
-        SpeedDisplay.setImageResource(R.drawable.display);
-        SpeedDisplay.setAlpha(150);
+        ImageView CalDisplay = (ImageView) findViewById(R.id.imageCalDisplay);
+        CalDisplay.setImageResource(R.drawable.display);
+        CalDisplay.setAlpha(150);
         ImageView MileageDisplay = (ImageView) findViewById(R.id.imageMileageDisplay);
         MileageDisplay.setImageResource(R.drawable.display);
         MileageDisplay.setAlpha(150);
+        ImageView SpeedDisplay = (ImageView) findViewById(R.id.imageSpeedDisplay);
+        SpeedDisplay.setImageResource(R.drawable.display);
+        SpeedDisplay.setAlpha(150);
         ImageView TargetBPMDisplay = (ImageView) findViewById(R.id.imageTargetBPMDisplay);
         TargetBPMDisplay.setImageResource(R.drawable.display);
         TargetBPMDisplay.setAlpha(150);
@@ -1111,6 +1119,14 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         tLAPS.setTypeface(tf2);
         tLAPS.setTextSize(25.0f);
         tLAPS.setPadding(0, 0, 10, 7);
+
+        /*走行距離*/
+        tCal.setTypeface(tf);
+        tCal.setTextSize(45.0f);
+        tCal.setPadding(0, 0, 5, 0);
+        tCAL.setTypeface(tf2);
+        tCAL.setTextSize(25.0f);
+        tCAL.setPadding(0, 0, 10, 7);
 
         tMileage.setTypeface(tf);
         tMileage.setTextSize(45.0f);

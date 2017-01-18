@@ -246,11 +246,51 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="600dp"
+            android:layout_height="100dp"
             android:id="@+id/MeterUI2Layout"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="120dp">
+
+            <RelativeLayout
+                android:layout_width="190dp"
+                android:layout_height="90dp"
+                android:id="@+id/CalUILayout"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="395dp">
+
+                <ImageView
+                    android:layout_width="190dp"
+                    android:layout_height="90dp"
+                    app:srcCompat="@drawable/display"
+                    android:id="@+id/imageCalDisplay"
+                    android:scaleType="fitXY"/>
+
+                <TextView
+                    android:text="kcal"
+                    android:id="@+id/textCAL"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="bottom|right"
+                    android:textColor="@android:color/white"
+                    android:layout_height="40dp"
+                    android:layout_width="190dp"/>
+
+                <TextView
+                    android:id="@+id/textCal"
+                    android:text="900.00"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="200dp"
+                    android:gravity="bottom|right"
+                    android:layout_height="60dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"/>
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="190dp"
@@ -258,8 +298,8 @@
                 android:id="@+id/MIleageUILayout"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="110dp"
-                android:layout_marginStart="5dp">
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="200dp">
 
                 <ImageView
                     android:layout_width="190dp"
@@ -335,7 +375,7 @@
 
         <RelativeLayout
             android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_height="190dp"
             android:id="@+id/MeterUI3Layout"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true">
@@ -346,7 +386,7 @@
                 android:id="@+id/targetBPMUILayout"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginBottom="110dp"
+                android:layout_marginBottom="100dp"
                 android:layout_marginEnd="5dp">
 
                 <ImageView
@@ -435,7 +475,7 @@
                 android:layout_height="90dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_marginEnd="5dp"
                 >
 
