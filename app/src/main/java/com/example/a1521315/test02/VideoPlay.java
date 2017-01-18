@@ -530,7 +530,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             mHandler.sendMessage(valueMsg);
 
             connectFlg = true;
-
+            Log.v("connect","connect!!!!!!!!");
+            ConnectCheck connectCheck = new ConnectCheck();
+            connectCheck.run();
+            Log.v("visivle","kieta");
             while (isRunning) {
                 // InputStreamの読み込み
                 bytes = mmInStream.read(buffer);
@@ -593,7 +596,18 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     };
     //bluetooth*************************************************************************************
-
+    //画面消すタスク
+    public class ConnectCheck implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
 
     // USB通信のタスク
     private Handler handler = new Handler() {
