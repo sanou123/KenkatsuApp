@@ -11,13 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -78,30 +72,7 @@ public class MainUser extends AppCompatActivity {
 
         init();             //初期値設定
 
-        mEditText01Year = (EditText) findViewById(R.id.editText01Year);     // 年
-        mEditText01Month = (EditText) findViewById(R.id.editText01Month);     // 月
-        mEditText01Day = (EditText) findViewById(R.id.editText01Day);     // 日
-
-
-        varDateSetListener = new DatePickerDialog.OnDateSetListener(){
-            @Override
-            public void onDateSet(DatePicker view , int year , int monthOfYear , int dayOfMonth){
-                globals.user_year = String.valueOf(year);
-                if(monthOfYear + 1 >= 1 && monthOfYear + 1 <= 9) {
-                    globals.user_month = '0' + String.valueOf((monthOfYear + 1));
-                }else {
-                    globals.user_month = '0' + String.valueOf((monthOfYear + 1));
-                }
-                    globals.user_day = String.valueOf(dayOfMonth) ;
-                mEditText01Year.setText(globals.user_year);
-                mEditText01Month.setText(globals.user_month);
-                mEditText01Day.setText(globals.user_day);
-
-            }
-        };
-
-
-
+        AgeSet();
 
         ((Button)findViewById(R.id.date_set))
                 .setOnClickListener(new View.OnClickListener(){
@@ -206,6 +177,37 @@ public class MainUser extends AppCompatActivity {
 
 
         mEditText01Name.requestFocus();      // フォーカスを品名のEditTextに指定
+    }
+
+    private void AgeSet(){
+
+        mEditText01Year = (EditText) findViewById(R.id.editText01Year);     // 年
+        mEditText01Month = (EditText) findViewById(R.id.editText01Month);     // 月
+        mEditText01Day = (EditText) findViewById(R.id.editText01Day);     // 日
+
+
+        varDateSetListener = new DatePickerDialog.OnDateSetListener(){
+            @Override
+            public void onDateSet(android.widget.DatePicker view , int year , int monthOfYear , int dayOfMonth){
+                globals.user_year = String.valueOf(year);
+
+                if(monthOfYear + 1 >= 1 && monthOfYear + 1 <= 9) {
+                    globals.user_month = '0' + String.valueOf((monthOfYear + 1));
+                }else {
+                    globals.user_month = String.valueOf((monthOfYear + 1));
+                }
+                if(dayOfMonth >= 1 && dayOfMonth <= 9) {
+                    globals.user_day = '0' + String.valueOf(dayOfMonth) ;
+                }else {
+                    globals.user_day = String.valueOf(dayOfMonth) ;
+                }
+                mEditText01Year.setText(globals.user_year);
+                mEditText01Month.setText(globals.user_month);
+                mEditText01Day.setText(globals.user_day);
+
+            }
+        };
+
     }
 
 

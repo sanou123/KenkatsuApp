@@ -208,7 +208,6 @@ public class GraphListView extends AppCompatActivity {
                 // データを取得
                 myListItem1 = items.get(position);
 
-
                 if (view == null) {
                     LayoutInflater inflater =
                             (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
