@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -187,5 +188,16 @@ public class UserUpdate extends AppCompatActivity {
             init();     // 初期値設定
 
         }
+    }
+
+    //戻るキーを無効にする
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.MenuSelect");
+            startActivity(intent);        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -3,6 +3,7 @@ package com.example.a1521315.test02;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.TabHost;
 
 
@@ -38,5 +39,17 @@ public class GraphTab extends TabActivity {
                 .setIndicator("走行時間")
                 .setContent(new Intent(this, GraphTime.class)
                 ));
+    }
+
+    @Override
+    //戻るキーを無効にする
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.TrainingHistorySelect");
+            startActivity(intent);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

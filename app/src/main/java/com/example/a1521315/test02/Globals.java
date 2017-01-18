@@ -28,6 +28,9 @@ public class Globals extends Application {
     static String year;
     static String month;
     static String day;
+    static String user_year;
+    static String user_month;
+    static String user_day;
     static String times_of_day;
     static String login;
     static String age;

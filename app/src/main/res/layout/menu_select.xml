@@ -56,20 +56,11 @@
 
             android:text="ユーザ情報更新"
             android:textSize="24sp"
-            android:layout_height="80dp"
-            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_marginStart="10dp" />
-
-        <Button
-            android:id="@+id/graph"
-            android:layout_width="150dp"
-            android:layout_height="80dp"
-            android:text="グラフ表示"
-            android:textSize="20sp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 

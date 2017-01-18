@@ -124,7 +124,7 @@
             android:name=".GraphHeartRate"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".Login"
+            android:name=".Age"
             android:screenOrientation="landscape" />
         <activity
             android:name=".TimeAttackVideoPlay"
@@ -148,7 +148,10 @@
         <activity
             android:name=".GraphTab"
             android:screenOrientation="landscape" />
-        <activity android:name=".twitter_logout"></activity>
+        <activity
+            android:name=".twitter_logout"
+            android:label="@string/twitter_login">
+        </activity>
         android:screenOrientation="landscape" />
         <activity android:name=".EndlessRunResult"></activity>
         android:screenOrientation="landscape" />

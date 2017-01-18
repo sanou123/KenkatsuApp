@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/select_training"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.example.a1521315.test02.TrainingSelect">
+
+    <TextView
+        android:id="@+id/textMSG"
+        android:text="閲覧したいトレーニングを選んでください"
+        android:textSize="40sp"
+        android:textColor="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"/>
+
+    <RelativeLayout
+        android:id="@+id/BackKeyLayout"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="80dp">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/TariningMenuLayout"
+        android:layout_below="@+id/textMSG"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="match_parent"
+        android:layout_height="500dp">
+
+
+        <Button
+            android:id="@+id/buttonNormal"
+            android:text="通常トレーニング"
+            android:layout_width="500dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="50sp" />
+        <Button
+            android:id="@+id/buttonEndurance"
+            android:text="耐久トレーニング"
+            android:layout_width="500dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/buttonNormal"
+            android:layout_alignStart="@+id/buttonNormal"
+            android:layout_marginTop="30dp"
+            android:textSize="50sp" />
+
+        <Button
+            android:id="@+id/buttonFitness"
+            android:text="体力テスト"
+            android:layout_width="500dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/buttonEndurance"
+            android:layout_alignStart="@+id/buttonEndurance"
+            android:layout_marginTop="30dp"
+            android:textSize="50sp" />
+
+        <Button
+            android:id="@+id/buttonGraph"
+            android:text="グラフ閲覧"
+            android:layout_width="500dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/buttonFitness"
+            android:layout_alignStart="@+id/buttonFitness"
+            android:layout_marginTop="30dp"
+            android:textSize="50sp" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

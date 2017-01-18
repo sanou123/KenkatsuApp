@@ -125,7 +125,7 @@ public class SelectSheetListView extends AppCompatActivity {
                 builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(SelectSheetListView.this, Login.class);
+                        Intent intent = new Intent(SelectSheetListView.this, SelectSheetListView.class);
                         startActivity(intent);
                     }
                 });
