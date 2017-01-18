@@ -31,7 +31,7 @@
             android:layout_width="138px"
             android:layout_height="639px"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="60dp">
+            android:layout_alignParentBottom="true">
 
             <RelativeLayout
                 android:id="@+id/BarLayout"
@@ -294,7 +294,8 @@
             android:layout_height="200dp"
             android:id="@+id/MeterUI2Layout"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="120dp">
 
             <RelativeLayout
                 android:layout_width="190dp"

@@ -31,7 +31,7 @@
             android:layout_width="138px"
             android:layout_height="639px"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="150dp" >
+            android:layout_marginTop="70dp" >
 
             <RelativeLayout
                 android:id="@+id/BarLayout"
