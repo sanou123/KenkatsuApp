@@ -1,5 +1,6 @@
 package com.example.a1521315.test02;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -9,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,7 +23,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 
-public class MenuSelect extends AppCompatActivity {
+public class MenuSelect extends Activity {
     private DBAdapter dbAdapter;
     private SelectSheetListView.MyBaseAdapter myBaseAdapter;
     private List<MyListItem> items;
@@ -38,10 +41,12 @@ public class MenuSelect extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // タイトルバーを隠す
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // ステータスバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
         //menu_selectのレイアウトを使用
         setContentView(R.layout.menu_select);
 

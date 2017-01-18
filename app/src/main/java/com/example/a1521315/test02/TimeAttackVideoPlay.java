@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
@@ -19,11 +20,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -62,6 +66,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     /*デバッグ用の関数*/
     TextView tDebug1;
     TextView tDebug2;
+
+
 
     int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
     String mediaPath = null;//動画データ
@@ -157,7 +163,24 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_play);
+        // タイトルバーを隠す
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // ステータスバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // ディスプレイサイズ取得
+        Display display = getWindowManager().getDefaultDisplay();
+        Point p = new Point();
+        display.getSize(p);
+        Log.v("width: ", String.valueOf(p.x));
+        Log.v("height: ", String.valueOf(p.y));
+        if(p.x == 2048){
+            //nexus 9の幅
+            setContentView(R.layout.activity_video_play);
+        }else{
+            //sそれ以外(nexus7 2013とか)
+            setContentView(R.layout.activity_video_play_7);
+        }
+
         getWindow().setFormat(PixelFormat.TRANSPARENT);
         mPreview = (SurfaceView) findViewById(R.id.surfaceView1);
         holder = mPreview.getHolder();
@@ -235,6 +258,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         mediaPath = "/izunuma2900meter_low.mp4";//実機9のストレージにあるファルを指定
         totalMileage = 2.9;
         raw = 0;
+        //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
+        //raw = 1;
 
         //USBAccessoryManager の初期化
         accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
@@ -1098,41 +1123,36 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         HukaProcess();
                         Toast.makeText(getApplication(), "負荷を3に設定してください", Toast.LENGTH_LONG);
                     }*/
-                    /*
                     if(Gear1_Flg == true){
-                        cal += (3.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
-                        tDebug1.setText(cal+"cal");
+                        cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tDebug2.setText("ギアの重さ：1");
                     }
                     if(Gear2_Flg == true){
-                        cal += (4.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
-                        tDebug1.setText(cal+"cal");
+                        cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tDebug2.setText("ギアの重さ：2");
-                    }*/
-                    if(Gear3_Flg == true){
-                        //cal = (5.8 * weight * (1 / 36000) * 1.05 * (speed_Value / 20) * 1000);
-                    cal += 5.8 * weight * 1 / 36000 * 1.05 * speed_Value / 20 * 1000;
-                        //tDebug1.setText(String.format("%.6f",cal)+"cal");
-                        tDebug1.setText(cal + "cal");
-                        tDebug2.setText("ギアの重さ：3"+"weight:"+weight+"speedValue:"+speed_Value);
                     }
-                    /*
+                    if(Gear3_Flg == true){
+                        cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tDebug2.setText("ギアの重さ：3");
+                    }
                     if(Gear4_Flg == true){
-                        cal += (6.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
-                        tDebug1.setText(cal+"cal");
+                        cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tDebug2.setText("ギアの重さ：4");
                     }
                     if(Gear5_Flg == true){
-                        cal += (7.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
-                        tDebug1.setText(cal+"cal");
+                        cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tDebug2.setText("ギアの重さ：5");
                     }
                     if(Gear6_Flg == true){
-                        cal += (8.8*weight*(1/36000)*1.05*(speed_Value/20)*1000);
-                        tDebug1.setText(cal+"cal");
+                        cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tDebug2.setText("ギアの重さ：6");
-                    }*/
-
+                    }
 
                     //残り時間0で終了
                     if(timerCount == 0){
