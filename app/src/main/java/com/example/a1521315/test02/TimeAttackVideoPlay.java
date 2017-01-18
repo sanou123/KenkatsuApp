@@ -633,7 +633,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
                                         //抵抗値の割り出し
                                         switch (resist_Value){
-                                            case 0:
+                                            case 1:
                                                 Gear1_Flg = true;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -641,7 +641,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 1:
+                                            case 2:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = true;
                                                 Gear3_Flg = false;
@@ -649,7 +649,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 2:
+                                            case 3:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = true;
@@ -657,7 +657,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 3:
+                                            case 4:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -665,7 +665,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 4:
+                                            case 5:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -673,7 +673,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear5_Flg = true;
                                                 Gear6_Flg = false;
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
