@@ -11,6 +11,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 
 public class MainActivity extends Activity {
@@ -27,6 +28,8 @@ public class MainActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //activity_mainのレイアウトを使用
         setContentView(R.layout.activity_main);
+        ImageView title = (ImageView)findViewById(R.id.imageView);
+        title.setImageResource(R.drawable.kenkatsuapp_title);
         //playBGM();
     }
     //画面タップでユーザ選択に遷移
