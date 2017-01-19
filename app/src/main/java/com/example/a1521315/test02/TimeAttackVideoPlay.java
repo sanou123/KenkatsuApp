@@ -280,7 +280,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-/*
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -297,7 +297,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             }
         }
         //******************************************************************************************
-*/
+
 
     }//onCreateここまで
 
@@ -464,9 +464,11 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             valueMsg.what = VIEW_STATUS;
             valueMsg.obj = "connected.";
             mHandler.sendMessage(valueMsg);
-
             connectFlg = true;
 
+            //コネクトチェック画面を消す
+            ConnectCheck connectCheck = new ConnectCheck();
+            connectCheck.run();
             while(isRunning){
 
                 // InputStreamの読み込み
@@ -501,6 +503,13 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 mSocket.close();
             }catch(Exception ee){}
             isRunning = false;
+            //通信が確立するまで通信しようとする↓
+            if (!connectFlg) {
+                mThread = new Thread(this);
+                // Threadを起動し、Bluetooth接続
+                isRunning = true;
+                mThread.start();
+            }
         }
     }
 
@@ -1436,6 +1445,19 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    //画面消すタスク
+    public class ConnectCheck implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
     @Override

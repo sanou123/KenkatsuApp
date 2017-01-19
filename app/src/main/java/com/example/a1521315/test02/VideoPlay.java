@@ -512,7 +512,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         mHandler.sendMessage(valueMsg);
 
         try {
-            Log.v("a","try...");
             // 取得したデバイス名を使ってBluetoothでSocket接続
             mSocket = mDevice.createRfcommSocketToServiceRecord(MY_UUID);
             mSocket.connect();
@@ -528,12 +527,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             valueMsg.what = VIEW_STATUS;
             valueMsg.obj = "connected.";
             mHandler.sendMessage(valueMsg);
-
             connectFlg = true;
-            Log.v("connect","connect!!!!!!!!");
+
+            //コネクトチェック画面を消す
             ConnectCheck connectCheck = new ConnectCheck();
             connectCheck.run();
-            Log.v("visivle","kieta");
             while (isRunning) {
                 // InputStreamの読み込み
                 bytes = mmInStream.read(buffer);
@@ -569,7 +567,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             } catch (Exception ee) {
             }
             isRunning = false;
-            //通信か確立するまで通信しようとする↓
+            //通信が確立するまで通信しようとする↓
             if (!connectFlg) {
                 mThread = new Thread(this);
                 // Threadを起動し、Bluetooth接続
@@ -596,18 +594,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     };
     //bluetooth*************************************************************************************
-    //画面消すタスク
-    public class ConnectCheck implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
 
     // USB通信のタスク
     private Handler handler = new Handler() {
@@ -1177,7 +1163,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //自機の移動//菅原変更
+    //自機の移動
     public class MoveMeTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
         final int endPoint = 45;//エンド地点の座標
@@ -1460,6 +1446,19 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    //画面消すタスク
+    public class ConnectCheck implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
     //戻るキーを無効にする
