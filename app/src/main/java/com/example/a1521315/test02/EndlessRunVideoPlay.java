@@ -654,7 +654,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 Gear3_Flg = true;
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = false;
-                                                Gear6_Flg = false;
                                                 break;
                                             case 4:
                                                 Gear1_Flg = false;
@@ -992,32 +991,32 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                     if(Gear1_Flg == true){
                         cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：1");
+                        tDebug2.setText("1");
                     }
                     if(Gear2_Flg == true){
                         cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：2");
+                        tDebug2.setText("2");
                     }
                     if(Gear3_Flg == true){
                         cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：3");
+                        tDebug2.setText("3");
                     }
                     if(Gear4_Flg == true){
                         cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：4");
+                        tDebug2.setText("4");
                     }
                     if(Gear5_Flg == true){
                         cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：5");
+                        tDebug2.setText("5");
                     }
                     if(Gear6_Flg == true){
                         cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：6");
+                        tDebug2.setText("6");
                     }
                 }
             });
