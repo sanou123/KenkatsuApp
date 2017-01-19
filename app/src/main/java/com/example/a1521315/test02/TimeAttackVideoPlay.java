@@ -614,7 +614,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                         }
 
                                         //各テキストに値を反映
-                                        tDebug2.setText(format2.format(my_dist_Value) + "km/h");
+                                        //tDebug2.setText(format2.format(my_dist_Value) + "km/h");
 
                                         //メディアプレイヤーの再生速度を設定
                                         if(speed_Value <= 50 && speed_Value >= 1){

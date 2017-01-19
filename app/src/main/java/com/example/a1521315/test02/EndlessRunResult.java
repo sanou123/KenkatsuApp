@@ -38,6 +38,7 @@ public class EndlessRunResult extends Activity {
         setContentView(R.layout.result);
         Button btn_tweet = (Button)findViewById(R.id.tweet);
         Button btn_back = (Button)findViewById(R.id.back);
+        btn_back.setText("トレーニングセレクトへ戻る");
 
         globals = (Globals)this.getApplication();
 
@@ -54,18 +55,18 @@ public class EndlessRunResult extends Activity {
         TextView textcoursename = (TextView)findViewById(R.id.coursename);
         textcoursename.setText(coursename);
         TextView textmileage = (TextView)findViewById(R.id.mileage);
-        textmileage.setText(mileage);
+        textmileage.setText(mileage+"km");
         TextView textmaxheartbeat = (TextView)findViewById(R.id.maxheartbeat);
-        textmaxheartbeat.setText(maxheartbeat);
+        textmaxheartbeat.setText(maxheartbeat+"bpm");
         TextView textavg = (TextView)findViewById(R.id.avg);
-        textavg.setText(avg);
+        textavg.setText(avg+"km/h");
         TextView textmax = (TextView)findViewById(R.id.max);
-        textmax.setText(max);
+        textmax.setText(max+"km/h");
         TextView texttime = (TextView)findViewById(R.id.time);
         texttime.setText(time);
         TextView textcal = (TextView)findViewById(R.id.cal);
         String stringal = new Double(cal).toString();
-        textcal.setText(stringal);
+        textcal.setText(stringal+"kcal");
 
 
         btn_back.setOnClickListener(new View.OnClickListener() {
