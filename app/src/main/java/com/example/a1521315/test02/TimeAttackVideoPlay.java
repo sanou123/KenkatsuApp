@@ -298,6 +298,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         //******************************************************************************************
 */
+
     }//onCreateここまで
 
 
@@ -613,7 +614,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                         }
 
                                         //各テキストに値を反映
-                                        tDebug2.setText(format2.format(my_dist_Value) + "km/h");
+                                        //tDebug2.setText(format2.format(my_dist_Value) + "km/h");
 
                                         //メディアプレイヤーの再生速度を設定
                                         if(speed_Value <= 50 && speed_Value >= 1){
@@ -939,15 +940,19 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
-                seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
-                delayedTimer = new Timer();//Timerインスタンスを生成
-                delayTask = new DelayedTask();//TimerTaskインスタンスを生成
-                delayedTimer.schedule(delayTask,0,10);
-                watchMeTimer = new Timer();//Timerインスタンスを生成
-                watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
-                watchMeTimer.schedule(watchMeTask,0,100);
-                usb_Flg = false;
+                if(Gear3_Flg != true){
+                    HukaProcess();
+                }else {
+                    future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
+                    seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
+                    delayedTimer = new Timer();//Timerインスタンスを生成
+                    delayTask = new DelayedTask();//TimerTaskインスタンスを生成
+                    delayedTimer.schedule(delayTask, 0, 10);
+                    watchMeTimer = new Timer();//Timerインスタンスを生成
+                    watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
+                    watchMeTimer.schedule(watchMeTask, 0, 100);
+                    usb_Flg = false;
+                }
             }
         });
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
@@ -1126,39 +1131,39 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
 
                     //100msごとに負荷の確認
-                    /*if(Gear3_Flg == false) {
+                    if(Gear3_Flg == false) {
                         HukaProcess();
-                        Toast.makeText(getApplication(), "負荷を3に設定してください", Toast.LENGTH_LONG);
-                    }*/
+                        Toast.makeText(getApplication(), "負荷を3に設定してください", Toast.LENGTH_LONG).show();
+                    }
                     if(Gear1_Flg == true){
                         cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：1");
+                        tDebug2.setText("1");
                     }
                     if(Gear2_Flg == true){
                         cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：2");
+                        tDebug2.setText("2");
                     }
                     if(Gear3_Flg == true){
                         cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：3");
+                        tDebug2.setText("3");
                     }
                     if(Gear4_Flg == true){
                         cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：4");
+                        tDebug2.setText("4");
                     }
                     if(Gear5_Flg == true){
                         cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：5");
+                        tDebug2.setText("5");
                     }
                     if(Gear6_Flg == true){
                         cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tDebug2.setText("ギアの重さ：6");
+                        tDebug2.setText("6");
                     }
 
                     //残り時間0で終了

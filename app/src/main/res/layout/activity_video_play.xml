@@ -413,7 +413,7 @@
             android:layout_height="300dp"
             android:visibility="visible"
             android:background="@android:color/darker_gray"
-            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
             android:layout_alignStart="@+id/MileageBarLayout">
 
             <RelativeLayout
