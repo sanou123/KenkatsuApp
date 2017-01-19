@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.NumberFormat;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -58,6 +59,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
     /*最高速度*/
     double maxSpeed = 0.0;
+
+    /*最大心拍*/
+    int maxHeartbeat = 0;
 
     /*平均速度を出すのに必要な関数*/
     double totalSpeed = 0.0;
@@ -281,7 +285,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-/*
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView) findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView) findViewById(R.id.textConnectStatus);
@@ -298,7 +302,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             }
         }
         //******************************************************************************************
-*/
+
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -458,9 +462,11 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             valueMsg.what = VIEW_STATUS;
             valueMsg.obj = "connected.";
             mHandler.sendMessage(valueMsg);
-
             connectFlg = true;
 
+            //コネクトチェック画面を消す
+            ConnectCheck connectCheck = new ConnectCheck();
+            connectCheck.run();
             while (isRunning) {
 
                 // InputStreamの読み込み
@@ -495,6 +501,13 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             } catch (Exception ee) {
             }
             isRunning = false;
+            //通信が確立するまで通信しようとする↓
+            if (!connectFlg) {
+                mThread = new Thread(this);
+                // Threadを起動し、Bluetooth接続
+                isRunning = true;
+                mThread.start();
+            }
         }
     }
 
@@ -506,15 +519,17 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         public void handleMessage(Message msg) {
             int action = msg.what;
             String msgStr = (String) msg.obj;
-            if (action == VIEW_INPUT) {
+            if (action == VIEW_INPUT  && msgStr.length() == 3) {
                 mInputTextView.setText(msgStr);
+                //最大心拍の判断
+                Maxheartbeat maxHeartbeat = new Maxheartbeat();
+                maxHeartbeat.run();
             } else if (action == VIEW_STATUS) {
                 mStatusTextView.setText(msgStr);
             }
         }
     };
     //bluetooth*************************************************************************************
-
 
     // USB通信のタスク
     private Handler handler = new Handler() {
@@ -856,7 +871,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
     /*処理の中身*/
     //Playボタンを押したときの処理の中身
-    public void PlayProcess() {         //変えた菅原
+    public void PlayProcess() {
         findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
         speedCount = 0.0;
         tSpeed.setText(String.format("%.2f", (float) (speedCount * 10)));
@@ -906,7 +921,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(EndlessRunVideoPlay.this);
         alertDialog.setTitle("ポーズ");
         alertDialog.setMessage("一時停止中です");
-        alertDialog.setPositiveButton("走行をやめてトレーニングメニュー選択に戻る", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("トレーニングメニューに戻る", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //VideoSelectに戻る処理
@@ -1226,6 +1241,33 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    //画面消すタスク
+    public class ConnectCheck implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+    //最大心拍タスク
+    public class Maxheartbeat implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
+                        maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
+                        //tDebug1.setText("maxheartbeat"+maxHeartbeat);
+                    }
+                }
+            });
+        }
     }
 
     @Override

@@ -66,6 +66,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     /*最高速度*/
     double maxSpeed = 0.0;
 
+    /*最大心拍*/
+    int maxHeartbeat = 0;
+
     /*平均速度を出すのに必要な関数*/
     double totalSpeed = 0.0;
     int totalSpeedCnt = 0;
@@ -512,7 +515,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         mHandler.sendMessage(valueMsg);
 
         try {
-            Log.v("a","try...");
             // 取得したデバイス名を使ってBluetoothでSocket接続
             mSocket = mDevice.createRfcommSocketToServiceRecord(MY_UUID);
             mSocket.connect();
@@ -528,12 +530,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             valueMsg.what = VIEW_STATUS;
             valueMsg.obj = "connected.";
             mHandler.sendMessage(valueMsg);
-
             connectFlg = true;
-            Log.v("connect","connect!!!!!!!!");
+
+            //コネクトチェック画面を消す
             ConnectCheck connectCheck = new ConnectCheck();
             connectCheck.run();
-            Log.v("visivle","kieta");
             while (isRunning) {
                 // InputStreamの読み込み
                 bytes = mmInStream.read(buffer);
@@ -553,6 +554,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     // Log.i(TAG,"value=nodata");
                 }
                 //Thread.sleep(10);
+
             }
         } catch (Exception e) {
 
@@ -569,7 +571,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             } catch (Exception ee) {
             }
             isRunning = false;
-            //通信か確立するまで通信しようとする↓
+            //通信が確立するまで通信しようとする↓
             if (!connectFlg) {
                 mThread = new Thread(this);
                 // Threadを起動し、Bluetooth接続
@@ -587,8 +589,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         public void handleMessage(Message msg) {
             int action = msg.what;
             String msgStr = (String) msg.obj;
-            if (action == VIEW_INPUT) {
+            if (action == VIEW_INPUT  && msgStr.length() == 3) {
                 mInputTextView.setText(msgStr);
+                mInputTextView.setText(msgStr);
+                //最大心拍の判断
+                Maxheartbeat maxHeartbeat = new Maxheartbeat();
+                maxHeartbeat.run();
 
             } else if (action == VIEW_STATUS) {
                 mStatusTextView.setText(msgStr);
@@ -596,18 +602,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     };
     //bluetooth*************************************************************************************
-    //画面消すタスク
-    public class ConnectCheck implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
 
     // USB通信のタスク
     private Handler handler = new Handler() {
@@ -1010,7 +1004,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
         alertDialog.setTitle("ポーズ");
         alertDialog.setMessage("一時停止中です");
-        alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("トレーニングコースに戻る", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //VideoSelectに戻る処理
@@ -1070,7 +1064,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
-        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数をそのまま代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍
         globals.avg = String.valueOf(AverageSpeed(totalSpeed, totalSpeedCnt));//平均速度
         globals.max = String.format("%.2f", maxSpeed);//最高速度
         globals.time = tTimer.getText().toString();//運動時間
@@ -1177,7 +1171,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //自機の移動//菅原変更
+    //自機の移動
     public class MoveMeTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
         final int endPoint = 45;//エンド地点の座標
@@ -1461,6 +1455,34 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         return super.dispatchKeyEvent(event);
     }
+
+    //画面消すタスク
+    public class ConnectCheck implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+    //最大心拍タスク
+    public class Maxheartbeat implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
+                        maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
+                        //tDebug1.setText("maxheartbeat"+maxHeartbeat);
+                    }
+                }
+            });
+        }
+    }
+
 
     //戻るキーを無効にする
     @Override

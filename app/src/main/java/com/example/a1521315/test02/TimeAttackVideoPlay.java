@@ -67,7 +67,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     TextView tDebug1;
     TextView tDebug2;
 
-
+    /*最大心拍*/
+    int maxHeartbeat = 0;
 
     int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
     String mediaPath = null;//動画データ
@@ -280,7 +281,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-/*
+
         //bluetooth*********************************************************************************
         mInputTextView = (TextView)findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView)findViewById(R.id.textConnectStatus);
@@ -297,7 +298,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             }
         }
         //******************************************************************************************
-*/
+
 
     }//onCreateここまで
 
@@ -464,9 +465,11 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             valueMsg.what = VIEW_STATUS;
             valueMsg.obj = "connected.";
             mHandler.sendMessage(valueMsg);
-
             connectFlg = true;
 
+            //コネクトチェック画面を消す
+            ConnectCheck connectCheck = new ConnectCheck();
+            connectCheck.run();
             while(isRunning){
 
                 // InputStreamの読み込み
@@ -501,6 +504,13 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 mSocket.close();
             }catch(Exception ee){}
             isRunning = false;
+            //通信が確立するまで通信しようとする↓
+            if (!connectFlg) {
+                mThread = new Thread(this);
+                // Threadを起動し、Bluetooth接続
+                isRunning = true;
+                mThread.start();
+            }
         }
     }
 
@@ -512,8 +522,11 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         public void handleMessage(Message msg) {
             int action = msg.what;
             String msgStr = (String)msg.obj;
-            if(action == VIEW_INPUT){
+            if (action == VIEW_INPUT  && msgStr.length() == 3) {
                 mInputTextView.setText(msgStr);
+                //最大心拍の判断
+                Maxheartbeat maxHeartbeat = new Maxheartbeat();
+                maxHeartbeat.run();
             }
             else if(action == VIEW_STATUS){
                 mStatusTextView.setText(msgStr);
@@ -1436,6 +1449,33 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    //画面消すタスク
+    public class ConnectCheck implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+    //最大心拍タスク
+    public class Maxheartbeat implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
+                        maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
+                        //tDebug1.setText("maxheartbeat"+maxHeartbeat);
+                    }
+                }
+            });
+        }
     }
 
     @Override
