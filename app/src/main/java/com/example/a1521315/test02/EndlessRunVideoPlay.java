@@ -976,7 +976,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.time = tTimer.getText().toString();//運動時間
         //int iWeight = Integer.parseInt(globals.weight);
         //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
-        globals.cal = 123.32;
+        globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), EndlessRunResult.class);
         startActivity(intent);
     }
@@ -1005,32 +1005,32 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
                     if(Gear1_Flg == true){
                         cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tCal.setText(String.format("%.2f",cal));
                         tDebug2.setText("1");
                     }
                     if(Gear2_Flg == true){
                         cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tCal.setText(String.format("%.2f",cal));
                         tDebug2.setText("2");
                     }
                     if(Gear3_Flg == true){
                         cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tCal.setText(String.format("%.2f",cal));
                         tDebug2.setText("3");
                     }
                     if(Gear4_Flg == true){
                         cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tCal.setText(String.format("%.2f",cal));
                         tDebug2.setText("4");
                     }
                     if(Gear5_Flg == true){
                         cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tCal.setText(String.format("%.2f",cal));
                         tDebug2.setText("5");
                     }
                     if(Gear6_Flg == true){
                         cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tCal.setText(String.format("%.2f",cal));
                         tDebug2.setText("6");
                     }
                 }
