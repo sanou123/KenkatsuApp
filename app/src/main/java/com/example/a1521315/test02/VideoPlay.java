@@ -494,7 +494,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         public void handleMessage(Message msg) {
             int action = msg.what;
             String msgStr = (String)msg.obj;
-            if(action == VIEW_INPUT){
+            if(action == VIEW_INPUT && msgStr.length() == 3){
                 mInputTextView.setText(msgStr);
             }
             else if(action == VIEW_STATUS){
