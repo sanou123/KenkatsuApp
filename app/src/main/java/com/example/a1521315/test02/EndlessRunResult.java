@@ -38,7 +38,7 @@ public class EndlessRunResult extends Activity {
         setContentView(R.layout.result);
         Button btn_tweet = (Button)findViewById(R.id.tweet);
         Button btn_back = (Button)findViewById(R.id.back);
-        btn_back.setText("トレーニングセレクトへ戻る");
+        btn_back.setText("トレーニングメニューへ戻る");
 
         globals = (Globals)this.getApplication();
 

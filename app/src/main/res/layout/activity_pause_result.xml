@@ -20,7 +20,7 @@
         android:layout_alignParentBottom="true" />
 
     <Button
-        android:text="トレーニング選択へ戻る"
+        android:text="トレーニングメニューへ戻る"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/back"
