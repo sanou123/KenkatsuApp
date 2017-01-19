@@ -1010,7 +1010,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
         alertDialog.setTitle("ポーズ");
         alertDialog.setMessage("一時停止中です");
-        alertDialog.setPositiveButton("走行をやめてコース選択に戻る", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("トレーニングコースに戻る", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //VideoSelectに戻る処理

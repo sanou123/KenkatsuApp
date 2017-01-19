@@ -906,7 +906,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(EndlessRunVideoPlay.this);
         alertDialog.setTitle("ポーズ");
         alertDialog.setMessage("一時停止中です");
-        alertDialog.setPositiveButton("走行をやめてトレーニングメニュー選択に戻る", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("トレーニングメニューに戻る", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //VideoSelectに戻る処理
