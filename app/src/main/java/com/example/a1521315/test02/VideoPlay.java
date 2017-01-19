@@ -551,6 +551,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     // Log.i(TAG,"value=nodata");
                 }
                 //Thread.sleep(10);
+
             }
         } catch (Exception e) {
 
