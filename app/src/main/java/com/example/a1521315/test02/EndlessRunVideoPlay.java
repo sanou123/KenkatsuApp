@@ -60,6 +60,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     /*最高速度*/
     double maxSpeed = 0.0;
 
+    /*最大心拍*/
+    int maxHeartbeat = 0;
+
     /*平均速度を出すのに必要な関数*/
     double totalSpeed = 0.0;
     int totalSpeedCnt = 0;
@@ -516,8 +519,11 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         public void handleMessage(Message msg) {
             int action = msg.what;
             String msgStr = (String) msg.obj;
-            if (action == VIEW_INPUT) {
+            if (action == VIEW_INPUT  && msgStr.length() == 3) {
                 mInputTextView.setText(msgStr);
+                //最大心拍の判断
+                Maxheartbeat maxHeartbeat = new Maxheartbeat();
+                maxHeartbeat.run();
             } else if (action == VIEW_STATUS) {
                 mStatusTextView.setText(msgStr);
             }
@@ -1245,6 +1251,20 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                 public void run() {
                     findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
                     findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+    //最大心拍タスク
+    public class Maxheartbeat implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
+                        maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
+                        //tDebug1.setText("maxheartbeat"+maxHeartbeat);
+                    }
                 }
             });
         }

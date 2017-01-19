@@ -66,6 +66,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     /*最高速度*/
     double maxSpeed = 0.0;
 
+    /*最大心拍*/
+    int maxHeartbeat = 0;
+
     /*平均速度を出すのに必要な関数*/
     double totalSpeed = 0.0;
     int totalSpeedCnt = 0;
@@ -586,8 +589,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         public void handleMessage(Message msg) {
             int action = msg.what;
             String msgStr = (String) msg.obj;
-            if (action == VIEW_INPUT) {
+            if (action == VIEW_INPUT  && msgStr.length() == 3) {
                 mInputTextView.setText(msgStr);
+                mInputTextView.setText(msgStr);
+                //最大心拍の判断
+                Maxheartbeat maxHeartbeat = new Maxheartbeat();
+                maxHeartbeat.run();
 
             } else if (action == VIEW_STATUS) {
                 mStatusTextView.setText(msgStr);
@@ -1057,7 +1064,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
-        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数をそのまま代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍
         globals.avg = String.valueOf(AverageSpeed(totalSpeed, totalSpeedCnt));//平均速度
         globals.max = String.format("%.2f", maxSpeed);//最高速度
         globals.time = tTimer.getText().toString();//運動時間
@@ -1461,6 +1468,21 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
+    //最大心拍タスク
+    public class Maxheartbeat implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
+                        maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
+                        //tDebug1.setText("maxheartbeat"+maxHeartbeat);
+                    }
+                }
+            });
+        }
+    }
+
 
     //戻るキーを無効にする
     @Override
