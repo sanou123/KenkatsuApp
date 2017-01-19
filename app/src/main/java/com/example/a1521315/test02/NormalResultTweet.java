@@ -48,6 +48,6 @@ public class NormalResultTweet extends Activity{
         WebView myWebView = (WebView) findViewById(R.id.web1);
         myWebView.setWebViewClient(new WebViewClient());
         //myWebView.loadUrl("http://www.google.com");
-        myWebView.loadUrl("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text="+"コース名："+coursename+"%0a"+"走行距離："+mileage+"%0a"+"最大心拍："+maxheartbeat+"%0a"+"平均速度："+avg+"%0a"+"最高速度："+max+"%0a"+"残り時間："+time+"%0a"+"消費カロリー："+cal+"%0a"+"クリアランク："+kuriarank+"%0a");
+        myWebView.loadUrl("https://twitter.com/intent/tweet?hashtags=けんかつAPP &text="+"コース名："+coursename+"%0a"+"走行距離："+mileage+"km"+"%0a"+"最大心拍："+maxheartbeat+"bpm"+"%0a"+"平均速度："+avg+"km/h"+"%0a"+"最高速度："+max+"km/h"+"%0a"+"残り時間："+time+"%0a"+"消費カロリー："+cal+"kcal"+"%0a"+"クリアランク："+kuriarank+"%0a");
     }
 }
