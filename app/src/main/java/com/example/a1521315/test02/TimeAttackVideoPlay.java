@@ -502,7 +502,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             isRunning = false;
         }
     }
-
     /**
      * 描画処理はHandlerでおこなう
      */
