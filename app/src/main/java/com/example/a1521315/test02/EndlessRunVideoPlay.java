@@ -107,7 +107,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     //センサー、動画再生関連の変数　初期化
     double speed_Value = 0.0;//速度の値
     double my_dist_Value = 0.0;
-    public float plus_dist_Value = 0.001F;//0.0015F
+    public float plus_dist_Value = 0.00005F;//0.0015F
 
     //double dist_Value = 0.0;//ペダルレベルでの距離
     //double old_dist_Value = 0.0;//ペダルレベルでの距離
