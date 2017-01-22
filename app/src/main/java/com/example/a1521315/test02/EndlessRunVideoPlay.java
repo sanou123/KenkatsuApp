@@ -63,6 +63,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     /*最大心拍*/
     int maxHeartbeat = 0;
 
+    /*ギア*/
+    TextView tGear;//ギア
+
     /*平均速度を出すのに必要な関数*/
     double totalSpeed = 0.0;
     int totalSpeedCnt = 0;
@@ -231,20 +234,26 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
 
-
-
         /*デバッグ用のやつ*/
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
         tDebug1.setText("デバッグ用1");
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
         tDebug2.setText("デバッグ用2");
 
+        tGear = (TextView) findViewById(R.id.textGear);
+        tGear.setText("0");
+
         Change7Seg();//7セグフォントに変換
 
+        /*タイム表示*/
         ImageView timeDisplay = (ImageView) findViewById(R.id.image_TimeDisplay);
         timeDisplay.setImageResource(R.drawable.time);
+        /*コースネーム*/
         ImageView CoursenameDisplay = (ImageView) findViewById(R.id.image_Coursenamedisplay);
         CoursenameDisplay.setImageResource(R.drawable.coursename);
+        /*gギア*/
+        ImageView GearDisplay = (ImageView) findViewById(R.id.imageGear);
+        GearDisplay.setImageResource(R.drawable.gear);
 
         ImageView CalDisplay = (ImageView) findViewById(R.id.imageCalDisplay);
         CalDisplay.setImageResource(R.drawable.display);
@@ -1006,32 +1015,32 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                     if(Gear1_Flg == true){
                         cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("1");
+                        tGear.setText("1");
                     }
                     if(Gear2_Flg == true){
                         cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("2");
+                        tGear.setText("2");
                     }
                     if(Gear3_Flg == true){
                         cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("3");
+                        tGear.setText("3");
                     }
                     if(Gear4_Flg == true){
                         cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("4");
+                        tGear.setText("4");
                     }
                     if(Gear5_Flg == true){
                         cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("5");
+                        tGear.setText("5");
                     }
                     if(Gear6_Flg == true){
                         cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("6");
+                        tGear.setText("6");
                     }
                 }
             });

@@ -63,6 +63,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
 
+    /*ギア*/
+    TextView tGear;//ギア
+
     /*最高速度*/
     double maxSpeed = 0.0;
 
@@ -254,6 +257,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
         tDebug2.setText("TargetBPM:" + TargetBPM(Integer.parseInt(globals.age)));
 
+        tGear = (TextView) findViewById(R.id.textGear);
+        tGear.setText("0");
+
         /*グローバル変数にバグあるので前回のデータは取得しない↓ゴーストは1kmを10秒で走る設定で固定
         下のメソッドのコメントアウトを消せば前回のデータでゴーストが動くよ*/
         GetLastTrainingData();//前回のデータを色々やってる
@@ -273,6 +279,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         /*コースネーム*/
         ImageView CoursenameDisplay = (ImageView) findViewById(R.id.image_Coursenamedisplay);
         CoursenameDisplay.setImageResource(R.drawable.coursename);
+        /*ギア*/
+        ImageView GearDisplay = (ImageView) findViewById(R.id.imageGear);
+        GearDisplay.setImageResource(R.drawable.gear);
 
         //各種ディスプレイ
         ImageView CalDisplay = (ImageView) findViewById(R.id.imageCalDisplay);
@@ -334,7 +343,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView) findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView) findViewById(R.id.textConnectStatus);
@@ -351,7 +360,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
-
+*/
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -1121,32 +1130,32 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     if (Gear1_Flg == true) {
                         cal += 3.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("1");
+                        tGear.setText("1");
                     }
                     if (Gear2_Flg == true) {
                         cal += 4.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("2");
+                        tGear.setText("2");
                     }
                     if (Gear3_Flg == true) {
                         cal += 5.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("3");
+                        tGear.setText("3");
                     }
                     if (Gear4_Flg == true) {
                         cal += 6.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("4");
+                        tGear.setText("4");
                     }
                     if (Gear5_Flg == true) {
                         cal += 7.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("5");
+                        tGear.setText("5");
                     }
                     if (Gear6_Flg == true) {
                         cal += 8.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("6");
+                        tGear.setText("6");
                     }
                 }
             });

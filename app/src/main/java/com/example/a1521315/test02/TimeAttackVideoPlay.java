@@ -63,12 +63,15 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     TextView tCourse;//コース名
     TextView textaddtimer;
 
-    /*デバッグ用の関数*/
-    TextView tDebug1;
-    TextView tDebug2;
+    /*ギア*/
+    TextView tGear;//ギア
 
     /*最大心拍*/
     int maxHeartbeat = 0;
+
+    /*デバッグ用の関数*/
+    TextView tDebug1;
+    TextView tDebug2;
 
     int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
     String mediaPath = null;//動画データ
@@ -220,6 +223,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
         tDebug2.setText(globals.weight+"");
 
+        tGear = (TextView) findViewById(R.id.textGear);
+        tGear.setText("0");
+
         Change7Seg();//7セグフォントに変換
 
         /*シークバーに関する奴*/
@@ -234,6 +240,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         /*コースネーム*/
         ImageView CoursenameDisplay = (ImageView) findViewById(R.id.image_Coursenamedisplay);
         CoursenameDisplay.setImageResource(R.drawable.coursename);
+        /*ギア*/
+        ImageView GearDisplay = (ImageView) findViewById(R.id.imageGear);
+        GearDisplay.setImageResource(R.drawable.gear);
 
         //各種ディスプレイ
         ImageView CalDisplay = (ImageView) findViewById(R.id.imageCalDisplay);
@@ -1150,37 +1159,37 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("1");
+                        tGear.setText("1");
                     }
                     if(Gear2_Flg == true){
                         cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("2");
+                        tGear.setText("2");
                     }
                     if(Gear3_Flg == true){
                         cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("3");
+                        tGear.setText("3");
                     }
                     if(Gear4_Flg == true){
                         cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("4");
+                        tGear.setText("4");
                     }
                     if(Gear5_Flg == true){
                         cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("5");
+                        tGear.setText("5");
                     }
                     if(Gear6_Flg == true){
                         cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
-                        tDebug2.setText("6");
+                        tGear.setText("6");
                     }
 
                     //残り時間0で終了
