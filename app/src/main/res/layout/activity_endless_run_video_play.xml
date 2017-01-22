@@ -27,6 +27,27 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/GearLayout"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/gear"
+                android:id="@+id/imageGear"/>
+
+            <TextView
+                android:text="6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textGear"
+                android:textSize="40sp"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/black"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/CoursenameLayout"
             android:layout_alignParentEnd="true"
             android:layout_width="350dp"
@@ -213,35 +234,6 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginLeft="80dp"
                 />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/DataLayout"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/CoursenameLayout">
-
-            <TextView
-                android:text="デバッグ用テキストビュー1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textDebug1"
-                android:textSize="20sp"
-                android:textColor="@android:color/holo_red_dark"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"/>
-
-            <TextView
-                android:text="デバッグ用テキストビュー2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textDebug2"
-                android:textSize="20sp"
-                android:textColor="@android:color/holo_orange_dark"
-                android:layout_below="@+id/textDebug1"
-                android:layout_alignParentStart="true"/>
 
         </RelativeLayout>
 
@@ -511,6 +503,35 @@
 
             </RelativeLayout>
 
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/DataLayout"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_above="@+id/ConnectCheak"
+            android:layout_alignParentEnd="true">
+
+            <TextView
+                android:text="デバッグ用テキストビュー1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDebug1"
+                android:textSize="20sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:text="デバッグ用テキストビュー2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDebug2"
+                android:textSize="20sp"
+                android:textColor="@android:color/holo_orange_dark"
+                android:layout_below="@+id/textDebug1"
+                android:layout_alignParentStart="true"/>
 
         </RelativeLayout>
 
