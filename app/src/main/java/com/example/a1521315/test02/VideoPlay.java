@@ -675,6 +675,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
                                             }
 
+
                                             //距離が進んだ場合
                                             if (chSpd_Flg == true) {
 
