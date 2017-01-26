@@ -153,6 +153,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     long now_time = 0;
 
 
+    public Timer watchMeTimer;
+    public WatchMeTask watchMeTask;
+
+
     private USBAccessoryManager accessoryManager;
 
 
@@ -647,6 +651,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                             float time_tmp = (float) t_cnt;
                                             long microSec=0;
 
+                                            Toast.makeText(getApplication(),"case HOLE",Toast.LENGTH_LONG);
+
                                             //センサー値取得
                                             hole_Value = (int) (commandPacket[1] & 0xFF);
 
@@ -659,29 +665,37 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 if(timer_check == 2){
                                                     chSpd_Flg = true;
                                                     microSec = TimeUnit.MICROSECONDS.convert( now_time - old_time, TimeUnit.NANOSECONDS );
-                                                    //tDebug2.setText( (microSec/1000) + "microsec passed" );
+                                                    tDebug1.setText( (microSec/1000) + "microsec passed" );
                                                 }
                                                 timer_check = 1;
+                                                Toast.makeText(getApplication(),"case 1",Toast.LENGTH_LONG);
                                             }
 
                                             //距離の加算(径分)
                                             else if (hole_Value == 0 && old_hole_Value == 1 && run_Flg == true) {
                                                 run_Flg = false;
+                                                old_time = System.nanoTime();
                                                 if(timer_check == 1){
-                                                    chSpd_Flg = true;
                                                     timer_check = 2;
+                                                    old_time = now_time;
                                                 }
                                             } else {
-
                                             }
 
                                             //距離が進んだ場合
                                             if (chSpd_Flg == true) {
+                                                //モータの径　/ cnt*10msec
 
+                                                //####
+                                                //25回分の平均の速度を表示
+                                                //125回目だけだす
+                                                //なぜなら1:25だから
 
-                                                    //モータの径　/ cnt*10msec
-                                                    speed_Value = my_dist_Value / (microSec);
-                                                    tDebug2.setText("sp::::"+speed_Value);
+                                                speed_Value = my_dist_Value / (((double)(microSec)/1000)/1000000);
+
+                                                if(speed_Value >= 0 && speed_Value <= 50){
+                                                    tDebug2.setText("sp:"+String.format("%.2f", (float) (speed_Value)));
+                                                }
                                                 chSpd_Flg=false;
                                                 clear_Flg = true;
                                             }
@@ -705,7 +719,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                         }
 
                                         //過去の値を更新
-                                        old_time = now_time;
+                                        //old_time = now_time;
                                         old_hole_Value = hole_Value;
                                         break;
 
@@ -850,7 +864,33 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 .build();
     }
 
+    //プレイヤーが止まらずに進んだ時間(止まるたびにリセット)
+    public class WatchMeTask extends TimerTask {
 
+        long t_cnt = 0;
+
+        @Override
+        public void run() {
+            // handlerを使って処理をキューイングする
+            handler.post(new Runnable() {
+                public void run() {
+                    t_cnt++;
+                    old_time = System.nanoTime();
+                    if(t_cnt >= 1){
+                        now_time = System.nanoTime();
+                        tDebug1.setText(now_time+":now_time");
+                        tDebug2.setText((now_time-old_time)+":nano");
+                        t_cnt = 0;
+                    }
+                    //MeterShow(speed_Value);
+                    if(clear_Flg == true){
+                        t_cnt = 0;
+                        clear_Flg = false;
+                    }
+                }
+            });
+        }
+    }
 
     //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
@@ -912,7 +952,16 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tSpeed.setText(String.format("%.2f", (float) (speedCount * 10)));
         mp.setPlaybackParams(params);
         mp.seekTo(0);
+/*
+        if (null != watchMeTimer) {
+            watchMeTimer.cancel();
+            watchMeTimer = null;
+        }
 
+        watchMeTimer = new Timer();//Timerインスタンスを生成
+        watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
+        watchMeTimer.schedule(watchMeTask, 0, 1000);
+*/
         timerscheduler = Executors.newSingleThreadScheduledExecutor();
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
         seekbarscheduler = Executors.newSingleThreadScheduledExecutor();
