@@ -645,6 +645,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                         } else {
                                             //時間の取得(秒に直す)
                                             float time_tmp = (float) t_cnt;
+                                            long microSec=0;
 
                                             //センサー値取得
                                             hole_Value = (int) (commandPacket[1] & 0xFF);
@@ -657,8 +658,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 run_Flg = true;
                                                 if(timer_check == 2){
                                                     chSpd_Flg = true;
-                                                    long microSec = TimeUnit.MICROSECONDS.convert( now_time - old_time, TimeUnit.NANOSECONDS );
-                                                    tDebug2.setText( (microSec/1000) + "microsec passed" );
+                                                    microSec = TimeUnit.MICROSECONDS.convert( now_time - old_time, TimeUnit.NANOSECONDS );
+                                                    //tDebug2.setText( (microSec/1000) + "microsec passed" );
                                                 }
                                                 timer_check = 1;
                                             }
@@ -679,8 +680,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
 
                                                     //モータの径　/ cnt*10msec
-                                                    speed_Value = my_dist_Value / ((double)(t_cnt)*0.01);
-                                                //tDebug2.setText("sp::::"+speed_Value);
+                                                    speed_Value = my_dist_Value / (microSec);
+                                                    tDebug2.setText("sp::::"+speed_Value);
                                                 chSpd_Flg=false;
                                                 clear_Flg = true;
                                             }
