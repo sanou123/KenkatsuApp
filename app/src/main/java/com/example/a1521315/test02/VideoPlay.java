@@ -694,7 +694,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                             }
 
                                         }
-
+//
                                         //通常の速度反映処理
                                         if(inertia_Flg == false){
                                             //メディアプレイヤーの再生速度を設定
