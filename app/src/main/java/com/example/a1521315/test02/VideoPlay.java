@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.hardware.usb.UsbManager;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.net.Uri;
@@ -50,6 +51,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import static android.R.attr.delay;
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener, View.OnClickListener {
 
@@ -156,8 +159,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     long old_time = 0;
     long now_time = 0;
 
+    //DAICHI_TEST
     private USBAccessoryManager accessoryManager;
-
+    byte[] commandPacket = new byte[2];
 
     //bluetooth*************************************************************************************
     private BluetoothAdapter mAdapter;/* Bluetooth Adapter */
@@ -329,16 +333,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             raw = 1;
         }
 
-        //USBAccessoryManager の初期化
-        accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
-        try {
-            PackageManager manager = this.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-            Log.d(TAG, "Info:" + info.packageName + "\n" + info.versionCode + "\n" + info.versionName);
-        } catch (PackageManager.NameNotFoundException e1) {
-            e1.printStackTrace();
-            Toast.makeText(this,"エラー",Toast.LENGTH_LONG);
-        }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
 
@@ -359,9 +353,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         //******************************************************************************************
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -372,7 +366,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         seekbarscheduler.shutdown();
         //USB通信の切断(停止がないため)
         accessoryManager.disable(this);
-        disconnectAccessory();//#
+        disconnectAccessory();
         //リザルトダイアログを表示
         ResultDialog();
         if (mp != null) {
@@ -384,7 +378,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();
         if (mp != null) {
             mp.release();
             mp = null;
@@ -394,39 +388,53 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //Activity の　基本ライフサイクル//
     @Override
     public void onStart() {
-        super.onStart();// ATTENTION: This was auto-generated to implement the App Indexing API.
-// See https://g.co/AppIndexing/AndroidStudio for more information.
+        super.onStart();
         client.connect();
         Log.d(TAG, "onStart");
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
+
+        accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
+        try {
+            PackageManager manager = this.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+            Log.d(TAG, "Info:" + info.packageName + "\n" + info.versionCode + "\n" + info.versionName);
+        } catch (PackageManager.NameNotFoundException e1) {
+            e1.printStackTrace();
+            Toast.makeText(this, "エラー", Toast.LENGTH_LONG);
+        }
+
+        accessoryManager.enable(getApplication(), getIntent());
+        //accessoryManager.showStatus(getApplication());
+        //最初にギア出すテスト#
+        commandPacket[0] = UPDATE_LED_SETTING;
+        commandPacket[1] = 0;
+        accessoryManager.write(commandPacket);
+
+        if(accessoryManager.threadStatus(getApplication()) == false){
+            finish();
+        }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        accessoryManager.enable(VideoPlay.this, getIntent());
     }
 
     @Override
     public void onStop() {
-        super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
-// See https://g.co/AppIndexing/AndroidStudio for more information.
+        super.onStop();
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.disconnect();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        // Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
         switch (firmwareProtocol) {
             case 2:
-                byte[] commandPacket = new byte[2];
+                commandPacket = new byte[2];
                 commandPacket[0] = (byte) APP_DISCONNECT;
                 commandPacket[1] = 0;
                 accessoryManager.write(commandPacket);
@@ -611,17 +619,19 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     // USB通信のタスク
     private Handler handler = new Handler() {
 
+        //#
+
         @Override
         public void handleMessage(Message msg) {
-            byte[] commandPacket = new byte[2];
+
             Log.d(TAG, "handleMessage");
             switch (msg.what) {
                 case UPDATE_LED_SETTING:
+
                     if (accessoryManager.isConnected() == false) {
                         return;
                     }
                     break;
-
                 case USBAccessoryWhat:
                     switch (((USBAccessoryManagerMessage) msg.obj).type) {
                         case READ:
@@ -692,9 +702,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 }
                                                 chSpd_Flg=false;
                                             }
-
                                         }
-////
+
                                         //通常の速度反映処理
                                         if(inertia_Flg == false){
                                             //メディアプレイヤーの再生速度を設定
@@ -707,6 +716,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                     mp.setPlaybackParams(params);
                                                     all_speed_Value = 0.0;
                                                 }
+
                                                 //漕ぎ出し時に速度を出す処理
                                                 else if(stop_Flg == true){
                                                     stop_Flg = false;
@@ -722,6 +732,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                             else {
                                             }
                                         }
+
                                         //慣性始まったと判断された時の処理
                                         //inertiaFlg == true
                                         else{
@@ -743,6 +754,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                         //センサー値取得
                                         int resist_Value = (int) (commandPacket[1] & 0xFF);
 
+                                        //#
+
                                         //抵抗値の割り出し
                                         switch (resist_Value) {
                                             case 1:
@@ -753,6 +766,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
+                                                tGear.setText("1");
                                                 break;
                                             case 2:
                                                 limit_Value = 120;
@@ -762,6 +776,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
+                                                tGear.setText("2");
                                                 break;
                                             case 3:
                                                 limit_Value = 150;
@@ -771,6 +786,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
+                                                tGear.setText("3");
                                                 break;
                                             case 4:
                                                 limit_Value = 150;
@@ -780,6 +796,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear4_Flg = true;
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
+                                                tGear.setText("4");
                                                 break;
                                             case 5:
                                                 limit_Value = 150;
@@ -789,6 +806,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = true;
                                                 Gear6_Flg = false;
+                                                tGear.setText("5");
                                                 break;
                                             case 6:
                                                 limit_Value = 150;
@@ -798,9 +816,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = true;
+                                                tGear.setText("6");
                                                 break;
                                             default:
                                                 limit_Value = 150;
+                                                tGear.setText("7");
                                                 break;
                                         }
 
@@ -832,7 +852,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                             break;
 
                         case DISCONNECTED:
-                            disconnectAccessory();
+                            //disconnectAccessory();
                             break;
                     }
 
@@ -961,6 +981,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         params.setSpeed((float) speedCount);
         mp.setPlaybackParams(params);
         tSpeed.setText(String.format("%.2f", (float) (speedCount * 10)));
+        //accessoryManager.showStatus(getApplication());//DAICHI_TEST
         // ポップアップメニュー表示
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
         alertDialog.setTitle("ポーズ");
@@ -975,13 +996,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     mp.release();
                     mp = null;
                 }
-                accessoryManager.disable(getApplication());//#
-                disconnectAccessory();//#
+
+                accessoryManager.disable(getApplication());
+                disconnectAccessory();
+                //accessoryManager.showStatus(getApplication());
                 Thread StopBGM = new Thread(new StopBGM());
                 StopBGM.start();
-
-                Intent intent = new Intent(getApplication(), VideoSelect.class);
-                startActivity(intent);
+                finish();
             }
         });
         alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
@@ -990,6 +1011,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                 seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
                 usb_Flg = false;
+                accessoryManager.showStatus(getApplication());
             }
         });
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
@@ -1026,8 +1048,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //int iWeight = Integer.parseInt(globals.weight);
         //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
-        Intent intent = new Intent(getApplication(), Result.class);
-        startActivity(intent);
+        finish();
     }
 
     public void ResultDialog() {
@@ -1073,35 +1094,40 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
 
-                    if (Gear1_Flg == true) {
-                        cal += 3.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("1");
+                    if(stop_Flg == true){
+                        //calの加算をしない
                     }
-                    if (Gear2_Flg == true) {
-                        cal += 4.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("2");
-                    }
-                    if (Gear3_Flg == true) {
-                        cal += 5.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("3");
-                    }
-                    if (Gear4_Flg == true) {
-                        cal += 6.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("4");
-                    }
-                    if (Gear5_Flg == true) {
-                        cal += 7.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("5");
-                    }
-                    if (Gear6_Flg == true) {
-                        cal += 8.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("6");
+                    else{
+                        if (Gear1_Flg == true) {
+                            cal += 3.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("1");
+                        }
+                        if (Gear2_Flg == true) {
+                            cal += 4.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("2");
+                        }
+                        if (Gear3_Flg == true) {
+                            cal += 5.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("3");
+                        }
+                        if (Gear4_Flg == true) {
+                            cal += 6.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("4");
+                        }
+                        if (Gear5_Flg == true) {
+                            cal += 7.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("5");
+                        }
+                        if (Gear6_Flg == true) {
+                            cal += 8.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("6");
+                        }
                     }
                 }
             });
