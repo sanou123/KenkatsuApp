@@ -1435,7 +1435,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 public void run() {
                     if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
                         maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
-                        //tDebug1.setText("maxheartbeat"+maxHeartbeat);
                     }
                 }
             });

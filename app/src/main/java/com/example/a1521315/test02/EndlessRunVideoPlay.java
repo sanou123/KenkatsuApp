@@ -1272,7 +1272,25 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                 public void run() {
                     if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
                         maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
-                        //tDebug1.setText("maxheartbeat"+maxHeartbeat);
+                    }
+                }
+            });
+        }
+    }
+
+    //最大速度タスク
+    public class MaxSpeed implements Runnable {
+        private double speed = 0.0;
+        public MaxSpeed(double speed) {
+            this.speed = speed;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //最高速度の判断
+                    if (speed > maxSpeed) {
+                        maxSpeed = speed;
                     }
                 }
             });
