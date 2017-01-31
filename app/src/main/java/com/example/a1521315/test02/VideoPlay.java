@@ -125,6 +125,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //センサー、動画再生関連の変数　初期化
     double speed_Value = 0.0;//速度の値
     double all_speed_Value=0.0;//speedValueを25回加算して平均だす
+    double max_speed_Value = 0.0;
     double pedal_Value = 0.0005F;//回すやつの直径
     boolean stop_Flg = false;//止まってから始動のとき用
     int timer_check=0;//ON OFF のホールセンサーの順番
@@ -705,6 +706,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                     tSpeed.setText(String.format("%.2f",all_speed_Value));
                                                     params.setSpeed((float) (all_speed_Value / 20));//再生速度変更
                                                     mp.setPlaybackParams(params);
+                                                    max_speed_Value = all_speed_Value;//ここで代入
                                                     all_speed_Value = 0.0;
                                                 }
                                                 //漕ぎ出し時に速度を出す処理
@@ -1073,33 +1075,35 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
 
+                    MaxSpeed maxSpeed = new MaxSpeed(max_speed_Value);
+                    maxSpeed.run();
                     if (Gear1_Flg == true) {
-                        cal += 3.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                        cal += 3.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("1");
                     }
                     if (Gear2_Flg == true) {
-                        cal += 4.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                        cal += 4.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("2");
                     }
                     if (Gear3_Flg == true) {
-                        cal += 5.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                        cal += 5.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("3");
                     }
                     if (Gear4_Flg == true) {
-                        cal += 6.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                        cal += 6.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("4");
                     }
                     if (Gear5_Flg == true) {
-                        cal += 7.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                        cal += 7.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("5");
                     }
                     if (Gear6_Flg == true) {
-                        cal += 8.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                        cal += 8.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("6");
                     }
@@ -1432,6 +1436,24 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
                         maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
                         //tDebug1.setText("maxheartbeat"+maxHeartbeat);
+                    }
+                }
+            });
+        }
+    }
+    //最大速度タスク
+    public class MaxSpeed implements Runnable {
+        private double speed = 0.0;
+        public MaxSpeed(double speed) {
+            this.speed = speed;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //最高速度の判断
+                    if (speed > maxSpeed) {
+                        maxSpeed = speed;
                     }
                 }
             });
