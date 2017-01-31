@@ -111,7 +111,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     PlaybackParams params = new PlaybackParams();
 
-
     //USB通信関連の変数　初期化
     private final static int USBAccessoryWhat = 0;
     public static final int UPDATE_LED_SETTING = 1;
