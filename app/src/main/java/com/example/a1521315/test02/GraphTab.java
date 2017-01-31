@@ -33,12 +33,7 @@ public class GraphTab extends TabActivity {
                 .setContent(new Intent(this, GraphHeartRate.class)
                 ));
 
-        // IntentでTabページ追加
-        tabhost.addTab(tabhost
-                .newTabSpec("走行時間")
-                .setIndicator("走行時間")
-                .setContent(new Intent(this, GraphTime.class)
-                ));
+
     }
 
     @Override

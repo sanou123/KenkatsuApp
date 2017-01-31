@@ -1,18 +1,14 @@
 package com.example.a1521315.test02;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,7 +20,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 
-public class MenuSelect extends Activity {
+public class MenuSelect extends AppCompatActivity {
     private DBAdapter dbAdapter;
     private SelectSheetListView.MyBaseAdapter myBaseAdapter;
     private List<MyListItem> items;
@@ -42,10 +38,7 @@ public class MenuSelect extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // タイトルバーを隠す
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // ステータスバーを隠す
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -154,25 +147,20 @@ public class MenuSelect extends Activity {
         Button btnDisp6 = (Button) findViewById(R.id.search);
         btnDisp6.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // IDを取得する
-                /*String listName = myListItem.getName();
-
-                globals.now_user = listName;
-*/
-                loginSort();
 
                 if(globals.twitter_user == null){
 
                     globals.twitter_user = globals.now_user;
                     Intent intent = new Intent(MenuSelect.this, twitter_logout.class);
                     startActivity(intent);
-                    Toast.makeText(MenuSelect.this, "ログインが必要です", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MenuSelect.this, "セッションが切れています", Toast.LENGTH_LONG).show();
                 }else if(globals.twitter_user != null){
 
                     // アラートダイアログ表示
                     AlertDialog.Builder builder = new AlertDialog.Builder(MenuSelect.this);
+
                     builder.setTitle("ログイン確認");
-                    builder.setMessage(globals.twitter_user + "さんですか？");
+                    builder.setMessage(globals.twitter_user+ "さんでログインします!\n");
                     // OKの時の処理
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -202,28 +190,14 @@ public class MenuSelect extends Activity {
                     dialog.show();
                 }
 
+                Intent intent = new Intent(MenuSelect.this, Search.class);
+                startActivity(intent);
 
             }
         });
         //////////////////////////////////////////////////////////////////////
 
-    }
-
-    public void loginSort(){
-        dbAdapter.readDB();                         // DBの読み込み(読み込みの方)
-
-
-        String[] column_year = {"year"};          //検索対象のカラム名
-        Cursor c_year = dbAdapter.sortDB(column_year);
-        String[] column_month = {"month"};          //検索対象のカラム名
-        Cursor c_month = dbAdapter.sortDB(column_month);
-        String[] column_day = {"day"};          //検索対象のカラム名
-        Cursor c_day = dbAdapter.sortDB(column_day);
-        String[] column_times_of_day = {"times_of_day"};          //検索対象のカラム名
-        Cursor c_times_of_day = dbAdapter.sortDB(column_times_of_day);
-
-
-    }
+  }
 
     public void dbLogin(){
         long currentTimeMillis = System.currentTimeMillis();
@@ -260,6 +234,7 @@ public class MenuSelect extends Activity {
     //戻るキーを無効にする
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+
             Intent intent = new Intent();
             intent.setClassName("com.example.a1521315.test02",
                     "com.example.a1521315.test02.SelectSheetListView");

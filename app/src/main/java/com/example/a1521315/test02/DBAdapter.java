@@ -16,9 +16,10 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "poi.db";      // DB名
+    private final static String DB_NAME = "kenko.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
+
     private final static int DB_VERSION = 2;                // DBのバージョン
 
     /**
@@ -57,8 +58,7 @@ public class DBAdapter {
     public final static String COL_MAX_SPEED = "max_speed";         //最高速度
     public final static String COL_DISTANCE = "distance";           //走行距離
     public final static String COL_TRAINING_NAME = "training_name";           //走行距離
-    public final static String COL_GRAPH_TIME = "graph_time";
-
+    public final static String COL_GRAPH_TIME = "graph_time";       //  グラフ用時間(変換)
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
     private DBHelper dbHelper = null;           // DBHelper
@@ -200,7 +200,6 @@ public class DBAdapter {
         }
     }
 
-
     /**
      * DBのデータを取得
      * getDB()
@@ -229,7 +228,7 @@ public class DBAdapter {
      * @param columns String[] 取得するカラム名 nullの場合は全カラムを取得
      * @return DBのデータ
      */
-    public Cursor getDB1(String[] columns) {
+    public Cursor getDB_DATA(String[] columns) {
 
         // queryメソッド DBのデータを取得
         // 第1引数：DBのテーブル名
@@ -275,7 +274,7 @@ public class DBAdapter {
      * @return DBの検索したデータ
      */
     public Cursor searchDB(String[] columns, String column, String[] name) {
-        return db.query(DB_TABLE_DATA, columns, column + " like ?", name, null, null, null,null);
+        return db.query(DB_TABLE_DATA, columns, column + " like ?", name, null, null, null);
     }
 
     /**
@@ -414,6 +413,7 @@ public class DBAdapter {
                     + COL_GRAPH_TIME +" TEXT NOT NULL ,"
                     + "FOREIGN KEY(name_id) REFERENCES DB_TABLE_USER(COL_ID_USER) ON DELETE CASCADE"
                     + ");";
+
             db.execSQL(createTbl_user);      //SQL文の実行
 
             db.execSQL(createTbl_data);      //SQL文の実行

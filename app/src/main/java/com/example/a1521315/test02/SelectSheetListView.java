@@ -20,8 +20,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * ListView表示画面に関連するクラス
@@ -70,68 +73,117 @@ public class SelectSheetListView extends AppCompatActivity {
 
                 globals.now_user = listName;
 
+                if((globals.twitter_user == null) && (globals.twitter_user != globals.now_user)){
 
-                // アラートダイアログ表示
-                AlertDialog.Builder builder = new AlertDialog.Builder(SelectSheetListView.this);
-                builder.setTitle("ログイン確認");
-                builder.setMessage(listName + "さんですか？");
-                // OKの時の処理
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-                        // IDを取得する
-                        //myListItem = items.get(position);
-                        //String listName = myListItem.getName();
-                        int NameID = myListItem.getUser_id();
-                        String Age = myListItem.getAge();
-                        String Sex = myListItem.getSex();
-                        String Weight = myListItem.getWeight();
-                        String Height = myListItem.getHeight();
-                        double Bmi = myListItem.getBmi();
-                        double Ideal_weight = myListItem.getIdeal_weight();
-                        String  Login = myListItem.getLogin();
+                    // IDを取得する
+                    //myListItem = items.get(position);
+                    //String listName = myListItem.getName();
+                    int NameID = myListItem.getUser_id();
+                    String Age = myListItem.getAge();
+                    String Sex = myListItem.getSex();
+                    String Weight = myListItem.getWeight();
+                    String Height = myListItem.getHeight();
+                    double Bmi = myListItem.getBmi();
+                    double Ideal_weight = myListItem.getIdeal_weight();
+                    String  Login = myListItem.getLogin();
 
 
-                        //int listId =  myListItem.getUser_id();//################
-                        //String columns = listName + "さんが選択されました";
-                        //Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
-                        //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
-                        //intent.putExtra("SELECTED_DATA",listName);
-                        //globals.now_user = listName;
-                        globals.name_id = String.valueOf(NameID);
-                        globals.age = Age;
-                        globals.sex = Sex;
-                        globals.weight = Weight;
-                        globals.height = Height;
-                        //元データをBigDecimal型にする
-                        BigDecimal bd_bmi = new BigDecimal(Bmi);
-                        //四捨五入する
-                        BigDecimal bmi = bd_bmi.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
-                        globals.bmi = bmi.doubleValue();
-                        //元データをBigDecimal型にする
-                        BigDecimal bd_ideal_weight = new BigDecimal(Ideal_weight);
-                        //四捨五入する
-                        BigDecimal ideal_weight = bd_ideal_weight.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
-                        globals.ideal_weight = ideal_weight.doubleValue();
-                        globals.login = Login;
-                        Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
-                        startActivity(intent);
+                    //int listId =  myListItem.getUser_id();//################
+                    //String columns = listName + "さんが選択されました";
+                    //Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
+                    //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
+                    //intent.putExtra("SELECTED_DATA",listName);
+                    //globals.now_user = listName;
+                    globals.name_id = String.valueOf(NameID);
+                    globals.age = Age;
+                    globals.sex = Sex;
+                    globals.weight = Weight;
+                    globals.height = Height;
+                    //元データをBigDecimal型にする
+                    BigDecimal bd_bmi = new BigDecimal(Bmi);
+                    //四捨五入する
+                    BigDecimal bmi = bd_bmi.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+                    globals.bmi = bmi.doubleValue();
+                    //元データをBigDecimal型にする
+                    BigDecimal bd_ideal_weight = new BigDecimal(Ideal_weight);
+                    //四捨五入する
+                    BigDecimal ideal_weight = bd_ideal_weight.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+                    globals.ideal_weight = ideal_weight.doubleValue();
+                    globals.login = Login;
+                    Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
+                    startActivity(intent);
 
-                    }
-                });
+                }else if(globals.twitter_user != null){
 
-                builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(SelectSheetListView.this, SelectSheetListView.class);
-                        startActivity(intent);
-                    }
-                });
-                // ダイアログの表示
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                    // アラートダイアログ表示
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SelectSheetListView.this);
+                    builder.setTitle("ログイン確認");
+                    builder.setMessage("最後にログインしたのは" + globals.twitter_user+ "さんです!\n"
+                            + globals.twitter_user + "さんですか？");
+                    // OKの時の処理
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            globals.twitter_user = globals.now_user;
+
+                            // IDを取得する
+                            //myListItem = items.get(position);
+                            //String listName = myListItem.getName();
+                            int NameID = myListItem.getUser_id();
+                            String Age = myListItem.getAge();
+                            String Sex = myListItem.getSex();
+                            String Weight = myListItem.getWeight();
+                            String Height = myListItem.getHeight();
+                            double Bmi = myListItem.getBmi();
+                            double Ideal_weight = myListItem.getIdeal_weight();
+                            String  Login = myListItem.getLogin();
+
+
+                            //int listId =  myListItem.getUser_id();//################
+                            //String columns = listName + "さんが選択されました";
+                            //Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
+                            //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
+                            //intent.putExtra("SELECTED_DATA",listName);
+                            //globals.now_user = listName;
+                            globals.name_id = String.valueOf(NameID);
+                            globals.age = Age;
+                            globals.sex = Sex;
+                            globals.weight = Weight;
+                            globals.height = Height;
+                            //元データをBigDecimal型にする
+                            BigDecimal bd_bmi = new BigDecimal(Bmi);
+                            //四捨五入する
+                            BigDecimal bmi = bd_bmi.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+                            globals.bmi = bmi.doubleValue();
+                            //元データをBigDecimal型にする
+                            BigDecimal bd_ideal_weight = new BigDecimal(Ideal_weight);
+                            //四捨五入する
+                            BigDecimal ideal_weight = bd_ideal_weight.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+                            globals.ideal_weight = ideal_weight.doubleValue();
+                            globals.login = Login;
+                            Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
+                            startActivity(intent);
+
+                            dbLogin();
+
+                        }
+                    });
+
+                    builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            globals.twitter_user = globals.now_user;
+
+                            Intent intent = new Intent(SelectSheetListView.this, twitter_logout.class);
+                            startActivity(intent);
+                        }
+                    });
+                    // ダイアログの表示
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
 
             }
         });
@@ -239,7 +291,7 @@ public class SelectSheetListView extends AppCompatActivity {
                         c.getDouble(6),
                         c.getDouble(7),
                         c.getString(8)
-                );
+                        );
 
                 Log.d("取得したCursor(USER_ID):", String.valueOf(c.getInt(0)));
                 Log.d("取得したCursor(名前):", c.getString(1));
@@ -351,6 +403,27 @@ public class SelectSheetListView extends AppCompatActivity {
             return view;
 
         }
+    }
+
+    public void dbLogin(){
+        long currentTimeMillis = System.currentTimeMillis();
+
+        Date date = new Date(currentTimeMillis);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日HH時mm分ss秒");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+        Log.v("時間", dateFormat.format(date));
+        globals.login = dateFormat.format(date);
+
+        int age = Integer.parseInt(globals.age);
+        int height = Integer.parseInt(globals.height);
+        int weight = Integer.parseInt(globals.weight);
+
+
+        // DBへの登録処理
+        DBAdapter dbAdapter = new DBAdapter(this);
+        dbAdapter.openDB();                                         // DBの読み書き
+        dbAdapter.updateDB(globals.now_user, age, globals.sex, height, weight, globals.bmi , globals.ideal_weight, globals.login);   // DBに登録
+        dbAdapter.closeDB();                                        // DBを閉じる
     }
 
     @Override

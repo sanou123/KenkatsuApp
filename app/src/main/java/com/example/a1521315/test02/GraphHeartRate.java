@@ -280,7 +280,7 @@ public class GraphHeartRate extends Activity {
                     && c_day.moveToNext());
         }
 
-        LineDataSet dataset = new LineDataSet(entries, "心拍数");
+        LineDataSet dataset = new LineDataSet(entries, "心拍数(bpm)");
 
         // ArrayListを生成
         ArrayList<String> labels = new ArrayList<String>();
@@ -288,8 +288,7 @@ public class GraphHeartRate extends Activity {
         if (c_name_id.moveToFirst() && c_year.moveToFirst() && c_month.moveToFirst()
                 && c_day.moveToFirst()) {
             do {
-                labels.add(new String(c_name_id.getString(3) + c_name_id.getString(4) + c_name_id.getString(5)
-                        + c_name_id.getString(6)));
+                labels.add(new String(c_name_id.getString(6)));
                 Log.d("取得したCursor:", c_name_id.getString(3) + c_name_id.getString(4) + c_name_id.getString(5)
                         + c_name_id.getString(6));
             } while (c_name_id.moveToNext() && c_year.moveToNext() && c_month.moveToNext()

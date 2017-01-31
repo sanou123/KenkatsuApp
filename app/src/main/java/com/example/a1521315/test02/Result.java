@@ -180,7 +180,8 @@ public class Result extends Activity {
 
         int name_id = Integer.parseInt(globals.name_id);
 
-        globals.graph_time = (globals.hh*60) + globals.mm + (globals.ss/60) + (globals.ss%60);
+        globals.graph_time = (globals.hh*60) + globals.mm + (globals.ss/60)
+                + (globals.ss%60) + (globals.ms);
 
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);

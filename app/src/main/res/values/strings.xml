@@ -19,7 +19,7 @@
 
     <!-- ここからactivity_main 01関連 -->
     <string name="text01_name">名前</string>
-    <string name="text01_age">生年月日</string>
+    <string name="text01_age">生年\n月日</string>
     <string name="text01_height">身長</string>
     <string name="text01_weight">体重</string>
     <string name="text01_sex">性別</string>
