@@ -100,101 +100,6 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="500dp"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true"
-            android:id="@+id/PlayResultLayout">
-
-            <Button
-                android:id="@+id/buttonPlay"
-                android:text="プレイ"
-                android:textSize="100sp"
-                android:layout_width="500dp"
-                android:layout_height="150dp"
-                android:visibility="invisible"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/ConnectCheak"
-            android:orientation="vertical"
-            android:layout_width="600dp"
-            android:layout_height="200dp"
-            android:visibility="invisible"
-            android:background="@android:color/darker_gray"
-            android:layout_centerInParent="true">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center">
-
-                <TextView
-                    android:id="@+id/textMSG"
-                    android:text="Bluetooth通信をして心拍数の測定をしますか？"
-                    android:layout_width="600dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:textSize="28sp"
-                    android:textColor="@android:color/black"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:layout_below="@+id/textMSG"
-                    android:id="@+id/textConnectMsg2"
-                    android:text="(接続が確立しない場合は心拍センサの電源を入れなおしてください)"
-                    android:layout_width="600dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:textSize="19sp"
-                    android:textColor="@android:color/black"
-                    android:layout_alignParentStart="true"/>
-
-                <TextView
-                    android:layout_below="@+id/textConnectMsg2"
-                    android:id="@+id/textConnectStatus"
-                    android:text="connect. / not connected."
-                    android:layout_width="600dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:textSize="30sp"
-                    android:textColor="@android:color/black"
-                    android:layout_alignParentStart="true" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_below="@+id/textConnectStatus"
-                    android:layout_alignParentStart="true">
-
-                    <Button
-                        android:id="@+id/buttonYes"
-                        android:text="はい"
-                        android:layout_width="300dp"
-                        android:layout_height="match_parent"
-                        android:textSize="30sp" />
-
-                    <Button
-                        android:id="@+id/buttonNo"
-                        android:text="いいえ"
-                        android:layout_width="300dp"
-                        android:layout_height="match_parent"
-                        android:textSize="30sp" />
-
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <RelativeLayout
             android:id="@+id/TimerLayout"
             android:layout_width="350dp"
             android:layout_height="130dp"
@@ -504,6 +409,86 @@
                 android:layout_alignParentStart="true"/>
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ConnectCheak"
+            android:orientation="vertical"
+            android:layout_width="600dp"
+            android:layout_height="200dp"
+            android:visibility="visible"
+            android:background="@android:color/white"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/textMSG"
+                    android:text="Bluetooth通信をして心拍数の測定をしますか？"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="28sp"
+                    android:textColor="@android:color/black"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_below="@+id/textMSG"
+                    android:id="@+id/textConnectMsg2"
+                    android:text="(接続が確立しない場合は心拍センサの電源を入れなおしてください)"
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="19sp"
+                    android:textColor="@android:color/black"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:layout_below="@+id/textConnectMsg2"
+                    android:id="@+id/textConnectStatus"
+                    android:text="connect. / not connected."
+                    android:layout_width="600dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/black"
+                    android:layout_alignParentStart="true" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_below="@+id/textConnectStatus"
+                    android:layout_alignParentStart="true">
+
+                    <Button
+                        android:id="@+id/buttonYes"
+                        android:text="はい"
+                        android:layout_width="300dp"
+                        android:layout_height="match_parent"
+                        android:textSize="30sp"
+                        android:background="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/buttonNo"
+                        android:text="いいえ"
+                        android:layout_width="300dp"
+                        android:layout_height="match_parent"
+                        android:textSize="30sp"
+                        android:background="@android:color/white" />
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
 
     </RelativeLayout>

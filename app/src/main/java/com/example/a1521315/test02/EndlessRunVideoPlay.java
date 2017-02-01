@@ -274,9 +274,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         CountDisplay.setImageResource(R.drawable.display);
         CountDisplay.setAlpha(150);
 
-        //ボタン押したときメソッドの宣言
-        findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
-
         tCourse = (TextView) findViewById(R.id.textCourse);
         tCourse.setText("エンドレスラン");
         //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
@@ -829,15 +826,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
     /*ボタンタップや画面タップした時の処理*/
-    //Playボタンを押したときの処理
-    View.OnClickListener PlayClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            PlayProcess();
-        }
-    };
-
-
     //Connectボタンを押したときの処理
     @Override
     public void onClick(View v) {
@@ -856,7 +844,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             case R.id.buttonNo:
                 Log.d("No", "no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                StartDialog();
                 tHeartbeat.setText("- ");
                 break;
         }
@@ -868,10 +856,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("", "ACTION_DOWN");
-                if (findViewById(R.id.buttonPlay).getVisibility() == View.INVISIBLE &&
-                        findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
+                if (findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
                     //トレーニングが始まっているときのみ画面タップでポーズする
-                    PauseProcess();
+                    PauseDialog();
                 }
                 break;
         }
@@ -879,9 +866,24 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     }
 
     /*処理の中身*/
+    //スタート時のやつ
+    public void StartDialog() {
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(EndlessRunVideoPlay.this);
+        alertDialog.setTitle("トレーニング開始");
+        alertDialog.setMessage("");
+        alertDialog.setPositiveButton("スタート", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PlayProcess();
+            }
+        });
+        final AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
+    }
     //Playボタンを押したときの処理の中身
     public void PlayProcess() {
-        findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
         speedCount = 0.0;
         tSpeed.setText(String.format("%.2f", (float) (speedCount * 10)));
         lapCount = 0;
@@ -915,7 +917,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     }
 
     //Pauseボタンを押したときの処理の中身
-    public void PauseProcess() {
+    public void PauseDialog() {
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         delayedTimer.cancel();
@@ -941,7 +943,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                 }
                 accessoryManager.disable(getApplication());//#
                 disconnectAccessory();//#
-                Thread StopBGM = new Thread(new EndlessRunVideoPlay.StopBGM());
+                Thread StopBGM = new Thread(new StopBGM());
                 StopBGM.start();
                 Intent intent = new Intent(getApplication(), TrainingSelect.class);
                 startActivity(intent);
@@ -975,7 +977,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //Resultボタンを押したときの処理の中身
     public void ResultProcess() {
-        Thread StopBGM = new Thread(new EndlessRunVideoPlay.StopBGM());
+        Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
@@ -983,8 +985,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度
         globals.max = String.format("%.2f",maxSpeed);//最高速度
         globals.time = tTimer.getText().toString();//運動時間
-        //int iWeight = Integer.parseInt(globals.weight);
-        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), EndlessRunResult.class);
         startActivity(intent);
@@ -1213,45 +1213,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         return avg;
     }
 
-    //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
-                if (mp != null) {
-                    if (speedCount < 0.1) {
-                        speedCount = speedCount + 0.1;
-                    } else if (speedCount < 5) {
-                        speedCount = speedCount + 0.01;
-                    } else if (speedCount >= 5) {
-                        //意味わからないほど早くされるとクラッシュする対策
-                        speedCount = 5.00;
-                    }
-                    Thread SpeedUp = new Thread(new SpeedMeterTask((float) speedCount));
-                    SpeedUp.start();
-                }
-                return true;
-            }
-        }
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                if (mp != null) {
-                    if (speedCount < 0.1) {
-                        speedCount = 0.00;
-                    } else if (speedCount <= 0.1) {
-                        speedCount = speedCount - 0.1;
-                    } else if (speedCount >= 0.1) {
-                        speedCount = speedCount - 0.01;
-                    }
-                    Thread SpeedDown = new Thread(new SpeedMeterTask((float) speedCount));
-                    SpeedDown.start();
-                }
-                return true;
-            }
-        }
-        return super.dispatchKeyEvent(event);
-    }
-
     //画面消すタスク
     public class ConnectCheck implements Runnable {
         public void run() {
@@ -1259,7 +1220,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                 @Override
                 public void run() {
                     findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                    StartDialog();
                 }
             });
         }
@@ -1301,6 +1262,44 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         }
     }
 
+    //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = speedCount + 0.1;
+                    } else if (speedCount < 5) {
+                        speedCount = speedCount + 0.01;
+                    } else if (speedCount >= 5) {
+                        //意味わからないほど早くされるとクラッシュする対策
+                        speedCount = 5.00;
+                    }
+                    Thread SpeedUp = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedUp.start();
+                }
+                return true;
+            }
+        }
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = 0.00;
+                    } else if (speedCount <= 0.1) {
+                        speedCount = speedCount - 0.1;
+                    } else if (speedCount >= 0.1) {
+                        speedCount = speedCount - 0.01;
+                    }
+                    Thread SpeedDown = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedDown.start();
+                }
+                return true;
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
     @Override
     //戻るキーを無効にする
     public boolean onKeyDown(int keyCode, KeyEvent event) {
