@@ -302,6 +302,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         //******************************************************************************************
 
+        usb_Flg = true;
+        stop_Flg = true;
 
     }//onCreateここまで
 
@@ -838,8 +840,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 PlayProcess();
             }
             else{
-                Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
-                Log.v("a","負荷を3に設定してください");
+                //Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
+                //Log.v("a","負荷を3に設定してください");
             }
         }
     };
@@ -920,6 +922,12 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
         Thread StartBGM = new Thread(new StartBGM());
         StartBGM.start();
+        //最初にギア出すテスト#
+        commandPacket[0] = UPDATE_LED_SETTING;
+        commandPacket[1] = 0;
+        accessoryManager.write(commandPacket);
+
+        usb_Flg = false;
     }
 
     //負荷を変えたときの処理の中身
@@ -1103,6 +1111,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), PauseResult.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
     //時間が0になったとき
@@ -1116,7 +1125,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
-        finish();
+        Intent intent = new Intent(getApplication(), TimeoutResult.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     /*非同期処理関連*/
@@ -1145,17 +1156,20 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         HukaDialog();
                         Toast.makeText(getApplication(), "負荷を3に設定してください", Toast.LENGTH_LONG).show();
                     }
+                    //#kaede debug
                     if(Gear1_Flg == true){
                         cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("1");
+                        HukaProcess();
                     }
                     if(Gear2_Flg == true){
                         cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("2");
+                        HukaProcess();
                     }
                     if(Gear3_Flg == true){
                         cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
@@ -1168,19 +1182,23 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("4");
+                        HukaProcess();
                     }
                     if(Gear5_Flg == true){
                         cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("5");
+                        HukaProcess();
                     }
                     if(Gear6_Flg == true){
                         cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f",cal));
                         tGear.setText("6");
+                        HukaProcess();
                     }
+                    //#kaede debug
 
                     //残り時間0で終了
                     if(timerCount == 0){

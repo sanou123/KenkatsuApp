@@ -186,7 +186,7 @@ public class USBAccessoryManager {
                                         accessory)).sendToTarget();
 
                         Log.d(TAG,"USBAccessoryManager:enable() device ready");
-                        Toast.makeText(context, "接続処理中1", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "UBS接続確認", Toast.LENGTH_LONG).show();
                         return RETURN_CODES.SUCCESS;
 
                     } else {
