@@ -80,7 +80,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     TextView tDebug1;
     TextView tDebug2;
 
-    int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
+    boolean mediaPathCheck = false;;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
     String mediaPath = null;//動画データ
     private ImageView imageMe;//自機イメージ用の変数
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
@@ -280,7 +280,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         tCourse.setText("体力測定コース");
         mediaPath = "/izunuma2900meter_low.mp4";//実機9のストレージにあるファルを指定
         totalMileage = 2.9;
-        raw = 0;
+        mediaPathCheck = false;
 
         //USBAccessoryManager の初期化
         accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
@@ -413,7 +413,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             //MediaPlayerを生成
             mp = new MediaPlayer();
 
-            if(raw==1){
+            if(mediaPathCheck == true){
                 //動画ファイルをMediaPlayerに読み込ませる
                 mp.setDataSource(getApplicationContext(), Uri.parse(mediaPath));//rawフォルダから指定する場合
             }else{
@@ -885,7 +885,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("", "ACTION_DOWN");
-                if(findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
+                if(Gear3_Flg == true && findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
                     //トレーニングが始まっているときのみ画面タップでポーズする
                     PauseDialog();
                 }
@@ -910,6 +910,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 else{
                     Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
                     Log.v("a","負荷を3に設定してください");
+                    StartDialog();
                 }
             }
         });

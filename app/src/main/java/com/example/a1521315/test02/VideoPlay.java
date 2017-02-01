@@ -81,7 +81,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tDebug1;
     TextView tDebug2;
 
-    int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
+    boolean mediaPathCheck = false;//rawファイルかどうかを判断する変数。true=内部ストレージ　false=rawファイル
     String mediaPath = null;//動画データ
     private ImageView imageMe;//自機イメージ用の変数
     private ImageView imageGhost;
@@ -310,22 +310,22 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             tCourse.setText("ポリテク→大地");
             mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
             totalMileage = 10.4;
-            raw = 0;
+            mediaPathCheck = false;
         } else if (CourseNum.equals("1")) {
             tCourse.setText("東京→御殿場");
             mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
             totalMileage = 83.7;
-            raw = 0;
+            mediaPathCheck = false;
         } else if (CourseNum.equals("2")) {
             tCourse.setText("鳴子");
             mediaPath = "/_naruko.mp4";//実機9のストレージにあるファイルを指定
             totalMileage = 1.3;
-            raw = 0;
+            mediaPathCheck = false;
         } else if (CourseNum.equals("3")) {
             tCourse.setText("デバッグ用");
             mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
             totalMileage = 2.9;
-            raw = 1;
+            mediaPathCheck = true;
         }
 
         //USBAccessoryManager の初期化
@@ -467,7 +467,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             //MediaPlayerを生成
             mp = new MediaPlayer();
 
-            if (raw == 1) {
+            if (mediaPathCheck == true) {
                 //動画ファイルをMediaPlayerに読み込ませる
                 mp.setDataSource(getApplicationContext(), Uri.parse(mediaPath));//rawフォルダから指定する場合
             } else {
