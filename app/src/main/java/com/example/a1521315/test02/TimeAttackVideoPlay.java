@@ -1128,8 +1128,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = String.valueOf(totalMileage);//走行距離
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
-        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
+        globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), NormalResult.class);
@@ -1142,8 +1142,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = String.valueOf(totalMileage);//走行距離
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
-        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
+        globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), PauseResult.class);
@@ -1156,8 +1156,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = String.valueOf(totalMileage);//走行距離
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
-        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
+        globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), TimeoutResult.class);
