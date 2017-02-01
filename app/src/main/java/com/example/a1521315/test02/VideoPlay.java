@@ -1049,6 +1049,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         myDialog.show();
     }
 
+
     /*非同期処理関連*/
     //カウントアップタイマタスク
     public class CntTimerTask implements Runnable {
