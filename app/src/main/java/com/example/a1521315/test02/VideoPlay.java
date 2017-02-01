@@ -356,6 +356,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
 
+        usb_Flg = true;
+        stop_Flg = true;
+
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -405,10 +408,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
         accessoryManager.enable(getApplication(), getIntent());
         //accessoryManager.showStatus(getApplication());
-        //最初にギア出すテスト#
-        commandPacket[0] = UPDATE_LED_SETTING;
-        commandPacket[1] = 0;
-        accessoryManager.write(commandPacket);
 
         if(accessoryManager.threadStatus(getApplication()) == false){
             finish();
@@ -654,7 +653,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                         //一時停止時
                                         if (usb_Flg == true) {
                                             speed_Value = 0.0;
-                                        } else {
+                                        }
+                                        else {
                                             //時間の取得(秒に直す)
                                             float time_tmp = (float) t_cnt;
                                             long microSec=0;
@@ -674,7 +674,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                     if((microSec/1000) >= limit_Value){
                                                         inertia_Flg = true;
                                                     }
-                                                    tDebug1.setText( (microSec/1000) + "microsec passed" );
+                                                    //tDebug1.setText( (microSec/1000) + "microsec passed" );
                                                 }
                                                 timer_check = 1;
                                             }
@@ -820,7 +820,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 break;
                                             default:
                                                 limit_Value = 150;
-                                                tGear.setText("7");
+                                                commandPacket[0] = (byte) APP_CONNECT;
+                                                commandPacket[1] = 0;
+                                                accessoryManager.write(commandPacket);
                                                 break;
                                         }
 
@@ -968,6 +970,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
         Thread StartBGM = new Thread(new StartBGM());
         StartBGM.start();
+
+        //最初にギア出すテスト#
+        commandPacket[0] = UPDATE_LED_SETTING;
+        commandPacket[1] = 0;
+        accessoryManager.write(commandPacket);
+
+        usb_Flg = false;
     }
 
     //Pauseボタンを押したときの処理の中身
@@ -978,7 +987,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         speed_Value = 0;
         all_speed_Value = 0;
         speedCount = 0.00;
-        params.setSpeed((float) speedCount);
+        params.setSpeed((float) 0);
         mp.setPlaybackParams(params);
         tSpeed.setText(String.format("%.2f", (float) (speedCount * 10)));
         //accessoryManager.showStatus(getApplication());//DAICHI_TEST
@@ -1048,7 +1057,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         //int iWeight = Integer.parseInt(globals.weight);
         //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
-        finish();
+        Intent intent = new Intent(getApplication(), Result.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public void ResultDialog() {

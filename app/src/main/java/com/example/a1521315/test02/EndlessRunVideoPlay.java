@@ -301,6 +301,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         //******************************************************************************************
 
+        usb_Flg = true;
+        stop_Flg = true;
+
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -886,6 +889,13 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
         Thread StartBGM = new Thread(new EndlessRunVideoPlay.StartBGM());
         StartBGM.start();
+
+        //最初にギア出すテスト#
+        commandPacket[0] = UPDATE_LED_SETTING;
+        commandPacket[1] = 0;
+        accessoryManager.write(commandPacket);
+
+        usb_Flg = false;
     }
 
     //Pauseボタンを押したときの処理の中身
@@ -953,6 +963,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), EndlessRunResult.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
