@@ -535,7 +535,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             if (action == VIEW_INPUT  && msgStr.length() == 3) {
                 mInputTextView.setText(msgStr);
                 //最大心拍の判断
-                Maxheartbeat maxHeartbeat = new Maxheartbeat();
+                Maxheartbeat maxHeartbeat = new Maxheartbeat(Integer.parseInt(mInputTextView.getText().toString()));
                 maxHeartbeat.run();
             }
             else if(action == VIEW_STATUS){
@@ -1481,12 +1481,16 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     }
     //最大心拍タスク
     public class Maxheartbeat implements Runnable {
+        private int inputHeartbeat = 0;
+        public Maxheartbeat(int inputHeartbeat){
+            this.inputHeartbeat = inputHeartbeat;
+        }
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
-                        maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
+                    if(inputHeartbeat > maxHeartbeat){
+                        maxHeartbeat = inputHeartbeat;
                     }
                 }
             });
