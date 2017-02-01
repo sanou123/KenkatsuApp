@@ -981,7 +981,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
-        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
         globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度
         globals.max = String.format("%.2f",maxSpeed);//最高速度
         globals.time = tTimer.getText().toString();//運動時間
