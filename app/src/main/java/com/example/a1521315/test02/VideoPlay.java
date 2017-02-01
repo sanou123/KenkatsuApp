@@ -28,6 +28,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ import java.util.concurrent.TimeUnit;
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener, View.OnClickListener {
 
+    AlertDialog connectingDialog;
     Globals globals;
     /*メーター関連の関数*/
     TextView tBPM, tHeartbeat;//心拍の変数
@@ -342,7 +344,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
-
+/*
         //bluetooth*********************************************************************************
         mInputTextView = (TextView) findViewById(R.id.textHeartbeat);
         mStatusTextView = (TextView) findViewById(R.id.textConnectStatus);
@@ -359,10 +361,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         //******************************************************************************************
-
+*/
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        ConnectCheckProcess();
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -514,7 +517,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     @Override
     public void run() {
         InputStream mmInStream = null;
-
         Message valueMsg = new Message();
         valueMsg.what = VIEW_STATUS;
         valueMsg.obj = "connecting...";
@@ -539,6 +541,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             connectFlg = true;
 
             //コネクトチェック画面を消す
+            connectingDialog.dismiss();
             ConnectCheck connectCheck = new ConnectCheck();
             connectCheck.run();
             while (isRunning) {
@@ -934,6 +937,70 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
 
     /*処理の中身*/
+
+    //初めに出る画面
+    public void ConnectCheckProcess() {
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
+        alertDialog.setTitle("Bluetooth通信");
+        alertDialog.setMessage("心拍数の測定をしますか？");
+        alertDialog.setPositiveButton("はい", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ConnectingProcess();
+            }
+        });
+        alertDialog.setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                StartProcess();
+            }
+        });
+        AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
+    }
+    //接続中
+    public void ConnectingProcess() {
+        if (!connectFlg) {
+            //mStatusTextView.setText("try connect");
+            mThread = new Thread();
+            // Threadを起動し、Bluetooth接続
+            isRunning = true;
+            mThread.start();
+        }
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
+        alertDialog.setTitle("Bluetooth通信");
+        alertDialog.setMessage("接続中");
+        alertDialog.setNegativeButton("中止", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ConnectCheckProcess();
+            }
+        });
+        connectingDialog = alertDialog.create();
+        connectingDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        connectingDialog.show();
+
+    }
+    //スタート時のやつ
+    public void StartProcess() {
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
+        alertDialog.setTitle("トレーニング開始");
+        alertDialog.setMessage("");
+        alertDialog.setPositiveButton("スタート", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PlayProcess();
+            }
+        });
+        final AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
+    }
+
     //Playボタンを押したときの処理の中身
     public void PlayProcess() {
 
