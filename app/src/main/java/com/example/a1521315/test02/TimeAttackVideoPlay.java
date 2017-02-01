@@ -72,11 +72,15 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     /*最大心拍*/
     int maxHeartbeat = 0;
 
+    /*平均速度を出すのに必要な関数*/
+    double totalSpeed = 0.0;
+    int totalSpeedCnt = 0;
+
     /*デバッグ用の関数*/
     TextView tDebug1;
     TextView tDebug2;
 
-    int raw = 0;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
+    boolean mediaPathCheck = false;;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
     String mediaPath = null;//動画データ
     private ImageView imageMe;//自機イメージ用の変数
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
@@ -88,6 +92,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     private SurfaceHolder holder;
     private SurfaceView mPreview;
     private MediaPlayer mp = null;
+    //BGM
+    private MediaPlayer mpBGM = null;
 
     //タイムに関する奴
     private ScheduledExecutorService timerscheduler;
@@ -264,9 +270,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         BPMDisplay.setImageResource(R.drawable.display);
         BPMDisplay.setAlpha(150);
 
-        //ボタン押したときメソッドの宣言
-        findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
-
 
         //コース番号受け取り
         Intent i = getIntent();
@@ -277,7 +280,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         tCourse.setText("体力測定コース");
         mediaPath = "/izunuma2900meter_low.mp4";//実機9のストレージにあるファルを指定
         totalMileage = 2.9;
-        raw = 0;
+        mediaPathCheck = false;
 
         //USBAccessoryManager の初期化
         accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
@@ -410,7 +413,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             //MediaPlayerを生成
             mp = new MediaPlayer();
 
-            if(raw==1){
+            if(mediaPathCheck == true){
                 //動画ファイルをMediaPlayerに読み込ませる
                 mp.setDataSource(getApplicationContext(), Uri.parse(mediaPath));//rawフォルダから指定する場合
             }else{
@@ -535,7 +538,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             if (action == VIEW_INPUT  && msgStr.length() == 3) {
                 mInputTextView.setText(msgStr);
                 //最大心拍の判断
-                Maxheartbeat maxHeartbeat = new Maxheartbeat();
+                Maxheartbeat maxHeartbeat = new Maxheartbeat(Integer.parseInt(mInputTextView.getText().toString()));
                 maxHeartbeat.run();
             }
             else if(action == VIEW_STATUS){
@@ -870,7 +873,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             case R.id.buttonNo:
                 Log.d("No","no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                StartDialog();
                 tHeartbeat.setText("- ");
                 break;
         }
@@ -882,10 +885,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("", "ACTION_DOWN");
-                if( findViewById(R.id.buttonPlay).getVisibility() == View.INVISIBLE &&
-                        findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
+                if(Gear3_Flg == true && findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
                     //トレーニングが始まっているときのみ画面タップでポーズする
-                    PauseProcess();
+                    PauseDialog();
                 }
                 break;
         }
@@ -893,9 +895,31 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     }
 
     /*処理の中身*/
+    //スタート時のやつ
+    public void StartDialog() {
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(TimeAttackVideoPlay.this);
+        alertDialog.setTitle("トレーニング開始");
+        alertDialog.setMessage("");
+        alertDialog.setPositiveButton("スタート", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(Gear3_Flg == true){
+                    PlayProcess();
+                }
+                else{
+                    Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
+                    Log.v("a","負荷を3に設定してください");
+                    StartDialog();
+                }
+            }
+        });
+        final AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
+    }
     //Playボタンを押したときの処理の中身
     public void PlayProcess(){
-        findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
         speedCount = 0.0;
         tSpeed.setText(String.format("%.1f", (float) (speedCount*10)));
         mp.setPlaybackParams(params);
@@ -925,10 +949,12 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
         seekbarscheduler = Executors.newSingleThreadScheduledExecutor();
         seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
+        Thread StartBGM = new Thread(new StartBGM());
+        StartBGM.start();
     }
 
-    //Pauseボタンを押したときの処理の中身
-    public void HukaProcess(){
+    //負荷を変えたときの処理の中身
+    public void HukaDialog(){
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         seekbarfuture.cancel(true);
@@ -956,6 +982,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 }
                 accessoryManager.disable(getApplication());//#
                 disconnectAccessory();//#
+                Thread StopBGM = new Thread(new StopBGM());
+                StopBGM.start();
                 Intent intent = new Intent(getApplication(), TrainingSelect.class);
                 startActivity(intent);
             }
@@ -964,7 +992,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(Gear3_Flg != true){
-                    HukaProcess();
+                    HukaDialog();
                 }else {
                     future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                     seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
@@ -992,7 +1020,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     }
 
     //Pauseボタンを押したときの処理の中身
-    public void PauseProcess(){
+    public void PauseDialog(){
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         seekbarfuture.cancel(true);
@@ -1020,6 +1048,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 }
                 accessoryManager.disable(getApplication());//#
                 disconnectAccessory();//#
+                Thread StopBGM = new Thread(new StopBGM());
+                StopBGM.start();
                 Intent intent = new Intent(getApplication(), TrainingSelect.class);
                 startActivity(intent);
             }
@@ -1094,39 +1124,42 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //走り終わったとき
     public void ResultProcess(){
+        Thread StopBGM = new Thread(new StopBGM());
+        StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = String.valueOf(totalMileage);//走行距離
-        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
-        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
+        globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
-        //int iWeight = Integer.parseInt(globals.weight);
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), NormalResult.class);
         startActivity(intent);
     }
     //ポーズしたとき
     public void PauseResultProcess(){
+        Thread StopBGM = new Thread(new StopBGM());
+        StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = String.valueOf(totalMileage);//走行距離
-        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
-        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
+        globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
-        //int iWeight = Integer.parseInt(globals.weight);
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), PauseResult.class);
         startActivity(intent);
     }
     //時間が0になったとき
     public void TimeoutResultProcess(){
+        Thread StopBGM = new Thread(new StopBGM());
+        StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = String.valueOf(totalMileage);//走行距離
-        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = tSpeed.getText().toString();//平均速度(これも計算する処理が必要)
-        globals.max = tSpeed.getText().toString();//最高速度(これも同じ)
+        globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
+        globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
-        //int iWeight = Integer.parseInt(globals.weight);
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), TimeoutResult.class);
         startActivity(intent);
@@ -1155,7 +1188,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
                     //100msごとに負荷の確認
                     if(Gear3_Flg == false) {
-                        HukaProcess();
+                        HukaDialog();
                         Toast.makeText(getApplication(), "負荷を3に設定してください", Toast.LENGTH_LONG).show();
                     }
                     if(Gear1_Flg == true){
@@ -1352,26 +1385,63 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //スピードメータータスク
     public class SpeedMeterTask implements Runnable {
-        private float pSpeedCount = (float) 0.0;
-        public SpeedMeterTask(float pSpeedCount){
-            this.pSpeedCount = pSpeedCount;
+        private float taskSpeedCount = (float) 0.0;
+
+        public SpeedMeterTask(float taskSpeedCount) {
+            this.taskSpeedCount = taskSpeedCount;
         }
+
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(mp != null) {
+                    if (mp != null) {
                     /*動画の再生速度を変えるのに必要なプログラム↓*/
-                        params.setSpeed(pSpeedCount);//再生速度変更
+                        params.setSpeed(taskSpeedCount);//再生速度変更
                         mp.setPlaybackParams(params);
                         //mp.start();
-                        tSpeed.setText(String.format("%.1f", (float) (pSpeedCount * 10)));
+                        tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
+                        totalSpeed = totalSpeed + (taskSpeedCount * 10);
+                        totalSpeedCnt++;
+                        //最高速度の判断
+                        if ((taskSpeedCount * 10) > maxSpeed) {
+                            maxSpeed = (taskSpeedCount * 10);
+                        }
                     }
                 }
             });
         }
     }
 
+    //BGM
+    public class StartBGM implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mpBGM == null) {
+                        mpBGM = MediaPlayer.create(getApplicationContext(), R.raw.zangyousenshi);
+                        mpBGM.start();
+                    }
+                }
+            });
+        }
+    }
+
+    public class StopBGM implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("stopBGM", "STOP");
+                    mpBGM.stop();
+                    mpBGM.reset();
+                    mpBGM.release();
+                    mpBGM = null;
+                }
+            });
+        }
+    }
     //フォントを7セグにする
     public void Change7Seg(){
         /*7セグ表示にする処理*/
@@ -1428,6 +1498,81 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
     }
 
+    //平均速度を計算する
+    public String AverageSpeed2(double totalMileage, String time){
+        Log.v("aaaaaaaaaaaaTIME",time);
+        double hours = Double.parseDouble(time.substring(0, 2));
+        double minutes = Double.parseDouble(time.substring(3, 5));
+        double seconds = Double.parseDouble(time.substring(6));
+        double totalHours = hours + (minutes/60) + (seconds/3600);
+        Log.v("mileage",String.valueOf(totalMileage) );
+        Log.v("HOURS",String.valueOf(hours) );
+        Log.v("MINUTES",String.valueOf(minutes) );
+        Log.v("SECONDS",String.valueOf(seconds) );
+        Log.v("TOTAL",String.valueOf(totalHours) );
+        String avg = String.format("%.2f",(totalMileage / totalHours));
+        return avg;
+    }
+
+    //平均速度を計算する(ボリュームで速度調整するとき用)
+    public String AverageSpeed(double totalSpeed, int totalSpeedCnt){
+        Log.v("TotalSpeed", String.valueOf(totalSpeed));
+        Log.v("TotalSpeedCnt", String.valueOf(totalSpeedCnt));
+        double averageSpeed;
+        averageSpeed = totalSpeed / totalSpeedCnt;
+        String avg = String.format("%.2f",averageSpeed);
+        return avg;
+    }
+
+    //画面消すタスク
+    public class ConnectCheck implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    StartDialog();
+                }
+            });
+        }
+    }
+    //最大心拍タスク
+    public class Maxheartbeat implements Runnable {
+        private int inputHeartbeat = 0;
+        public Maxheartbeat(int inputHeartbeat){
+            this.inputHeartbeat = inputHeartbeat;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(inputHeartbeat > maxHeartbeat){
+                        maxHeartbeat = inputHeartbeat;
+                    }
+                }
+            });
+        }
+    }
+
+    //最大速度タスク
+    public class MaxSpeed implements Runnable {
+        private double speed = 0.0;
+        public MaxSpeed(double speed) {
+            this.speed = speed;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //最高速度の判断
+                    if (speed > maxSpeed) {
+                        maxSpeed = speed;
+                    }
+                }
+            });
+        }
+    }
+
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -1466,52 +1611,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         return super.dispatchKeyEvent(event);
     }
-
-    //画面消すタスク
-    public class ConnectCheck implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
-    //最大心拍タスク
-    public class Maxheartbeat implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
-                        maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
-                    }
-                }
-            });
-        }
-    }
-
-    //最大速度タスク
-    public class MaxSpeed implements Runnable {
-        private double speed = 0.0;
-        public MaxSpeed(double speed) {
-            this.speed = speed;
-        }
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    //最高速度の判断
-                    if (speed > maxSpeed) {
-                        maxSpeed = speed;
-                    }
-                }
-            });
-        }
-    }
-
     @Override
     //戻るキーを無効にする
     public boolean onKeyDown(int keyCode, KeyEvent event) {

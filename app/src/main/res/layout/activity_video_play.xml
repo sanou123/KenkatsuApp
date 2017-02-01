@@ -163,24 +163,6 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="500dp"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true"
-            android:id="@+id/PlayResultLayout">
-
-            <Button
-                android:id="@+id/buttonPlay"
-                android:text="プレイ"
-                android:textSize="100sp"
-                android:layout_width="500dp"
-                android:layout_height="150dp"
-                android:visibility="invisible"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
             android:layout_width="200dp"
             android:layout_height="300dp"
             android:id="@+id/MeterUI2Layout"
@@ -404,7 +386,7 @@
             android:layout_width="600dp"
             android:layout_height="200dp"
             android:visibility="visible"
-            android:background="@android:color/darker_gray"
+            android:background="@android:color/white"
             android:layout_centerInParent="true">
 
             <RelativeLayout
@@ -458,14 +440,16 @@
                         android:text="はい"
                         android:layout_width="300dp"
                         android:layout_height="match_parent"
-                        android:textSize="30sp" />
+                        android:textSize="30sp"
+                        android:background="@android:color/white" />
 
                     <Button
                         android:id="@+id/buttonNo"
                         android:text="いいえ"
                         android:layout_width="300dp"
                         android:layout_height="match_parent"
-                        android:textSize="30sp" />
+                        android:textSize="30sp"
+                        android:background="@android:color/white" />
 
 
                 </LinearLayout>

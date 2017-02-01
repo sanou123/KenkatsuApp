@@ -274,9 +274,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         CountDisplay.setImageResource(R.drawable.display);
         CountDisplay.setAlpha(150);
 
-        //ボタン押したときメソッドの宣言
-        findViewById(R.id.buttonPlay).setOnClickListener(PlayClickListener);
-
         tCourse = (TextView) findViewById(R.id.textCourse);
         tCourse.setText("エンドレスラン");
         //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
@@ -531,7 +528,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             if (action == VIEW_INPUT  && msgStr.length() == 3) {
                 mInputTextView.setText(msgStr);
                 //最大心拍の判断
-                Maxheartbeat maxHeartbeat = new Maxheartbeat();
+                Maxheartbeat maxHeartbeat = new Maxheartbeat(Integer.parseInt(mInputTextView.getText().toString()));
                 maxHeartbeat.run();
             } else if (action == VIEW_STATUS) {
                 mStatusTextView.setText(msgStr);
@@ -829,15 +826,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
     /*ボタンタップや画面タップした時の処理*/
-    //Playボタンを押したときの処理
-    View.OnClickListener PlayClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            PlayProcess();
-        }
-    };
-
-
     //Connectボタンを押したときの処理
     @Override
     public void onClick(View v) {
@@ -856,7 +844,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             case R.id.buttonNo:
                 Log.d("No", "no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
+                StartDialog();
                 tHeartbeat.setText("- ");
                 break;
         }
@@ -868,10 +856,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("", "ACTION_DOWN");
-                if (findViewById(R.id.buttonPlay).getVisibility() == View.INVISIBLE &&
-                        findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
+                if (findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
                     //トレーニングが始まっているときのみ画面タップでポーズする
-                    PauseProcess();
+                    PauseDialog();
                 }
                 break;
         }
@@ -879,9 +866,24 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     }
 
     /*処理の中身*/
+    //スタート時のやつ
+    public void StartDialog() {
+        // ポップアップメニュー表示
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(EndlessRunVideoPlay.this);
+        alertDialog.setTitle("トレーニング開始");
+        alertDialog.setMessage("");
+        alertDialog.setPositiveButton("スタート", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PlayProcess();
+            }
+        });
+        final AlertDialog myDialog = alertDialog.create();
+        myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
+        myDialog.show();
+    }
     //Playボタンを押したときの処理の中身
     public void PlayProcess() {
-        findViewById(R.id.buttonPlay).setVisibility(View.INVISIBLE);//PLAYボタンを押したらPLAYボタンを消す
         speedCount = 0.0;
         tSpeed.setText(String.format("%.2f", (float) (speedCount * 10)));
         lapCount = 0;
@@ -915,7 +917,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     }
 
     //Pauseボタンを押したときの処理の中身
-    public void PauseProcess() {
+    public void PauseDialog() {
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         delayedTimer.cancel();
@@ -941,7 +943,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                 }
                 accessoryManager.disable(getApplication());//#
                 disconnectAccessory();//#
-                Thread StopBGM = new Thread(new EndlessRunVideoPlay.StopBGM());
+                Thread StopBGM = new Thread(new StopBGM());
                 StopBGM.start();
                 Intent intent = new Intent(getApplication(), TrainingSelect.class);
                 startActivity(intent);
@@ -975,16 +977,14 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //Resultボタンを押したときの処理の中身
     public void ResultProcess() {
-        Thread StopBGM = new Thread(new EndlessRunVideoPlay.StopBGM());
+        Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = tMileage.getText().toString();//走行距離
-        globals.maxheartbeat = tHeartbeat.getText().toString();//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
+        globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
         globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度
         globals.max = String.format("%.2f",maxSpeed);//最高速度
         globals.time = tTimer.getText().toString();//運動時間
-        //int iWeight = Integer.parseInt(globals.weight);
-        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), EndlessRunResult.class);
         startActivity(intent);
@@ -1213,6 +1213,55 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         return avg;
     }
 
+    //画面消すタスク
+    public class ConnectCheck implements Runnable {
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    StartDialog();
+                }
+            });
+        }
+    }
+    //最大心拍タスク
+    public class Maxheartbeat implements Runnable {
+        private int inputHeartbeat = 0;
+        public Maxheartbeat(int inputHeartbeat){
+            this.inputHeartbeat = inputHeartbeat;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(inputHeartbeat > maxHeartbeat){
+                        maxHeartbeat = inputHeartbeat;
+                    }
+                }
+            });
+        }
+    }
+
+    //最大速度タスク
+    public class MaxSpeed implements Runnable {
+        private double speed = 0.0;
+        public MaxSpeed(double speed) {
+            this.speed = speed;
+        }
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //最高速度の判断
+                    if (speed > maxSpeed) {
+                        maxSpeed = speed;
+                    }
+                }
+            });
+        }
+    }
+
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -1251,52 +1300,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         return super.dispatchKeyEvent(event);
     }
-
-    //画面消すタスク
-    public class ConnectCheck implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.buttonPlay).setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
-    //最大心拍タスク
-    public class Maxheartbeat implements Runnable {
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(Integer.parseInt(mInputTextView.getText().toString()) > maxHeartbeat){
-                        maxHeartbeat = Integer.parseInt(mInputTextView.getText().toString());
-                    }
-                }
-            });
-        }
-    }
-
-    //最大速度タスク
-    public class MaxSpeed implements Runnable {
-        private double speed = 0.0;
-        public MaxSpeed(double speed) {
-            this.speed = speed;
-        }
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    //最高速度の判断
-                    if (speed > maxSpeed) {
-                        maxSpeed = speed;
-                    }
-                }
-            });
-        }
-    }
-
     @Override
     //戻るキーを無効にする
     public boolean onKeyDown(int keyCode, KeyEvent event) {
