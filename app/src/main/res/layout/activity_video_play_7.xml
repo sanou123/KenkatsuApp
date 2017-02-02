@@ -53,7 +53,8 @@
                     android:layout_width="50px"
                     android:layout_height="50px"
                     android:layout_marginTop="545px"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:visibility="invisible"/>
 
                 <ImageView
                     app:srcCompat="@drawable/me"

@@ -1150,13 +1150,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     /*ゴースト関連*/
     //前回の測定結果を変数に入れたりするメソッド　
-    public void GetLastTrainingData() {
+    public void GetLastTrainingData() {//ここの処理は何か気持ち悪いからあとで書き直したい
         //前回の走行データを色々するところ↓
         if (globals.total_mileage == null) {
             //前回のデータがないときはこっち
+            findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             Log.v("globals.total_mileage", "null");
         } else {
             psKilometers = Double.parseDouble(globals.total_mileage);
+            findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             Log.v("globals.total_mileage", globals.total_mileage);
         }
         if (globals.total_time == null) {
