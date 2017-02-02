@@ -1318,8 +1318,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 public void run() {
                     Thread MoveMe = new Thread(new MoveMeTask());
                     MoveMe.start();
-                    Thread TestMileageTask = new Thread(new MileageTask());
-                    TestMileageTask.start();
+                    Thread MileageTask = new Thread(new MileageTask((double)mp.getDuration(), (double)mp.getCurrentPosition(), totalMileage));
+                    MileageTask.start();
                 }
             });
         }
@@ -1347,34 +1347,44 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //走行距離タスク
     public class MileageTask implements Runnable {
+        private double duration = 0.0;
+        private double currentPosition = 0.0;
+        private double totalMileage = 0.0;
+        private double Mileage = 0.0;
+        public MileageTask(double getDuration, double getCurrentPosition, double totalMileage){
+            this.duration = getDuration;
+            this.currentPosition = getCurrentPosition;
+            this.totalMileage = totalMileage;
+        }
         public void run() {
             handler.post(new Runnable() {
+
                 @Override
                 public void run() {
                     //走行距離表示↓
-                    double f3 = totalMileage / ( (double)mp.getDuration() / (double)mp.getCurrentPosition());
-                    tMileage.setText(String.format("%.2f",f3));
+                    Mileage = totalMileage / (duration / currentPosition);
+                    tMileage.setText(String.format("%.2f",Mileage));
                     //800mでチェックポイント
                     if(globals.timflg1 == 0) {
-                        if (f3 >= 0.8) {
+                        if (Mileage >= 0.8) {
                             globals.timflg1 = 1;
                         }
                     }
                     //1.5km
                     if(globals.timflg2 == 0) {
-                        if (f3 >= 1.5) {
+                        if (Mileage >= 1.5) {
                             globals.timflg2 = 1;
                         }
                     }
                     //2km
                     if(globals.timflg3 == 0) {
-                        if (f3 >= 2) {
+                        if (Mileage >= 2) {
                             globals.timflg3 = 1;
                         }
                     }
                     //2.3km
                     if(globals.timflg4 == 0) {
-                        if (f3 >= 2.3) {
+                        if (Mileage >= 2.3) {
                             globals.timflg4 = 1;
                         }
                     }

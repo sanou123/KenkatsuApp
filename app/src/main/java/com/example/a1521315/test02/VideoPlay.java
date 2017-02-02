@@ -1210,32 +1210,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
 
     //走行距離タスク
-    public class MileageTask2 implements Runnable {
-        /*
-        private float taskMileage = (float) 0.0;
-        public MileageTask(float taskMileage){
-            this.taskMileage = taskMileage;
-        }*/
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    //走行距離表示↓
-                    double f3 = totalMileage / ((double) mp.getDuration() / (double) mp.getCurrentPosition());
-                    tMileage.setText(String.format("%.2f", f3));
-                }
-            });
-        }
-    }
-
-    //走行距離タスク
     public class MileageTask implements Runnable {
-
         private double duration = 0.0;
         private double currentPosition = 0.0;
         private double totalMileage = 0.0;
         private double Mileage = 0.0;
-
         public MileageTask(double getDuration, double getCurrentPosition, double totalMileage){
             this.duration = getDuration;
             this.currentPosition = getCurrentPosition;
