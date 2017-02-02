@@ -47,6 +47,7 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -1119,8 +1120,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     MoveGhost.start();
                     Thread MoveMe = new Thread(new MoveMeTask());
                     MoveMe.start();
-                    Thread TestMileageTask = new Thread(new MileageTask());
-                    TestMileageTask.start();
+                    Thread MileageTask = new Thread(new MileageTask((double)mp.getDuration(), (double)mp.getCurrentPosition(), totalMileage));
+                    MileageTask.start();
                 }
             });
         }
@@ -1149,13 +1150,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     /*ゴースト関連*/
     //前回の測定結果を変数に入れたりするメソッド　
-    public void GetLastTrainingData() {
+    public void GetLastTrainingData() {//ここの処理は何か気持ち悪いからあとで書き直したい
         //前回の走行データを色々するところ↓
         if (globals.total_mileage == null) {
             //前回のデータがないときはこっち
+            findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             Log.v("globals.total_mileage", "null");
         } else {
             psKilometers = Double.parseDouble(globals.total_mileage);
+            findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             Log.v("globals.total_mileage", globals.total_mileage);
         }
         if (globals.total_time == null) {
@@ -1210,18 +1213,23 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     //走行距離タスク
     public class MileageTask implements Runnable {
-        /*
-        private float taskMileage = (float) 0.0;
-        public MileageTask(float taskMileage){
-            this.taskMileage = taskMileage;
-        }*/
+        private double duration = 0.0;
+        private double currentPosition = 0.0;
+        private double totalMileage = 0.0;
+        private double Mileage = 0.0;
+        public MileageTask(double getDuration, double getCurrentPosition, double totalMileage){
+            this.duration = getDuration;
+            this.currentPosition = getCurrentPosition;
+            this.totalMileage = totalMileage;
+        }
         public void run() {
             handler.post(new Runnable() {
+
                 @Override
                 public void run() {
                     //走行距離表示↓
-                    double f3 = totalMileage / ((double) mp.getDuration() / (double) mp.getCurrentPosition());
-                    tMileage.setText(String.format("%.2f", f3));
+                    Mileage = totalMileage / (duration / currentPosition);
+                    tMileage.setText(String.format("%.2f",Mileage));
                 }
             });
         }

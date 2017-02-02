@@ -1049,18 +1049,23 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //走行距離タスク
     public class MileageTask implements Runnable {
-        /*
-        private float taskMileage = (float) 0.0;
-        public MileageTask(float taskMileage){
-            this.taskMileage = taskMileage;
-        }*/
+        private double duration = 0.0;
+        private double currentPosition = 0.0;
+        private double totalMileage = 0.0;
+        private double Mileage = 0.0;
+        public MileageTask(double getDuration, double getCurrentPosition, double totalMileage){
+            this.duration = getDuration;
+            this.currentPosition = getCurrentPosition;
+            this.totalMileage = totalMileage;
+        }
         public void run() {
             handler.post(new Runnable() {
+
                 @Override
                 public void run() {
                     //走行距離表示↓
-                    double f3 = totalMileage / ((double) mp.getDuration() / (double) mp.getCurrentPosition());
-                    tMileage.setText(String.format("%.2f", f3));
+                    Mileage = totalMileage / (duration / currentPosition);
+                    tMileage.setText(String.format("%.2f",Mileage));
                 }
             });
         }
