@@ -1206,7 +1206,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                             HukaDialog();
                         }
                     }
-                    //#kaede debug
 
                     //残り時間0で終了
                     if(timerCount == 0){

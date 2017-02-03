@@ -1083,8 +1083,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         startActivity(intent);
     }
 
-
-
     /*非同期処理関連*/
     //カウントアップタイマタスク
     public class CntTimerTask implements Runnable {
