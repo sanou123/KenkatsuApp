@@ -44,7 +44,7 @@ public class SelectSheetProduct1 extends AppCompatActivity {
 
         // DBのデータを取得
         String[] columns = {DBAdapter.COL_NAME};     // DBのカラム：品名
-        Cursor c = dbAdapter.getDB1(columns);
+        Cursor c = dbAdapter.getDB_DATA(columns);
 
         if (c.moveToFirst()) {
             do {

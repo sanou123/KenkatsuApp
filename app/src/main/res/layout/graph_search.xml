@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/year_search"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        />
+
+    <Button
+        android:text="を比較する"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/year_button" />
+
+    <TextView
+        android:id="@+id/month_search"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/year_search"
+        />
+
+    <Button
+        android:text="を比較する"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/month_button" />
+
+    <TextView
+        android:id="@+id/day_search"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/month_search"
+        />
+
+    <Button
+        android:text="を比較する"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/day_button" />
+</LinearLayout>

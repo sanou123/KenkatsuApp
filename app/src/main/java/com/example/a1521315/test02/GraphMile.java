@@ -498,7 +498,7 @@ public class GraphMile extends Activity {
         //////////////////////////////////////////////////////////////////////////////
 
 
-        BarDataSet valuesADataSet = new BarDataSet(valuesA, "走行距離");
+        BarDataSet valuesADataSet = new BarDataSet(valuesA, "走行距離(km)");
         valuesADataSet.setColor(ColorTemplate.COLORFUL_COLORS[3]);
 
         barDataSets.add(valuesADataSet);

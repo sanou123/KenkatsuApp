@@ -35,7 +35,8 @@
             android:layout_marginTop="10dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:textSize="50sp" />
+            android:textSize="50sp"
+            android:background="@drawable/button_state"/>
         <Button
             android:id="@+id/buttonEndurance"
             android:text="耐久トレーニング"
@@ -44,7 +45,8 @@
             android:layout_below="@+id/buttonNormal"
             android:layout_alignStart="@+id/buttonNormal"
             android:layout_marginTop="10dp"
-            android:textSize="50sp" />
+            android:textSize="50sp"
+            android:background="@drawable/button_state"/>
 
         <Button
             android:id="@+id/buttonFitness"
@@ -54,7 +56,8 @@
             android:layout_below="@+id/buttonEndurance"
             android:layout_alignStart="@+id/buttonEndurance"
             android:layout_marginTop="10dp"
-            android:textSize="50sp" />
+            android:textSize="50sp"
+            android:background="@drawable/button_state"/>
 
         <Button
             android:id="@+id/buttonGraph"
@@ -63,8 +66,12 @@
             android:layout_height="80dp"
             android:layout_below="@+id/buttonFitness"
             android:layout_alignStart="@+id/buttonFitness"
+            android:onClick="showDatePickerDialog"
             android:layout_marginTop="10dp"
-            android:textSize="50sp" />
+            android:textSize="50sp"
+            android:background="@drawable/button_state"/>
+
+
 
 
     </RelativeLayout>

@@ -32,7 +32,7 @@ public class MainUser extends AppCompatActivity {
     Globals globals;
 
     private EditText mEditText01Name;        // 名前
-    private EditText mEditText01Age;         // 年齢
+    //private EditText mEditText01Age;         // 年齢
     private RadioGroup mRadioGroup01Sex;         // 性別
     private EditText mEditText01Height;         // 身長
     private EditText mEditText01Weight;          // 体重
@@ -42,13 +42,9 @@ public class MainUser extends AppCompatActivity {
 
 
     private TextView mText01Kome01;             // 名前の※印
-    //private TextView mText01Kome02;             // 年齢の※印
+    private TextView mText01Kome02;             // 年齢の※印
     private TextView mText01Kome03;             // 年の※印
     private TextView mText01Kome04;             // 月の※印
-    private TextView mText01Kome05;             // 日の※印
-    private TextView mText01Kome06;             // 性別の※印
-    private TextView mText01Kome07;             // 身長の※印
-    private TextView mText01Kome08;             // 体重の※印
 
 
     private Button mButton01Regist;             // 登録ボタン
@@ -95,18 +91,14 @@ public class MainUser extends AppCompatActivity {
         mButton01Regist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.SelectSheetListView");
-                startActivity(intent);
 
-                // キーボードを非表示
-                InputMethodManager inputMethodManager =
-                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    // キーボードを非表示
+                    InputMethodManager inputMethodManager =
+                            (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-                // DBに登録
-                saveList();
+                    // DBに登録
+                    saveList();
 
             }
         });
@@ -141,13 +133,10 @@ public class MainUser extends AppCompatActivity {
         mEditText01Weight = (EditText) findViewById(R.id.editText01Weight);       // 体重
 
         mText01Kome01 = (TextView) findViewById(R.id.text01Kome01);             // 名前の※印
-        //mText01Kome02 = (TextView) findViewById(R.id.text01Kome02);             // 年齢※印
+        mText01Kome02 = (TextView) findViewById(R.id.text01Kome02);             // 年齢※印
         mText01Kome03 = (TextView) findViewById(R.id.text01Kome03);             // 年齢※印
         mText01Kome04 = (TextView) findViewById(R.id.text01Kome04);             // 年齢※印
-        mText01Kome05 = (TextView) findViewById(R.id.text01Kome05);             // 年齢※印
-        mText01Kome06 = (TextView) findViewById(R.id.text01Kome06);             // 性別の※印
-        mText01Kome07 = (TextView) findViewById(R.id.text01Kome07);             // 身長の※印
-        mText01Kome08 = (TextView) findViewById(R.id.text01Kome08);             // 体重の※印
+
 
         mButton01Regist = (Button) findViewById(R.id.button01Regist);           // 登録ボタン
 
@@ -167,13 +156,10 @@ public class MainUser extends AppCompatActivity {
         mEditText01Weight.setText("");
 
         mText01Kome01.setText("");
-        //mText01Kome02.setText("");
+        mText01Kome02.setText("");
         mText01Kome03.setText("");
         mText01Kome04.setText("");
-        mText01Kome05.setText("");
-        mText01Kome06.setText("");
-        mText01Kome07.setText("");
-        mText01Kome08.setText("");
+
 
 
         mEditText01Name.requestFocus();      // フォーカスを品名のEditTextに指定
@@ -232,8 +218,7 @@ public class MainUser extends AppCompatActivity {
         String strWeight = mEditText01Weight.getText().toString();
 
         // EditTextが空白の場合
-        if (strName.equals("") /*|| strAge.equals("")*/ || strSex.equals("")
-                || strHeight.equals("") || strWeight.equals("")) {
+        if (strName.equals("") || strYear.equals("") || strHeight.equals("") || strWeight.equals("")) {
 
             if (strName.equals("")) {
                 mText01Kome01.setText("※");     // 名前が空白の場合、※印を表示
@@ -241,30 +226,25 @@ public class MainUser extends AppCompatActivity {
                 mText01Kome01.setText("");      // 空白でない場合は※印を消す
             }
 
-            /*if (strAge.equals("")) {
+            if (strYear.equals("")) {
                 mText01Kome02.setText("※");     // 年齢が空白の場合、※印を表示
             } else {
                 mText01Kome02.setText("");      // 空白でない場合は※印を消す
-            }*/
+            }
 
-            if (strSex.equals("")) {
+            if (strHeight.equals("")) {
                 mText01Kome03.setText("※");     // 性別が空白の場合、※印を表示
             } else {
                 mText01Kome03.setText("");      // 空白でない場合は※印を消す
             }
 
 
-            if (strHeight.equals("")) {
+            if (strWeight.equals("")) {
                 mText01Kome04.setText("※");     // 身長が空白の場合、※印を表示
             } else {
                 mText01Kome04.setText("");      // 空白でない場合は※印を消す
             }
 
-            if (strWeight.equals("")) {
-                mText01Kome05.setText("※");     // 体重が空白の場合、※印を表示
-            } else {
-                mText01Kome05.setText("");      // 空白でない場合は※印を消す
-            }
 
             Toast.makeText(MainUser.this, "※の箇所を入力して下さい。", Toast.LENGTH_SHORT).show();
 
@@ -304,6 +284,12 @@ public class MainUser extends AppCompatActivity {
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定
+
+
+            Intent intent = new Intent();
+            intent.setClassName("com.example.a1521315.test02",
+                    "com.example.a1521315.test02.SelectSheetListView");
+            startActivity(intent);
 
         }
     }

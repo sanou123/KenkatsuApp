@@ -44,7 +44,6 @@
             android:layout_weight="2"
             android:ellipsize="end"
             android:hint="@string/text01_hinttext"
-            android:inputType="text"
             android:lines="1"
             android:maxLength="12"
             android:maxLines="1"
@@ -72,20 +71,23 @@
             android:text="@string/text01_age"
             android:textColor="#000000"
             android:textSize="16sp" />
+
+        <TextView
+        android:id="@+id/text01Kome02"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:text="@string/text01_kome"
+        android:textColor="#FF0000"
+        android:textSize="14sp" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="日付を入力"
             android:id="@+id/date_set"
             android:layout_weight="0.40" />
-        <TextView
-            android:id="@+id/text01Kome03"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:text="@string/text01_kome"
-            android:textColor="#FF0000"
-            android:textSize="14sp" />
+
 
         <!-- inputType：表示するキーボードを数値に指定 -->
         <EditText
@@ -94,23 +96,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:ellipsize="end"
-            android:hint="@string/text01_hintnumber"
-            android:inputType="number"
+            android:hint="年"
             android:lines="1"
             android:maxLength="24"
             android:maxLines="1"
             android:minLines="1"
+            android:enabled="false"
+            android:focusable="false"
             android:singleLine="true"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/text01Kome04"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:text="@string/text01_kome"
-            android:textColor="#FF0000"
-            android:textSize="14sp" />
+
         <!-- inputType：表示するキーボードを数値に指定 -->
         <EditText
             android:id="@+id/editText01Month"
@@ -118,23 +114,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:ellipsize="end"
-            android:hint="@string/text01_hintnumber"
-            android:inputType="number"
+            android:hint="月"
             android:lines="1"
             android:maxLength="24"
             android:maxLines="1"
             android:minLines="1"
+            android:enabled="false"
+            android:focusable="false"
             android:singleLine="true"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/text01Kome05"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:text="@string/text01_kome"
-            android:textColor="#FF0000"
-            android:textSize="14sp" />
         <!-- inputType：表示するキーボードを数値に指定 -->
         <EditText
             android:id="@+id/editText01Day"
@@ -142,12 +131,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:ellipsize="end"
-            android:hint="@string/text01_hintnumber"
-            android:inputType="number"
+            android:hint="日"
             android:lines="1"
             android:maxLength="24"
             android:maxLines="1"
             android:minLines="1"
+            android:enabled="false"
+            android:focusable="false"
             android:singleLine="true"
             android:textSize="16sp" />
 
@@ -174,15 +164,6 @@
             android:textColor="#000000"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/text01Kome06"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:text="@string/text01_kome"
-            android:textColor="#FF0000"
-            android:textSize="14sp" />
-
         <!-- 選択用ラジオボタン -->
         <RadioGroup
             android:id="@+id/radioGroup01Sex"
@@ -207,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ellipsize="end"
-                android:checked="false"
+                android:checked="true"
                 android:text="@string/radio01_man"
                 android:textColor="#000000"
                 android:textSize="16sp" />
@@ -248,7 +229,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text01Kome07"
+            android:id="@+id/text01Kome03"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -294,7 +275,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text01Kome08"
+            android:id="@+id/text01Kome04"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
