@@ -254,10 +254,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer.setText("00:00:00.0");
 
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText("age:" + globals.age);
+        //tDebug1.setText("age:" + globals.age);
         TargetBPM(Integer.parseInt(globals.age));
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        tDebug2.setText("TargetBPM:" + TargetBPM(Integer.parseInt(globals.age)));
+        //tDebug2.setText("TargetBPM:" + TargetBPM(Integer.parseInt(globals.age)));
 
         tGear = (TextView) findViewById(R.id.textGear);
         tGear.setText("0");
@@ -695,7 +695,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 //25回分の平均の速度を表示
                                                 //なぜなら1:25だから
                                                 speed_Value = pedal_Value / (((double)(microSec)/1000)/1000000);//  モータの径　/ cnt*10msec
-                                                tDebug2.setText("sp:"+speed_Value);
+                                                //tDebug2.setText("sp:"+speed_Value);
                                                 if(speed_Value >= 0 && speed_Value <= 50){
                                                     cnt_25++;
                                                     all_speed_Value += speed_Value;
