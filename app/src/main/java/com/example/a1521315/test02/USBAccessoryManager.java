@@ -110,8 +110,7 @@ public class USBAccessoryManager {
 
             // Get a UsbManager object from the specified intent (only works for
             // v3.1+ devices)
-            deviceManager = (UsbManager) context
-                    .getSystemService(Context.USB_SERVICE);
+            deviceManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
 
             // If we were unable to get a UsbManager, return an error
             if (deviceManager == null) {
@@ -124,7 +123,7 @@ public class USBAccessoryManager {
 
             // If the list of accessories is empty, then exit
             if (accessories == null) {
-                Toast.makeText(context, "EMPTY1", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "USB周辺機器が見つかりません", Toast.LENGTH_LONG).show();
                 return RETURN_CODES.ACCESSORIES_LIST_IS_EMPTY;
             }
 
@@ -139,8 +138,7 @@ public class USBAccessoryManager {
                 if (deviceManager.hasPermission(accessory)) {
                     // Try to open a ParcelFileDescriptor by opening the
                     // accessory
-                    parcelFileDescriptor = deviceManager
-                            .openAccessory(accessory);
+                    parcelFileDescriptor = deviceManager.openAccessory(accessory);
 
                     if (parcelFileDescriptor != null) {
                         // Create a new read thread to handle reading data from
@@ -159,8 +157,7 @@ public class USBAccessoryManager {
 
                         // Open the output file stream for writing data out to
                         // the accessory
-                        outputStream = new FileOutputStream(
-                                parcelFileDescriptor.getFileDescriptor());
+                        outputStream = new FileOutputStream(parcelFileDescriptor.getFileDescriptor());
 
                         if(outputStream == null) {
                             Log.d(TAG, "USBAccessoryManager:enable() outputStream == null");
@@ -175,8 +172,7 @@ public class USBAccessoryManager {
                             return RETURN_CODES.FILE_DESCRIPTOR_WOULD_NOT_OPEN;
                         }
 
-                        Log.d(TAG,
-                                "USBAccessoryManager:enable() outputStream open");
+                        Log.d(TAG,"USBAccessoryManager:enable() outputStream open");
 
                         // If the ParcelFileDescriptor was successfully opened,
                         // mark the accessory as enabled and open
@@ -189,10 +185,10 @@ public class USBAccessoryManager {
                                         USBAccessoryManagerMessage.MessageType.READY,
                                         accessory)).sendToTarget();
 
-                        Log.d(TAG,
-                                "USBAccessoryManager:enable() device ready");
-                        Toast.makeText(context, "接続処理中", Toast.LENGTH_LONG).show();
+                        Log.d(TAG,"USBAccessoryManager:enable() device ready");
+                        Toast.makeText(context, "UBS接続確認", Toast.LENGTH_LONG).show();
                         return RETURN_CODES.SUCCESS;
+
                     } else {
 						/*
 						 * If we weren't able to open the ParcelFileDescriptor,
@@ -208,6 +204,7 @@ public class USBAccessoryManager {
 						 * having the openAccessory() request return null,
 						 * ending up in this section of code.
 						 */
+                        //Toast.makeText(context, "接続処理中2", Toast.LENGTH_LONG).show();
                         return RETURN_CODES.FILE_DESCRIPTOR_WOULD_NOT_OPEN;
                     }
                 } else {
@@ -249,6 +246,54 @@ public class USBAccessoryManager {
             context.unregisterReceiver(receiver);
         } catch (Exception e) {
         }
+    }
+
+    /*
+        各ステータスの表示
+    */
+    public void showStatus(Context context){
+        Toast.makeText(context, "Enable："+enabled, Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "Permission："+permissionRequested, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "open："+open, Toast.LENGTH_LONG).show();
+        if(readThread != null){
+            Toast.makeText(context, "readThread："+readThread.isAlive(), Toast.LENGTH_LONG).show();
+        }
+        //Toast.makeText(context, "Discripter："+parcelFileDescriptor, Toast.LENGTH_LONG).show();
+    }
+
+    public boolean threadStatus(Context context){
+
+        if(readThread != null){
+
+            if(enabled == true){
+
+                if(open == true){
+                    return true;
+                }
+                else{
+                    Toast.makeText(context, "ERROR CODE:2", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            else{
+                if(enabled == false){
+                    Toast.makeText(context, "ERROR CODE:3", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(context, "ERROR CODE:4", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            Toast.makeText(context, "ERROR CODE:5", Toast.LENGTH_LONG).show();
+
+            return false;
+        }
+
+        else{
+            Toast.makeText(context, "ペダルを漕いでからタップしてください", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
     }
 
     /**
@@ -806,6 +851,7 @@ public class USBAccessoryManager {
             try {
                 inputStream.close();
             } catch (IOException e) {
+
             }
 
             try {

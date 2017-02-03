@@ -480,6 +480,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textDebug1"
                 android:textSize="20sp"
+                android:visibility="invisible"
                 android:textColor="@android:color/holo_red_dark"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"/>
@@ -490,6 +491,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textDebug2"
                 android:textSize="20sp"
+                android:visibility="invisible"
                 android:textColor="@android:color/holo_orange_dark"
                 android:layout_below="@+id/textDebug1"
                 android:layout_alignParentStart="true"/>

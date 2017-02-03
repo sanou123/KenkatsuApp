@@ -109,13 +109,18 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //センサー、動画再生関連の変数　初期化
     double speed_Value = 0.0;//速度の値
-    double my_dist_Value = 0.0;
-    public float plus_dist_Value = 0.00005F;//0.0015F
+    double all_speed_Value=0.0;//speedValueを25回加算して平均だす
+    double pedal_Value = 0.0005F;//回すやつの直径
+    boolean stop_Flg = false;//止まってから始動のとき用
+    int timer_check=0;//ON OFF のホールセンサーの順番
+    boolean inertia_Flg = false;//慣性に入った判断
+    int cnt_25 = 0;//25回データとったかのカウンター
+    long limit_Value = 150;//慣性判断での閾値
 
     //double dist_Value = 0.0;//ペダルレベルでの距離
     //double old_dist_Value = 0.0;//ペダルレベルでの距離
 
-    public float resist_Level = (float)1.0;//負荷のレベルによる係数
+    public float resist_Level = (float) 1.0;//負荷のレベルによる係数
     NumberFormat format2 = NumberFormat.getInstance();
 
     public int hole_Value = 0;
@@ -124,8 +129,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     public boolean run_Flg = false;//ON OFF で順番にセンサーの値を受け取るため
     public boolean usb_Flg = false;//pause画面で速度を変化させない
     public boolean chSpd_Flg = false;//speed_valueを更新するか否か
-    public boolean clear_Flg = false;
-    public boolean clear_Flg2 = true;
     public boolean Gear1_Flg = false;
     public boolean Gear2_Flg = false;
     public boolean Gear3_Flg = false;
@@ -134,17 +137,13 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     public boolean Gear6_Flg = false;
 
     //止まらずに進んでる時間
-    long my_mm = 0;
-    long my_ss = 0;
+    long t_cnt=0;
+    long old_time = 0;
+    long now_time = 0;
 
-    public Timer watchMeTimer;
-    public WatchMeTask watchMeTask;
-
-    public Timer delayedTimer;
-    public DelayedTask delayTask;
-
+    //DAICHI_TEST
     private USBAccessoryManager accessoryManager;
-
+    byte[] commandPacket = new byte[2];
 
     //bluetooth*************************************************************************************
     private BluetoothAdapter mAdapter;/* Bluetooth Adapter */
@@ -236,9 +235,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
         /*デバッグ用のやつ*/
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText("デバッグ用1");
+        //tDebug1.setText("デバッグ用1");
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        tDebug2.setText("デバッグ用2");
+        //tDebug2.setText("デバッグ用2");
 
         tGear = (TextView) findViewById(R.id.textGear);
         tGear.setText("0");
@@ -279,16 +278,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
         mediaPath = "/endless.mp4";//実機9のストレージにあるファルを指定
 
-        //USBAccessoryManager の初期化
-        accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
-        try {
-            PackageManager manager = this.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-            Log.d(TAG, "Info:" + info.packageName + "\n" + info.versionCode + "\n" + info.versionName);
-        } catch (PackageManager.NameNotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
 
@@ -309,6 +298,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         }
         //******************************************************************************************
 
+        usb_Flg = true;
+        stop_Flg = true;
+
     }//onCreateここまで
 
     // 再生完了時の処理
@@ -328,7 +320,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();
         if (mp != null) {
             mp.release();
             mp = null;
@@ -340,13 +331,34 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
+
+        accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
+        try {
+            PackageManager manager = this.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+            Log.d(TAG, "Info:" + info.packageName + "\n" + info.versionCode + "\n" + info.versionName);
+        } catch (PackageManager.NameNotFoundException e1) {
+            e1.printStackTrace();
+            Toast.makeText(this, "エラー", Toast.LENGTH_LONG);
+        }
+
+        accessoryManager.enable(getApplication(), getIntent());
+        //accessoryManager.showStatus(getApplication());
+        //最初にギア出すテスト#
+        commandPacket[0] = UPDATE_LED_SETTING;
+        commandPacket[1] = 0;
+        accessoryManager.write(commandPacket);
+
+        if(accessoryManager.threadStatus(getApplication()) == false){
+            finish();
+        }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        accessoryManager.enable(EndlessRunVideoPlay.this, getIntent());
     }
 
     @Override
@@ -389,7 +401,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     // Resets the demo application when a device detaches
     public void disconnectAccessory() {
         Log.d(TAG, "disconnectAccessory()");
-        Toast.makeText(this, "DISCONNECT SUCCESS", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "通信切断処理中…", Toast.LENGTH_LONG).show();
 
         if (deviceAttached == false) {
             //Toast.makeText(this, "デバイスが切断されました", Toast.LENGTH_LONG).show();
@@ -540,18 +552,19 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     // USB通信のタスク
     private Handler handler = new Handler() {
 
+        //#
+
         @Override
         public void handleMessage(Message msg) {
-            byte[] commandPacket = new byte[2];
+
             Log.d(TAG, "handleMessage");
             switch (msg.what) {
                 case UPDATE_LED_SETTING:
+
                     if (accessoryManager.isConnected() == false) {
                         return;
                     }
-
                     break;
-
                 case USBAccessoryWhat:
                     switch (((USBAccessoryManagerMessage) msg.obj).type) {
                         case READ:
@@ -572,77 +585,100 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
                                     case HOLE_SENSOR_CHANGE:
                                         //一時停止時
-                                        if( usb_Flg == true ) {
+                                        if (usb_Flg == true) {
                                             speed_Value = 0.0;
-                                        }
-
-                                        else
-                                        {
+                                        } else {
                                             //時間の取得(秒に直す)
-                                            float time_tmp = (float)((my_mm*60) + my_ss);
+                                            float time_tmp = (float) t_cnt;
+                                            long microSec=0;
 
                                             //センサー値取得
                                             hole_Value = (int) (commandPacket[1] & 0xFF);
 
                                             //距離の加算(径分)
-                                            if(hole_Value == 1 && old_hole_Value == 0 && run_Flg == false) {
-                                                //dist_Value += plus_dist_Value;
-                                                my_dist_Value += plus_dist_Value;
+                                            if (hole_Value == 1 && old_hole_Value == 0 && run_Flg == false) {
+
+                                                now_time = System.nanoTime();
+
                                                 run_Flg = true;
-                                                chSpd_Flg = true;
-                                                clear_Flg2 = true;
+                                                if(timer_check == 2){
+                                                    chSpd_Flg = true;
+                                                    microSec = TimeUnit.MICROSECONDS.convert( now_time - old_time, TimeUnit.NANOSECONDS );
+                                                    if((microSec/1000) >= limit_Value){
+                                                        inertia_Flg = true;
+                                                    }
+                                                   // tDebug1.setText( (microSec/1000) + "microsec passed" );
+                                                }
+                                                timer_check = 1;
                                             }
 
                                             //距離の加算(径分)
-                                            else if(hole_Value == 0 && old_hole_Value == 1 && run_Flg == true){
-                                                //dist_Value += plus_dist_Value;
-                                                my_dist_Value += plus_dist_Value;
+                                            else if (hole_Value == 0 && old_hole_Value == 1 && run_Flg == true) {
                                                 run_Flg = false;
-                                                chSpd_Flg = true;
-                                                clear_Flg2 = true;
+                                                old_time = System.nanoTime();
+                                                if(timer_check == 1){
+                                                    timer_check = 2;
+                                                    old_time = now_time;
+                                                }
+                                            } else {
                                             }
 
-                                            else{
-
+                                            //モータが1回転した場合に、速度を算出する処理
+                                            if (chSpd_Flg == true && inertia_Flg == false) {
+                                                //25回分の平均の速度を表示
+                                                //なぜなら1:25だから
+                                                speed_Value = pedal_Value / (((double)(microSec)/1000)/1000000);//  モータの径　/ cnt*10msec
+                                               // tDebug2.setText("sp:"+speed_Value);
+                                                if(speed_Value >= 0 && speed_Value <= 50){
+                                                    cnt_25++;
+                                                    all_speed_Value += speed_Value;
+                                                }
+                                                chSpd_Flg=false;
                                             }
+                                        }
 
-                                            //距離が進んだ場合
-                                            if(chSpd_Flg == true){
+                                        //通常の速度反映処理
+                                        if(inertia_Flg == false){
+                                            //メディアプレイヤーの再生速度を設定
+                                            if (speed_Value <= 50 && speed_Value >= 0) {
+                                                if(cnt_25 >= 25){
+                                                    cnt_25 = 0;
+                                                    all_speed_Value = all_speed_Value / 25;
+                                                    tSpeed.setText(String.format("%.2f",all_speed_Value));
+                                                    params.setSpeed((float) (all_speed_Value / 20));//再生速度変更
+                                                    mp.setPlaybackParams(params);
+                                                    all_speed_Value = 0.0;
+                                                }
 
-                                                //0秒時の処理
-                                                if(time_tmp <= 0){
-                                                    speed_Value = 1.8;
+                                                //漕ぎ出し時に速度を出す処理
+                                                else if(stop_Flg == true){
+                                                    stop_Flg = false;
+                                                    tSpeed.setText(String.format("%.2f",speed_Value));
+                                                    params.setSpeed((float) (speed_Value / 20));//再生速度変更
+                                                    mp.setPlaybackParams(params);
                                                 }
                                                 else{
-                                                    //加算された距離とタイマーの時間(秒)で、時速割り出し(現在の時速)
-                                                    speed_Value = my_dist_Value / (time_tmp / 3600);
+
                                                 }
                                             }
-
-                                            //予防措置
-                                            if(my_dist_Value == 0){
-                                                speed_Value = 0.0;
+                                            //速度が0のとき
+                                            else {
                                             }
-
                                         }
 
-                                        //各テキストに値を反映
-                                        tDebug2.setText(format2.format(my_dist_Value) + "km/h");
-
-                                        //メディアプレイヤーの再生速度を設定
-                                        if(speed_Value <= 50 && speed_Value >= 1){
-                                            params.setSpeed( (float) ( speed_Value / 10 ) );//再生速度変更
-                                            mp.setPlaybackParams(params);
-                                        }
-                                        //速度が0のとき
+                                        //慣性始まったと判断された時の処理
+                                        //inertiaFlg == true
                                         else{
-                                            params.setSpeed((float)0);
-                                            mp.setPlaybackParams(params);
+                                            all_speed_Value = 0;
+                                            speed_Value = 0;
+                                            cnt_25 = 0;
+                                            stop_Flg = true;
+                                            inertia_Flg = false;
+                                            ZeroSpeedSet();
                                         }
 
                                         //過去の値を更新
                                         old_hole_Value = hole_Value;
-                                        //old_dist_Value = dist_Value;
                                         break;
 
                                     //抵抗値の受け取り
@@ -651,56 +687,75 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                                         //センサー値取得
                                         int resist_Value = (int) (commandPacket[1] & 0xFF);
 
+                                        //#
+
                                         //抵抗値の割り出し
-                                        switch (resist_Value){
+                                        switch (resist_Value) {
                                             case 1:
+                                                limit_Value = 100;
                                                 Gear1_Flg = true;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
+                                                tGear.setText("1");
                                                 break;
                                             case 2:
+                                                limit_Value = 100;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = true;
                                                 Gear3_Flg = false;
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
+                                                tGear.setText("2");
                                                 break;
                                             case 3:
+                                                limit_Value = 150;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = true;
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = false;
+                                                Gear6_Flg = false;
+                                                tGear.setText("3");
                                                 break;
                                             case 4:
+                                                limit_Value = 150;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
                                                 Gear4_Flg = true;
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = false;
+                                                tGear.setText("4");
                                                 break;
                                             case 5:
+                                                limit_Value = 150;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = true;
                                                 Gear6_Flg = false;
+                                                tGear.setText("5");
                                                 break;
                                             case 6:
+                                                limit_Value = 150;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
                                                 Gear4_Flg = false;
                                                 Gear5_Flg = false;
                                                 Gear6_Flg = true;
+                                                tGear.setText("6");
                                                 break;
                                             default:
+                                                limit_Value = 150;
+                                                commandPacket[0] = (byte) APP_CONNECT;
+                                                commandPacket[1] = 0;
+                                                accessoryManager.write(commandPacket);
                                                 break;
                                         }
 
@@ -732,7 +787,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                             break;
 
                         case DISCONNECTED:
-                            disconnectAccessory();
+                            //disconnectAccessory();
                             break;
                     }
 
@@ -758,70 +813,12 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         return new Integer(major).intValue();
     }
 
-    //表示更新
-    public void MeterShow(double sp_value){
-        tSpeed.setText(String.format("%.2f",sp_value));
+    //速度を0に
+    public void ZeroSpeedSet() {
+        params.setSpeed((float) 0);
+        mp.setPlaybackParams(params);
+        tSpeed.setText(0.00+"");
     }
-
-    //数値を0にリセットする
-    public void ResetValue(){
-        speed_Value = 0;
-        my_dist_Value = 0;
-    }
-
-    //時間の余韻をなくす----------------------------------------
-    public class DelayedTask extends TimerTask {
-
-        long t_cnt = 0;
-
-        @Override
-        public void run() {
-            // handlerを使って処理をキューイングする
-            handler.post(new Runnable() {
-                public void run() {
-                    t_cnt++;
-
-                    if(usb_Flg == true || t_cnt >= 200){
-                        t_cnt = 0;
-                        ResetValue();
-                        MeterShow(speed_Value);
-                        params.setSpeed((float)0);
-                        mp.setPlaybackParams(params);
-                        clear_Flg = true;
-                    }
-
-                    if(clear_Flg2 == true){
-                        t_cnt = 0;
-                        clear_Flg2 = false;
-                    }
-                }
-            });
-        }
-    }
-
-    //プレイヤーが止まらずに進んだ時間(止まるたびにリセット)
-    public class WatchMeTask extends TimerTask {
-
-        long t_cnt = 0;
-
-        @Override
-        public void run() {
-            // handlerを使って処理をキューイングする
-            handler.post(new Runnable() {
-                public void run() {
-                    t_cnt++;
-                    my_mm = t_cnt * 100 / 1000 / 60;
-                    my_ss = t_cnt * 100 / 1000 % 60;
-                    MeterShow(speed_Value);
-                    if(clear_Flg == true){
-                        t_cnt = 0;
-                        clear_Flg = false;
-                    }
-                }
-            });
-        }
-    }
-
 
     //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
@@ -891,38 +888,25 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         mp.setPlaybackParams(params);
         mp.seekTo(0);
 
-        if (null != watchMeTimer) {
-            watchMeTimer.cancel();
-            watchMeTimer = null;
-        }
-
-        watchMeTimer = new Timer();//Timerインスタンスを生成
-        watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
-        watchMeTimer.schedule(watchMeTask, 0, 100);
-
-        if (null != delayedTimer) {
-            delayedTimer.cancel();
-            delayedTimer = null;
-        }
-
-        delayedTimer = new Timer();//Timerインスタンスを生成
-        delayTask = new DelayedTask();//TimerTaskインスタンスを生成
-        delayedTimer.schedule(delayTask,0,10);
-        //#
-
         timerscheduler = Executors.newSingleThreadScheduledExecutor();
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
         Thread StartBGM = new Thread(new EndlessRunVideoPlay.StartBGM());
         StartBGM.start();
+
+        //最初にギア出すテスト#
+        commandPacket[0] = UPDATE_LED_SETTING;
+        commandPacket[1] = 0;
+        accessoryManager.write(commandPacket);
+
+        usb_Flg = false;
     }
 
     //Pauseボタンを押したときの処理の中身
     public void PauseDialog() {
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
-        delayedTimer.cancel();
-        watchMeTimer.cancel();
-        ResetValue();
+        speed_Value = 0;
+        all_speed_Value = 0;
         speedCount = 0.0;
         params.setSpeed((float) speedCount);
         mp.setPlaybackParams(params);
@@ -945,20 +929,13 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                 disconnectAccessory();//#
                 Thread StopBGM = new Thread(new StopBGM());
                 StopBGM.start();
-                Intent intent = new Intent(getApplication(), TrainingSelect.class);
-                startActivity(intent);
+                finish();
             }
         });
         alertDialog.setNegativeButton("走行に戻る", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
-                delayedTimer = new Timer();//Timerインスタンスを生成
-                delayTask = new DelayedTask();//TimerTaskインスタンスを生成
-                delayedTimer.schedule(delayTask,0,10);
-                watchMeTimer = new Timer();//Timerインスタンスを生成
-                watchMeTask = new WatchMeTask();//TimerTaskインスタンスを生成
-                watchMeTimer.schedule(watchMeTask,0,100);
                 usb_Flg = false;
             }
         });
@@ -987,6 +964,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), EndlessRunResult.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -1012,35 +990,40 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
 
-                    if(Gear1_Flg == true){
-                        cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("1");
+                    if(stop_Flg == true){
+                        //calの加算をしない
                     }
-                    if(Gear2_Flg == true){
-                        cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("2");
-                    }
-                    if(Gear3_Flg == true){
-                        cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("3");
-                    }
-                    if(Gear4_Flg == true){
-                        cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("4");
-                    }
-                    if(Gear5_Flg == true){
-                        cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("5");
-                    }
-                    if(Gear6_Flg == true){
-                        cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("6");
+                    else{
+                        if(Gear1_Flg == true){
+                            cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("1");
+                        }
+                        if(Gear2_Flg == true){
+                            cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("2");
+                        }
+                        if(Gear3_Flg == true){
+                            cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("3");
+                        }
+                        if(Gear4_Flg == true){
+                            cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("4");
+                        }
+                        if(Gear5_Flg == true){
+                            cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("5");
+                        }
+                        if(Gear6_Flg == true){
+                            cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("6");
+                        }
                     }
                 }
             });
