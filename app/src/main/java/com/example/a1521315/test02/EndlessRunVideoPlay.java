@@ -235,9 +235,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
         /*デバッグ用のやつ*/
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText("デバッグ用1");
+        //tDebug1.setText("デバッグ用1");
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        tDebug2.setText("デバッグ用2");
+        //tDebug2.setText("デバッグ用2");
 
         tGear = (TextView) findViewById(R.id.textGear);
         tGear.setText("0");
@@ -607,7 +607,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                                                     if((microSec/1000) >= limit_Value){
                                                         inertia_Flg = true;
                                                     }
-                                                    tDebug1.setText( (microSec/1000) + "microsec passed" );
+                                                   // tDebug1.setText( (microSec/1000) + "microsec passed" );
                                                 }
                                                 timer_check = 1;
                                             }
@@ -628,7 +628,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 //25回分の平均の速度を表示
                                                 //なぜなら1:25だから
                                                 speed_Value = pedal_Value / (((double)(microSec)/1000)/1000000);//  モータの径　/ cnt*10msec
-                                                tDebug2.setText("sp:"+speed_Value);
+                                               // tDebug2.setText("sp:"+speed_Value);
                                                 if(speed_Value >= 0 && speed_Value <= 50){
                                                     cnt_25++;
                                                     all_speed_Value += speed_Value;
