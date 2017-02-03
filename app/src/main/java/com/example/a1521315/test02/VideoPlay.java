@@ -1166,6 +1166,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     MoveMe.start();
                     Thread MileageTask = new Thread(new MileageTask((double)mp.getDuration(), (double)mp.getCurrentPosition(), totalMileage));
                     MileageTask.start();
+                    //平均速度出すのに必要な奴
+                    totalSpeed += Double.parseDouble(tSpeed.getText().toString());//ディスプレイに表示されている時速を代入
+                    totalSpeedCnt++;//カウントする
                 }
             });
         }
