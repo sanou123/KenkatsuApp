@@ -3,13 +3,17 @@ package com.example.a1521315.test02;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * Created by 1521315 on 2016/07/05.
@@ -63,6 +67,7 @@ public class VideoSelect extends Activity {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override
