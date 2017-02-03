@@ -272,9 +272,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
         TargetBPM(Integer.parseInt(globals.age));//目標心拍
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText(globals.bestrecord_time0);
+        //tDebug1.setText(globals.bestrecord_time0);
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        tDebug2.setText(globals.bestrecord_time1);
+        //tDebug2.setText(globals.bestrecord_time1);
 
         tGear = (TextView) findViewById(R.id.textGear);
         tGear.setText("0");
