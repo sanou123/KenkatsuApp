@@ -1048,23 +1048,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         myDialog.show();
     }
 
-    //Resultボタンを押したときの処理の中身
-    public void ResultProcess() {
-
-        Thread StopBGM = new Thread(new StopBGM());
-        StopBGM.start();
-        globals.coursename = tCourse.getText().toString();//コース名
-        globals.mileage = String.valueOf(totalMileage);//走行距離
-        globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍
-        globals.avg = String.valueOf(AverageSpeed(totalSpeed, totalSpeedCnt));//平均速度
-        globals.max = String.format("%.2f", maxSpeed);//最高速度
-        globals.time = tTimer.getText().toString();//運動時間
-        //int iWeight = Integer.parseInt(globals.weight);
-        //globals.cal = (8.4 * Double.valueOf(globals.time) * iWeight);//カロリー計算
-        globals.cal = Double.parseDouble(String.format("%.2f",cal));
-        finish();
-    }
-
     public void ResultDialog() {
         //Toast.makeText(this, "ResultDialog", Toast.LENGTH_LONG).show();
         // ポップアップメニュー表示

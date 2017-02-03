@@ -1169,14 +1169,14 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                             //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                             tCal.setText(String.format("%.2f", cal));
                             tGear.setText("1");
-                            HukaProcess();
+                            HukaDialog();
                         }
                         if (Gear2_Flg == true) {
                             cal += 4.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
                             //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                             tCal.setText(String.format("%.2f", cal));
                             tGear.setText("2");
-                            HukaProcess();
+                            HukaDialog();
                         }
                         if (Gear3_Flg == true) {
                             cal += 5.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
@@ -1189,21 +1189,21 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                             //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                             tCal.setText(String.format("%.2f", cal));
                             tGear.setText("4");
-                            HukaProcess();
+                            HukaDialog();
                         }
                         if (Gear5_Flg == true) {
                             cal += 7.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
                             //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                             tCal.setText(String.format("%.2f", cal));
                             tGear.setText("5");
-                            HukaProcess();
+                            HukaDialog();
                         }
                         if (Gear6_Flg == true) {
                             cal += 8.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
                             //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                             tCal.setText(String.format("%.2f", cal));
                             tGear.setText("6");
-                            HukaProcess();
+                            HukaDialog();
                         }
                     }
                     //#kaede debug
