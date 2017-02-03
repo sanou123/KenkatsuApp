@@ -50,14 +50,14 @@
 
             <Button
                 android:id="@+id/course0"
-                android:text="ポリテクから大地家(約10km)"
+                android:text="ポリテクから瀬峰(約10km)"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp" />
 
             <Button
                 android:id="@+id/course1"
-                android:text="東京IC→御殿場IC(約84km)"
+                android:text="出羽街道(約5.4km)"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp" />
@@ -74,7 +74,8 @@
                 android:text="デバッグ用(rawフォルダ)"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
-                android:layout_height="80dp" />
+                android:layout_height="80dp"
+                android:visibility="invisible"/>
 
             <Button
                 android:id="@+id/course4"
