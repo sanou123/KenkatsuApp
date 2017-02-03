@@ -290,7 +290,7 @@ public class USBAccessoryManager {
         }
 
         else{
-            Toast.makeText(context, "ERROR CODE:1", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "ペダルを漕いでからタップしてください", Toast.LENGTH_LONG).show();
             return false;
         }
 

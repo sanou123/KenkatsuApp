@@ -312,7 +312,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tCourse = (TextView) findViewById(R.id.textCourse);
         tCourse.setText("コース" + CourseNum);
         if (CourseNum.equals("0")) {
-            tCourse.setText("ポリテク→大地");
+            tCourse.setText("ポリテク→瀬峰");
             mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
             totalMileage = 10.4;
             raw = 0;
@@ -759,7 +759,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                         //抵抗値の割り出し
                                         switch (resist_Value) {
                                             case 1:
-                                                limit_Value = 120;
+                                                limit_Value = 100;
                                                 Gear1_Flg = true;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -769,7 +769,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 tGear.setText("1");
                                                 break;
                                             case 2:
-                                                limit_Value = 120;
+                                                limit_Value = 100;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = true;
                                                 Gear3_Flg = false;
@@ -1063,7 +1063,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
 
     public void ResultDialog() {
-        Toast.makeText(this, "ResultDialog", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "ResultDialog", Toast.LENGTH_LONG).show();
         // ポップアップメニュー表示
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoPlay.this);
         alertDialog.setTitle("トレーニング終了");

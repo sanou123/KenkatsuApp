@@ -321,7 +321,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();
         if (mp != null) {
             mp.release();
             mp = null;
@@ -696,7 +695,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                         //抵抗値の割り出し
                                         switch (resist_Value) {
                                             case 1:
-                                                limit_Value = 120;
+                                                limit_Value = 100;
                                                 Gear1_Flg = true;
                                                 Gear2_Flg = false;
                                                 Gear3_Flg = false;
@@ -706,7 +705,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 tGear.setText("1");
                                                 break;
                                             case 2:
-                                                limit_Value = 120;
+                                                limit_Value = 100;
                                                 Gear1_Flg = false;
                                                 Gear2_Flg = true;
                                                 Gear3_Flg = false;
@@ -757,7 +756,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 break;
                                             default:
                                                 limit_Value = 150;
-                                                tGear.setText("7");
+                                                commandPacket[0] = (byte) APP_CONNECT;
+                                                commandPacket[1] = 0;
+                                                accessoryManager.write(commandPacket);
                                                 break;
                                         }
 
@@ -1064,6 +1065,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         //int iWeight = Integer.parseInt(globals.weight);
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
         Intent intent = new Intent(getApplication(), NormalResult.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
     //ポーズしたとき
@@ -1116,49 +1118,55 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
 
-                    //#kaede debug
-                    if(Gear1_Flg == true){
-                        cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("1");
-                        HukaProcess();
+                    if(stop_Flg == true){
+                        //calの加算をしない
                     }
-                    if(Gear2_Flg == true){
-                        cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("2");
-                        HukaProcess();
+                    else{
+                        //#kaede debug
+                        if(Gear1_Flg == true){
+                            cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("1");
+                            HukaProcess();
+                        }
+                        if(Gear2_Flg == true){
+                            cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("2");
+                            HukaProcess();
+                        }
+                        if(Gear3_Flg == true){
+                            cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("3");
+                        }
+                        if(Gear4_Flg == true){
+                            cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("4");
+                            HukaProcess();
+                        }
+                        if(Gear5_Flg == true){
+                            cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("5");
+                            HukaProcess();
+                        }
+                        if(Gear6_Flg == true){
+                            cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                            tCal.setText(String.format("%.2f",cal));
+                            tGear.setText("6");
+                            HukaProcess();
+                        }
+                        //#kaede debug
                     }
-                    if(Gear3_Flg == true){
-                        cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("3");
-                    }
-                    if(Gear4_Flg == true){
-                        cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("4");
-                        HukaProcess();
-                    }
-                    if(Gear5_Flg == true){
-                        cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("5");
-                        HukaProcess();
-                    }
-                    if(Gear6_Flg == true){
-                        cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
-                        //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                        tCal.setText(String.format("%.2f",cal));
-                        tGear.setText("6");
-                        HukaProcess();
-                    }
-                    //#kaede debug
+
 
                     //残り時間0で終了
                     if(timerCount == 0){
