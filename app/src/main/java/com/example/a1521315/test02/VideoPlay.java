@@ -86,6 +86,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     TextView tDebug2;
 
     boolean mediaPathCheck = false;//rawファイルかどうかを判断する変数。true=内部ストレージ　false=rawファイル
+    boolean finishRunning = false;
     String mediaPath = null;//動画データ
     private ImageView imageMe;//自機イメージ用の変数
     private ImageView imageGhost;
@@ -1057,6 +1058,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                finishRunning = true;//完走
                 ResultProcess();
             }
         });
@@ -1069,7 +1071,11 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
-        globals.mileage = String.valueOf(totalMileage);//走行距離
+        if(finishRunning == true){
+            globals.mileage = String.valueOf(totalMileage);//完走
+        }else{
+            globals.mileage = String.valueOf(tMileage.getText());//とちゅうでやめた
+        }
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍
         globals.avg = String.valueOf(AverageSpeed(totalSpeed, totalSpeedCnt));//平均速度
         globals.max = String.format("%.2f", maxSpeed);//最高速度
