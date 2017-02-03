@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -58,7 +59,15 @@ import static android.R.attr.delay;
 
 public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener, View.OnClickListener {
 
+
+    DBAdapter dbAdapter;
     Globals globals;
+
+    /*コース名*/
+    final String course0 = "瀬峰";
+    final String course1 = "出羽海道";
+    final String course2 = "鳴子";
+    final String course3 = "デバッグ";
     /*メーター関連の関数*/
     TextView tBPM, tHeartbeat;//心拍の変数
     TextView tTargetBPM, tTargetHeartbeat;//目標心拍数の変数
@@ -77,11 +86,15 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     /*最大心拍*/
     int maxHeartbeat = 0;
 
-    /*平均速度を出すのに必要な関数*/
+    /*平均速度を出すのに必要*/
     double totalSpeed = 0.0;
     int totalSpeedCnt = 0;
 
-    /*デバッグ用の関数*/
+    /*ゴースト動かすのに必要*/
+    double totalSeconds = 10;
+    double perSecond = 0.0;
+
+    /*デバッグ用*/
     TextView tDebug1;
     TextView tDebug2;
 
@@ -94,8 +107,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     double speedCount = 0.0;//速度用
     double cal = 0.0; //カロリー計算用
     double weight = Double.parseDouble(globals.weight);
-
-    double psKilometers = 1, psSeconds = 10;
 
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
@@ -259,18 +270,19 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer = (TextView) findViewById(R.id.textTimer);
         tTimer.setText("00:00:00.0");
 
+        TargetBPM(Integer.parseInt(globals.age));//目標心拍
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-       // tDebug1.setText("age:" + globals.age);
-        TargetBPM(Integer.parseInt(globals.age));
+        tDebug1.setText(globals.bestrecord_time0);
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        //tDebug2.setText("TargetBPM:" + TargetBPM(Integer.parseInt(globals.age)));
+        tDebug2.setText(globals.bestrecord_time1);
 
         tGear = (TextView) findViewById(R.id.textGear);
         tGear.setText("0");
 
-        /*グローバル変数にバグあるので前回のデータは取得しない↓ゴーストは1kmを10秒で走る設定で固定
-        下のメソッドのコメントアウトを消せば前回のデータでゴーストが動くよ*/
-        GetLastTrainingData();//前回のデータを色々やってる
+        CheckLastData(tCourse.getText().toString());//過去に走行したことがある場合はゴースト出す
+        totalSeconds = SetBestrecordToSecond(tCourse.getText().toString());//レコードタイムを秒に変換
+        perSecond = PerSecond(totalMileage, totalSeconds);//秒速を計算
+
         Change7Seg();//7セグフォントに変換
 
         /*シークバーに関する奴*/
@@ -315,22 +327,22 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tCourse = (TextView) findViewById(R.id.textCourse);
         tCourse.setText("コース" + CourseNum);
         if (CourseNum.equals("0")) {
-            tCourse.setText("ポリテク→瀬峰");
+            tCourse.setText(course0);
             mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
             totalMileage = 10.4;
             video_Speed = 20;
         } else if (CourseNum.equals("1")) {
-            tCourse.setText("出羽街道");
+            tCourse.setText(course1);
             mediaPath = "/dewa.mp4";//実機9のストレージにあるファイルを指定
             totalMileage = 5.4;
             video_Speed = 5;
         } else if (CourseNum.equals("2")) {
-            tCourse.setText("鳴子");
+            tCourse.setText(course2);
             mediaPath = "/_naruko.mp4";//実機9のストレージにあるファイルを指定
             totalMileage = 1.3;
             video_Speed = 5;
         } else if (CourseNum.equals("3")) {
-            tCourse.setText("デバッグ用");
+            tCourse.setText(course3);
             mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
             totalMileage = 2.9;
             mediaPathCheck = true;
@@ -1071,10 +1083,33 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
-        if(finishRunning == true){
-            globals.mileage = String.valueOf(totalMileage);//完走
-        }else{
-            globals.mileage = String.valueOf(tMileage.getText());//とちゅうでやめた
+        if(finishRunning == true){//完走した
+            globals.mileage = String.valueOf(totalMileage);
+            //完走したときのみ新記録かどうかの判定をする
+            switch(tCourse.getText().toString()){
+                case course0:
+                    if( ChangeSeconds(tTimer.getText().toString()) > ChangeSeconds(globals.bestrecord_time0)){
+                        globals.bestrecord_time0 = tTimer.getText().toString();
+                    }
+                    break;
+                case course1:
+                    if( ChangeSeconds(tTimer.getText().toString()) > ChangeSeconds(globals.bestrecord_time1)){
+                        globals.bestrecord_time1 = tTimer.getText().toString();
+                    }
+                    break;
+                case course2:
+                    if( ChangeSeconds(tTimer.getText().toString()) > ChangeSeconds(globals.bestrecord_time2)){
+                        globals.bestrecord_time2 = tTimer.getText().toString();
+                    }
+                    break;
+                case course3:
+                    if( ChangeSeconds(tTimer.getText().toString()) > ChangeSeconds(globals.bestrecord_time3)){
+                        globals.bestrecord_time3 = tTimer.getText().toString();
+                    }
+                    break;
+            }
+        }else{//完走しない
+            globals.mileage = String.valueOf(tMileage.getText());
         }
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍
         globals.avg = String.valueOf(AverageSpeed(totalSpeed, totalSpeedCnt));//平均速度
@@ -1166,7 +1201,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Thread MoveGhost = new Thread(new MoveGhostTask(PerSecond(psKilometers, psSeconds)));
+                    Thread MoveGhost = new Thread(new MoveGhostTask(perSecond));
                     MoveGhost.start();
                     Thread MoveMe = new Thread(new MoveMeTask());
                     MoveMe.start();
@@ -1202,40 +1237,69 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
 
     /*ゴースト関連*/
-    //前回の測定結果を変数に入れたりするメソッド　
-    public void GetLastTrainingData() {//ここの処理は何か気持ち悪いからあとで書き直したい
-        //前回の走行データを色々するところ↓
-        if (globals.total_mileage == null) {
-            //前回のデータがないときはこっち
-            findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
-            Log.v("globals.total_mileage", "null");
-        } else {
-            psKilometers = Double.parseDouble(globals.total_mileage);
-            findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
-            Log.v("globals.total_mileage", globals.total_mileage);
+    public void CheckLastData(String courseName){
+        if(courseName == course0){
+            if(globals.bestrecord_time0 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        }else if(courseName == course1){
+            if(globals.bestrecord_time1 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        } if(courseName == course2){
+            if(globals.bestrecord_time2 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        } if(courseName == course3){
+            if(globals.bestrecord_time3 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
         }
-        if (globals.total_time == null) {
-            //前回のデータがないときはこっち
-            Log.v("globals.total_time", "null");
-        } else {
-            //秒速を求めるために時分秒を秒に変換
-            int hours = Integer.parseInt(globals.total_time.substring(0, 2));
-            int minutes = Integer.parseInt(globals.total_time.substring(3, 5));
-            double seconds = Double.parseDouble(globals.total_time.substring(6));
-            double totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-            psSeconds = totalSeconds;
-            Log.v("globals.total_time", String.valueOf(totalSeconds));
+    }
+    public double SetBestrecordToSecond(String courseName){
+        double seconds = 0.0;
+        switch(courseName){
+            case course0:
+                seconds = ChangeSeconds(globals.bestrecord_time0);
+                break;
+            case course1:
+                seconds = ChangeSeconds(globals.bestrecord_time1);
+                break;
+            case course2:
+                seconds = ChangeSeconds(globals.bestrecord_time2);
+                break;
+            case course3:
+                seconds = ChangeSeconds(globals.bestrecord_time3);
+                break;
         }
+        return seconds;
+    }
+
+    //時分秒を秒に変換
+    public double ChangeSeconds(String time){
+        int hours = Integer.parseInt(time.substring(0, 2));
+        int minutes = Integer.parseInt(time.substring(3, 5));
+        double seconds = Double.parseDouble(time.substring(6));
+        double totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+        return totalSeconds;
     }
 
     //秒速の計算
     public double PerSecond(double kilometers, double seconds) {
         int meters = 0;
-        double perSeconds = 0.0;
+        double pSecond = 0.0;
         meters = (int) (kilometers * 1000);
-        perSeconds = meters / seconds;
-        perSeconds = (perSeconds / meters);
-        return perSeconds;
+        pSecond = meters / seconds;
+        pSecond = (pSecond / meters);
+        return pSecond;
     }
 
     //ゴースト用のタスク
