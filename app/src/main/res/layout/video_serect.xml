@@ -57,7 +57,7 @@
 
             <Button
                 android:id="@+id/course1"
-                android:text="東京IC→御殿場IC(約84km)"
+                android:text="出羽街道(約5.4km)"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp" />

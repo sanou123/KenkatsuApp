@@ -135,18 +135,18 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     int cnt_25 = 0;//25回データとったかのカウンター
     long limit_Value = 150;//慣性判断での閾値
 
-    //double dist_Value = 0.0;//ペダルレベルでの距離
-    //double old_dist_Value = 0.0;//ペダルレベルでの距離
-
     public float resist_Level = (float) 1.0;//負荷のレベルによる係数
     NumberFormat format2 = NumberFormat.getInstance();
 
+    //ホールセンサの値
     public int hole_Value = 0;
     public int old_hole_Value = 0;
 
     public boolean run_Flg = false;//ON OFF で順番にセンサーの値を受け取るため
     public boolean usb_Flg = false;//pause画面で速度を変化させない
     public boolean chSpd_Flg = false;//speed_valueを更新するか否か
+
+    //ギアの値
     public boolean Gear1_Flg = false;
     public boolean Gear2_Flg = false;
     public boolean Gear3_Flg = false;
@@ -159,7 +159,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     long old_time = 0;
     long now_time = 0;
 
-    //DAICHI_TEST
+    double video_Speed = 0;
+
+    //USB通信　送信コマンド
     private USBAccessoryManager accessoryManager;
     byte[] commandPacket = new byte[2];
 
@@ -254,7 +256,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tTimer.setText("00:00:00.0");
 
         tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        //tDebug1.setText("age:" + globals.age);
+       // tDebug1.setText("age:" + globals.age);
         TargetBPM(Integer.parseInt(globals.age));
         tDebug2 = (TextView) findViewById(R.id.textDebug2);
         //tDebug2.setText("TargetBPM:" + TargetBPM(Integer.parseInt(globals.age)));
@@ -315,16 +317,19 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             tCourse.setText("ポリテク→瀬峰");
             mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
             totalMileage = 10.4;
+            video_Speed = 20;
             raw = 0;
         } else if (CourseNum.equals("1")) {
-            tCourse.setText("東京→御殿場");
-            mediaPath = "/test_x264.mp4";//実機9のストレージにあるファイルを指定
-            totalMileage = 83.7;
+            tCourse.setText("出羽街道");
+            mediaPath = "/dewa.mp4";//実機9のストレージにあるファイルを指定
+            totalMileage = 5.4;
+            video_Speed = 5;
             raw = 0;
         } else if (CourseNum.equals("2")) {
             tCourse.setText("鳴子");
             mediaPath = "/_naruko.mp4";//実機9のストレージにあるファイルを指定
             totalMileage = 1.3;
+            video_Speed = 5;
             raw = 0;
         } else if (CourseNum.equals("3")) {
             tCourse.setText("デバッグ用");
@@ -712,7 +717,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                     cnt_25 = 0;
                                                     all_speed_Value = all_speed_Value / 25;
                                                     tSpeed.setText(String.format("%.2f",all_speed_Value));
-                                                    params.setSpeed((float) (all_speed_Value / 20));//再生速度変更
+                                                    params.setSpeed((float) (all_speed_Value / video_Speed));//再生速度変更
                                                     mp.setPlaybackParams(params);
                                                     all_speed_Value = 0.0;
                                                 }
@@ -721,7 +726,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 else if(stop_Flg == true){
                                                     stop_Flg = false;
                                                     tSpeed.setText(String.format("%.2f",speed_Value));
-                                                    params.setSpeed((float) (speed_Value / 20));//再生速度変更
+                                                    params.setSpeed((float) (speed_Value / video_Speed));//再生速度変更
                                                     mp.setPlaybackParams(params);
                                                 }
                                                 else{
