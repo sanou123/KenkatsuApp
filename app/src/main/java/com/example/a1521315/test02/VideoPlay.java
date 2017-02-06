@@ -342,7 +342,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
             totalMileage = 2.9;
             mediaPathCheck = true;
+            video_Speed = 1;
         }
+
 
         CheckLastData(tCourse.getText().toString());//過去に走行したことがある場合はゴースト出す
         totalSeconds = SetBestrecordToSecond(tCourse.getText().toString());//レコードタイムを秒に変換
