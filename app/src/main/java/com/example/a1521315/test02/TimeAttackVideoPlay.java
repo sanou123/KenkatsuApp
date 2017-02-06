@@ -1153,57 +1153,27 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
 
-                    //100msごとに負荷の確認
-                    if(Gear3_Flg == false) {
-                        HukaDialog();
-                        Toast.makeText(getApplication(), "負荷を3に設定してください", Toast.LENGTH_LONG).show();
-                    }
-
-                    if(stop_Flg == true){
-                        //calの加算をしない
-                    }
-                    else {
-                        //#kaede debug
-                        if (Gear1_Flg == true) {
-                            cal += 3.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                            tCal.setText(String.format("%.2f", cal));
-                            tGear.setText("1");
-                            HukaDialog();
-                        }
-                        if (Gear2_Flg == true) {
-                            cal += 4.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                            tCal.setText(String.format("%.2f", cal));
-                            tGear.setText("2");
-                            HukaDialog();
-                        }
-                        if (Gear3_Flg == true) {
+                    if(Gear3_Flg == true){
+                        if (stop_Flg == true) {
+                            //calの加算をしない
+                        }else{
                             cal += 5.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                            tCal.setText(String.format("%.2f", cal));
-                            tGear.setText("3");
                         }
-                        if (Gear4_Flg == true) {
-                            cal += 6.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                            tCal.setText(String.format("%.2f", cal));
+                        //tDebug1.setText(String.format("%.2f",cal)+"kcal");
+                        tCal.setText(String.format("%.2f", cal));
+                        tGear.setText("3");
+                    }else{
+                        HukaDialog();
+                        if (Gear1_Flg == true && Gear2_Flg == false && Gear4_Flg == false && Gear5_Flg == false && Gear6_Flg == false) {
+                            tGear.setText("1");
+                        }else if (Gear1_Flg == false && Gear2_Flg == true && Gear4_Flg == false && Gear5_Flg == false && Gear6_Flg == false) {
+                            tGear.setText("2");
+                        }else if (Gear1_Flg == false && Gear2_Flg == false && Gear4_Flg == true && Gear5_Flg == false && Gear6_Flg == false) {
                             tGear.setText("4");
-                            HukaDialog();
-                        }
-                        if (Gear5_Flg == true) {
-                            cal += 7.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                            tCal.setText(String.format("%.2f", cal));
+                        }else if (Gear1_Flg == false && Gear2_Flg == false && Gear4_Flg == false && Gear5_Flg == true && Gear6_Flg == false) {
                             tGear.setText("5");
-                            HukaDialog();
-                        }
-                        if (Gear6_Flg == true) {
-                            cal += 8.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
-                            //tDebug1.setText(String.format("%.2f",cal)+"kcal");
-                            tCal.setText(String.format("%.2f", cal));
+                        }else if (Gear1_Flg == false && Gear2_Flg == false && Gear4_Flg == false && Gear5_Flg == false && Gear6_Flg == true) {
                             tGear.setText("6");
-                            HukaDialog();
                         }
                     }
 
