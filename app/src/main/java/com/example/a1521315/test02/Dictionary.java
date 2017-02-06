@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
@@ -26,6 +28,10 @@ public class Dictionary extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // タイトルバーを隠す
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // ステータスバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.dictionary);

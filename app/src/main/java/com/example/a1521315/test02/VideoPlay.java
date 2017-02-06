@@ -65,9 +65,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     /*コース名*/
     final String course0 = "瀬峰";
-    final String course1 = "出羽海道";
-    final String course2 = "鳴子";
-    final String course3 = "デバッグ";
+    final String course1 = "伊豆沼";
+    final String course2 = "出羽海道";
+    final String course3 = "鳴子";
+    final String course6 = "デバッグ";
     /*メーター関連の関数*/
     TextView tBPM, tHeartbeat;//心拍の変数
     TextView tTargetBPM, tTargetHeartbeat;//目標心拍数の変数
@@ -259,7 +260,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tKPH.setText("Speed              km/h");
 
         tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
-        tTargetHeartbeat.setText("" + TargetBPM(Integer.parseInt(globals.age)));
+
+        tTargetHeartbeat.setText("000");
         tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
         tTargetBPM.setText("Target BPM");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
@@ -324,25 +326,30 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tCourse.setText("コース" + CourseNum);
         if (CourseNum.equals("0")) {
             tCourse.setText(course0);
-            mediaPath = "/test02.mp4";//実機9のストレージにあるファルを指定
+            mediaPath = "/semine.mp4";//実機9のストレージにあるファルを指定
             totalMileage = 10.4;
             video_Speed = 20;
         } else if (CourseNum.equals("1")) {
             tCourse.setText(course1);
-            mediaPath = "/dewa.mp4";//実機9のストレージにあるファイルを指定
-            totalMileage = 5.4;
+            mediaPath = "/izunuma4400.mp4";//実機9のストレージにあるファイルを指定
+            totalMileage = 4.4;
             video_Speed = 5;
         } else if (CourseNum.equals("2")) {
             tCourse.setText(course2);
-            mediaPath = "/_naruko.mp4";//実機9のストレージにあるファイルを指定
-            totalMileage = 1.3;
+            mediaPath = "/dewa.mp4";//実機9のストレージにあるファイルを指定
+            totalMileage = 5.4;
             video_Speed = 5;
         } else if (CourseNum.equals("3")) {
             tCourse.setText(course3);
+            mediaPath = "/naruko.mp4";//実機9のストレージにあるファイルを指定
+            totalMileage = 1.3;
+            video_Speed = 5;
+        } else if (CourseNum.equals("6")) {
+            tCourse.setText(course6);
             mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
             totalMileage = 2.9;
             mediaPathCheck = true;
-            video_Speed = 1;
+            video_Speed = 0.5;
         }
 
 
@@ -942,6 +949,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 Log.d("No", "no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
                 StartDialog();
+                tTargetHeartbeat.setText("- ");
                 tHeartbeat.setText("- ");
                 break;
         }
@@ -1506,6 +1514,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void run() {
                     findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    tTargetHeartbeat.setText("" + TargetBPM(Integer.parseInt(globals.age)));
                     StartDialog();
                 }
             });

@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -39,6 +41,10 @@ public class SelectSheetTableNormal extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // タイトルバーを隠す
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // ステータスバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.select_sheet_table1);
