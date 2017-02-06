@@ -80,7 +80,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     TextView tDebug1;
     TextView tDebug2;
 
-    boolean mediaPathCheck = false;;//rawファイルかどうかを判断する変数。0=内部ストレージ　1=rawファイル
+    boolean mediaPathCheck = false;;//rawファイルかどうかを判断する変数。trueだったらraw
     String mediaPath = null;//動画データ
     private ImageView imageMe;//自機イメージ用の変数
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
@@ -1091,7 +1091,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
-        globals.mileage = String.valueOf(totalMileage);//走行距離
+        globals.mileage = String.valueOf(totalMileage);//完走
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
         globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
         globals.max = String.format("%.2f", maxSpeed);
@@ -1106,7 +1106,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
-        globals.mileage = String.valueOf(totalMileage);//走行距離
+        globals.mileage = String.valueOf(tMileage.getText());//とちゅうでやめた
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
         globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
         globals.max = String.format("%.2f", maxSpeed);
@@ -1121,7 +1121,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
-        globals.mileage = String.valueOf(totalMileage);//走行距離
+        globals.mileage = String.valueOf(tMileage.getText());//とちゅうでやめた
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
         globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
         globals.max = String.format("%.2f", maxSpeed);
@@ -1133,7 +1133,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     }
 
     /*非同期処理関連*/
-    //カウントアップタイマタスク
+    //カウントダウンタイマタスク
     public class CntTimerTask implements Runnable {
         //private Handler handler = new Handler();
         private long timerCount = 6000;//初期値10分
@@ -1269,6 +1269,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     MoveMe.start();
                     Thread MileageTask = new Thread(new MileageTask((double)mp.getDuration(), (double)mp.getCurrentPosition(), totalMileage));
                     MileageTask.start();
+                    //平均速度出すのに必要な奴
+                    totalSpeed += Double.parseDouble(tSpeed.getText().toString());//ディスプレイに表示されている時速を代入
+                    totalSpeedCnt++;//カウントする
                 }
             });
         }
