@@ -36,7 +36,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:textSize="50sp"
-            android:background="@drawable/button_state"/>
+            android:background="@drawable/button_state" />
         <Button
             android:id="@+id/buttonEndurance"
             android:text="耐久トレーニング"

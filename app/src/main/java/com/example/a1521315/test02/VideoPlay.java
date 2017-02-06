@@ -69,6 +69,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     final String course2 = "出羽海道";
     final String course3 = "鳴子";
     final String course6 = "デバッグ";
+    final String course7 = "お試し";
     /*メーター関連の関数*/
     TextView tBPM, tHeartbeat;//心拍の変数
     TextView tTargetBPM, tTargetHeartbeat;//目標心拍数の変数
@@ -350,6 +351,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             totalMileage = 2.9;
             mediaPathCheck = true;
             video_Speed = 0.5;
+        }else if (CourseNum.equals("6")) {
+            tCourse.setText(course7);
+            mediaPath = "/semine_otameshi.mp4";//実機9のストレージにあるファイルを指定
+            totalMileage = 1.04;
+            video_Speed = 20;
+            mediaPathCheck = false;
         }
 
 
