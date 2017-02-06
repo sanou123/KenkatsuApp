@@ -1,5 +1,6 @@
 package com.example.a1521315.test02;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -30,7 +33,7 @@ import java.util.TimeZone;
  * ListView表示画面に関連するクラス
  * SelectSheetListView
  */
-public class SelectSheetListView extends AppCompatActivity {
+public class SelectSheetListView extends Activity {
 
     private DBAdapter dbAdapter;
     private MyBaseAdapter myBaseAdapter;
@@ -46,6 +49,10 @@ public class SelectSheetListView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // タイトルバーを隠す
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // ステータスバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.select_sheet_listview);
