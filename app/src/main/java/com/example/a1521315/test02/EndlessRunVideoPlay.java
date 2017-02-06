@@ -280,7 +280,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
         tCourse = (TextView) findViewById(R.id.textCourse);
         tCourse.setText("エンドレスラン");
-        //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
         mediaPath = "/endless.mp4";//実機9のストレージにあるファルを指定
 
         findViewById(R.id.buttonYes).setOnClickListener(this);

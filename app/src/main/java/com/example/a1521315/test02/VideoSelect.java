@@ -67,6 +67,15 @@ public class VideoSelect extends Activity {
                 startActivity(intent);
             }
         });
+        Button btnDisp6 = (Button)findViewById(R.id.course6);
+        btnDisp6.setAllCaps(false);
+        btnDisp6.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(),VideoPlay.class);
+                intent.putExtra("course","6");//VideoPlayにコース番号を渡す
+                startActivity(intent);
+            }
+        });
 
     }
 
