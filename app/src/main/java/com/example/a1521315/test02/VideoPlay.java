@@ -260,7 +260,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tKPH.setText("Speed              km/h");
 
         tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
-        tTargetHeartbeat.setText("" + TargetBPM(Integer.parseInt(globals.age)));
+
+        tTargetHeartbeat.setText("000");
         tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
         tTargetBPM.setText("Target BPM");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
@@ -948,6 +949,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 Log.d("No", "no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
                 StartDialog();
+                tTargetHeartbeat.setText("- ");
                 tHeartbeat.setText("- ");
                 break;
         }
@@ -1512,6 +1514,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void run() {
                     findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    tTargetHeartbeat.setText("" + TargetBPM(Integer.parseInt(globals.age)));
                     StartDialog();
                 }
             });
