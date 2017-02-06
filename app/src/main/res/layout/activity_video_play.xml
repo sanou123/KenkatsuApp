@@ -466,7 +466,7 @@
             android:layout_height="100dp"
             android:layout_alignTop="@+id/MileageBarLayout"
             android:layout_alignParentEnd="true"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <TextView
                 android:text="デバッグ用テキストビュー1"
