@@ -37,6 +37,7 @@ public class MenuSelect extends Activity {
     /**
      * Called when the activity is first created.
      */
+    ImageView tyari0, tyari1;
 
 
     @Override
@@ -55,6 +56,10 @@ public class MenuSelect extends Activity {
 
         ImageView image = (ImageView) findViewById(R.id.imageDisplay);
         image.setImageResource(R.drawable.display);
+        tyari0 = (ImageView) findViewById(R.id.imageTyari0);
+        tyari0.setImageResource(R.drawable.tyari0);
+        tyari1 = (ImageView) findViewById(R.id.imageTyari1);
+        tyari1.setImageResource(R.drawable.tyari1);
         // TextView インスタンス生成
         TextView textView = (TextView)findViewById(R.id.title_user_select);
 
@@ -123,10 +128,26 @@ public class MenuSelect extends Activity {
                 startActivity(intent);
             }
         });
+        tyari0.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.TrainingSelect");
+                startActivity(intent);
+            }
+        });
 
         //training_logボタンを押した時TrainingLogへ移動
         Button btnDisp1 = (Button) findViewById(R.id.training_log);
         btnDisp1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName("com.example.a1521315.test02",
+                        "com.example.a1521315.test02.TrainingHistorySelect");
+                startActivity(intent);
+            }
+        });
+        tyari1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
