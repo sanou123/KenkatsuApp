@@ -1,126 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context=".MenuSelect"
-    android:background="@drawable/back_image">
+    android:background="@drawable/mainmenu00">
 
 
-
-
-    <RelativeLayout
-        android:layout_width="900dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/TextLayout"
+    <ImageButton
+        app:srcCompat="@drawable/tori"
+        android:id="@+id/imageButton"
+        android:background="@drawable/tori"
+        android:scaleType="fitXY"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_alignParentTop="true"
-        android:layout_centerInParent="true">
-
-        <TextView
-            android:id="@+id/title_user_select"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:textColor="@android:color/black"
-            android:textSize="30sp"
-            android:text="-----さんのメニュー" />
-
-        <TextView
-            android:id="@+id/text_bmi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textColor="@android:color/black"
-            android:text="-----さんのBMIは-----"
-            android:layout_below="@+id/title_user_select"
-            android:layout_alignParentStart="true" />
-
-
-    </RelativeLayout>
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="60dp"/>
 
     <RelativeLayout
-        android:id="@+id/BackKeyLayout"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        android:id="@+id/PersonalDataLayout"
         android:layout_alignParentStart="true"
-        android:layout_height="80dp">
+        android:layout_alignParentBottom="true">
 
-        <Button
-            android:id="@+id/update"
-
-            android:text="ユーザ情報更新"
-            android:textSize="24sp"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_alignParentTop="true"
+        <RelativeLayout
+            android:layout_width="345dp"
+            android:layout_height="295dp"
+            android:id="@+id/ImageLayout"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="10dp" />
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/display"
+                android:id="@+id/imageDisplay"
+                android:scaleType="fitXY"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:id="@+id/update"
+
+                android:text="ユーザ情報更新"
+                android:textSize="24sp"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="220dp"
+                android:background="#54b801"
+                android:textColor="@android:color/white" />
+
+            <RelativeLayout
+                android:layout_height="wrap_content"
+                android:id="@+id/TextLayout"
+                android:layout_width="300dp"
+                android:layout_marginTop="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/title_user_select"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="30sp"
+                    android:text="-----さん" />
+
+                <TextView
+                    android:id="@+id/text_bmi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/white"
+                    android:text="BMIは-----"
+                    android:layout_below="@+id/title_user_select"
+                    android:layout_alignParentStart="true" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <TextView
+        android:id="@+id/textView"
+        android:text="メインメニュー"
+        android:textSize="40sp"
+        android:textColor="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:id="@+id/ManuLayout2"
-        android:layout_below="@+id/TextLayout"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:background="@android:color/black"
+        android:layout_height="60dp" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_height="match_parent"
-            android:id="@+id/Left"
-            android:layout_width="0dip"
-            android:layout_weight="1">
+    <Button
+        android:id="@+id/training_log"
+        android:text="トレーニング履歴"
+        android:textSize="30sp"
+        android:layout_weight="1"
+        android:background="@drawable/button_state"
+        android:layout_height="70dp"
+        android:layout_width="300dp"
+        android:layout_marginBottom="51dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/training" />
 
-            <Button
-                android:id="@+id/training"
-                android:text="トレーニング"
-                android:textSize="50sp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_state"/>
+    <Button
+        android:id="@+id/training"
+        android:text="トレーニング"
+        android:textSize="30sp"
+        android:layout_weight="1"
+        android:background="@drawable/button_state"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="29dp"
+        android:layout_above="@+id/training_log"
+        android:layout_toStartOf="@+id/imageButton" />
 
-            <Button
-                android:id="@+id/dictionary"
-                android:text="健康辞典"
-                android:textSize="50sp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_state"/>
+    <RelativeLayout
+        android:id="@+id/BookLayout"
+        android:layout_width="100dp"
+        android:layout_marginEnd="13dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="28dp"
+        android:layout_alignTop="@+id/PersonalDataLayout"
+        android:layout_alignParentEnd="true">
 
-        </LinearLayout>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/book"
+            android:id="@+id/imageButtonBook"
+            android:background="@drawable/book"
+            android:scaleType="fitXY" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_height="match_parent"
-            android:id="@+id/Right"
-            android:layout_width="0dip"
-            android:layout_weight="1">
+        <TextView
+            android:text="健 活"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:textColor="@android:color/black"
+            android:textSize="38sp"
+            android:layout_marginTop="4dp"
+            android:layout_centerHorizontal="true" />
 
-            <Button
-                android:id="@+id/training_log"
-                android:text="トレーニング履歴"
-                android:textSize="50sp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_state"/>
-
-            <Button
-                android:id="@+id/search"
-                android:text="ツイート検索"
-                android:textSize="50sp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_state"/>
-
-        </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

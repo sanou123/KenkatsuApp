@@ -6,141 +6,94 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context=".VideoSelect"
-    android:id="@+id/CourseSelectLayout">
+    android:id="@+id/CourseSelectLayout"
+    android:background="@drawable/courseselect">
 
     <TextView
         android:id="@+id/textMSG"
         android:text="トレーニングコースを選んでください"
         android:textSize="40sp"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:gravity="center"
-        />
+        android:background="@android:color/black"
+        android:layout_height="60dp" />
 
-    <RelativeLayout
-        android:id="@+id/BackKeyLayout"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_height="80dp">
+    <Button
+        android:id="@+id/course6"
+        android:textSize="20sp"
+        android:visibility="visible"
+        android:background="@drawable/button_state"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="瀬"
+        android:layout_marginTop="68dp"
+        android:layout_alignTop="@+id/course0"
+        android:layout_toEndOf="@+id/course0"
+        android:layout_marginStart="11dp" />
 
-    </RelativeLayout>
+    <Button
+        android:id="@+id/course0"
+        android:textSize="20sp"
+        android:background="@drawable/button_state"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="瀬"
+        android:layout_marginTop="54dp"
+        android:layout_below="@+id/course1"
+        android:layout_alignStart="@+id/course7" />
 
-    <LinearLayout
-        android:id="@+id/CourseLayout"
-        android:orientation="horizontal"
+    <Button
+        android:id="@+id/course7"
+        android:textSize="20sp"
+        android:visibility="visible"
+        android:background="@drawable/button_state"
+        android:layout_marginEnd="223dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="瀬"
+        android:layout_below="@+id/course3"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/course1"
+        android:textSize="20sp"
+        android:visibility="visible"
+        android:background="@drawable/button_state"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="伊"
+        android:layout_marginStart="44dp"
+        android:layout_alignTop="@+id/course7"
+        android:layout_alignStart="@+id/course6" />
+
+    <Button
+        android:id="@+id/course3"
+        android:textSize="20sp"
+        android:visibility="visible"
+        android:background="@drawable/button_state"
+        android:layout_marginStart="139dp"
+        android:layout_marginTop="27dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="鳴"
         android:layout_below="@+id/textMSG"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true">
+        android:layout_alignParentStart="true" />
 
-        <LinearLayout
-            android:id="@+id/CourseLayoutLeft"
-            android:orientation="vertical"
-            android:layout_below="@+id/textMSG"
-            android:layout_width="0dip"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="0dp"
-            android:gravity="left">
-
-            <Button
-                android:id="@+id/course0"
-                android:text="瀬峰(約10km)"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@drawable/button_state"/>
-
-            <Button
-                android:id="@+id/course2"
-                android:text="出羽街道(約5.4km)"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@drawable/button_state"/>
-
-            <Button
-                android:id="@+id/course4"
-                android:text="あ"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="invisible"
-                android:background="@drawable/button_state"/>
-
-            <Button
-                android:id="@+id/course6"
-                android:text="デバッグ用(rawフォルダ)"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="visible"
-                android:background="@drawable/button_state"/>
-
-            <Button
-                android:id="@+id/course8"
-                android:text="コース4"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="invisible"
-                android:background="@drawable/button_state"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/CourseLayoutRight"
-            android:orientation="vertical"
-            android:layout_below="@+id/textMSG"
-            android:layout_width="0dip"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:gravity="right">
-
-            <Button
-                android:id="@+id/course1"
-                android:text="伊豆沼(4.4km)"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="visible"
-                android:background="@drawable/button_state"/>
-
-            <Button
-                android:id="@+id/course3"
-                android:text="鳴子(約1.3km)"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="visible"
-                android:background="@drawable/button_state"/>
-
-            <Button
-                android:id="@+id/course5"
-                android:text="コース7"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="invisible"
-                android:background="@drawable/button_state"/>
-
-            <Button
-                android:id="@+id/course7"
-                android:text="お試し(約1km)"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="visible"
-                android:background="@drawable/button_state"/>
-
-        </LinearLayout>
-    </LinearLayout>
+    <Button
+        android:id="@+id/course2"
+        android:textSize="20sp"
+        android:background="@drawable/button_state"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="出"
+        android:layout_below="@+id/course3"
+        android:layout_alignEnd="@+id/course3"
+        android:layout_marginEnd="12dp" />
 
 
 </RelativeLayout>

@@ -3,6 +3,8 @@ package com.example.a1521315.test02;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -16,6 +18,10 @@ public class twitter_logout extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // タイトルバーを隠す
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // ステータスバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.search);
