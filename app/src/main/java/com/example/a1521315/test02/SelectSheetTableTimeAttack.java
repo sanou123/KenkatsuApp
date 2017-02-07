@@ -77,7 +77,7 @@ public class SelectSheetTableTimeAttack extends AppCompatActivity {
         TextView headerCalorie_consumption = setTextItem("消費カロリー", GCH);
         TableRow.LayoutParams paramsCalorie_consumption = setParams(0.3f);
         // ヘッダー：総走行時間
-        TextView headerTotal_time = setTextItem("走行時間", GCH);
+        TextView headerTotal_time = setTextItem("残り時間", GCH);
         TableRow.LayoutParams paramsTotal_time = setParams(0.4f);
         // ヘッダー：総走行距離
         TextView headerTotal_distance = setTextItem("走行距離", GCH);
@@ -101,7 +101,7 @@ public class SelectSheetTableTimeAttack extends AppCompatActivity {
         String column = "name_id";
         String column1 = "training_name";          //検索対象のカラム名
         String[] name_id = {globals.name_id};
-        String [] training_name = {"TimeAttack"};            //検索対象の文字
+        String [] training_name = {"体力測定コース"};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
         Cursor c = dbAdapter.searchDB(null, column , name_id);

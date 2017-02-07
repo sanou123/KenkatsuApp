@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 
 /**
@@ -12,12 +13,20 @@ import android.widget.TabHost;
  */
 
 public class GraphTab extends TabActivity {
+
+    Globals globals;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graph_tab);
 
         TabHost tabhost = getTabHost();
+
+        TextView TextView = (TextView) findViewById(R.id.textView);             // 検索する日を表示
+        TextView.setText(globals.year + globals.month + globals.day + "のトレーニング履歴");
+
+
 
         // IntentでTabページ追加
         tabhost.addTab(tabhost

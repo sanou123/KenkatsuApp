@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -53,7 +52,7 @@ public class TrainingSelect extends Activity {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
-                globals.training_name = "TimeAttack";
+                //globals.training_name = "TimeAttack";
                 intent.setClassName("com.example.a1521315.test02",
                         "com.example.a1521315.test02.TimeAttackVideoPlay");
                 startActivity(intent);
@@ -66,7 +65,7 @@ public class TrainingSelect extends Activity {
             public void onClick(View v) {
                 // Sub 画面を起動
                 Intent intent = new Intent();
-                globals.training_name = "EndlessRun";
+                //globals.training_name = "EndlessRun";
                 intent.setClassName("com.example.a1521315.test02",
                         "com.example.a1521315.test02.EndlessRunVideoPlay");
                 startActivity(intent);

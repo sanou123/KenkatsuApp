@@ -111,6 +111,7 @@ public class GraphHeartRate extends Activity {
         createLineChartDay();
     }
 
+    /*年での検索*/
     private void createLineChartYear() {
         LineChart lineChart = (LineChart) findViewById(R.id.chart);
 
@@ -171,6 +172,7 @@ public class GraphHeartRate extends Activity {
 
     }
 
+    /*年と月で検索*/
     private void createLineChartMonth() {
         LineChart lineChart = (LineChart) findViewById(R.id.chart);
 
@@ -236,6 +238,7 @@ public class GraphHeartRate extends Activity {
 
     }
 
+    /*年月日で検索*/
     private void createLineChartDay() {
         LineChart lineChart = (LineChart) findViewById(R.id.chart);
 

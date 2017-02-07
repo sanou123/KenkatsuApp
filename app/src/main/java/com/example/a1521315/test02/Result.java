@@ -174,10 +174,6 @@ public class Result extends Activity {
         Log.v("時間", times_of_dayFormat.format(times_of_day));
         globals.times_of_day = times_of_dayFormat.format(times_of_day);
 
-        globals.total_time =  globals.time;
-
-        globals.total_mileage = globals.mileage;
-
         int name_id = Integer.parseInt(globals.name_id);
 
         globals.graph_time = (globals.hh*60) + globals.mm + (globals.ss/60)

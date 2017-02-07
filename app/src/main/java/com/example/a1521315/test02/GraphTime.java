@@ -3,6 +3,14 @@ package com.example.a1521315.test02;
 /**
  * Created by 1521315 on 2016/11/17.
  */
+/**
+ *
+ * 今回は使用していない
+ * 数値表現方法が芳しくないため
+ * ex)1分30秒　→　1.5　
+ *
+ */
+
 
 
 import android.app.Activity;
