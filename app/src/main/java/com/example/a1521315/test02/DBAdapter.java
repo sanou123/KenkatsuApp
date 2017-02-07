@@ -60,6 +60,7 @@ public class DBAdapter {
     public final static String COL_TRAINING_NAME = "training_name";           //走行距離
     public final static String COL_GRAPH_TIME = "graph_time";       //  グラフ用時間(変換)
 
+
     private SQLiteDatabase db = null;           // SQLiteDatabase
     private DBHelper dbHelper = null;           // DBHelper
     protected Context context;                  // Context

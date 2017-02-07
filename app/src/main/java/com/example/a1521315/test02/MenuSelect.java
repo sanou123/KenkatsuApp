@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -197,8 +196,6 @@ public class MenuSelect extends Activity {
                     dialog.show();
                 }
 
-                Intent intent = new Intent(MenuSelect.this, Search.class);
-                startActivity(intent);
 
             }
         });

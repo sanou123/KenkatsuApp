@@ -107,7 +107,7 @@ public class SelectSheetTableEndlessrun extends AppCompatActivity {
         String column = "name_id";
         String column1 = "training_name";          //検索対象のカラム名
         String[] name_id = {globals.name_id};
-        String [] training_name = {"Endlessrun"};            //検索対象の文字
+        String [] training_name = {"エンドレスラン"};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
         Cursor c = dbAdapter.searchDB(null, column , name_id);

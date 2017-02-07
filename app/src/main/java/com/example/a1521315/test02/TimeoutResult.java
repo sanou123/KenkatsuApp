@@ -124,16 +124,6 @@ public class TimeoutResult extends Activity {
         globals.times_of_day = times_of_dayFormat.format(times_of_day);
 
 
-        ///////////////////////////////////////////////////////////////////
-        if(globals.total_time != null){
-            globals.total_time = globals.total_time + globals.time;
-        }else {
-            globals.total_time = globals.time;
-        }
-        globals.total_mileage = globals.mileage;
-/////////////////////////////////////////////////////////////////////////
-
-
         int name_id = Integer.parseInt(globals.name_id);
 
         //globals.cal = (8.4 * Double.valueOf(globals.time) * Double.valueOf(globals.weight));
