@@ -9,8 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -41,10 +39,6 @@ public class SelectSheetTableEndlessrun extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // タイトルバーを隠す
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // ステータスバーを隠す
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.select_sheet_table1);
@@ -107,7 +101,7 @@ public class SelectSheetTableEndlessrun extends AppCompatActivity {
         String column = "name_id";
         String column1 = "training_name";          //検索対象のカラム名
         String[] name_id = {globals.name_id};
-        String [] training_name = {"EndlessRun"};            //検索対象の文字
+        String [] training_name = {"Endlessrun"};            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
         Cursor c = dbAdapter.searchDB(null, column , name_id);
