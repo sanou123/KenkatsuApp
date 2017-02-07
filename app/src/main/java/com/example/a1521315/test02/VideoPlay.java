@@ -1410,9 +1410,10 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void run() {
                     if (mpBGM == null) {
-                        mpBGM = MediaPlayer.create(getApplicationContext(), R.raw.zangyousenshi);
+                        mpBGM = MediaPlayer.create(getApplicationContext(), R.raw.morning2);
                         mpBGM.start();
                     }
+                    mpBGM.setLooping(true);
                 }
             });
         }

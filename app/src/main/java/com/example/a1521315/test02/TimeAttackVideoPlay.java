@@ -1382,9 +1382,10 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 @Override
                 public void run() {
                     if (mpBGM == null) {
-                        mpBGM = MediaPlayer.create(getApplicationContext(), R.raw.zangyousenshi);
+                        mpBGM = MediaPlayer.create(getApplicationContext(), R.raw.morning2);
                         mpBGM.start();
                     }
+                    mpBGM.setLooping(true);
                 }
             });
         }
