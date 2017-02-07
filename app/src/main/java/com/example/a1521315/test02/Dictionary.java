@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Dictionary extends AppCompatActivity {
-    int PARENT_DATA = 20;
+    int PARENT_DATA = 13;
     int CHILD_DATA = 1;
 
     @Override
