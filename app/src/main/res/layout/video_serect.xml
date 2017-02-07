@@ -12,15 +12,15 @@
     <TextView
         android:id="@+id/textMSG"
         android:text="トレーニングコースを選んでください"
-        android:textSize="40sp"
-        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="50sp"
+        android:textColor="@android:color/black"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:gravity="center"
-        />
+        android:layout_height="70dp"
+        android:background="@android:color/darker_gray" />
 
     <Button
         android:id="@+id/course7"
