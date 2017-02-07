@@ -123,7 +123,6 @@ public class TimeoutResult extends Activity {
         Log.v("時間", times_of_dayFormat.format(times_of_day));
         globals.times_of_day = times_of_dayFormat.format(times_of_day);
 
-
         int name_id = Integer.parseInt(globals.name_id);
 
         //globals.cal = (8.4 * Double.valueOf(globals.time) * Double.valueOf(globals.weight));

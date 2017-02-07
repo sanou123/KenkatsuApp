@@ -53,14 +53,16 @@
                 android:text="瀬峰(約10km)"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
-                android:layout_height="80dp" />
+                android:layout_height="80dp"
+                android:background="@drawable/button_state"/>
 
             <Button
                 android:id="@+id/course2"
                 android:text="出羽街道(約5.4km)"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
-                android:layout_height="80dp" />
+                android:layout_height="80dp"
+                android:background="@drawable/button_state"/>
 
             <Button
                 android:id="@+id/course4"
@@ -68,7 +70,8 @@
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:background="@drawable/button_state"/>
 
             <Button
                 android:id="@+id/course6"
@@ -76,7 +79,8 @@
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:visibility="visible"/>
+                android:visibility="visible"
+                android:background="@drawable/button_state"/>
 
             <Button
                 android:id="@+id/course8"
@@ -84,7 +88,8 @@
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:background="@drawable/button_state"/>
 
         </LinearLayout>
 
@@ -104,7 +109,8 @@
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:background="@drawable/button_state"/>
 
             <Button
                 android:id="@+id/course3"
@@ -112,7 +118,8 @@
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:background="@drawable/button_state"/>
 
             <Button
                 android:id="@+id/course5"
@@ -120,7 +127,8 @@
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:background="@drawable/button_state"/>
 
             <Button
                 android:id="@+id/course7"
@@ -128,7 +136,8 @@
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:background="@drawable/button_state"/>
 
         </LinearLayout>
     </LinearLayout>

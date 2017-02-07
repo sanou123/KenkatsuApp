@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
@@ -133,7 +134,7 @@ public class SelectSheetTableNormal extends AppCompatActivity {
                 // コース名
                 TextView textCourse = setTextItem(c.getString(11), GCH);      // TextViewのカスタマイズ処理
 
-                /* getString()参考
+                /* getString()参考*/
                 Log.d("取得したCursor(DATA_ID):", String.valueOf(c.getString(0)));
                 Log.d("取得したCursor(名前に対するID):", String.valueOf(c.getString(1)));
                 Log.d("取得したCursor(名前):", String.valueOf(c.getString(2)));
@@ -150,7 +151,7 @@ public class SelectSheetTableNormal extends AppCompatActivity {
                 Log.d("取得したCursor(平均速度):", c.getString(13));
                 Log.d("取得したCursor(最高速度):", c.getString(14));
                 Log.d("取得したCursor(走行距離):", c.getString(15));
-                */
+
 
 
                 // rowHeaderに各項目(DBから取得した各項目)を追加
