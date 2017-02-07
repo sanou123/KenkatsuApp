@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,11 +51,13 @@ public class MenuSelect extends Activity {
 
         //menu_selectのレイアウトを使用
         setContentView(R.layout.menu_select);
+        ImageView image = (ImageView) findViewById(R.id.imageTori);
+        image.setImageResource(R.drawable.tori);
 
         // TextView インスタンス生成
         TextView textView = (TextView)findViewById(R.id.title_user_select);
 
-        String columns = globals.now_user + "さんのメニュー";
+        String columns = globals.now_user + "さん";
         textView.setText(columns);
 
         TextView textView1 = (TextView)findViewById(R.id.text_bmi);
@@ -62,43 +65,55 @@ public class MenuSelect extends Activity {
         //Degree of obesity(肥満度)
         if(globals.bmi < 18.5){
 
-            String Doo = "(低体重)\n";
-            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
-                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
+            String Doo = "(低体重)\n\n";
+            String columns1 = "BMI指数は\n"
+                    + globals.bmi + Doo
+                    + "理想体重は\n"
+                    + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
 
         }else if(globals.bmi >= 18.5 && globals.bmi < 25){
 
-            String Doo = new String("(普通体重)\n");
-            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
-                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
+            String Doo = new String("(普通体重)\n\n");
+            String columns1 = "BMI指数は\n"
+                    + globals.bmi + Doo
+                    + "理想体重は\n"
+                    + globals.ideal_weight + "kg";
             textView1.setText(columns1);
 
         }else if(globals.bmi >= 25 && globals.bmi < 30){
 
-            String Doo = new String("(肥満(1度))\n");
-            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
-                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
+            String Doo = new String("(肥満(1度))\n\n");
+            String columns1 = "BMI指数は\n"
+                    + globals.bmi + Doo
+                    + "理想体重は\n"
+                    + globals.ideal_weight + "kg";
             textView1.setText(columns1);
 
         }else if(globals.bmi >= 30 && globals.bmi < 35){
 
-            String Doo = new String("(肥満(2度))\n");
-            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
-                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
+            String Doo = new String("(肥満(2度))\n\n");
+            String columns1 ="BMI指数は\n"
+                    + globals.bmi + Doo
+                    + "理想体重は\n"
+                    + globals.ideal_weight + "kg";
             textView1.setText(columns1);
 
         }else if(globals.bmi >= 35 && globals.bmi < 40){
 
-            String Doo = new String("(肥満(3度))\n");
-            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
-                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
+            String Doo = new String("(肥満(3度))\n\n");
+            String columns1 ="BMI指数は\n"
+                    + globals.bmi + Doo
+                    + "理想体重は\n"
+                    + globals.ideal_weight + "kg";
             textView1.setText(columns1);
         }else if(globals.bmi >= 40){
 
-            String Doo = new String("(肥満(4度))\n");
-            String columns1 = globals.now_user + "さんのBMIは　" + globals.bmi
-                    + Doo + "理想体重は　" + globals.ideal_weight + "　kgです。";
+            String Doo = new String("(肥満(4度))\n\n");
+            String columns1 = "BMI指数は\n"
+                    + globals.bmi + Doo
+                    + "理想体重は\n"
+                    + globals.ideal_weight + "kg";
             textView1.setText(columns1);
         }
 
