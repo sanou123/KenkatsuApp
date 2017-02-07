@@ -151,7 +151,7 @@ public class VideoSelect extends Activity {
                 // ポップアップメニュー表示
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoSelect.this);
                 alertDialog.setTitle("コースセレクト");
-                alertDialog.setMessage("でばっぐ！！");
+                alertDialog.setMessage("瀬峰ショートコース1(約200m)");
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -178,7 +178,7 @@ public class VideoSelect extends Activity {
                 // ポップアップメニュー表示
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(VideoSelect.this);
                 alertDialog.setTitle("コースセレクト");
-                alertDialog.setMessage("おためし！(約1km)");
+                alertDialog.setMessage("瀬峰ショートコース2(約1km)");
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
