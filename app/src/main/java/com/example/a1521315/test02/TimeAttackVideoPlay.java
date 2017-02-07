@@ -408,7 +408,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     // Resets the demo application when a device detaches
     public void disconnectAccessory() {
         Log.d(TAG, "disconnectAccessory()");
-        Toast.makeText(this, "通信切断処理中…", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "通信切断処理中…", Toast.LENGTH_LONG).show();
 
         if (deviceAttached == false) {
             //Toast.makeText(this, "デバイスが切断されました", Toast.LENGTH_LONG).show();
@@ -900,8 +900,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     PlayProcess();
                 }
                 else{
-                    Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
-                    Log.v("a","負荷を3に設定してください");
+                    //Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
+                    //Log.v("a","負荷を3に設定してください");
                     StartDialog();
                 }
             }

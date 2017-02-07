@@ -496,7 +496,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     // Resets the demo application when a device detaches
     public void disconnectAccessory() {
         Log.d(TAG, "disconnectAccessory()");
-        Toast.makeText(this, "通信切断処理中…", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "通信切断処理中…", Toast.LENGTH_LONG).show();
 
         if (deviceAttached == false) {
             //Toast.makeText(this, "デバイスが切断されました", Toast.LENGTH_LONG).show();
@@ -736,7 +736,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                                                 chSpd_Flg=false;
                                             }
                                         }
-
+//
                                         //通常の速度反映処理
                                         if(inertia_Flg == false){
                                             //メディアプレイヤーの再生速度を設定
@@ -1060,7 +1060,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                 seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
                 usb_Flg = false;
-                accessoryManager.showStatus(getApplication());
+                //accessoryManager.showStatus(getApplication());
             }
         });
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
