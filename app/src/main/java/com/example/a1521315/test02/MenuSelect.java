@@ -73,7 +73,8 @@ public class MenuSelect extends Activity {
 
             String Doo = "(低体重)\n";
             String columns1 = "身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
 
@@ -81,7 +82,8 @@ public class MenuSelect extends Activity {
 
             String Doo = new String("(普通体重)\n");
             String columns1 = "身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
 
@@ -89,7 +91,8 @@ public class MenuSelect extends Activity {
 
             String Doo = new String("(肥満(1度))\n");
             String columns1 = "身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
 
@@ -97,7 +100,8 @@ public class MenuSelect extends Activity {
 
             String Doo = new String("(肥満(2度))\n");
             String columns1 ="身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
 
@@ -105,14 +109,16 @@ public class MenuSelect extends Activity {
 
             String Doo = new String("(肥満(3度))\n");
             String columns1 ="身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
         }else if(globals.bmi >= 40){
 
             String Doo = new String("(肥満(4度))\n");
             String columns1 ="身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
         }
