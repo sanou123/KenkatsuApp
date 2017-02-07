@@ -9,7 +9,8 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context=".MainUser">
+    tools:context=".MainUser"
+    android:background="@drawable/note0">
 
     <!-- 説明 -->
     <TextView
@@ -17,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/text03_title_detail"
-        android:textColor="#333333" />
+        android:textColor="#333333"
+        android:textSize="30sp"/>
 
     <!-- ListView -->
     <ListView

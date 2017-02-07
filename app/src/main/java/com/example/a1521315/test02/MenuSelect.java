@@ -56,10 +56,7 @@ public class MenuSelect extends Activity {
 
         ImageView image = (ImageView) findViewById(R.id.imageDisplay);
         image.setImageResource(R.drawable.display);
-        tyari0 = (ImageView) findViewById(R.id.imageTyari0);
-        tyari0.setImageResource(R.drawable.tyari0);
-        tyari1 = (ImageView) findViewById(R.id.imageTyari1);
-        tyari1.setImageResource(R.drawable.tyari1);
+
         // TextView インスタンス生成
         TextView textView = (TextView)findViewById(R.id.title_user_select);
 
@@ -73,7 +70,8 @@ public class MenuSelect extends Activity {
 
             String Doo = "(低体重)\n";
             String columns1 = "身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
 
@@ -81,7 +79,8 @@ public class MenuSelect extends Activity {
 
             String Doo = new String("(普通体重)\n");
             String columns1 = "身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
 
@@ -89,7 +88,8 @@ public class MenuSelect extends Activity {
 
             String Doo = new String("(肥満(1度))\n");
             String columns1 = "身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
 
@@ -97,7 +97,8 @@ public class MenuSelect extends Activity {
 
             String Doo = new String("(肥満(2度))\n");
             String columns1 ="身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
 
@@ -105,14 +106,16 @@ public class MenuSelect extends Activity {
 
             String Doo = new String("(肥満(3度))\n");
             String columns1 ="身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
         }else if(globals.bmi >= 40){
 
             String Doo = new String("(肥満(4度))\n");
             String columns1 ="身長"+globals.height+"cm,"+ "体重"+globals.weight + "kg\n"
-                    +"BMIは" + globals.bmi + Doo
+                    +"BMIは" + globals.bmi + "\n"
+                    + Doo
                     + "理想体重は" + globals.ideal_weight+ "kg";
             textView1.setText(columns1);
         }
@@ -121,14 +124,6 @@ public class MenuSelect extends Activity {
         //trainingボタンを押した時TrainingSelectへ移動
         Button btnDisp0 = (Button) findViewById(R.id.training);
         btnDisp0.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.TrainingSelect");
-                startActivity(intent);
-            }
-        });
-        tyari0.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
@@ -147,14 +142,7 @@ public class MenuSelect extends Activity {
                 startActivity(intent);
             }
         });
-        tyari1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName("com.example.a1521315.test02",
-                        "com.example.a1521315.test02.TrainingHistorySelect");
-                startActivity(intent);
-            }
-        });
+
 
         //updateボタンを押した時MainUserへ移動
         Button btnDisp3 = (Button) findViewById(R.id.update);
