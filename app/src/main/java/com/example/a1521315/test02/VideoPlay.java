@@ -1060,7 +1060,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                 seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
                 usb_Flg = false;
-                accessoryManager.showStatus(getApplication());
+                //accessoryManager.showStatus(getApplication());
             }
         });
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
