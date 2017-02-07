@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +39,10 @@ public class UserUpdate extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // タイトルバーを隠す
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // ステータスバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.user_update);

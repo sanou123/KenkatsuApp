@@ -50,35 +50,36 @@
 
             <Button
                 android:id="@+id/course0"
-                android:text="ポリテクから瀬峰(約10km)"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp" />
-
-            <Button
-                android:id="@+id/course1"
-                android:text="出羽街道(約5.4km)"
+                android:text="瀬峰(約10km)"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp" />
 
             <Button
                 android:id="@+id/course2"
-                android:text="鳴子(約1.3km)"
+                android:text="出羽街道(約5.4km)"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp" />
 
             <Button
-                android:id="@+id/course3"
-                android:text="デバッグ用(rawフォルダ)"
+                android:id="@+id/course4"
+                android:text="あ"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:visibility="invisible"/>
 
             <Button
-                android:id="@+id/course4"
+                android:id="@+id/course6"
+                android:text="デバッグ用(rawフォルダ)"
+                android:textSize="30sp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:visibility="visible"/>
+
+            <Button
+                android:id="@+id/course8"
                 android:text="コース4"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
@@ -98,23 +99,23 @@
             android:gravity="right">
 
             <Button
+                android:id="@+id/course1"
+                android:text="伊豆沼(4.4km)"
+                android:textSize="30sp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/course3"
+                android:text="鳴子(約1.3km)"
+                android:textSize="30sp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:visibility="visible" />
+
+            <Button
                 android:id="@+id/course5"
-                android:text="コース5"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="invisible" />
-
-            <Button
-                android:id="@+id/course6"
-                android:text="コース6"
-                android:textSize="30sp"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="invisible" />
-
-            <Button
-                android:id="@+id/course7"
                 android:text="コース7"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
@@ -122,12 +123,12 @@
                 android:visibility="invisible" />
 
             <Button
-                android:id="@+id/course8"
-                android:text="コース8"
+                android:id="@+id/course7"
+                android:text="お試し(約1km)"
                 android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
         </LinearLayout>
     </LinearLayout>

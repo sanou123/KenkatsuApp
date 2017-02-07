@@ -95,6 +95,11 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     ScheduledFuture future;
     Runnable myTimerTask = new CntTimerTask();
 
+    //シークバーに関する奴(平均速度出すのに必要)
+    private ScheduledExecutorService seekbarscheduler;
+    ScheduledFuture seekbarfuture;
+    Runnable mySeekBarTask = new SeekBarTask();
+
     PlaybackParams params = new PlaybackParams();
 
     //USB通信関連の変数　初期化
@@ -275,7 +280,6 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
         tCourse = (TextView) findViewById(R.id.textCourse);
         tCourse.setText("エンドレスラン");
-        //mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
         mediaPath = "/endless.mp4";//実機9のストレージにあるファルを指定
 
         findViewById(R.id.buttonYes).setOnClickListener(this);
@@ -890,6 +894,8 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
 
         timerscheduler = Executors.newSingleThreadScheduledExecutor();
         future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);
+        seekbarscheduler = Executors.newSingleThreadScheduledExecutor();
+        seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
         Thread StartBGM = new Thread(new EndlessRunVideoPlay.StartBGM());
         StartBGM.start();
 
@@ -905,6 +911,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     public void PauseDialog() {
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
+        seekbarfuture.cancel(true);
         speed_Value = 0;
         all_speed_Value = 0;
         speedCount = 0.0;
@@ -921,6 +928,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             public void onClick(DialogInterface dialog, int which) {
                 //VideoSelectに戻る処理
                 timerscheduler.shutdown();//タイマー終了
+                seekbarscheduler.shutdown();//タイマー終了
                 if (mp != null) {
                     mp.release();
                     mp = null;
@@ -936,6 +944,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
+                seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
                 usb_Flg = false;
             }
         });
@@ -1025,6 +1034,21 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                             tGear.setText("6");
                         }
                     }
+                }
+            });
+        }
+    }
+
+    //シークバータスク(エンドレスランはシークバーがないので平均速度出すだけに使ってる)
+    public class SeekBarTask implements Runnable {
+        public void run() {
+            // handlerを使って処理をキューイングする
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //平均速度出すのに必要な奴
+                    totalSpeed += Double.parseDouble(tSpeed.getText().toString());//ディスプレイに表示されている時速を代入
+                    totalSpeedCnt++;//カウントする
                 }
             });
         }
