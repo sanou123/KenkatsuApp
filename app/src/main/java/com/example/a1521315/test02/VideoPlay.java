@@ -496,7 +496,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     // Resets the demo application when a device detaches
     public void disconnectAccessory() {
         Log.d(TAG, "disconnectAccessory()");
-        Toast.makeText(this, "通信切断処理中…", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "通信切断処理中…", Toast.LENGTH_LONG).show();
 
         if (deviceAttached == false) {
             //Toast.makeText(this, "デバイスが切断されました", Toast.LENGTH_LONG).show();
