@@ -326,37 +326,41 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         tCourse = (TextView) findViewById(R.id.textCourse);
         tCourse.setText("コース" + CourseNum);
         if (CourseNum.equals("0")) {
+            mediaPathCheck = false;
             tCourse.setText(course0);
             mediaPath = "/semine.mp4";//実機9のストレージにあるファルを指定
             totalMileage = 10.4;
             video_Speed = 20;
         } else if (CourseNum.equals("1")) {
+            mediaPathCheck = false;
             tCourse.setText(course1);
             mediaPath = "/izunuma4400.mp4";//実機9のストレージにあるファイルを指定
             totalMileage = 4.4;
             video_Speed = 5;
         } else if (CourseNum.equals("2")) {
+            mediaPathCheck = false;
             tCourse.setText(course2);
             mediaPath = "/dewa.mp4";//実機9のストレージにあるファイルを指定
             totalMileage = 5.4;
             video_Speed = 5;
         } else if (CourseNum.equals("3")) {
+            mediaPathCheck = false;
             tCourse.setText(course3);
             mediaPath = "/naruko.mp4";//実機9のストレージにあるファイルを指定
             totalMileage = 1.3;
             video_Speed = 5;
         } else if (CourseNum.equals("6")) {
+            mediaPathCheck = true;
             tCourse.setText(course6);
             mediaPath = "android.resource://" + getPackageName() + "/" + R.raw.test01;//rawフォルダから指定する場合
             totalMileage = 2.9;
-            mediaPathCheck = true;
             video_Speed = 0.5;
-        }else if (CourseNum.equals("6")) {
+        }else if (CourseNum.equals("7")) {
+            mediaPathCheck = false;
             tCourse.setText(course7);
             mediaPath = "/semine_otameshi.mp4";//実機9のストレージにあるファイルを指定
             totalMileage = 1.04;
             video_Speed = 20;
-            mediaPathCheck = false;
         }
 
 
