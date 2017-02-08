@@ -22,7 +22,8 @@ public class Globals extends Application {
     static String bestrecord_time1 = "00:00:00.0";
     static String bestrecord_time2 = "00:00:00.0";
     static String bestrecord_time3 = "00:00:00.0";
-    static String bestrecord_time4 = "00:00:00.0";
+    static String bestrecord_time6 = "00:00:00.0";
+    static String bestrecord_time7 = "00:00:00.0";
     static String total_mileage;
     static String name_id;
     static double bmi;

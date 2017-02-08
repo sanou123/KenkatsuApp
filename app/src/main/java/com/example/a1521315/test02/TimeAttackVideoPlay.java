@@ -118,6 +118,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     private int firmwareProtocol = 0;
 
     //センサー、動画再生関連の変数　初期化
+    double max_speed_Value = 0.0;
     double speed_Value = 0.0;//速度の値
     double all_speed_Value=0.0;//speedValueを25回加算して平均だす
     double pedal_Value = 0.0005F;//回すやつの直径
@@ -150,6 +151,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     long t_cnt=0;
     long old_time = 0;
     long now_time = 0;
+    double video_Speed = 15;
 
     //DAICHI_TEST
     private USBAccessoryManager accessoryManager;
@@ -596,7 +598,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                         //一時停止時
                                         if (usb_Flg == true) {
                                             speed_Value = 0.0;
-                                        } else {
+                                        }
+                                        else {
                                             //時間の取得(秒に直す)
                                             float time_tmp = (float) t_cnt;
                                             long microSec=0;
@@ -637,7 +640,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 //25回分の平均の速度を表示
                                                 //なぜなら1:25だから
                                                 speed_Value = pedal_Value / (((double)(microSec)/1000)/1000000);//  モータの径　/ cnt*10msec
-                                               // tDebug2.setText("sp:"+speed_Value);
+                                                //tDebug2.setText("sp:"+speed_Value);
                                                 if(speed_Value >= 0 && speed_Value <= 50){
                                                     cnt_25++;
                                                     all_speed_Value += speed_Value;
@@ -645,7 +648,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 chSpd_Flg=false;
                                             }
                                         }
-
+//
                                         //通常の速度反映処理
                                         if(inertia_Flg == false){
                                             //メディアプレイヤーの再生速度を設定
@@ -654,8 +657,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                     cnt_25 = 0;
                                                     all_speed_Value = all_speed_Value / 25;
                                                     tSpeed.setText(String.format("%.2f",all_speed_Value));
-                                                    params.setSpeed((float) (all_speed_Value / 20));//再生速度変更
+                                                    params.setSpeed((float) (all_speed_Value / video_Speed));//再生速度変更
                                                     mp.setPlaybackParams(params);
+                                                    max_speed_Value = all_speed_Value;//ここで代入
                                                     all_speed_Value = 0.0;
                                                 }
 
@@ -663,7 +667,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                                                 else if(stop_Flg == true){
                                                     stop_Flg = false;
                                                     tSpeed.setText(String.format("%.2f",speed_Value));
-                                                    params.setSpeed((float) (speed_Value / 20));//再生速度変更
+                                                    params.setSpeed((float) (speed_Value / video_Speed));//再生速度変更
                                                     mp.setPlaybackParams(params);
                                                 }
                                                 else{
@@ -866,6 +870,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 Log.d("No","no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
                 StartDialog();
+                tTargetHeartbeat.setText("- ");
                 tHeartbeat.setText("- ");
                 break;
         }
@@ -1152,6 +1157,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
+
+                    MaxSpeed maxSpeed = new MaxSpeed(max_speed_Value);
+                    maxSpeed.run();
 
                     if(Gear3_Flg == true){
                         if (stop_Flg == true) {

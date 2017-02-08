@@ -113,6 +113,8 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
     private int firmwareProtocol = 0;
 
     //センサー、動画再生関連の変数　初期化
+    double video_Speed = 0;
+    double max_speed_Value = 0.0;
     double speed_Value = 0.0;//速度の値
     double all_speed_Value=0.0;//speedValueを25回加算して平均だす
     double pedal_Value = 0.0005F;//回すやつの直径
@@ -651,6 +653,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                                                     tSpeed.setText(String.format("%.2f",all_speed_Value));
                                                     params.setSpeed((float) (all_speed_Value / 20));//再生速度変更
                                                     mp.setPlaybackParams(params);
+                                                    max_speed_Value = all_speed_Value;//ここで代入
                                                     all_speed_Value = 0.0;
                                                 }
 
@@ -846,6 +849,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                 Log.d("No", "no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
                 StartDialog();
+                tTargetHeartbeat.setText("- ");
                 tHeartbeat.setText("- ");
                 break;
         }
@@ -998,6 +1002,9 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                     long ms = (timerCount * 100 - ss * 1000 - mm * 1000 * 60 - hh * 1000 * 3600) / 100;//ミリ秒
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
+
+                    MaxSpeed maxSpeed = new MaxSpeed(max_speed_Value);
+                    maxSpeed.run();
 
                     if(stop_Flg == true){
                         //calの加算をしない

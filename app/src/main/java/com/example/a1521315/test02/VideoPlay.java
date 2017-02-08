@@ -68,8 +68,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     final String course1 = "伊豆沼";
     final String course2 = "出羽海道";
     final String course3 = "鳴子";
-    final String course6 = "デバッグ";
-    final String course7 = "お試し";
+    final String course6 = "瀬峰ショート2";
+    final String course7 = "瀬峰ショート1";
     /*メーター関連の関数*/
     TextView tBPM, tHeartbeat;//心拍の変数
     TextView tTargetBPM, tTargetHeartbeat;//目標心拍数の変数
@@ -144,6 +144,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //センサー、動画再生関連の変数　初期化
     double speed_Value = 0.0;//速度の値
     double all_speed_Value=0.0;//speedValueを25回加算して平均だす
+    double video_Speed = 0;
     double max_speed_Value = 0.0;
     double pedal_Value = 0.0005F;//回すやつの直径
     boolean stop_Flg = false;//止まってから始動のとき用
@@ -176,7 +177,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     long old_time = 0;
     long now_time = 0;
 
-    double video_Speed = 0;
+
 
     //USB通信　送信コマンド
     private USBAccessoryManager accessoryManager;
@@ -351,9 +352,9 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             video_Speed = 5;
         } else if (CourseNum.equals("6")) {
             mediaPathCheck = false;
-            tCourse.setText(course7);
+            tCourse.setText(course6);
             mediaPath = "/semine_otameshi2.mp4";//実機9のストレージにあるファイルを指定
-            totalMileage = 1.04;
+            totalMileage = 0.2;
             video_Speed = 20;
         }else if (CourseNum.equals("7")) {
             mediaPathCheck = false;
@@ -1128,6 +1129,16 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         globals.bestrecord_time3 = tTimer.getText().toString();
                     }
                     break;
+                case course6:
+                    if( ChangeSeconds(tTimer.getText().toString()) > ChangeSeconds(globals.bestrecord_time6)){
+                        globals.bestrecord_time6 = tTimer.getText().toString();
+                    }
+                    break;
+                case course7:
+                    if( ChangeSeconds(tTimer.getText().toString()) > ChangeSeconds(globals.bestrecord_time7)){
+                        globals.bestrecord_time7 = tTimer.getText().toString();
+                    }
+                    break;
             }
         }else{//完走しない
             globals.mileage = String.valueOf(tMileage.getText());
@@ -1170,7 +1181,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                     globals.ms = ms;
                     // 桁数を合わせるために02d(2桁)を設定
                     tTimer.setText(String.format("%1$02d:%2$02d:%3$02d.%4$01d", hh, mm, ss, ms));
-
 
                     MaxSpeed maxSpeed = new MaxSpeed(max_speed_Value);
                     maxSpeed.run();
@@ -1283,6 +1293,18 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
+        }if(courseName == course6){
+            if(globals.bestrecord_time6 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        }if(courseName == course7){
+            if(globals.bestrecord_time7 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
         }
     }
     public double SetBestrecordToSecond(String courseName){
@@ -1299,6 +1321,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 break;
             case course3:
                 seconds = ChangeSeconds(globals.bestrecord_time3);
+                break;
+            case course6:
+                seconds = ChangeSeconds(globals.bestrecord_time6);
+                break;
+            case course7:
+                seconds = ChangeSeconds(globals.bestrecord_time7);
                 break;
         }
         return seconds;
