@@ -4,6 +4,7 @@ package com.example.a1521315.test02;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -17,6 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import static com.example.a1521315.test02.Age.getBirthCal;
 
 /**
  * メイン画面に関連するクラス
@@ -113,8 +119,8 @@ public class UserUpdate extends AppCompatActivity {
      * init()
      */
     private void init() {
-        mEditText01Height.setText("");
-        mEditText01Weight.setText("");
+        mEditText01Height.setText(globals.height);
+        mEditText01Weight.setText(globals.weight);
 
         mText01Kome04.setText("");
         mText01Kome05.setText("");
@@ -152,9 +158,13 @@ public class UserUpdate extends AppCompatActivity {
 
 
             // 入力された年齢と身長、体重は文字列からint型へ変換
-            int iAge = Integer.parseInt(globals.age);
             int iHeight = Integer.parseInt(strHeight);
             int iWeight = Integer.parseInt(strWeight);
+            int iYear = Integer.parseInt(globals.user_year);
+            int iMonth = Integer.parseInt(globals.user_month);
+            int iDay = Integer.parseInt(globals.user_day);
+
+            long iAge = getOld(globals.user_year+globals.user_month+globals.user_day);
 
             //BMIの算出
             double dbmi = iWeight / ((iHeight * 0.01) * (iHeight * 0.01));
@@ -174,14 +184,48 @@ public class UserUpdate extends AppCompatActivity {
             // DBへの登録処理
             DBAdapter dbAdapter = new DBAdapter(this);
             dbAdapter.openDB();                                         // DBの読み書き
-            dbAdapter.updateDB(globals.now_user, iAge, globals.sex, iHeight, iWeight,
-                    bmi.doubleValue(), ideal_weight.doubleValue(), globals.login);   // DBに登録
+            dbAdapter.updateDB(globals.now_user, iAge,  globals.sex, iHeight, iWeight, bmi.doubleValue(),
+                    ideal_weight.doubleValue(), "再度ログインしてください", iYear, iMonth, iDay);   // DBに登録
             dbAdapter.closeDB();                                        // DBを閉じる
 
             init();     // 初期値設定
 
         }
     }
+
+    /**
+     * 年齢を返す
+     *
+     * @param birth_day yyyyMMdd 形式の誕生日
+     * @return 年齢
+     * @throws ParseException
+     */
+
+    public static long getOld(String birth_day) throws ParseException {
+
+        Calendar birthCal = getBirthCal(birth_day);
+
+        Date now = new Date();
+
+        if (birthCal.getTime().after(now)) {
+
+            return 0; // マイナスは0
+
+        }
+
+        Calendar nowCal = Calendar.getInstance();
+
+        nowCal.setTime(now);
+
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+
+        String nowYmd = df.format(now);
+
+        return (Long.parseLong(nowYmd) - Long.parseLong(birth_day)) / 10000L;
+
+    }
+
 
     //戻るキーを無効にする
     @Override

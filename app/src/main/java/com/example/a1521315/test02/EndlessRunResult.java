@@ -3,6 +3,7 @@ package com.example.a1521315.test02;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -14,8 +15,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+
+import static com.example.a1521315.test02.Age.getBirthCal;
 
 public class EndlessRunResult extends Activity {
     Globals globals;
@@ -131,12 +135,17 @@ public class EndlessRunResult extends Activity {
         int age = Integer.parseInt(globals.age);
         int height = Integer.parseInt(globals.height);
         int weight = Integer.parseInt(globals.weight);
+        int iYear = Integer.parseInt(globals.user_year);
+        int iMonth = Integer.parseInt(globals.user_month);
+        int iDay = Integer.parseInt(globals.user_day);
 
+        long iAge = getOld(globals.user_year+globals.user_month+globals.user_day);
 
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);
         dbAdapter.openDB();                                         // DBの読み書き
-        dbAdapter.updateDB(globals.now_user, age, globals.sex, height, weight, globals.bmi , globals.ideal_weight, globals.login);   // DBに登録
+        dbAdapter.updateDB(globals.now_user, iAge, globals.sex, height, weight, globals.bmi ,
+                globals.ideal_weight, globals.login, iYear, iMonth, iDay);   // DBに登録
         dbAdapter.closeDB();                                        // DBを閉じる
     }
 
@@ -184,6 +193,39 @@ public class EndlessRunResult extends Activity {
                 globals.total_mileage, globals.coursename, globals.time, globals.avg, globals.max,
                 globals.mileage,globals.training_name, globals.graph_time);   // DBに登録
         dbAdapter.closeDB();                                        // DBを閉じる
+
+    }
+
+    /**
+     * 年齢を返す
+     *
+     * @param birth_day yyyyMMdd 形式の誕生日
+     * @return 年齢
+     * @throws ParseException
+     */
+
+    public static long getOld(String birth_day) throws ParseException {
+
+        Calendar birthCal = getBirthCal(birth_day);
+
+        Date now = new Date();
+
+        if (birthCal.getTime().after(now)) {
+
+            return 0; // マイナスは0
+
+        }
+
+        Calendar nowCal = Calendar.getInstance();
+
+        nowCal.setTime(now);
+
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+
+        String nowYmd = df.format(now);
+
+        return (Long.parseLong(nowYmd) - Long.parseLong(birth_day)) / 10000L;
 
     }
 
