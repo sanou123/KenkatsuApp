@@ -16,11 +16,12 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "kenkatsu_app.db";      // DB名
+    private final static String DB_NAME = "kenkatsu_app_DEMO.db";      // DB名
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
+    private final static String DB_TABLE_DATA_TABLE = "data_table";       // DBのテーブル名
 
-    private final static int DB_VERSION = 2;                // DBのバージョン
+    private final static int DB_VERSION = 1;                // DBのバージョン
 
     /**
      * DBのカラム名
@@ -192,6 +193,7 @@ public class DBAdapter {
             // 第2引数：更新する条件式
             // 第3引数：ContentValues
             db.insert(DB_TABLE_DATA, null, values);      // レコードへ登録
+            db.insert(DB_TABLE_DATA_TABLE, null, values);      // レコードへ登録
 
             db.setTransactionSuccessful();      // トランザクションへコミット
         } catch (Exception e) {
@@ -276,6 +278,20 @@ public class DBAdapter {
      */
     public Cursor searchDB(String[] columns, String column, String[] name) {
         return db.query(DB_TABLE_DATA, columns, column + " like ?", name, null, null, null);
+    }
+
+    /**
+     * DBの検索したデータを取得
+     * searchDB()
+     *
+     * @param columns String[] 取得するカラム名 nullの場合は全カラムを取得
+     * @param column  String 選択条件に使うカラム名
+     * @param name_id    String[]
+     * @return DBの検索したデータ
+     */
+    public Cursor search_tableDB(String[] columns, String column, String column1, String name_id,String course) {
+        return db.query(DB_TABLE_DATA_TABLE, columns, column + " like ? and "+ column1 + " like ?",
+                new String[]{name_id, course}, null, null, null);
     }
 
     /**
@@ -418,9 +434,34 @@ public class DBAdapter {
                     + "FOREIGN KEY(name_id) REFERENCES DB_TABLE_USER(COL_ID_USER) ON DELETE CASCADE"
                     + ");";
 
-            db.execSQL(createTbl_user);      //SQL文の実行
+            //テーブルを作成するSQL文の定義 ※スペースに気を付ける
+            String createTbl_data_table = "CREATE TABLE " + DB_TABLE_DATA_TABLE + " ("
+                    + COL_ID_DATA + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                    + COL_NAME_ID + " INTEGER NOT NULL ,"
+                    + COL_NAME + " TEXT NOT NULL ,"
+                    + COL_YEAR + " TEXT NOT NULL ,"
+                    + COL_MONTH + " TEXT NOT NULL ,"
+                    + COL_DAY + " TEXT NOT NULL ,"
+                    + COL_TIMES_OF_DAY + " TEXT NOT NULL ,"
 
+                    + COL_HEART_RATE + " INTEGER NOT NULL ,"
+                    + COL_CALORIE_CONSUMPTION + " INTEGER NOT NULL ,"
+                    + COL_TOTAL_TIME + " INTEGER NOT NULL ,"
+                    + COL_TOTAL_DISTANCE + " INTEGER NOT NULL ,"
+                    + COL_COURSE_NAME + " TEXT NOT NULL ,"
+                    + COL_TIME + " INTEGER NOT NULL ,"
+                    + COL_AVG_SPEED + " INTEGER NOT NULL ,"
+                    + COL_MAX_SPEED + " INTEGER NOT NULL ,"
+                    + COL_DISTANCE + " INTEGER NOT NULL ,"
+                    + COL_TRAINING_NAME + " TEXT NOT NULL ,"
+                    + COL_GRAPH_TIME +" TEXT NOT NULL ,"
+                    + "FOREIGN KEY(name_id) REFERENCES DB_TABLE_USER(COL_ID_USER) ON DELETE CASCADE"
+                    + ");";
+
+            db.execSQL(createTbl_user);      //SQL文の実行
             db.execSQL(createTbl_data);      //SQL文の実行
+            db.execSQL(createTbl_data_table);      //SQL文の実行
+
 
         }
 
@@ -437,6 +478,9 @@ public class DBAdapter {
             db.execSQL("DROP TABLE IF EXISTS" + DB_TABLE_USER);
             // DBからテーブル削除
             db.execSQL("DROP TABLE IF EXISTS" + DB_TABLE_DATA);
+            // DBからテーブル削除
+            db.execSQL("DROP TABLE IF EXISTS" + DB_TABLE_DATA_TABLE);
+
             // テーブル生成
             onCreate(db);
         }

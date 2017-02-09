@@ -100,14 +100,16 @@ public class SelectSheetTableEndlessrun extends AppCompatActivity {
 
         String column = "name_id";
         String column1 = "training_name";          //検索対象のカラム名
-        String[] name_id = {globals.name_id};
-        String [] training_name = {"Endlessrun"};            //検索対象の文字
+        String name_id = globals.name_id;
+        String training_name = "Endlessrun";            //検索対象の文字
 
         // DBの検索データを取得 入力した文字列を参照してDBの品名から検索
-        Cursor c = dbAdapter.searchDB(null, column , name_id);
-        Cursor c1 = dbAdapter.searchDB(null, column1,training_name);
+        //Cursor c = dbAdapter.search_endlessDB(null, column , name_id);
+        //Cursor c1 = dbAdapter.search_endlessDB(null, column1,training_name);
+        Cursor c = dbAdapter.search_tableDB(null, column , column1, name_id, training_name);
 
-        if (c.moveToFirst() && c1.moveToFirst()) {
+
+        if (c.moveToFirst() /*&& c1.moveToFirst()*/) {
             do {
 
                 TableRow row = new TableRow(this);          // 行を作成
@@ -165,7 +167,7 @@ public class SelectSheetTableEndlessrun extends AppCompatActivity {
                 }
                 colorFlg++;
 
-            } while (c.moveToNext() && c1.moveToNext());
+            } while (c.moveToNext() /*&& c1.moveToNext()*/);
         } else {
             Toast.makeText(this, "登録されているデータがありません。", Toast.LENGTH_SHORT).show();
         }
