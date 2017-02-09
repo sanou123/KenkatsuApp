@@ -1068,6 +1068,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                try{
+                    mSocket.close();
+                }catch(Exception e){}
+                isRunning = false;
+
                 timerscheduler.shutdown();//タイマー終了
                 seekbarscheduler.shutdown();//タイマー終了
                 if (mp != null) {
@@ -1103,6 +1109,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     }
     //Resultボタンを押したときの処理の中身
     public void ResultProcess() {
+
+        try{
+            mSocket.close();
+        }catch(Exception e){}
+        isRunning = false;
+
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
