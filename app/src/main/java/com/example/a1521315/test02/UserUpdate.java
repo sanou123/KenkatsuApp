@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -156,7 +157,6 @@ public class UserUpdate extends AppCompatActivity {
 
         } else {        // EditTextが全て入力されている場合
 
-
             // 入力された年齢と身長、体重は文字列からint型へ変換
             int iHeight = Integer.parseInt(strHeight);
             int iWeight = Integer.parseInt(strWeight);
@@ -164,7 +164,22 @@ public class UserUpdate extends AppCompatActivity {
             int iMonth = Integer.parseInt(globals.user_month);
             int iDay = Integer.parseInt(globals.user_day);
 
+            globals.user_year = String.valueOf(iYear);
+
+            if(iMonth >= 1 && iMonth <= 9) {
+                globals.user_month = '0' + String.valueOf((iMonth));
+            }else {
+                globals.user_month = String.valueOf((iMonth));
+            }
+            if(iDay >= 1 && iDay <= 9) {
+                globals.user_day = '0' + String.valueOf(iDay) ;
+            }else {
+                globals.user_day = String.valueOf(iDay) ;
+            }
+
             long iAge = getOld(globals.user_year+globals.user_month+globals.user_day);
+            Log.d("age-----------------", globals.user_year+globals.user_month+globals.user_day);
+
 
             //BMIの算出
             double dbmi = iWeight / ((iHeight * 0.01) * (iHeight * 0.01));

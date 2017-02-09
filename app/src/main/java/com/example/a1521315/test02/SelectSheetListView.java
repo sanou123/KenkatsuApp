@@ -135,7 +135,7 @@ public class SelectSheetListView extends Activity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(SelectSheetListView.this);
                     builder.setTitle("ログイン確認");
                     builder.setMessage("最後にログインしたのは" + globals.twitter_user+ "さんです!\n"
-                            + globals.twitter_user + "さんですか？");
+                            + "ログアウトしますか?");
                     // OKの時の処理
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -154,6 +154,9 @@ public class SelectSheetListView extends Activity {
                             double Bmi = myListItem.getBmi();
                             double Ideal_weight = myListItem.getIdeal_weight();
                             String  Login = myListItem.getLogin();
+                            String  User_Year = myListItem.getUser_Year();
+                            String  User_Month = myListItem.getUser_Month();
+                            String  User_Day = myListItem.getUser_Day();
 
 
                             //int listId =  myListItem.getUser_id();//################
@@ -178,6 +181,11 @@ public class SelectSheetListView extends Activity {
                             BigDecimal ideal_weight = bd_ideal_weight.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
                             globals.ideal_weight = ideal_weight.doubleValue();
                             globals.login = Login;
+
+                            globals.user_year = User_Year;
+                            globals.user_month = User_Month;
+                            globals.user_day = User_Day;
+
                             Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
                             startActivity(intent);
 

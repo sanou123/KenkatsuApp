@@ -1,11 +1,9 @@
 package com.example.a1521315.test02;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ParseException;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -88,39 +86,10 @@ public class Result extends Activity {
         btn_tweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    // IDを取得する
-                /*String listName = myListItem.getName();
-
-                globals.now_user = listName;
-*/
-
-                    // アラートダイアログ表示
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Result.this);
-                    builder.setTitle("ログイン確認");
-                    builder.setMessage(globals.now_user + "さんですか？");
-                    // OKの時の処理
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
                             dbLogin();
 
                             Intent intent = new Intent(Result.this, Resulttweet.class);
                             startActivity(intent);
-
-                        }
-                    });
-
-                    builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Result.this, MenuSelect.class);
-                            startActivity(intent);
-                        }
-                    });
-                    // ダイアログの表示
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
 
                 }
         });
@@ -186,6 +155,10 @@ public class Result extends Activity {
 
         globals.graph_time = (globals.hh*60) + globals.mm + (globals.ss/60)
                 + (globals.ss%60) + (globals.ms);
+
+
+        globals.total_mileage = globals.mileage;
+        globals.total_time = globals.time;
 
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);

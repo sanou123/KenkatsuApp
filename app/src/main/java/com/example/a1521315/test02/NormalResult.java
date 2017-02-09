@@ -131,6 +131,11 @@ public class NormalResult extends Activity {
 
         globals.graph_time = (globals.hh*60) + globals.mm + (globals.ss/60) + (globals.ss%60);
 
+
+        globals.total_mileage = globals.mileage;
+        globals.total_time = globals.time;
+
+
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);
         dbAdapter.openDB();                                         // DBの読み書き
