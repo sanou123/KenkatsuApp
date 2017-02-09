@@ -86,6 +86,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
     double cal=0.0; //カロリー計算用
+    double old_cal = 0.0;
     double weight = Double.parseDouble(globals.weight);
 
     private static final String TAG = "VideoPlayer";
@@ -1165,7 +1166,11 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         if (stop_Flg == true) {
                             //calの加算をしない
                         }else{
+                            old_cal = cal;
                             cal += 5.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) speed_Value / 20);
+                            if((cal - old_cal >= 0.2)){//calが異常に増えた場合に破棄
+                                cal = old_cal;
+                            }
                         }
                         //tDebug1.setText(String.format("%.2f",cal)+"kcal");
                         tCal.setText(String.format("%.2f", cal));

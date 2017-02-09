@@ -108,6 +108,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
     double cal = 0.0; //カロリー計算用
+    double old_cal = 0.0;
     double weight = Double.parseDouble(globals.weight);
 
     private static final String TAG = "VideoPlayer";
@@ -1189,33 +1190,57 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         //calの加算をしない
                     }
                     else{
-                        if (Gear1_Flg == true) {
-                            cal += 3.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
+                        if(Gear1_Flg == true){
+                            old_cal = cal;
+                            cal += 3.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            if((cal - old_cal >= 0.2)){//calが異常に増えた場合に破棄
+                                cal = old_cal;
+                            }
                             tCal.setText(String.format("%.2f",cal));
                             tGear.setText("1");
                         }
-                        if (Gear2_Flg == true) {
-                            cal += 4.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
+                        else if(Gear2_Flg == true){
+                            old_cal = cal;
+                            cal += 4.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            if((cal - old_cal >= 0.2)){//calが異常に増えた場合に破棄
+                                cal = old_cal;
+                            }
                             tCal.setText(String.format("%.2f",cal));
                             tGear.setText("2");
                         }
-                        if (Gear3_Flg == true) {
-                            cal += 5.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
+                        else if(Gear3_Flg == true){
+                            old_cal = cal;
+                            cal += 5.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            if((cal - old_cal >= 0.2)){//calが異常に増えた場合に破棄
+                                cal = old_cal;
+                            }
                             tCal.setText(String.format("%.2f",cal));
                             tGear.setText("3");
                         }
-                        if (Gear4_Flg == true) {
-                            cal += 6.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
+                        else if(Gear4_Flg == true){
+                            old_cal = cal;
+                            cal += 6.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            if((cal - old_cal >= 0.2)){//calが異常に増えた場合に破棄
+                                cal = old_cal;
+                            }
                             tCal.setText(String.format("%.2f",cal));
                             tGear.setText("4");
                         }
-                        if (Gear5_Flg == true) {
-                            cal += 7.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
+                        else if(Gear5_Flg == true){
+                            old_cal = cal;
+                            cal += 7.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            if((cal - old_cal >= 0.2)){//calが異常に増えた場合に破棄
+                                cal = old_cal;
+                            }
                             tCal.setText(String.format("%.2f",cal));
                             tGear.setText("5");
                         }
-                        if (Gear6_Flg == true) {
-                            cal += 8.8 * weight * ((float) 1 / 36000) * 1.05 * ((float) max_speed_Value / 20);
+                        else if(Gear6_Flg == true){
+                            old_cal = cal;
+                            cal += 8.8 * weight * ((float)1/36000) * 1.05 * ((float)speed_Value/20);
+                            if((cal - old_cal >= 0.2)){//calが異常に増えた場合に破棄
+                                cal = old_cal;
+                            }
                             tCal.setText(String.format("%.2f",cal));
                             tGear.setText("6");
                         }
