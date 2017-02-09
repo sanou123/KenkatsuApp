@@ -318,20 +318,23 @@ public class DBAdapter {
         }
     }
 
-    public void updateDB(String strName, int strAge,String strSex, int strHeight, int strWeight,
-                         double strBmi, double ideal_weight, String login) {
+    public void updateDB(String name, long age, String sex, int height, int weight, double bmi,
+                         double ideal_weight, String login, int age_year, int age_month, int age_day) {
         db.beginTransaction();          // トランザクション開始
 
         try {
             ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
-            values.put(COL_NAME, strName);
-            values.put(COL_AGE, strAge);
-            values.put(COL_SEX, strSex);
-            values.put(COL_HEIGHT, strHeight);
-            values.put(COL_WEIGHT, strWeight);
-            values.put(COL_BMI, strBmi);
+            values.put(COL_NAME, name);
+            values.put(COL_AGE, age);
+            values.put(COL_SEX, sex);
+            values.put(COL_HEIGHT, height);
+            values.put(COL_WEIGHT, weight);
+            values.put(COL_BMI, bmi);
             values.put(COL_IDEAL_WEIGHT, ideal_weight);
             values.put(COL_LOGIN, login);
+            values.put(COL_AGE_YEAR, age_year);
+            values.put(COL_AGE_MONTH, age_month);
+            values.put(COL_AGE_DAY, age_day);
 
             // insertメソッド データ登録
             // 第1引数：DBのテーブル名
@@ -339,7 +342,7 @@ public class DBAdapter {
             // 第3引数：ContentValues
 
             String whereClause = "name = ?";
-            String whereArgs[] = new String[]{strName};
+            String whereArgs[] = new String[]{name};
             db.update(DB_TABLE_USER, values, whereClause, whereArgs);
 
             db.setTransactionSuccessful();      // トランザクションへコミット

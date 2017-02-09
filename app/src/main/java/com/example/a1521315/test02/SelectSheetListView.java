@@ -7,8 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.net.ParseException;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,9 +25,12 @@ import android.widget.TextView;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+
+import static com.example.a1521315.test02.Age.getBirthCal;
 
 /**
  * ListView表示画面に関連するクラス
@@ -93,6 +96,9 @@ public class SelectSheetListView extends Activity {
                     double Bmi = myListItem.getBmi();
                     double Ideal_weight = myListItem.getIdeal_weight();
                     String  Login = myListItem.getLogin();
+                    String  User_Year = myListItem.getUser_Year();
+                    String  User_Month = myListItem.getUser_Month();
+                    String  User_Day = myListItem.getUser_Day();
 
 
                     //int listId =  myListItem.getUser_id();//################
@@ -117,6 +123,9 @@ public class SelectSheetListView extends Activity {
                     BigDecimal ideal_weight = bd_ideal_weight.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
                     globals.ideal_weight = ideal_weight.doubleValue();
                     globals.login = Login;
+                    globals.user_year = User_Year;
+                    globals.user_month = User_Month;
+                    globals.user_day = User_Day;
                     Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
                     startActivity(intent);
 
@@ -297,7 +306,10 @@ public class SelectSheetListView extends Activity {
                         c.getString(5),
                         c.getDouble(6),
                         c.getDouble(7),
-                        c.getString(8)
+                        c.getString(8),
+                        c.getString(9),
+                        c.getString(10),
+                        c.getString(11)
                         );
 
                 Log.d("取得したCursor(USER_ID):", String.valueOf(c.getInt(0)));
@@ -421,17 +433,55 @@ public class SelectSheetListView extends Activity {
         Log.v("時間", dateFormat.format(date));
         globals.login = dateFormat.format(date);
 
-        int age = Integer.parseInt(globals.age);
         int height = Integer.parseInt(globals.height);
         int weight = Integer.parseInt(globals.weight);
+        int iYear = Integer.parseInt(globals.user_year);
+        int iMonth = Integer.parseInt(globals.user_month);
+        int iDay = Integer.parseInt(globals.user_day);
 
+        long iAge = getOld(globals.user_year+globals.user_month+globals.user_day);
 
         // DBへの登録処理
         DBAdapter dbAdapter = new DBAdapter(this);
         dbAdapter.openDB();                                         // DBの読み書き
-        dbAdapter.updateDB(globals.now_user, age, globals.sex, height, weight, globals.bmi , globals.ideal_weight, globals.login);   // DBに登録
+        dbAdapter.updateDB(globals.now_user, iAge, globals.sex, height, weight, globals.bmi ,
+                globals.ideal_weight, globals.login,iYear,iMonth,iDay);   // DBに登録
         dbAdapter.closeDB();                                        // DBを閉じる
     }
+
+    /**
+     * 年齢を返す
+     *
+     * @param birth_day yyyyMMdd 形式の誕生日
+     * @return 年齢
+     * @throws ParseException
+     */
+
+    public static long getOld(String birth_day) throws ParseException {
+
+        Calendar birthCal = getBirthCal(birth_day);
+
+        Date now = new Date();
+
+        if (birthCal.getTime().after(now)) {
+
+            return 0; // マイナスは0
+
+        }
+
+        Calendar nowCal = Calendar.getInstance();
+
+        nowCal.setTime(now);
+
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+
+        String nowYmd = df.format(now);
+
+        return (Long.parseLong(nowYmd) - Long.parseLong(birth_day)) / 10000L;
+
+    }
+
 
     @Override
     //戻るキーを無効にする

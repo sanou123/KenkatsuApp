@@ -16,6 +16,9 @@ public class MyListItem {
     protected double bmi;       //BMI
     protected double ideal_weight;  //理想体重
     protected String  login;  //最終ログイン
+    protected String  user_year;  //
+    protected String  user_month;  //
+    protected String  user_day;  //
 
     /**
      * MyListItem()
@@ -29,10 +32,13 @@ public class MyListItem {
      * @param bmi       double BMI
      * @param ideal_weight double 理想体重
      * @param login         String 最終ログイン
-     *
+     * @param user_year         String 生年月日
+     * @param user_month         String 生年月日
+     * @param user_day         String 生年月日
      */
     public MyListItem(int user_id, String name, String age, String sex,String height,
-                      String weight, double bmi, double ideal_weight, String login) {
+                      String weight, double bmi, double ideal_weight, String login,
+                      String user_year, String user_month, String user_day) {
         this.user_id = user_id;
         this.name = name;
         this.age = age;
@@ -42,6 +48,10 @@ public class MyListItem {
         this.bmi = bmi;
         this.ideal_weight = ideal_weight;
         this.login = login;
+        this.user_year = user_year;
+        this.user_month = user_month;
+        this.user_day = user_day;
+
 
     }
 
@@ -134,5 +144,35 @@ public class MyListItem {
      */
     public String getLogin() {
         return login;
+    }
+
+    /**
+     * 生年月日を取得
+     * getUser_Year()
+     *
+     * @return login String 生年月日
+     */
+    public String getUser_Year() {
+        return user_year;
+    }
+
+    /**
+     * 生年月日を取得
+     * getUser_Month()
+     *
+     * @return login String 生年月日
+     */
+    public String getUser_Month() {
+        return user_month;
+    }
+
+    /**
+     * 生年月日を取得
+     * getUser_Day()
+     *
+     * @return login String 生年月日
+     */
+    public String getUser_Day() {
+        return user_day;
     }
 }
