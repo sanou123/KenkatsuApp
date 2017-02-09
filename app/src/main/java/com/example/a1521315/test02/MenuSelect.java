@@ -1,12 +1,10 @@
 package com.example.a1521315.test02;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.ParseException;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -177,49 +175,23 @@ public class MenuSelect extends Activity {
         btnDisp6.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if(globals.twitter_user == null){
+                if(globals.twitter_user == null || globals.twitter_user != globals.now_user){
 
                     globals.twitter_user = globals.now_user;
+                    dbLogin();
+
                     Intent intent = new Intent(MenuSelect.this, twitter_logout.class);
                     startActivity(intent);
                     Toast.makeText(MenuSelect.this, "セッションが切れています", Toast.LENGTH_LONG).show();
-                }else if(globals.twitter_user != null){
+                }else{
 
-                    // アラートダイアログ表示
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MenuSelect.this);
+                    globals.twitter_user = globals.now_user;
+                    dbLogin();
 
-                    builder.setTitle("ログイン確認");
-                    builder.setMessage(globals.twitter_user+ "さんでログインします!\n");
-                    // OKの時の処理
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(MenuSelect.this, Search.class);
+                    startActivity(intent);
 
-                            globals.twitter_user = globals.now_user;
-                            dbLogin();
-
-                            Intent intent = new Intent(MenuSelect.this, Search.class);
-                            startActivity(intent);
-
-                        }
-                    });
-
-                    builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            globals.twitter_user = globals.now_user;
-
-                            Intent intent = new Intent(MenuSelect.this, twitter_logout.class);
-                            startActivity(intent);
-                        }
-                    });
-                    // ダイアログの表示
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
                 }
-
-
             }
         });
         //////////////////////////////////////////////////////////////////////
