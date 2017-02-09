@@ -12,6 +12,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Layout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -19,10 +20,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -41,9 +44,6 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
         // タイトルバーを隠す
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         // ステータスバーを隠す
@@ -52,6 +52,28 @@ public class MainActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //activity_mainのレイアウトを使用
         setContentView(R.layout.activity_main);
+        //Randomクラスのインスタンス化
+        Random random = new Random();
+        int rnd = random.nextInt(5)+1;
+        RelativeLayout layout = (RelativeLayout)findViewById(R.id.TitleLayout);
+        switch (rnd){
+            case 1:
+                layout.setBackgroundResource(R.drawable.top1);
+                break;
+            case 2:
+                layout.setBackgroundResource(R.drawable.top2);
+                break;
+            case 3:
+                layout.setBackgroundResource(R.drawable.top3);
+                break;
+            case 4:
+                layout.setBackgroundResource(R.drawable.top4);
+                break;
+            case 5:
+                layout.setBackgroundResource(R.drawable.top5);
+                break;
+        }
+
         ImageView title = (ImageView)findViewById(R.id.imageView);
         title.setImageResource(R.drawable.kenkatsuapp_title);
         //playBGM();
