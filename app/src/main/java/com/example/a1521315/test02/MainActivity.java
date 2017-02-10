@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         //Randomクラスのインスタンス化
         Random random = new Random();
-        int rnd = random.nextInt(5)+1;
+        int rnd = random.nextInt(6)+1;
         RelativeLayout layout = (RelativeLayout)findViewById(R.id.TitleLayout);
         switch (rnd){
             case 1:
@@ -71,6 +71,9 @@ public class MainActivity extends Activity {
                 break;
             case 5:
                 layout.setBackgroundResource(R.drawable.top5);
+                break;
+            case 6:
+                layout.setBackgroundResource(R.drawable.top6);
                 break;
         }
 
