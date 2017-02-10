@@ -31,6 +31,14 @@ public class NormalResult extends Activity {
     String kuriarank;
     double cal;
 
+    /*コース名*/
+    final String course0 = "瀬峰";
+    final String course1 = "伊豆沼";
+    final String course2 = "出羽海道";
+    final String course3 = "鳴子";
+    final String course6 = "瀬峰ショート2";
+    final String course7 = "瀬峰ショート1";
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,6 +151,26 @@ public class NormalResult extends Activity {
                             globals.times_of_day, globals.maxheartbeat, globals.cal, globals.total_time,
                             globals.total_mileage, globals.coursename, globals.time, globals.avg,
                             globals.max, globals.mileage,globals.training_name, globals.graph_time );   // DBに登録
+        switch(globals.coursename) {
+            case course0:
+                dbAdapter.saveDB_GHOST(globals.coursename, globals.bestrecord_time0);
+                break;
+            case course1:
+                dbAdapter.saveDB_GHOST(globals.coursename, globals.bestrecord_time1);
+                break;
+            case course2:
+                dbAdapter.saveDB_GHOST(globals.coursename, globals.bestrecord_time2);
+                break;
+            case course3:
+                dbAdapter.saveDB_GHOST(globals.coursename, globals.bestrecord_time3);
+                break;
+            case course6:
+                dbAdapter.saveDB_GHOST(globals.coursename, globals.bestrecord_time6);
+                break;
+            case course7:
+                dbAdapter.saveDB_GHOST(globals.coursename, globals.bestrecord_time7);
+                break;
+        }
         dbAdapter.closeDB();                                        // DBを閉じる
 
     }

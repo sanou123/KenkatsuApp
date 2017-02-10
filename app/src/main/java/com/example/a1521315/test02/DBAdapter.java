@@ -16,10 +16,13 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "kenkatsu_app_DEMO.db";      // DB名
+    private final static String DB_NAME = "kenkatsu_app_DEMO1.db";      // DB名
+
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
     private final static String DB_TABLE_DATA_TABLE = "data_table";       // DBのテーブル名
+    private final static String DB_TABLE_GHOST = "ghost";       // DBのテーブル名
+
 
     private final static int DB_VERSION = 1;                // DBのバージョン
 
@@ -60,6 +63,10 @@ public class DBAdapter {
     public final static String COL_DISTANCE = "distance";           //走行距離
     public final static String COL_TRAINING_NAME = "training_name";           //走行距離
     public final static String COL_GRAPH_TIME = "graph_time";       //  グラフ用時間(変換)
+
+    public final static String COL_COURSE_ID = "course_id";         //名前に対するID
+    public final static String COL_GHOST_TIME = "ghost_time";
+
 
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
@@ -203,6 +210,29 @@ public class DBAdapter {
         }
     }
 
+    public void saveDB_GHOST( String course_name, String ghost) {
+
+        db.beginTransaction();          // トランザクション開始
+
+        try {
+            ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
+            values.put(COL_COURSE_NAME, course_name);
+            values.put(COL_GHOST_TIME, ghost);
+
+            // insertメソッド データ登録
+            // 第1引数：DBのテーブル名
+            // 第2引数：更新する条件式
+            // 第3引数：ContentValues
+            db.insert(DB_TABLE_GHOST, null, values);      // レコードへ登録
+
+            db.setTransactionSuccessful();      // トランザクションへコミット
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();                // トランザクションの終了
+        }
+    }
+
     /**
      * DBのデータを取得
      * getDB()
@@ -252,7 +282,7 @@ public class DBAdapter {
      * @param columns String[] 取得するカラム名 nullの場合は全カラムを取得
      * @return DBのデータ
      */
-    public Cursor sortDB(String[] columns) {
+    public Cursor sortDB(String[] columns,String column,String[] name) {
 
         // queryメソッド DBのデータを取得
         // 第1引数：DBのテーブル名
@@ -262,7 +292,7 @@ public class DBAdapter {
         // 第5引数：集計条件(GROUP BY句)
         // 第6引数：選択条件(HAVING句)
         // 第7引数：ソート条件(ODERBY句)
-        return db.query(DB_TABLE_USER, columns, null, null, null, null, "DESC");
+        return db.query(DB_TABLE_GHOST, columns, " MAX("+ column +")",name, null, null, null);
 
     }
 
@@ -458,9 +488,17 @@ public class DBAdapter {
                     + "FOREIGN KEY(name_id) REFERENCES DB_TABLE_USER(COL_ID_USER) ON DELETE CASCADE"
                     + ");";
 
+            //テーブルを作成するSQL文の定義 ※スペースに気を付ける
+            String createTbl_data_ghost = "CREATE TABLE " + DB_TABLE_GHOST + " ("
+                    + COL_COURSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                    + COL_COURSE_NAME + " TEXT NOT NULL ,"
+                    + COL_GHOST_TIME + " TEXT NOT NULL "
+                    + ");";
+
             db.execSQL(createTbl_user);      //SQL文の実行
             db.execSQL(createTbl_data);      //SQL文の実行
             db.execSQL(createTbl_data_table);      //SQL文の実行
+            db.execSQL(createTbl_data_ghost);      //SQL文の実行
 
 
         }
@@ -480,7 +518,8 @@ public class DBAdapter {
             db.execSQL("DROP TABLE IF EXISTS" + DB_TABLE_DATA);
             // DBからテーブル削除
             db.execSQL("DROP TABLE IF EXISTS" + DB_TABLE_DATA_TABLE);
-
+            // DBからテーブル削除
+            db.execSQL("DROP TABLE IF EXISTS" + DB_TABLE_GHOST);
             // テーブル生成
             onCreate(db);
         }

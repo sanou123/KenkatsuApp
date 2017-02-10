@@ -5,25 +5,31 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Toast;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by 1521315 on 2016/07/05.
  */
 public class VideoSelect extends Activity {
     /** Called when the activity is first created. */
+
+    Globals globals;
+    private DBAdapter dbAdapter;                // DBAdapter
+
+    /*コース名*/
+    final String course0 = "瀬峰";
+    final String course1 = "伊豆沼";
+    final String course2 = "出羽海道";
+    final String course3 = "鳴子";
+    final String course6 = "瀬峰ショート2";
+    final String course7 = "瀬峰ショート1";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +41,7 @@ public class VideoSelect extends Activity {
 
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         Button btnDisp0 = (Button)findViewById(R.id.course0);
         btnDisp0.setAllCaps(false);//小文を字使用可能にする
         btnDisp0.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +53,8 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        globals.coursename = course0;
+                        ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","0");//VideoPlayにコース番号を渡す
                         startActivity(intent);
@@ -73,6 +82,8 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        globals.coursename = course1;
+                        ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","1");//VideoPlayにコース番号を渡す
                         startActivity(intent);
@@ -100,6 +111,8 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        globals.coursename = course2;
+                        ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","2");//VideoPlayにコース番号を渡す
                         startActivity(intent);
@@ -127,6 +140,8 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        globals.coursename = course3;
+                        ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","3");//VideoPlayにコース番号を渡す
                         startActivity(intent);
@@ -155,6 +170,8 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        globals.coursename = course6;
+                        ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","6");//VideoPlayにコース番号を渡す
                         startActivity(intent);
@@ -182,6 +199,8 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        globals.coursename = course7;
+                        ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","7");//VideoPlayにコース番号を渡す
                         startActivity(intent);
@@ -199,6 +218,44 @@ public class VideoSelect extends Activity {
             }
         });
 
+    }
+
+    private void ghost(){
+
+        dbAdapter.readDB();                         // DBの読み込み(読み込みの方)
+        String column = "ghost_time";
+        String[] colums = {globals.coursename};
+
+        // DBの検索データを取得 入力した文字列を参照して検索
+        Cursor c = dbAdapter.sortDB(null, column, colums);
+
+
+        if (c.moveToFirst()) {
+            do {
+                switch(globals.coursename) {
+                    case course0:
+                        globals.bestrecord_time0 = c.getString(2);     // TextViewのカスタマイズ処理
+                        break;
+                    case course1:
+                        globals.bestrecord_time1 = c.getString(2);     // TextViewのカスタマイズ処理
+                        break;
+                    case course2:
+                        globals.bestrecord_time2 = c.getString(2);     // TextViewのカスタマイズ処理
+                        break;
+                    case course3:
+                        globals.bestrecord_time3 = c.getString(2);     // TextViewのカスタマイズ処理
+                        break;
+                    case course6:
+                        globals.bestrecord_time6 = c.getString(2);     // TextViewのカスタマイズ処理
+                        break;
+                    case course7:
+                        globals.bestrecord_time7 = c.getString(2);     // TextViewのカスタマイズ処理
+                        break;
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        dbAdapter.closeDB();        // DBを閉じる
     }
 
     @Override
