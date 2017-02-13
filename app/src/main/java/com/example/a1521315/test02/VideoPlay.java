@@ -1456,7 +1456,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
-    //BGM
+    /*BGM関連*/
+    //BGM鳴らす
     public class StartBGM implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -1466,12 +1467,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                         mpBGM = MediaPlayer.create(getApplicationContext(), R.raw.morning2);
                         mpBGM.start();
                     }
-                    mpBGM.setLooping(true);
+                    mpBGM.setLooping(true);//再生が終わったらループ
                 }
             });
         }
     }
-
+    //BGM止める
     public class StopBGM implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -1544,22 +1545,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         int targetBPM;
         targetBPM = (int) ((220 - age) * 0.6);
         return targetBPM;
-    }
-
-    //平均速度を計算する
-    public String AverageSpeed2(double totalMileage, String time) {
-        Log.v("aaaaaaaaaaaaTIME", time);
-        double hours = Double.parseDouble(time.substring(0, 2));
-        double minutes = Double.parseDouble(time.substring(3, 5));
-        double seconds = Double.parseDouble(time.substring(6));
-        double totalHours = hours + (minutes / 60) + (seconds / 3600);
-        Log.v("mileage", String.valueOf(totalMileage));
-        Log.v("HOURS", String.valueOf(hours));
-        Log.v("MINUTES", String.valueOf(minutes));
-        Log.v("SECONDS", String.valueOf(seconds));
-        Log.v("TOTAL", String.valueOf(totalHours));
-        String avg = String.format("%.2f", (totalMileage / totalHours));
-        return avg;
     }
 
     //平均速度を計算する(ボリュームで速度調整するとき用)
