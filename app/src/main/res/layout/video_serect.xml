@@ -7,7 +7,7 @@
     android:layout_height="fill_parent"
     tools:context=".VideoSelect"
     android:id="@+id/CourseSelectLayout"
-    android:background="@drawable/courseselect">
+    android:background="@drawable/map">
 
     <TextView
         android:id="@+id/textMSG"
