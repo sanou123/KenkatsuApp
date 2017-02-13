@@ -42,6 +42,8 @@ public class VideoSelect extends Activity {
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+        dbAdapter = new DBAdapter(this);
+
         Button btnDisp0 = (Button)findViewById(R.id.course0);
         btnDisp0.setAllCaps(false);//小文を字使用可能にする
         btnDisp0.setOnClickListener(new View.OnClickListener() {
@@ -223,11 +225,13 @@ public class VideoSelect extends Activity {
     private void ghost(){
 
         dbAdapter.readDB();                         // DBの読み込み(読み込みの方)
-        String column = "ghost_time";
-        String[] colums = {globals.coursename};
+        String column = "course_name";
+        String column1 = "ghost_time";
+
+        String columns = globals.coursename;
 
         // DBの検索データを取得 入力した文字列を参照して検索
-        Cursor c = dbAdapter.sortDB(null, column, colums);
+        Cursor c = dbAdapter.sortDB(null, column, column1, columns);
 
 
         if (c.moveToFirst()) {
@@ -251,8 +255,11 @@ public class VideoSelect extends Activity {
                     case course7:
                         globals.bestrecord_time7 = c.getString(2);     // TextViewのカスタマイズ処理
                         break;
+                    default:
+                        break;
                 }
             } while (c.moveToNext());
+        } else {
         }
         c.close();
         dbAdapter.closeDB();        // DBを閉じる

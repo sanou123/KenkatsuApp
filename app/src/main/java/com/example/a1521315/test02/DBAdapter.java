@@ -279,10 +279,10 @@ public class DBAdapter {
      * DBのデータを取得
      * sortDB()
      *
-     * @param columns String[] 取得するカラム名 nullの場合は全カラムを取得
+     * @param //columns String[] 取得するカラム名 nullの場合は全カラムを取得
      * @return DBのデータ
      */
-    public Cursor sortDB(String[] columns,String column,String[] name) {
+    public Cursor sortDB(String[] columns, String column,String column_name,String ghost_time) {
 
         // queryメソッド DBのデータを取得
         // 第1引数：DBのテーブル名
@@ -292,8 +292,8 @@ public class DBAdapter {
         // 第5引数：集計条件(GROUP BY句)
         // 第6引数：選択条件(HAVING句)
         // 第7引数：ソート条件(ODERBY句)
-        return db.query(DB_TABLE_GHOST, columns, " MAX("+ column +")",name, null, null, null);
-
+        //return db.query(DB_TABLE_GHOST, columns, " MAX("+ column +")",name, null,  null, null);
+        return db.query(DB_TABLE_GHOST, columns, column + " like ? and " + column_name + " = " + "(SELECT MAX(" + column_name + ") FROM " + DB_TABLE_GHOST + ")", new String[]{ghost_time}, null, null, null);
     }
 
 
