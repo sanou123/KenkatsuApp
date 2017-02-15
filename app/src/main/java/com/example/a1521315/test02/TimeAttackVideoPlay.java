@@ -53,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callback, Runnable, MediaPlayer.OnCompletionListener,View.OnClickListener {
 
     Globals globals;
-    /*メーター関連の関数*/
+
     TextView tBPM,tHeartbeat;//心拍の変数
     TextView tTargetBPM,tTargetHeartbeat;//目標心拍数の変数
     TextView tKPH,tSpeed;//時速の変数
@@ -61,27 +61,20 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     TextView tCAL,tCal;//走行距離の変数
     TextView tTimer;//タイマーの変数
     TextView tCourse;//コース名
-    TextView textaddtimer;
-
-    /*ギア*/
+    TextView textaddtimer;//タイム加算用テキスト
     TextView tGear;//ギア
+    TextView tDebug1;//デバッグ用
+    TextView tDebug2;//デバッグ用
 
-    /*最高速度*/
-    double maxSpeed = 0.0;
-
-    /*最大心拍*/
-    int maxHeartbeat = 0;
+    double maxSpeed = 0.0;//最高速度
+    int maxHeartbeat = 0;//最大心拍
 
     /*平均速度を出すのに必要な関数*/
     double totalSpeed = 0.0;
     int totalSpeedCnt = 0;
 
-    /*デバッグ用の関数*/
-    TextView tDebug1;
-    TextView tDebug2;
-
-    boolean mediaPathCheck = false;;//rawファイルかどうかを判断する変数。trueだったらraw
-    String mediaPath = null;//動画データ
+    boolean mediaPathCheck = false;;//rawファイルかどうかを判断する変数
+    String mediaPath = null;//動画データのパス
     private ImageView imageMe;//自機イメージ用の変数
     double totalMileage = 0;//総走行距離用,選択されたコースごとに変わる
     double speedCount = 0.0;//速度用
@@ -92,9 +85,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     private static final String TAG = "VideoPlayer";
     private SurfaceHolder holder;
     private SurfaceView mPreview;
-    private MediaPlayer mp = null;
-    //BGM
-    private MediaPlayer mpBGM = null;
+    private MediaPlayer mp = null;//動画
+    private MediaPlayer mpBGM = null;//BGM
 
     //タイムに関する奴
     private ScheduledExecutorService timerscheduler;
@@ -128,9 +120,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     boolean inertia_Flg = false;//慣性に入った判断
     int cnt_25 = 0;//25回データとったかのカウンター
     long limit_Value = 150;//慣性判断での閾値
-
-    //double dist_Value = 0.0;//ペダルレベルでの距離
-    //double old_dist_Value = 0.0;//ペダルレベルでの距離
 
     public float resist_Level = (float) 1.0;//負荷のレベルによる係数
     NumberFormat format2 = NumberFormat.getInstance();
@@ -179,21 +168,17 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // タイトルバーを隠す
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // ステータスバーを隠す
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        // ディスプレイサイズ取得
-        Display display = getWindowManager().getDefaultDisplay();
+        requestWindowFeature(Window.FEATURE_NO_TITLE);// タイトルバーを隠す
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);// ステータスバーを隠す
+        Display display = getWindowManager().getDefaultDisplay();// ディスプレイサイズ取得
         Point p = new Point();
         display.getSize(p);
         Log.v("width: ", String.valueOf(p.x));
         Log.v("height: ", String.valueOf(p.y));
-        if(p.x == 2048){
-            //nexus 9の幅
+        /*ディスプレイの横幅のピクセル数で判断*/
+        if(p.x == 2048){//nexus 9の幅
             setContentView(R.layout.activity_video_play);
-        }else{
-            //sそれ以外(nexus7 2013とか)
+        }else{//sそれ以外(nexus7 2013とか)
             setContentView(R.layout.activity_video_play_7);
         }
 
@@ -205,86 +190,14 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         globals = (Globals)this.getApplication();
         globals.DriveDataInit();//グローバル変数初期化
 
-        tCal = (TextView) findViewById(R.id.textCal);
-        tCal.setText("000.00");
-        tCAL = (TextView) findViewById(R.id.textCAL);
-        tCAL.setText("Calorie              kcal");
-        tMileage = (TextView) findViewById(R.id.textMileage);
-        tMileage.setText("000.00");
-        tKM = (TextView) findViewById(R.id.textKM);
-        tKM.setText("Mileage              km");
-        tSpeed = (TextView) findViewById(R.id.textSpeed);
-        tSpeed.setText("00.00");
-        tKPH = (TextView) findViewById(R.id.textKPH);
-        tKPH.setText("Speed              km/h");
+        setText();//テキストを表示
+        change7Seg();//テキストを7セグフォントに変換
+        setImage();//画像を表示
 
-        tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
-        tTargetHeartbeat.setText("000");
-        tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
-        tTargetBPM.setText("Target BPM");
-        tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
-        tHeartbeat.setText("000");
-        tBPM = (TextView) findViewById(R.id.textBPM);
-        tBPM.setText("BPM");
-        tTimer = (TextView) findViewById(R.id.textTimer);
-        tTimer.setText("00:00:00.0");
-        textaddtimer = (TextView) findViewById(R.id.textAddTimer);
-
-        tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        //tDebug1.setText(globals.height+"");
-        tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        //tDebug2.setText(globals.weight+"");
-
-        tGear = (TextView) findViewById(R.id.textGear);
-        tGear.setText("0");
-
-        Change7Seg();//7セグフォントに変換
-
-        /*シークバーに関する奴*/
-        imageMe = (ImageView)findViewById(R.id.image_view_me);
-        imageMe.setImageResource(R.drawable.me);
-        ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
-        imageView1.setImageResource(R.drawable.bar0);
-
-        /*タイム表示*/
-        ImageView timeDisplay = (ImageView)findViewById(R.id.image_TimeDisplay);
-        timeDisplay.setImageResource(R.drawable.time);
-        /*コースネーム*/
-        ImageView CoursenameDisplay = (ImageView) findViewById(R.id.image_Coursenamedisplay);
-        CoursenameDisplay.setImageResource(R.drawable.coursename);
-        /*ギア*/
-        ImageView GearDisplay = (ImageView) findViewById(R.id.imageGear);
-        GearDisplay.setImageResource(R.drawable.gear);
-
-        //各種ディスプレイ
-        ImageView CalDisplay = (ImageView) findViewById(R.id.imageCalDisplay);
-        CalDisplay.setImageResource(R.drawable.display);
-        CalDisplay.setAlpha(150);
-        ImageView MileageDisplay = (ImageView) findViewById(R.id.imageMileageDisplay);
-        MileageDisplay.setImageResource(R.drawable.display);
-        MileageDisplay.setAlpha(150);
-        ImageView SpeedDisplay = (ImageView) findViewById(R.id.imageSpeedDisplay);
-        SpeedDisplay.setImageResource(R.drawable.display);
-        SpeedDisplay.setAlpha(150);
-        ImageView TargetBPMDisplay = (ImageView) findViewById(R.id.imageTargetBPMDisplay);
-        TargetBPMDisplay.setImageResource(R.drawable.display);
-        TargetBPMDisplay.setAlpha(150);
-        ImageView BPMDisplay = (ImageView) findViewById(R.id.imageBPMDisplay);
-        BPMDisplay.setImageResource(R.drawable.display);
-        BPMDisplay.setAlpha(150);
-
-
-        //コース番号受け取り
-        Intent i = getIntent();
-        String CourseNum = i.getStringExtra("course");
-        tCourse = (TextView)findViewById(R.id.textCourse);
-        tCourse.setText("コース"+CourseNum);
-
-        tCourse.setText("体力測定コース");
         mediaPath = "/izunuma2900.mp4";//実機9のストレージにあるファルを指定
         totalMileage = 2.9;
         mediaPathCheck = false;
-
+        /*Bluetooth接続のYes/Noボタンのリスナー*/
         findViewById(R.id.buttonYes).setOnClickListener(this);
         findViewById(R.id.buttonNo).setOnClickListener(this);
 
@@ -321,7 +234,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         //USB通信の切断(停止がないため)
         accessoryManager.disable(this);
         disconnectAccessory();//#
-        ResultDialog();//リザルトダイアログを表示
+        resultDialog();//リザルトダイアログを表示
         if (mp != null) {
             mp.release();
             mp = null;
@@ -426,14 +339,13 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             //MediaPlayerを生成
             mp = new MediaPlayer();
 
-            if(mediaPathCheck == true){
+            if(mediaPathCheck == true){//rawフォルダから指定する場合
                 //動画ファイルをMediaPlayerに読み込ませる
                 mp.setDataSource(getApplicationContext(), Uri.parse(mediaPath));//rawフォルダから指定する場合
-            }else{
+            }else{//内部ストレージから指定する場合
                 File pathExternalPublicDir =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-                String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定してい
-                //動画ファイルをMediaPlayerに読み込ませる
-                mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
+                String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定している
+                mp.setDataSource(dir + mediaPath);//動画ファイルをMediaPlayerに読み込ませる
             }
 
             //読み込んだ動画ファイルを画面に表示する
@@ -837,22 +749,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
 
     //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-    /*ボタンタップや画面タップした時の処理*/
-    //Playボタンを押したときの処理
-    View.OnClickListener PlayClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(Gear3_Flg == true){
-                PlayProcess();
-            }
-            else{
-                //Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
-                //Log.v("a","負荷を3に設定してください");
-            }
-        }
-    };
-
-    //Connectボタンを押したときの処理
+    /*Connectボタンを押したときの処理*/
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -870,14 +767,14 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             case R.id.buttonNo:
                 Log.d("No","no");
                 findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                StartDialog();
+                startDialog();
                 tTargetHeartbeat.setText("- ");
                 tHeartbeat.setText("- ");
                 break;
         }
     }
 
-    //動画再生中に画面をタップされたときの処理(Pause)
+    /*動画再生中に画面をタップされたときの処理(Pause)*/
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -885,16 +782,15 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 Log.d("", "ACTION_DOWN");
                 if(Gear3_Flg == true && findViewById(R.id.ConnectCheak).getVisibility() == View.INVISIBLE) {
                     //トレーニングが始まっているときのみ画面タップでポーズする
-                    PauseDialog();
+                    pauseDialog();
                 }
                 break;
         }
         return true;
     }
 
-    /*処理の中身*/
-    //スタート時のやつ
-    public void StartDialog() {
+    /*トレーニング開始できるようになったら表示されるダイアログ*/
+    private void startDialog() {
         // ポップアップメニュー表示
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(TimeAttackVideoPlay.this);
         alertDialog.setTitle("トレーニング開始");
@@ -903,12 +799,12 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(Gear3_Flg == true){
-                    PlayProcess();
+                    playProcess();
                 }
                 else{
                     //Toast.makeText(getApplication(),"負荷を3に設定してください",Toast.LENGTH_LONG).show();
                     //Log.v("a","負荷を3に設定してください");
-                    StartDialog();
+                    startDialog();
                 }
             }
         });
@@ -916,8 +812,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
         myDialog.show();
     }
-    //Playボタンを押したときの処理の中身
-    public void PlayProcess(){
+    /*Playボタンを押したときの処理の中身*/
+    private void playProcess(){
         speedCount = 0.0;
         tSpeed.setText(String.format("%.1f", (float) (speedCount*10)));
         mp.setPlaybackParams(params);
@@ -937,8 +833,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         usb_Flg = false;
     }
 
-    //負荷を変えたときの処理の中身
-    public void HukaDialog(){
+    /*負荷を変えたときに表示されるダイアログ*/
+    private void hukaDialog(){
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         seekbarfuture.cancel(true);
@@ -974,7 +870,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(Gear3_Flg != true){
-                    HukaDialog();
+                    hukaDialog();
                 }else {
                     future = timerscheduler.scheduleAtFixedRate(myTimerTask, 0, 100, TimeUnit.MILLISECONDS);//タイマーを動かす
                     seekbarfuture = seekbarscheduler.scheduleAtFixedRate(mySeekBarTask, 0, 1000, TimeUnit.MILLISECONDS);
@@ -987,7 +883,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             public void onClick(DialogInterface dialog, int which) {
                 accessoryManager.disable(getApplication());//#
                 disconnectAccessory();//#
-                PauseResultProcess();
+                pauseResultProcess();
             }
         });
         AlertDialog myDialog = alertDialog.create();
@@ -995,8 +891,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         myDialog.show();
     }
 
-    //Pauseボタンを押したときの処理の中身
-    public void PauseDialog(){
+    /*Pauseボタンを押したときに表示されるダイアログ*/
+    private void pauseDialog(){
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         seekbarfuture.cancel(true);
@@ -1041,7 +937,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             public void onClick(DialogInterface dialog, int which) {
                 accessoryManager.disable(getApplication());//#
                 disconnectAccessory();//#
-                PauseResultProcess();
+                pauseResultProcess();
             }
         });
         AlertDialog myDialog = alertDialog.create();
@@ -1049,8 +945,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         myDialog.show();
     }
 
-    //ゲームオーバー時のダイアログ
-    public void TimeoutResultDialog(){
+    /*ゲームオーバー時に表示されるダイアログ*/
+    private void timeoutResultDialog(){
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
         seekbarfuture.cancel(true);
@@ -1067,7 +963,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TimeoutResultProcess();
+                timeoutResultProcess();
             }
         });
         AlertDialog myDialog = alertDialog.create();
@@ -1075,8 +971,8 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         myDialog.show();
     }
 
-    //ゲームクリア時のダイアログ
-    public void ResultDialog(){
+    /*ゲームクリア時に表示されるダイアログ*/
+    private void resultDialog(){
         // ポップアップメニュー表示
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(TimeAttackVideoPlay.this);
         alertDialog.setTitle("トレーニング終了");
@@ -1084,7 +980,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         alertDialog.setNeutralButton("リザルトに行く", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ResultProcess();
+                resultProcess();
             }
         });
         AlertDialog myDialog = alertDialog.create();
@@ -1092,14 +988,14 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         myDialog.show();
     }
 
-    //走り終わったとき
-    public void ResultProcess(){
+    /*走り終わったとき*/
+    private void resultProcess(){
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = String.valueOf(totalMileage);//完走
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
+        globals.avg = String.valueOf(averageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
         globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
@@ -1107,14 +1003,15 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-    //ポーズしたとき
-    public void PauseResultProcess(){
+
+    /*ポーズしたとき*/
+    private void pauseResultProcess(){
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = String.valueOf(tMileage.getText());//とちゅうでやめた
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
+        globals.avg = String.valueOf(averageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
         globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
@@ -1122,14 +1019,15 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-    //時間が0になったとき
-    public void TimeoutResultProcess(){
+
+    /*時間が0になったとき*/
+    private void timeoutResultProcess(){
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
         globals.coursename = tCourse.getText().toString();//コース名
         globals.mileage = String.valueOf(tMileage.getText());//とちゅうでやめた
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍(現在は心拍数を代入しているので実際最大心拍を取得する処理を書いてから代入する)
-        globals.avg = String.valueOf(AverageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
+        globals.avg = String.valueOf(averageSpeed(totalSpeed,totalSpeedCnt));//平均速度(これも計算する処理が必要)
         globals.max = String.format("%.2f", maxSpeed);
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
@@ -1137,6 +1035,154 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+    /*テキスト表示*/
+    private void setText(){
+        tCourse = (TextView) findViewById(R.id.textCourse);
+        tCourse.setText("体力測定コース");
+        tCal = (TextView) findViewById(R.id.textCal);
+        tCal.setText("000.00");
+        tCAL = (TextView) findViewById(R.id.textCAL);
+        tCAL.setText("Calorie              kcal");
+        tMileage = (TextView) findViewById(R.id.textMileage);
+        tMileage.setText("000.00");
+        tKM = (TextView) findViewById(R.id.textKM);
+        tKM.setText("Mileage              km");
+        tSpeed = (TextView) findViewById(R.id.textSpeed);
+        tSpeed.setText("00.00");
+        tKPH = (TextView) findViewById(R.id.textKPH);
+        tKPH.setText("Speed              km/h");
+        tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
+        tTargetHeartbeat.setText("000");
+        tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
+        tTargetBPM.setText("Target BPM");
+        tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
+        tHeartbeat.setText("000");
+        tBPM = (TextView) findViewById(R.id.textBPM);
+        tBPM.setText("BPM");
+        tTimer = (TextView) findViewById(R.id.textTimer);
+        tTimer.setText("00:00:00.0");
+        textaddtimer = (TextView) findViewById(R.id.textAddTimer);
+        tGear = (TextView) findViewById(R.id.textGear);
+        tGear.setText("0");
+        /*
+        tDebug1 = (TextView) findViewById(R.id.textDebug1);
+        tDebug1.setText(globals.height+"");
+        tDebug2 = (TextView) findViewById(R.id.textDebug2);
+        tDebug2.setText(globals.weight+"");
+        */
+    }
+
+    /*フォントを7セグにする*/
+    private void change7Seg(){
+        /*7セグ表示にする処理*/
+        // フォントを取得
+        Typeface tf = Typeface.createFromAsset(getAssets(), "dseg7classic-bold.ttf");//7セグフォント
+        Typeface tf2 = Typeface.createFromAsset(getAssets(), "digitalword.ttf");//7セグフォント
+        /*タイマー*/
+        tTimer.setTypeface(tf);
+        tTimer.setTextSize(32.0f);
+        tTimer.setPadding(0, 0, 0, 15);
+        textaddtimer.setTypeface(tf);
+        textaddtimer.setTextSize(32.0f);
+        textaddtimer.setPadding(0,0,0,15);
+
+        /*走行距離*/
+        tCal.setTypeface(tf);
+        tCal.setTextSize(45.0f);
+        tCal.setPadding(0, 0, 5, 0);
+        tCAL.setTypeface(tf2);
+        tCAL.setTextSize(25.0f);
+        tCAL.setPadding(0, 0, 10, 7);
+
+        /*走行距離*/
+        tMileage.setTypeface(tf);
+        tMileage.setTextSize(45.0f);
+        tMileage.setPadding(0, 0, 5, 0);
+        tKM.setTypeface(tf2);
+        tKM.setTextSize(25.0f);
+        tKM.setPadding(0, 0, 10, 7);
+
+        /*スピード*/
+        tSpeed.setTypeface(tf);
+        tSpeed.setTextSize(45.0f);
+        tSpeed.setPadding(0, 0, 5, 0);
+        tKPH.setTypeface(tf2);
+        tKPH.setTextSize(25.0f);
+        tKPH.setPadding(0, 0, 10, 7);
+
+        /*ターゲット心拍*/
+        tTargetHeartbeat.setTypeface(tf);
+        tTargetHeartbeat.setTextSize(45.0f);
+        tTargetHeartbeat.setPadding(0, 0, 5, 0);
+        tTargetBPM.setTypeface(tf2);
+        tTargetBPM.setTextSize(25.0f);
+        tTargetBPM.setPadding(0, 0, 10, 7);
+
+        /*心拍*/
+        tHeartbeat.setTypeface(tf);
+        tHeartbeat.setTextSize(45.0f);
+        tHeartbeat.setPadding(0, 0, 5, 0);
+        tBPM.setTypeface(tf2);
+        tBPM.setTextSize(25.0f);
+        tBPM.setPadding(0, 0, 10, 7);
+
+    }
+
+    /*画像をセット*/
+    private void setImage(){
+        /*シークバーに関する奴*/
+        imageMe = (ImageView)findViewById(R.id.image_view_me);
+        imageMe.setImageResource(R.drawable.me);
+        ImageView imageView1 = (ImageView)findViewById(R.id.image_view_bar);
+        imageView1.setImageResource(R.drawable.bar0);
+
+        /*タイム表示*/
+        ImageView timeDisplay = (ImageView)findViewById(R.id.image_TimeDisplay);
+        timeDisplay.setImageResource(R.drawable.time);
+        /*コースネーム*/
+        ImageView CoursenameDisplay = (ImageView) findViewById(R.id.image_Coursenamedisplay);
+        CoursenameDisplay.setImageResource(R.drawable.coursename);
+        /*ギア*/
+        ImageView GearDisplay = (ImageView) findViewById(R.id.imageGear);
+        GearDisplay.setImageResource(R.drawable.gear);
+
+        //各種ディスプレイ
+        ImageView CalDisplay = (ImageView) findViewById(R.id.imageCalDisplay);
+        CalDisplay.setImageResource(R.drawable.display);
+        CalDisplay.setAlpha(150);
+        ImageView MileageDisplay = (ImageView) findViewById(R.id.imageMileageDisplay);
+        MileageDisplay.setImageResource(R.drawable.display);
+        MileageDisplay.setAlpha(150);
+        ImageView SpeedDisplay = (ImageView) findViewById(R.id.imageSpeedDisplay);
+        SpeedDisplay.setImageResource(R.drawable.display);
+        SpeedDisplay.setAlpha(150);
+        ImageView TargetBPMDisplay = (ImageView) findViewById(R.id.imageTargetBPMDisplay);
+        TargetBPMDisplay.setImageResource(R.drawable.display);
+        TargetBPMDisplay.setAlpha(150);
+        ImageView BPMDisplay = (ImageView) findViewById(R.id.imageBPMDisplay);
+        BPMDisplay.setImageResource(R.drawable.display);
+        BPMDisplay.setAlpha(150);
+    }
+
+    /*目標心拍を計算*/
+    private int targetBPM(int age) {
+        int targetBPM;
+        targetBPM = (int) ((220 - age) * 0.6);
+        return targetBPM;
+    }
+
+    /*平均速度を計算*/
+    public String averageSpeed(double totalSpeed, int totalSpeedCnt){
+        Log.v("TotalSpeed", String.valueOf(totalSpeed));
+        Log.v("TotalSpeedCnt", String.valueOf(totalSpeedCnt));
+        double averageSpeed;
+        averageSpeed = totalSpeed / totalSpeedCnt;
+        String avg = String.format("%.2f",averageSpeed);
+        return avg;
+    }
+
+
 
     /*非同期処理関連*/
     //カウントダウンタイマタスク
@@ -1176,7 +1222,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                         tCal.setText(String.format("%.2f", cal));
                         tGear.setText("3");
                     }else{
-                        HukaDialog();
+                        hukaDialog();
                         if (Gear1_Flg == true && Gear2_Flg == false && Gear4_Flg == false && Gear5_Flg == false && Gear6_Flg == false) {
                             tGear.setText("1");
                         }else if (Gear1_Flg == false && Gear2_Flg == true && Gear4_Flg == false && Gear5_Flg == false && Gear6_Flg == false) {
@@ -1194,7 +1240,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                     if(timerCount == 0){
                         speedCount = 0;
                         //ゲームオーバーのダイアログを表示
-                        TimeoutResultDialog();
+                        timeoutResultDialog();
                     }
                     //残り時間を増やす800km
                     if(globals.timflg1 == 1){
@@ -1271,7 +1317,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
     }
 
-    //シークバータスク
+    /*シークバータスク*/
     public class SeekBarTask implements Runnable {
         public void run() {
             // handlerを使って処理をキューイングする
@@ -1290,7 +1336,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
     }
 
-    //自機の移動//菅原変更
+    /*自機の移動*/
     public class MoveMeTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
         final int endPoint = 45;//エンド地点の座標
@@ -1310,7 +1356,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
     }
 
-    //走行距離タスク
+    /*走行距離タスク*/
     public class MileageTask implements Runnable {
         private double duration = 0.0;
         private double currentPosition = 0.0;
@@ -1358,37 +1404,9 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
     }
 
-    //スピードメータータスク
-    public class SpeedMeterTask implements Runnable {
-        private float taskSpeedCount = (float) 0.0;
 
-        public SpeedMeterTask(float taskSpeedCount) {
-            this.taskSpeedCount = taskSpeedCount;
-        }
 
-        public void run() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mp != null) {
-                    /*動画の再生速度を変えるのに必要なプログラム↓*/
-                        params.setSpeed(taskSpeedCount);//再生速度変更
-                        mp.setPlaybackParams(params);
-                        //mp.start();
-                        tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
-                        totalSpeed = totalSpeed + (taskSpeedCount * 10);
-                        totalSpeedCnt++;
-                        //最高速度の判断
-                        if ((taskSpeedCount * 10) > maxSpeed) {
-                            maxSpeed = (taskSpeedCount * 10);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    //BGM
+    /*BGM鳴らす*/
     public class StartBGM implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -1404,6 +1422,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
     }
 
+    /*BGM止める*/
     public class StopBGM implements Runnable {
         public void run() {
             handler.post(new Runnable() {
@@ -1418,100 +1437,21 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
             });
         }
     }
-    //フォントを7セグにする
-    public void Change7Seg(){
-        /*7セグ表示にする処理*/
-        // フォントを取得
-        Typeface tf = Typeface.createFromAsset(getAssets(), "dseg7classic-bold.ttf");//7セグフォント
-        Typeface tf2 = Typeface.createFromAsset(getAssets(), "digitalword.ttf");//7セグフォント
-        /*タイマー*/
-        tTimer.setTypeface(tf);
-        tTimer.setTextSize(32.0f);
-        tTimer.setPadding(0, 0, 0, 15);
-        textaddtimer.setTypeface(tf);
-        textaddtimer.setTextSize(32.0f);
-        textaddtimer.setPadding(0,0,0,15);
 
-        /*走行距離*/
-        tCal.setTypeface(tf);
-        tCal.setTextSize(45.0f);
-        tCal.setPadding(0, 0, 5, 0);
-        tCAL.setTypeface(tf2);
-        tCAL.setTextSize(25.0f);
-        tCAL.setPadding(0, 0, 10, 7);
-
-        /*走行距離*/
-        tMileage.setTypeface(tf);
-        tMileage.setTextSize(45.0f);
-        tMileage.setPadding(0, 0, 5, 0);
-        tKM.setTypeface(tf2);
-        tKM.setTextSize(25.0f);
-        tKM.setPadding(0, 0, 10, 7);
-
-        /*スピード*/
-        tSpeed.setTypeface(tf);
-        tSpeed.setTextSize(45.0f);
-        tSpeed.setPadding(0, 0, 5, 0);
-        tKPH.setTypeface(tf2);
-        tKPH.setTextSize(25.0f);
-        tKPH.setPadding(0, 0, 10, 7);
-
-        /*ターゲット心拍*/
-        tTargetHeartbeat.setTypeface(tf);
-        tTargetHeartbeat.setTextSize(45.0f);
-        tTargetHeartbeat.setPadding(0, 0, 5, 0);
-        tTargetBPM.setTypeface(tf2);
-        tTargetBPM.setTextSize(25.0f);
-        tTargetBPM.setPadding(0, 0, 10, 7);
-
-        /*心拍*/
-        tHeartbeat.setTypeface(tf);
-        tHeartbeat.setTextSize(45.0f);
-        tHeartbeat.setPadding(0, 0, 5, 0);
-        tBPM.setTypeface(tf2);
-        tBPM.setTextSize(25.0f);
-        tBPM.setPadding(0, 0, 10, 7);
-
-    }
-
-    //平均速度を計算する
-    public String AverageSpeed2(double totalMileage, String time){
-        Log.v("aaaaaaaaaaaaTIME",time);
-        double hours = Double.parseDouble(time.substring(0, 2));
-        double minutes = Double.parseDouble(time.substring(3, 5));
-        double seconds = Double.parseDouble(time.substring(6));
-        double totalHours = hours + (minutes/60) + (seconds/3600);
-        Log.v("mileage",String.valueOf(totalMileage) );
-        Log.v("HOURS",String.valueOf(hours) );
-        Log.v("MINUTES",String.valueOf(minutes) );
-        Log.v("SECONDS",String.valueOf(seconds) );
-        Log.v("TOTAL",String.valueOf(totalHours) );
-        String avg = String.format("%.2f",(totalMileage / totalHours));
-        return avg;
-    }
-
-    //平均速度を計算する(ボリュームで速度調整するとき用)
-    public String AverageSpeed(double totalSpeed, int totalSpeedCnt){
-        Log.v("TotalSpeed", String.valueOf(totalSpeed));
-        Log.v("TotalSpeedCnt", String.valueOf(totalSpeedCnt));
-        double averageSpeed;
-        averageSpeed = totalSpeed / totalSpeedCnt;
-        String avg = String.format("%.2f",averageSpeed);
-        return avg;
-    }
-
-    //画面消すタスク
+    /*画面消すタスク*/
     public class ConnectCheck implements Runnable {
         public void run() {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                    StartDialog();
+                    tTargetHeartbeat.setText("" + targetBPM(Integer.parseInt(globals.age)));
+                    startDialog();
                 }
             });
         }
     }
+
     //最大心拍タスク
     public class Maxheartbeat implements Runnable {
         private int inputHeartbeat = 0;
@@ -1549,44 +1489,6 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         }
     }
 
-    //ボリュームキーの操作(完成版はここで速度変更はできなくする)
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
-                if (mp != null) {
-                    if (speedCount < 0.1) {
-                        speedCount = speedCount + 0.1;
-                    } else if (speedCount < 5) {
-                        speedCount = speedCount + 0.01;
-                    } else if (speedCount >= 5) {
-                        //意味わからないほど早くされるとクラッシュする対策
-                        speedCount = 5.00;
-                    }
-                    Thread SpeedUp = new Thread(new SpeedMeterTask((float) speedCount));
-                    SpeedUp.start();
-                }
-                return true;
-            }
-        }
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                if (mp != null) {
-                    if (speedCount < 0.1) {
-                        speedCount = 0.00;
-                    } else if (speedCount <= 0.1) {
-                        speedCount = speedCount - 0.1;
-                    } else if (speedCount >= 0.1) {
-                        speedCount = speedCount - 0.01;
-                    }
-                    Thread SpeedDown = new Thread(new SpeedMeterTask((float) speedCount));
-                    SpeedDown.start();
-                }
-                return true;
-            }
-        }
-        return super.dispatchKeyEvent(event);
-    }
     @Override
     //戻るキーを無効にする
     public boolean onKeyDown(int keyCode, KeyEvent event) {
