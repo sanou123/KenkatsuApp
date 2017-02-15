@@ -383,14 +383,13 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             //MediaPlayerを生成
             mp = new MediaPlayer();
 
-            if (mediaPathCheck == true) {
+            if (mediaPathCheck == true) {//rawフォルダ指定する場合
                 //動画ファイルをMediaPlayerに読み込ませる
                 mp.setDataSource(getApplicationContext(), Uri.parse(mediaPath));//rawフォルダから指定する場合
-            } else {
+            } else {//内部ストレージから指定する場合
                 File pathExternalPublicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
                 String dir = pathExternalPublicDir.getPath();//dirは　/storage/emulated/0/Movie　を指定してい
-                //動画ファイルをMediaPlayerに読み込ませる
-                mp.setDataSource(dir + mediaPath);//内部ストレージから指定する場合
+                mp.setDataSource(dir + mediaPath); //動画ファイルをMediaPlayerに読み込ませる
             }
 
             //読み込んだ動画ファイルを画面に表示する
