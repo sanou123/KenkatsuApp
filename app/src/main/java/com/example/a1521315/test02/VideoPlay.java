@@ -55,12 +55,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     Globals globals;
 
     /*コース名*/
-    final String course0 = "瀬峰";
-    final String course1 = "伊豆沼";
-    final String course2 = "出羽海道";
-    final String course3 = "鳴子";
-    final String course6 = "瀬峰ショート2";
-    final String course7 = "瀬峰ショート1";
+    final String COURSE0 = "瀬峰";
+    final String COURSE1 = "伊豆沼";
+    final String COURSE2 = "出羽海道";
+    final String COURSE3 = "鳴子";
+    final String COURSE6 = "瀬峰ショート2";
+    final String COURSE7 = "瀬峰ショート1";
 
     /*画面に表示するテキスト*/
     TextView tBPM, tHeartbeat;//心拍の変数
@@ -977,32 +977,32 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             globals.mileage = String.valueOf(totalMileage);
             //完走したときのみ新記録かどうかの判定をする
             switch(tCourse.getText().toString()){
-                case course0:
+                case COURSE0:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time0)){
                         globals.bestrecord_time0 = tTimer.getText().toString();
                     }
                     break;
-                case course1:
+                case COURSE1:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time1)){
                         globals.bestrecord_time1 = tTimer.getText().toString();
                     }
                     break;
-                case course2:
+                case COURSE2:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time2)){
                         globals.bestrecord_time2 = tTimer.getText().toString();
                     }
                     break;
-                case course3:
+                case COURSE3:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time3)){
                         globals.bestrecord_time3 = tTimer.getText().toString();
                     }
                     break;
-                case course6:
+                case COURSE6:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time6)){
                         globals.bestrecord_time6 = tTimer.getText().toString();
                     }
                     break;
-                case course7:
+                case COURSE7:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time7)){
                         globals.bestrecord_time7 = tTimer.getText().toString();
                     }
@@ -1291,37 +1291,37 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
 
     /*過去に走ったことがあるかを見る*/
     private void CheckLastData(String courseName){
-        if(courseName == course0){
+        if(courseName == COURSE0){
             if(globals.bestrecord_time0 == "00:00:00.0") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
-        }else if(courseName == course1){
+        }else if(courseName == COURSE1){
             if(globals.bestrecord_time1 == "00:00:00.0") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
-        } if(courseName == course2){
+        } if(courseName == COURSE2){
             if(globals.bestrecord_time2 == "00:00:00.0") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
-        } if(courseName == course3){
+        } if(courseName == COURSE3){
             if(globals.bestrecord_time3 == "00:00:00.0") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
-        }if(courseName == course6){
+        }if(courseName == COURSE6){
             if(globals.bestrecord_time6 == "00:00:00.0") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
-        }if(courseName == course7){
+        }if(courseName == COURSE7){
             if(globals.bestrecord_time7 == "00:00:00.0") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
@@ -1333,22 +1333,22 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     private double bestrecordToSecond(String courseName){
         double seconds = 0.0;
         switch(courseName){
-            case course0:
+            case COURSE0:
                 seconds = changeSeconds(globals.bestrecord_time0);
                 break;
-            case course1:
+            case COURSE1:
                 seconds = changeSeconds(globals.bestrecord_time1);
                 break;
-            case course2:
+            case COURSE2:
                 seconds = changeSeconds(globals.bestrecord_time2);
                 break;
-            case course3:
+            case COURSE3:
                 seconds = changeSeconds(globals.bestrecord_time3);
                 break;
-            case course6:
+            case COURSE6:
                 seconds = changeSeconds(globals.bestrecord_time6);
                 break;
-            case course7:
+            case COURSE7:
                 seconds = changeSeconds(globals.bestrecord_time7);
                 break;
         }
@@ -1397,42 +1397,42 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         switch(num){
             case "0":
                 mediaPathCheck = false;
-                tCourse.setText(course0);
+                tCourse.setText(COURSE0);
                 mediaPath = "/semine.mp4";//実機9のストレージにあるファルを指定
                 totalMileage = 10.4;
                 video_Speed = 20;
                 break;
             case "1":
                 mediaPathCheck = false;
-                tCourse.setText(course1);
+                tCourse.setText(COURSE1);
                 mediaPath = "/izunuma4400.mp4";//実機9のストレージにあるファイルを指定
                 totalMileage = 4.4;
                 video_Speed = 5;
                 break;
             case "2":
                 mediaPathCheck = false;
-                tCourse.setText(course2);
+                tCourse.setText(COURSE2);
                 mediaPath = "/dewa.mp4";//実機9のストレージにあるファイルを指定
                 totalMileage = 5.4;
                 video_Speed = 5;
                 break;
             case "3":
                 mediaPathCheck = false;
-                tCourse.setText(course3);
+                tCourse.setText(COURSE3);
                 mediaPath = "/naruko.mp4";//実機9のストレージにあるファイルを指定
                 totalMileage = 1.3;
                 video_Speed = 5;
                 break;
             case "6":
                 mediaPathCheck = false;
-                tCourse.setText(course6);
+                tCourse.setText(COURSE6);
                 mediaPath = "/semine_otameshi2.mp4";//実機9のストレージにあるファイルを指定
                 totalMileage = 0.2;
                 video_Speed = 20;
                 break;
             case "7":
                 mediaPathCheck = false;
-                tCourse.setText(course7);
+                tCourse.setText(COURSE7);
                 mediaPath = "/semine_otameshi.mp4";//実機9のストレージにあるファイルを指定
                 totalMileage = 1.04;
                 video_Speed = 20;
