@@ -55,12 +55,12 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     Globals globals;
 
     /*コース名*/
-    final String course0 = "瀬峰";
-    final String course1 = "伊豆沼";
-    final String course2 = "出羽海道";
-    final String course3 = "鳴子";
-    final String course6 = "瀬峰ショート2";
-    final String course7 = "瀬峰ショート1";
+    final String COURSE0 = "瀬峰";
+    final String COURSE1 = "伊豆沼";
+    final String COURSE2 = "出羽海道";
+    final String COURSE3 = "鳴子";
+    final String COURSE6 = "瀬峰ショート2";
+    final String COURSE7 = "瀬峰ショート1";
 
     /*画面に表示するテキスト*/
     TextView tBPM, tHeartbeat;//心拍の変数
@@ -237,7 +237,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         setImage();//画像を表示
 
 
-        CheckLastData(tCourse.getText().toString());//過去に走行したことがある場合はゴースト出す
+        checkLastData(tCourse.getText().toString());//過去に走行したことがある場合はゴースト出す
         totalSeconds = bestrecordToSecond(tCourse.getText().toString());//レコードタイムを秒に変換
         perSecond = calcPerSecond(totalMileage, totalSeconds);//秒速を計算
         /*Bluetooth接続のYes/Noボタンのリスナー*/
@@ -889,7 +889,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         usb_Flg = false;
     }
 
-    //Pauseボタンを押したときの処理の中身
+    /*Pauseボタンを押したときに表示されるダイアログ*/
     private void pauseDialog() {
         usb_Flg = true;
         future.cancel(true);//タイマー一時停止
@@ -951,6 +951,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         myDialog.show();
     }
 
+    /*Resultボタンを押したときに表示されるダイアログ*/
     private void resultDialog() {
         //Toast.makeText(this, "ResultDialog", Toast.LENGTH_LONG).show();
         // ポップアップメニュー表示
@@ -968,7 +969,8 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         myDialog.setCanceledOnTouchOutside(false);//ダイアログ画面外をタッチされても消えないようにする
         myDialog.show();
     }
-    //Resultボタンを押したときの処理の中身
+
+    /*Resultボタンを押したときの処理の中身*/
     private void resultProcess() {
         Thread StopBGM = new Thread(new StopBGM());
         StopBGM.start();
@@ -977,32 +979,32 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             globals.mileage = String.valueOf(totalMileage);
             //完走したときのみ新記録かどうかの判定をする
             switch(tCourse.getText().toString()){
-                case course0:
+                case COURSE0:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time0)){
                         globals.bestrecord_time0 = tTimer.getText().toString();
                     }
                     break;
-                case course1:
+                case COURSE1:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time1)){
                         globals.bestrecord_time1 = tTimer.getText().toString();
                     }
                     break;
-                case course2:
+                case COURSE2:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time2)){
                         globals.bestrecord_time2 = tTimer.getText().toString();
                     }
                     break;
-                case course3:
+                case COURSE3:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time3)){
                         globals.bestrecord_time3 = tTimer.getText().toString();
                     }
                     break;
-                case course6:
+                case COURSE6:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time6)){
                         globals.bestrecord_time6 = tTimer.getText().toString();
                     }
                     break;
-                case course7:
+                case COURSE7:
                     if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time7)){
                         globals.bestrecord_time7 = tTimer.getText().toString();
                     }
@@ -1012,7 +1014,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             globals.mileage = String.valueOf(tMileage.getText());
         }
         globals.maxheartbeat = String.valueOf(maxHeartbeat);//最大心拍
-        globals.avg = String.valueOf(AverageSpeed(totalSpeed, totalSpeedCnt));//平均速度
+        globals.avg = String.valueOf(averageSpeed(totalSpeed, totalSpeedCnt));//平均速度
         globals.max = String.format("%.2f", maxSpeed);//最高速度
         globals.time = tTimer.getText().toString();//運動時間
         globals.cal = Double.parseDouble(String.format("%.2f",cal));
@@ -1022,6 +1024,284 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         Intent intent = new Intent(getApplication(), Result.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    /*過去に走ったことがあるかを見る*/
+    private void checkLastData(String courseName){
+        if(courseName == COURSE0){
+            if(globals.bestrecord_time0 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        }else if(courseName == COURSE1){
+            if(globals.bestrecord_time1 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        } if(courseName == COURSE2){
+            if(globals.bestrecord_time2 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        } if(courseName == COURSE3){
+            if(globals.bestrecord_time3 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        }if(courseName == COURSE6){
+            if(globals.bestrecord_time6 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        }if(courseName == COURSE7){
+            if(globals.bestrecord_time7 == "00:00:00.0") {
+                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
+            }else{
+                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    /*最高記録を秒に直す*/
+    private double bestrecordToSecond(String courseName){
+        double seconds = 0.0;
+        switch(courseName){
+            case COURSE0:
+                seconds = changeSeconds(globals.bestrecord_time0);
+                break;
+            case COURSE1:
+                seconds = changeSeconds(globals.bestrecord_time1);
+                break;
+            case COURSE2:
+                seconds = changeSeconds(globals.bestrecord_time2);
+                break;
+            case COURSE3:
+                seconds = changeSeconds(globals.bestrecord_time3);
+                break;
+            case COURSE6:
+                seconds = changeSeconds(globals.bestrecord_time6);
+                break;
+            case COURSE7:
+                seconds = changeSeconds(globals.bestrecord_time7);
+                break;
+        }
+        return seconds;
+    }
+
+    /*時分秒を秒に変換*/
+    private double changeSeconds(String time){
+        int hours = Integer.parseInt(time.substring(0, 2));
+        int minutes = Integer.parseInt(time.substring(3, 5));
+        double seconds = Double.parseDouble(time.substring(6));
+        double totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+        return totalSeconds;
+    }
+
+    /*秒速の計算*/
+    private double calcPerSecond(double kilometers, double seconds) {
+        int meters = 0;
+        double pSecond = 0.0;
+        meters = (int) (kilometers * 1000);
+        pSecond = meters / seconds;
+        pSecond = (pSecond / meters);
+        return pSecond;
+    }
+
+    /*目標心拍を計算*/
+    private int targetBPM(int age) {
+        int targetBPM;
+        targetBPM = (int) ((220 - age) * 0.6);
+        return targetBPM;
+    }
+
+    /*平均速度を計算*/
+    private String averageSpeed(double totalSpeed, int totalSpeedCnt) {
+        Log.v("TotalSpeed", String.valueOf(totalSpeed));
+        Log.v("TotalSpeedCnt", String.valueOf(totalSpeedCnt));
+        double averageSpeed;
+        averageSpeed = totalSpeed / totalSpeedCnt;
+        String avg = String.format("%.2f", averageSpeed);
+        return avg;
+    }
+
+    /*コース番号セット*/
+    private void setCourseNum(String num){
+        tCourse = (TextView) findViewById(R.id.textCourse);
+        switch(num){
+            case "0":
+                mediaPathCheck = false;
+                tCourse.setText(COURSE0);
+                mediaPath = "/semine.mp4";//実機9のストレージにあるファルを指定
+                totalMileage = 10.4;
+                video_Speed = 20;
+                break;
+            case "1":
+                mediaPathCheck = false;
+                tCourse.setText(COURSE1);
+                mediaPath = "/izunuma4400.mp4";//実機9のストレージにあるファイルを指定
+                totalMileage = 4.4;
+                video_Speed = 5;
+                break;
+            case "2":
+                mediaPathCheck = false;
+                tCourse.setText(COURSE2);
+                mediaPath = "/dewa.mp4";//実機9のストレージにあるファイルを指定
+                totalMileage = 5.4;
+                video_Speed = 5;
+                break;
+            case "3":
+                mediaPathCheck = false;
+                tCourse.setText(COURSE3);
+                mediaPath = "/naruko.mp4";//実機9のストレージにあるファイルを指定
+                totalMileage = 1.3;
+                video_Speed = 5;
+                break;
+            case "6":
+                mediaPathCheck = false;
+                tCourse.setText(COURSE6);
+                mediaPath = "/semine_otameshi2.mp4";//実機9のストレージにあるファイルを指定
+                totalMileage = 0.2;
+                video_Speed = 20;
+                break;
+            case "7":
+                mediaPathCheck = false;
+                tCourse.setText(COURSE7);
+                mediaPath = "/semine_otameshi.mp4";//実機9のストレージにあるファイルを指定
+                totalMileage = 1.04;
+                video_Speed = 20;
+                break;
+        }
+    }
+
+    /*テキスト表示*/
+    private void setText(){
+        tCal = (TextView) findViewById(R.id.textCal);
+        tCal.setText("000.00");
+        tCAL = (TextView) findViewById(R.id.textCAL);
+        tCAL.setText("Calorie              kcal");
+        tMileage = (TextView) findViewById(R.id.textMileage);
+        tMileage.setText("000.00");
+        tKM = (TextView) findViewById(R.id.textKM);
+        tKM.setText("Mileage              km");
+        tSpeed = (TextView) findViewById(R.id.textSpeed);
+        tSpeed.setText("00.00");
+        tKPH = (TextView) findViewById(R.id.textKPH);
+        tKPH.setText("Speed              km/h");
+        tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
+        tTargetHeartbeat.setText("000");
+        tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
+        tTargetBPM.setText("Target BPM");
+        tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
+        tHeartbeat.setText("000");
+        tBPM = (TextView) findViewById(R.id.textBPM);
+        tBPM.setText("BPM");
+        tTimer = (TextView) findViewById(R.id.textTimer);
+        tTimer.setText("00:00:00.0");
+        tGear = (TextView) findViewById(R.id.textGear);
+        tGear.setText("0");
+        /*
+        tDebug1 = (TextView) findViewById(R.id.textDebug1);
+        tDebug1.setText(globals.bestrecord_time0);
+        tDebug2 = (TextView) findViewById(R.id.textDebug2);
+        tDebug2.setText(globals.bestrecord_time1);
+        */
+    }
+
+    /*フォントを7セグにする*/
+    private void change7Seg() {
+        /*7セグ表示にする処理*/
+        // フォントを取得
+        Typeface tf = Typeface.createFromAsset(getAssets(), "dseg7classic-bold.ttf");//7セグフォント
+        Typeface tf2 = Typeface.createFromAsset(getAssets(), "digitalword.ttf");//7セグフォント
+        /*タイマー*/
+        tTimer.setTypeface(tf);
+        tTimer.setTextSize(32.0f);
+        tTimer.setPadding(0, 0, 0, 15);
+
+         /*走行距離*/
+        tCal.setTypeface(tf);
+        tCal.setTextSize(45.0f);
+        tCal.setPadding(0, 0, 5, 0);
+        tCAL.setTypeface(tf2);
+        tCAL.setTextSize(25.0f);
+        tCAL.setPadding(0, 0, 10, 7);
+
+        /*走行距離*/
+        tMileage.setTypeface(tf);
+        tMileage.setTextSize(45.0f);
+        tMileage.setPadding(0, 0, 5, 0);
+        tKM.setTypeface(tf2);
+        tKM.setTextSize(25.0f);
+        tKM.setPadding(0, 0, 10, 7);
+
+        /*スピード*/
+        tSpeed.setTypeface(tf);
+        tSpeed.setTextSize(45.0f);
+        tSpeed.setPadding(0, 0, 5, 0);
+        tKPH.setTypeface(tf2);
+        tKPH.setTextSize(25.0f);
+        tKPH.setPadding(0, 0, 10, 7);
+
+        /*ターゲット心拍*/
+        tTargetHeartbeat.setTypeface(tf);
+        tTargetHeartbeat.setTextSize(45.0f);
+        tTargetHeartbeat.setPadding(0, 0, 5, 0);
+        tTargetBPM.setTypeface(tf2);
+        tTargetBPM.setTextSize(25.0f);
+        tTargetBPM.setPadding(0, 0, 10, 7);
+
+        /*心拍*/
+        tHeartbeat.setTypeface(tf);
+        tHeartbeat.setTextSize(45.0f);
+        tHeartbeat.setPadding(0, 0, 5, 0);
+        tBPM.setTypeface(tf2);
+        tBPM.setTextSize(25.0f);
+        tBPM.setPadding(0, 0, 10, 7);
+    }
+
+    /*画像セット*/
+    private void setImage(){
+        /*シークバーに関する奴*/
+        imageMe = (ImageView) findViewById(R.id.image_view_me);
+        imageMe.setImageResource(R.drawable.me);
+        imageGhost = (ImageView) findViewById(R.id.image_view_ghost);
+        imageGhost.setImageResource(R.drawable.ghost);
+        ImageView imageBar = (ImageView) findViewById(R.id.image_view_bar);
+        imageBar.setImageResource(R.drawable.bar0);
+
+        /*タイム表示*/
+        ImageView timeDisplay = (ImageView) findViewById(R.id.image_TimeDisplay);
+        timeDisplay.setImageResource(R.drawable.time);
+
+        /*コースネーム*/
+        ImageView CoursenameDisplay = (ImageView) findViewById(R.id.image_Coursenamedisplay);
+        CoursenameDisplay.setImageResource(R.drawable.coursename);
+
+        /*ギア*/
+        ImageView GearDisplay = (ImageView) findViewById(R.id.imageGear);
+        GearDisplay.setImageResource(R.drawable.gear);
+
+        //各種ディスプレイ
+        ImageView CalDisplay = (ImageView) findViewById(R.id.imageCalDisplay);
+        CalDisplay.setImageResource(R.drawable.display);
+        CalDisplay.setAlpha(150);
+        ImageView MileageDisplay = (ImageView) findViewById(R.id.imageMileageDisplay);
+        MileageDisplay.setImageResource(R.drawable.display);
+        MileageDisplay.setAlpha(150);
+        ImageView SpeedDisplay = (ImageView) findViewById(R.id.imageSpeedDisplay);
+        SpeedDisplay.setImageResource(R.drawable.display);
+        SpeedDisplay.setAlpha(150);
+        ImageView TargetBPMDisplay = (ImageView) findViewById(R.id.imageTargetBPMDisplay);
+        TargetBPMDisplay.setImageResource(R.drawable.display);
+        TargetBPMDisplay.setAlpha(150);
+        ImageView BPMDisplay = (ImageView) findViewById(R.id.imageBPMDisplay);
+        BPMDisplay.setImageResource(R.drawable.display);
+        BPMDisplay.setAlpha(150);
     }
 
     /*非同期処理関連*/
@@ -1245,7 +1525,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 @Override
                 public void run() {
                     findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
-                    tTargetHeartbeat.setText("" + TargetBPM(Integer.parseInt(globals.age)));
+                    tTargetHeartbeat.setText("" + targetBPM(Integer.parseInt(globals.age)));
                     startDialog();
                 }
             });
@@ -1287,283 +1567,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
                 }
             });
         }
-    }
-
-    /*過去に走ったことがあるかを見る*/
-    private void CheckLastData(String courseName){
-        if(courseName == course0){
-            if(globals.bestrecord_time0 == "00:00:00.0") {
-                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
-            }else{
-                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
-            }
-        }else if(courseName == course1){
-            if(globals.bestrecord_time1 == "00:00:00.0") {
-                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
-            }else{
-                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
-            }
-        } if(courseName == course2){
-            if(globals.bestrecord_time2 == "00:00:00.0") {
-                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
-            }else{
-                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
-            }
-        } if(courseName == course3){
-            if(globals.bestrecord_time3 == "00:00:00.0") {
-                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
-            }else{
-                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
-            }
-        }if(courseName == course6){
-            if(globals.bestrecord_time6 == "00:00:00.0") {
-                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
-            }else{
-                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
-            }
-        }if(courseName == course7){
-            if(globals.bestrecord_time7 == "00:00:00.0") {
-                findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
-            }else{
-                findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
-            }
-        }
-    }
-    /*最高記録を秒に直す*/
-    private double bestrecordToSecond(String courseName){
-        double seconds = 0.0;
-        switch(courseName){
-            case course0:
-                seconds = changeSeconds(globals.bestrecord_time0);
-                break;
-            case course1:
-                seconds = changeSeconds(globals.bestrecord_time1);
-                break;
-            case course2:
-                seconds = changeSeconds(globals.bestrecord_time2);
-                break;
-            case course3:
-                seconds = changeSeconds(globals.bestrecord_time3);
-                break;
-            case course6:
-                seconds = changeSeconds(globals.bestrecord_time6);
-                break;
-            case course7:
-                seconds = changeSeconds(globals.bestrecord_time7);
-                break;
-        }
-        return seconds;
-    }
-
-    /*時分秒を秒に変換*/
-    private double changeSeconds(String time){
-        int hours = Integer.parseInt(time.substring(0, 2));
-        int minutes = Integer.parseInt(time.substring(3, 5));
-        double seconds = Double.parseDouble(time.substring(6));
-        double totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-        return totalSeconds;
-    }
-
-    /*秒速の計算*/
-    private double calcPerSecond(double kilometers, double seconds) {
-        int meters = 0;
-        double pSecond = 0.0;
-        meters = (int) (kilometers * 1000);
-        pSecond = meters / seconds;
-        pSecond = (pSecond / meters);
-        return pSecond;
-    }
-
-    /*目標心拍を計算*/
-    private int TargetBPM(int age) {
-        int targetBPM;
-        targetBPM = (int) ((220 - age) * 0.6);
-        return targetBPM;
-    }
-
-    /*平均速度を計算*/
-    private String AverageSpeed(double totalSpeed, int totalSpeedCnt) {
-        Log.v("TotalSpeed", String.valueOf(totalSpeed));
-        Log.v("TotalSpeedCnt", String.valueOf(totalSpeedCnt));
-        double averageSpeed;
-        averageSpeed = totalSpeed / totalSpeedCnt;
-        String avg = String.format("%.2f", averageSpeed);
-        return avg;
-    }
-
-    /*コース番号セット*/
-    private void setCourseNum(String num){
-        tCourse = (TextView) findViewById(R.id.textCourse);
-        switch(num){
-            case "0":
-                mediaPathCheck = false;
-                tCourse.setText(course0);
-                mediaPath = "/semine.mp4";//実機9のストレージにあるファルを指定
-                totalMileage = 10.4;
-                video_Speed = 20;
-                break;
-            case "1":
-                mediaPathCheck = false;
-                tCourse.setText(course1);
-                mediaPath = "/izunuma4400.mp4";//実機9のストレージにあるファイルを指定
-                totalMileage = 4.4;
-                video_Speed = 5;
-                break;
-            case "2":
-                mediaPathCheck = false;
-                tCourse.setText(course2);
-                mediaPath = "/dewa.mp4";//実機9のストレージにあるファイルを指定
-                totalMileage = 5.4;
-                video_Speed = 5;
-                break;
-            case "3":
-                mediaPathCheck = false;
-                tCourse.setText(course3);
-                mediaPath = "/naruko.mp4";//実機9のストレージにあるファイルを指定
-                totalMileage = 1.3;
-                video_Speed = 5;
-                break;
-            case "6":
-                mediaPathCheck = false;
-                tCourse.setText(course6);
-                mediaPath = "/semine_otameshi2.mp4";//実機9のストレージにあるファイルを指定
-                totalMileage = 0.2;
-                video_Speed = 20;
-                break;
-            case "7":
-                mediaPathCheck = false;
-                tCourse.setText(course7);
-                mediaPath = "/semine_otameshi.mp4";//実機9のストレージにあるファイルを指定
-                totalMileage = 1.04;
-                video_Speed = 20;
-                break;
-        }
-    }
-
-    /*テキスト表示*/
-    private void setText(){
-        tCal = (TextView) findViewById(R.id.textCal);
-        tCal.setText("000.00");
-        tCAL = (TextView) findViewById(R.id.textCAL);
-        tCAL.setText("Calorie              kcal");
-        tMileage = (TextView) findViewById(R.id.textMileage);
-        tMileage.setText("000.00");
-        tKM = (TextView) findViewById(R.id.textKM);
-        tKM.setText("Mileage              km");
-        tSpeed = (TextView) findViewById(R.id.textSpeed);
-        tSpeed.setText("00.00");
-        tKPH = (TextView) findViewById(R.id.textKPH);
-        tKPH.setText("Speed              km/h");
-        tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
-        tTargetHeartbeat.setText("000");
-        tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
-        tTargetBPM.setText("Target BPM");
-        tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
-        tHeartbeat.setText("000");
-        tBPM = (TextView) findViewById(R.id.textBPM);
-        tBPM.setText("BPM");
-        tTimer = (TextView) findViewById(R.id.textTimer);
-        tTimer.setText("00:00:00.0");
-        tGear = (TextView) findViewById(R.id.textGear);
-        tGear.setText("0");
-        /*
-        tDebug1 = (TextView) findViewById(R.id.textDebug1);
-        tDebug1.setText(globals.bestrecord_time0);
-        tDebug2 = (TextView) findViewById(R.id.textDebug2);
-        tDebug2.setText(globals.bestrecord_time1);
-        */
-    }
-
-    /*フォントを7セグにする*/
-    private void change7Seg() {
-        /*7セグ表示にする処理*/
-        // フォントを取得
-        Typeface tf = Typeface.createFromAsset(getAssets(), "dseg7classic-bold.ttf");//7セグフォント
-        Typeface tf2 = Typeface.createFromAsset(getAssets(), "digitalword.ttf");//7セグフォント
-        /*タイマー*/
-        tTimer.setTypeface(tf);
-        tTimer.setTextSize(32.0f);
-        tTimer.setPadding(0, 0, 0, 15);
-
-         /*走行距離*/
-        tCal.setTypeface(tf);
-        tCal.setTextSize(45.0f);
-        tCal.setPadding(0, 0, 5, 0);
-        tCAL.setTypeface(tf2);
-        tCAL.setTextSize(25.0f);
-        tCAL.setPadding(0, 0, 10, 7);
-
-        /*走行距離*/
-        tMileage.setTypeface(tf);
-        tMileage.setTextSize(45.0f);
-        tMileage.setPadding(0, 0, 5, 0);
-        tKM.setTypeface(tf2);
-        tKM.setTextSize(25.0f);
-        tKM.setPadding(0, 0, 10, 7);
-
-        /*スピード*/
-        tSpeed.setTypeface(tf);
-        tSpeed.setTextSize(45.0f);
-        tSpeed.setPadding(0, 0, 5, 0);
-        tKPH.setTypeface(tf2);
-        tKPH.setTextSize(25.0f);
-        tKPH.setPadding(0, 0, 10, 7);
-
-        /*ターゲット心拍*/
-        tTargetHeartbeat.setTypeface(tf);
-        tTargetHeartbeat.setTextSize(45.0f);
-        tTargetHeartbeat.setPadding(0, 0, 5, 0);
-        tTargetBPM.setTypeface(tf2);
-        tTargetBPM.setTextSize(25.0f);
-        tTargetBPM.setPadding(0, 0, 10, 7);
-
-        /*心拍*/
-        tHeartbeat.setTypeface(tf);
-        tHeartbeat.setTextSize(45.0f);
-        tHeartbeat.setPadding(0, 0, 5, 0);
-        tBPM.setTypeface(tf2);
-        tBPM.setTextSize(25.0f);
-        tBPM.setPadding(0, 0, 10, 7);
-    }
-
-    /*画像セット*/
-    private void setImage(){
-        /*シークバーに関する奴*/
-        imageMe = (ImageView) findViewById(R.id.image_view_me);
-        imageMe.setImageResource(R.drawable.me);
-        imageGhost = (ImageView) findViewById(R.id.image_view_ghost);
-        imageGhost.setImageResource(R.drawable.ghost);
-        ImageView imageBar = (ImageView) findViewById(R.id.image_view_bar);
-        imageBar.setImageResource(R.drawable.bar0);
-
-        /*タイム表示*/
-        ImageView timeDisplay = (ImageView) findViewById(R.id.image_TimeDisplay);
-        timeDisplay.setImageResource(R.drawable.time);
-
-        /*コースネーム*/
-        ImageView CoursenameDisplay = (ImageView) findViewById(R.id.image_Coursenamedisplay);
-        CoursenameDisplay.setImageResource(R.drawable.coursename);
-
-        /*ギア*/
-        ImageView GearDisplay = (ImageView) findViewById(R.id.imageGear);
-        GearDisplay.setImageResource(R.drawable.gear);
-
-        //各種ディスプレイ
-        ImageView CalDisplay = (ImageView) findViewById(R.id.imageCalDisplay);
-        CalDisplay.setImageResource(R.drawable.display);
-        CalDisplay.setAlpha(150);
-        ImageView MileageDisplay = (ImageView) findViewById(R.id.imageMileageDisplay);
-        MileageDisplay.setImageResource(R.drawable.display);
-        MileageDisplay.setAlpha(150);
-        ImageView SpeedDisplay = (ImageView) findViewById(R.id.imageSpeedDisplay);
-        SpeedDisplay.setImageResource(R.drawable.display);
-        SpeedDisplay.setAlpha(150);
-        ImageView TargetBPMDisplay = (ImageView) findViewById(R.id.imageTargetBPMDisplay);
-        TargetBPMDisplay.setImageResource(R.drawable.display);
-        TargetBPMDisplay.setAlpha(150);
-        ImageView BPMDisplay = (ImageView) findViewById(R.id.imageBPMDisplay);
-        BPMDisplay.setImageResource(R.drawable.display);
-        BPMDisplay.setAlpha(150);
     }
 
     /*戻るキーを無効にする*/

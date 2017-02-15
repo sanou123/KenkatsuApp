@@ -23,12 +23,12 @@ public class VideoSelect extends Activity {
     private DBAdapter dbAdapter;                // DBAdapter
 
     /*コース名*/
-    final String course0 = "瀬峰";
-    final String course1 = "伊豆沼";
-    final String course2 = "出羽海道";
-    final String course3 = "鳴子";
-    final String course6 = "瀬峰ショート2";
-    final String course7 = "瀬峰ショート1";
+    final String COURSE0 = "瀬峰";
+    final String COURSE1 = "伊豆沼";
+    final String COURSE2 = "出羽海道";
+    final String COURSE3 = "鳴子";
+    final String COURSE6 = "瀬峰ショート2";
+    final String COURSE7 = "瀬峰ショート1";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        globals.coursename = course0;
+                        globals.coursename = COURSE0;
                         ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","0");//VideoPlayにコース番号を渡す
@@ -84,7 +84,7 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        globals.coursename = course1;
+                        globals.coursename = COURSE0;
                         ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","1");//VideoPlayにコース番号を渡す
@@ -113,7 +113,7 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        globals.coursename = course2;
+                        globals.coursename = COURSE2;
                         ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","2");//VideoPlayにコース番号を渡す
@@ -142,7 +142,7 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        globals.coursename = course3;
+                        globals.coursename = COURSE3;
                         ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","3");//VideoPlayにコース番号を渡す
@@ -172,7 +172,7 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        globals.coursename = course6;
+                        globals.coursename = COURSE6;
                         ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","6");//VideoPlayにコース番号を渡す
@@ -201,7 +201,7 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        globals.coursename = course7;
+                        globals.coursename = COURSE7;
                         ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","7");//VideoPlayにコース番号を渡す
@@ -237,22 +237,22 @@ public class VideoSelect extends Activity {
         if (c.moveToFirst()) {
             do {
                 switch(globals.coursename) {
-                    case course0:
+                    case COURSE0:
                         globals.bestrecord_time0 = c.getString(2);     // TextViewのカスタマイズ処理
                         break;
-                    case course1:
+                    case COURSE1:
                         globals.bestrecord_time1 = c.getString(2);     // TextViewのカスタマイズ処理
                         break;
-                    case course2:
+                    case COURSE2:
                         globals.bestrecord_time2 = c.getString(2);     // TextViewのカスタマイズ処理
                         break;
-                    case course3:
+                    case COURSE3:
                         globals.bestrecord_time3 = c.getString(2);     // TextViewのカスタマイズ処理
                         break;
-                    case course6:
+                    case COURSE6:
                         globals.bestrecord_time6 = c.getString(2);     // TextViewのカスタマイズ処理
                         break;
-                    case course7:
+                    case COURSE7:
                         globals.bestrecord_time7 = c.getString(2);     // TextViewのカスタマイズ処理
                         break;
                     default:
