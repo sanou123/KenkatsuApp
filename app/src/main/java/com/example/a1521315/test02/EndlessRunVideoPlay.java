@@ -938,7 +938,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
         tKPH = (TextView) findViewById(R.id.textKPH);
         tKPH.setText("Speed              km/h");
         tTargetHeartbeat = (TextView) findViewById(R.id.textTargetHeartbeat);
-        tTargetHeartbeat.setText( "" + targetBPM(Integer.parseInt(globals.age)) );
+        tTargetHeartbeat.setText("000");
         tTargetBPM = (TextView) findViewById(R.id.textTargetBPM);
         tTargetBPM.setText("Target BPM");
         tHeartbeat = (TextView) findViewById(R.id.textHeartbeat);
@@ -1212,6 +1212,7 @@ public class EndlessRunVideoPlay extends Activity implements SurfaceHolder.Callb
                 @Override
                 public void run() {
                     findViewById(R.id.ConnectCheak).setVisibility(View.INVISIBLE);
+                    tTargetHeartbeat.setText( "" + targetBPM(Integer.parseInt(globals.age)) );
                     StartDialog();
                 }
             });
