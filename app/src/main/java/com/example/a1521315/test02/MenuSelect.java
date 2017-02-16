@@ -175,14 +175,13 @@ public class MenuSelect extends Activity {
         btnDisp6.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if(globals.twitter_user == null || globals.twitter_user != globals.now_user){
+                if(globals.twitter_user == null){
 
                     globals.twitter_user = globals.now_user;
                     dbLogin();
 
                     Intent intent = new Intent(MenuSelect.this, twitter_logout.class);
                     startActivity(intent);
-                    Toast.makeText(MenuSelect.this, "セッションが切れています", Toast.LENGTH_LONG).show();
                 }else{
 
                     globals.twitter_user = globals.now_user;
