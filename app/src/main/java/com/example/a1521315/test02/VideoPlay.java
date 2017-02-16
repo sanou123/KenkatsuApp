@@ -979,32 +979,32 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             //完走したときのみ新記録かどうかの判定をする
             switch(tCourse.getText().toString()){
                 case COURSE0:
-                    if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time0)){
+                    if( changeSeconds(tTimer.getText().toString()) < changeSeconds(globals.bestrecord_time0)){
                         globals.bestrecord_time0 = tTimer.getText().toString();
                     }
                     break;
                 case COURSE1:
-                    if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time1)){
+                    if( changeSeconds(tTimer.getText().toString()) < changeSeconds(globals.bestrecord_time1)){
                         globals.bestrecord_time1 = tTimer.getText().toString();
                     }
                     break;
                 case COURSE2:
-                    if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time2)){
+                    if( changeSeconds(tTimer.getText().toString()) < changeSeconds(globals.bestrecord_time2)){
                         globals.bestrecord_time2 = tTimer.getText().toString();
                     }
                     break;
                 case COURSE3:
-                    if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time3)){
+                    if( changeSeconds(tTimer.getText().toString()) < changeSeconds(globals.bestrecord_time3)){
                         globals.bestrecord_time3 = tTimer.getText().toString();
                     }
                     break;
                 case COURSE6:
-                    if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time6)){
+                    if( changeSeconds(tTimer.getText().toString()) < changeSeconds(globals.bestrecord_time6)){
                         globals.bestrecord_time6 = tTimer.getText().toString();
                     }
                     break;
                 case COURSE7:
-                    if( changeSeconds(tTimer.getText().toString()) > changeSeconds(globals.bestrecord_time7)){
+                    if( changeSeconds(tTimer.getText().toString()) < changeSeconds(globals.bestrecord_time7)){
                         globals.bestrecord_time7 = tTimer.getText().toString();
                     }
                     break;
