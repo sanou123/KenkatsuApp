@@ -1029,37 +1029,37 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     /*過去に走ったことがあるかを見る*/
     private void checkLastData(String courseName){
         if(courseName == COURSE0){
-            if(globals.bestrecord_time0 == "00:00:00.0") {
+            if(globals.bestrecord_time0 == "99:99:99.9") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
         }else if(courseName == COURSE1){
-            if(globals.bestrecord_time1 == "00:00:00.0") {
+            if(globals.bestrecord_time1 == "99:99:99.9") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
         } if(courseName == COURSE2){
-            if(globals.bestrecord_time2 == "00:00:00.0") {
+            if(globals.bestrecord_time2 == "99:99:99.9") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
         } if(courseName == COURSE3){
-            if(globals.bestrecord_time3 == "00:00:00.0") {
+            if(globals.bestrecord_time3 == "99:99:99.9") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
         }if(courseName == COURSE6){
-            if(globals.bestrecord_time6 == "00:00:00.0") {
+            if(globals.bestrecord_time6 == "99:99:99.9") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
             }
         }if(courseName == COURSE7){
-            if(globals.bestrecord_time7 == "00:00:00.0") {
+            if(globals.bestrecord_time7 == "99:99:99.9") {
                 findViewById(R.id.image_view_ghost).setVisibility(View.INVISIBLE);
             }else{
                 findViewById(R.id.image_view_ghost).setVisibility(View.VISIBLE);
@@ -1610,7 +1610,6 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
     //スピードメータータスク
     public class SpeedMeterTask implements Runnable {
         private float taskSpeedCount = (float) 0.0;
-
         public SpeedMeterTask(float taskSpeedCount) {
             this.taskSpeedCount = taskSpeedCount;
         }
