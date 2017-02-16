@@ -173,7 +173,7 @@ public class VideoSelect extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         globals.coursename = COURSE6;
-                        ghost();
+                        //ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","6");//VideoPlayにコース番号を渡す
                         startActivity(intent);
@@ -223,15 +223,17 @@ public class VideoSelect extends Activity {
     }
 
     private void ghost(){
-
+/*
         dbAdapter.readDB();                         // DBの読み込み(読み込みの方)
         String column = "course_name";
         String column1 = "ghost_time";
+        String columns2 = "name";
 
         String columns = globals.coursename;
+        String columns1 = globals.now_user;
 
         // DBの検索データを取得 入力した文字列を参照して検索
-        Cursor c = dbAdapter.sortDB(null, column, column1, columns);
+        Cursor c = dbAdapter.sortDB(null, column, column1, columns2, columns, columns1);
 
 
         if (c.moveToFirst()) {
@@ -259,32 +261,35 @@ public class VideoSelect extends Activity {
                         break;
                 }
             } while (c.moveToNext());
-        } else {
-            switch(globals.coursename) {
-                case COURSE0:
-                    globals.bestrecord_time0 = "00:00:00.0";     // TextViewのカスタマイズ処理
-                    break;
-                case COURSE1:
-                    globals.bestrecord_time1 = "00:00:00.0";     // TextViewのカスタマイズ処理
-                    break;
-                case COURSE2:
-                    globals.bestrecord_time2 = "00:00:00.0";     // TextViewのカスタマイズ処理
-                    break;
-                case COURSE3:
-                    globals.bestrecord_time3 = "00:00:00.0";     // TextViewのカスタマイズ処理
-                    break;
-                case COURSE6:
-                    globals.bestrecord_time6 = "00:00:00.0";     // TextViewのカスタマイズ処理
-                    break;
-                case COURSE7:
-                    globals.bestrecord_time7 = "00:00:00.0";     // TextViewのカスタマイズ処理
-                    break;
-                default:
-                    break;
-            }
+        } else if(c.moveToFirst()){
+            do {
+                switch (globals.coursename) {
+                    case COURSE0:
+                        globals.bestrecord_time0 = "00:00:00.0";     // TextViewのカスタマイズ処理
+                        break;
+                    case COURSE1:
+                        globals.bestrecord_time1 = "00:00:00.0";     // TextViewのカスタマイズ処理
+                        break;
+                    case COURSE2:
+                        globals.bestrecord_time2 = "00:00:00.0";     // TextViewのカスタマイズ処理
+                        break;
+                    case COURSE3:
+                        globals.bestrecord_time3 = "00:00:00.0";     // TextViewのカスタマイズ処理
+                        break;
+                    case COURSE6:
+                        globals.bestrecord_time6 = "00:00:00.0";     // TextViewのカスタマイズ処理
+                        break;
+                    case COURSE7:
+                        globals.bestrecord_time7 = "00:00:00.0";     // TextViewのカスタマイズ処理
+                        break;
+                    default:
+                        break;
+                }
+            } while (c.moveToNext()) ;
         }
         c.close();
         dbAdapter.closeDB();        // DBを閉じる
+        */
     }
 
     @Override

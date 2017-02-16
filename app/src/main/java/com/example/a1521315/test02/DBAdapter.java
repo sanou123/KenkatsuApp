@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 
-    private final static String DB_NAME = "kenkatsu_app_DEMO1.db";      // DB名
+    private final static String DB_NAME = "kenkatsu_APP.db";      // DB名
 
     private final static String DB_TABLE_USER = "user";       // DBのテーブル名
     private final static String DB_TABLE_DATA = "data";       // DBのテーブル名
@@ -210,14 +210,15 @@ public class DBAdapter {
         }
     }
 
-    public void saveDB_GHOST( String course_name, String ghost) {
+    public void saveDB_GHOST(String name, String course_name, double ghost_time) {
 
         db.beginTransaction();          // トランザクション開始
 
         try {
             ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
+            values.put(COL_NAME, name);
             values.put(COL_COURSE_NAME, course_name);
-            values.put(COL_GHOST_TIME, ghost);
+            values.put(COL_GHOST_TIME, ghost_time);
 
             // insertメソッド データ登録
             // 第1引数：DBのテーブル名
@@ -282,7 +283,7 @@ public class DBAdapter {
      * @param columns String[] 取得するカラム名 nullの場合は全カラムを取得
      * @return DBのデータ
      */
-    public Cursor sortDB(String[] columns, String column,String column_name,String ghost_time) {
+    public Cursor sortDB(String[] columns, String column,String time,String column_user, String course, String user) {
 
         // queryメソッド DBのデータを取得
         // 第1引数：DBのテーブル名
@@ -293,7 +294,8 @@ public class DBAdapter {
         // 第6引数：選択条件(HAVING句)
         // 第7引数：ソート条件(ODERBY句)
         //return db.query(DB_TABLE_GHOST, columns, " MAX("+ column +")",name, null,  null, null);
-        return db.query(DB_TABLE_GHOST, columns, column + " like ? and " + column_name + " = " + "(SELECT MAX(" + column_name + ") FROM " + DB_TABLE_GHOST + ")", new String[]{ghost_time}, null, null, null);
+        return db.query(DB_TABLE_GHOST, columns, column + " like ? and " + time + " = " + "(SELECT MIN(" + time + ") FROM " + DB_TABLE_GHOST + ")"
+                + "and "+ column_user + " like ?", new String[]{course,user}, null, null, null);
     }
 
 
@@ -491,8 +493,9 @@ public class DBAdapter {
             //テーブルを作成するSQL文の定義 ※スペースに気を付ける
             String createTbl_data_ghost = "CREATE TABLE " + DB_TABLE_GHOST + " ("
                     + COL_COURSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                    + COL_NAME + " TEXT NOT NULL ,"
                     + COL_COURSE_NAME + " TEXT NOT NULL ,"
-                    + COL_GHOST_TIME + " TEXT NOT NULL "
+                    + COL_GHOST_TIME + " DOUBLE NOT NULL "
                     + ");";
 
             db.execSQL(createTbl_user);      //SQL文の実行

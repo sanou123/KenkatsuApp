@@ -793,7 +793,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
     private void startDialog() {
         // ポップアップメニュー表示
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(TimeAttackVideoPlay.this);
-        alertDialog.setTitle("トレーニング開始");
+        alertDialog.setTitle("トレーニング開始（ギアを3にしてスタートしてください。）");
         alertDialog.setMessage("");
         alertDialog.setPositiveButton("スタート", new DialogInterface.OnClickListener() {
             @Override
