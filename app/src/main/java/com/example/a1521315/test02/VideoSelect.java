@@ -261,22 +261,22 @@ public class VideoSelect extends Activity {
             } while (c.moveToNext());
         } else {
             switch(globals.coursename) {
-                case course0:
+                case COURSE0:
                     globals.bestrecord_time0 = "00:00:00.0";     // TextViewのカスタマイズ処理
                     break;
-                case course1:
+                case COURSE1:
                     globals.bestrecord_time1 = "00:00:00.0";     // TextViewのカスタマイズ処理
                     break;
-                case course2:
+                case COURSE2:
                     globals.bestrecord_time2 = "00:00:00.0";     // TextViewのカスタマイズ処理
                     break;
-                case course3:
+                case COURSE3:
                     globals.bestrecord_time3 = "00:00:00.0";     // TextViewのカスタマイズ処理
                     break;
-                case course6:
+                case COURSE6:
                     globals.bestrecord_time6 = "00:00:00.0";     // TextViewのカスタマイズ処理
                     break;
-                case course7:
+                case COURSE7:
                     globals.bestrecord_time7 = "00:00:00.0";     // TextViewのカスタマイズ処理
                     break;
                 default:
