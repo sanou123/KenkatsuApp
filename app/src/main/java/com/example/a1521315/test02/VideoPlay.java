@@ -1417,6 +1417,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
+
     //自機の移動
     public class MoveMeTask implements Runnable {
         final int startPoint = 545;//スタート地点の座標
