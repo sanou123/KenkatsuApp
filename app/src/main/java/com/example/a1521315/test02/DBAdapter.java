@@ -279,7 +279,7 @@ public class DBAdapter {
      * DBのデータを取得
      * sortDB()
      *
-     * @param //columns String[] 取得するカラム名 nullの場合は全カラムを取得
+     * @param columns String[] 取得するカラム名 nullの場合は全カラムを取得
      * @return DBのデータ
      */
     public Cursor sortDB(String[] columns, String column,String column_name,String ghost_time) {

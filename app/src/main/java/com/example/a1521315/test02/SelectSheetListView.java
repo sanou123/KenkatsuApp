@@ -21,6 +21,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -133,11 +134,11 @@ public class SelectSheetListView extends Activity {
 
                     // アラートダイアログ表示
                     AlertDialog.Builder builder = new AlertDialog.Builder(SelectSheetListView.this);
-                    builder.setTitle("ログイン確認");
+                    builder.setTitle("twitterログイン確認");
                     builder.setMessage("最後にログインしたのは" + globals.twitter_user+ "さんです!\n"
-                            + "ログアウトしますか?");
+                            +  globals.twitter_user + "さんですか!?");
                     // OKの時の処理
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton("はい", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -159,12 +160,6 @@ public class SelectSheetListView extends Activity {
                             String  User_Day = myListItem.getUser_Day();
 
 
-                            //int listId =  myListItem.getUser_id();//################
-                            //String columns = listName + "さんが選択されました";
-                            //Toast.makeText(getApplicationContext(), columns, Toast.LENGTH_LONG).show();
-                            //Intent intent = new Intent(SelectSheetListView.this, VideoPlay.class);
-                            //intent.putExtra("SELECTED_DATA",listName);
-                            //globals.now_user = listName;
                             globals.name_id = String.valueOf(NameID);
                             globals.age = Age;
                             globals.sex = Sex;
@@ -194,14 +189,54 @@ public class SelectSheetListView extends Activity {
                         }
                     });
 
-                    builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            globals.twitter_user = globals.now_user;
+                            globals.twitter_user = null;
 
-                            Intent intent = new Intent(SelectSheetListView.this, twitter_logout.class);
+                            // IDを取得する
+                            //myListItem = items.get(position);
+                            //String listName = myListItem.getName();
+                            int NameID = myListItem.getUser_id();
+                            String Age = myListItem.getAge();
+                            String Sex = myListItem.getSex();
+                            String Weight = myListItem.getWeight();
+                            String Height = myListItem.getHeight();
+                            double Bmi = myListItem.getBmi();
+                            double Ideal_weight = myListItem.getIdeal_weight();
+                            String  Login = myListItem.getLogin();
+                            String  User_Year = myListItem.getUser_Year();
+                            String  User_Month = myListItem.getUser_Month();
+                            String  User_Day = myListItem.getUser_Day();
+
+
+                            globals.name_id = String.valueOf(NameID);
+                            globals.age = Age;
+                            globals.sex = Sex;
+                            globals.weight = Weight;
+                            globals.height = Height;
+                            //元データをBigDecimal型にする
+                            BigDecimal bd_bmi = new BigDecimal(Bmi);
+                            //四捨五入する
+                            BigDecimal bmi = bd_bmi.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+                            globals.bmi = bmi.doubleValue();
+                            //元データをBigDecimal型にする
+                            BigDecimal bd_ideal_weight = new BigDecimal(Ideal_weight);
+                            //四捨五入する
+                            BigDecimal ideal_weight = bd_ideal_weight.setScale(2, BigDecimal.ROUND_HALF_UP);  //小数第２位
+                            globals.ideal_weight = ideal_weight.doubleValue();
+                            globals.login = Login;
+
+                            globals.user_year = User_Year;
+                            globals.user_month = User_Month;
+                            globals.user_day = User_Day;
+
+                            Intent intent = new Intent(SelectSheetListView.this, MenuSelect.class);
                             startActivity(intent);
+
+                            dbLogin();
+                            Toast.makeText(SelectSheetListView.this, "twitterログアウトしました。", Toast.LENGTH_LONG).show();
                         }
                     });
                     // ダイアログの表示
@@ -261,29 +296,10 @@ public class SelectSheetListView extends Activity {
         btnDisp.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-         /*      dbAdapter.openDB();     // DBの読み込み(読み書きの方)
-
-                // DBのデータを取得
-                String[] columns = {DBAdapter.COL_ID_USER};     // DBのカラム：ID
-                Cursor c = dbAdapter.getDB(columns);
-                c.moveToFirst();
-                if ( c.getInt(0)  < 6) {    */
                 Intent intent = new Intent();
                 intent.setClassName("com.example.a1521315.test02",
                         "com.example.a1521315.test02.MainUser");
                 startActivity(intent);
-
-         /*           c.close();
-                    dbAdapter.closeDB();    // DBを閉じる
-                }else{
-                    do {
-                        String over = "登録出来ません。ユーザーを削除してください。";
-                        Toast.makeText(getApplicationContext(), over, Toast.LENGTH_LONG).show();
-
-                        c.close();
-                        dbAdapter.closeDB();    // DBを閉じる
-                    } while (c.moveToNext());
-                }   */
             }
         });
     }
