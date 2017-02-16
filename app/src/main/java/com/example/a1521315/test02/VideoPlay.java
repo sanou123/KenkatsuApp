@@ -488,13 +488,14 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             } catch (Exception ee) {
             }
             isRunning = false;
+            /*
             //通信が確立するまで通信しようとする↓
             if (!connectFlg) {
                 mThread = new Thread(this);
                 // Threadを起動し、Bluetooth接続
                 isRunning = true;
                 mThread.start();
-            }
+            }*/
         }
     }
 
@@ -1568,6 +1569,73 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         }
     }
 
+    //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = speedCount + 0.1;
+                    } else if (speedCount < 5) {
+                        speedCount = speedCount + 0.01;
+                    } else if (speedCount >= 5) {
+                        //意味わからないほど早くされるとクラッシュする対策
+                        speedCount = 5.00;
+                    }
+                    Thread SpeedUp = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedUp.start();
+                }
+                return true;
+            }
+        }
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                if (mp != null) {
+                    if (speedCount < 0.1) {
+                        speedCount = 0.00;
+                    } else if (speedCount <= 0.1) {
+                        speedCount = speedCount - 0.1;
+                    } else if (speedCount >= 0.1) {
+                        speedCount = speedCount - 0.01;
+                    }
+                    Thread SpeedDown = new Thread(new SpeedMeterTask((float) speedCount));
+                    SpeedDown.start();
+                }
+                return true;
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+    //スピードメータータスク
+    public class SpeedMeterTask implements Runnable {
+        private float taskSpeedCount = (float) 0.0;
+
+        public SpeedMeterTask(float taskSpeedCount) {
+            this.taskSpeedCount = taskSpeedCount;
+        }
+
+        public void run() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mp != null) {
+                    /*動画の再生速度を変えるのに必要なプログラム↓*/
+                        params.setSpeed(taskSpeedCount);//再生速度変更
+                        mp.setPlaybackParams(params);
+                        //mp.start();
+                        tSpeed.setText(String.format("%.1f", (float) (taskSpeedCount * 10)));
+                        totalSpeed = totalSpeed + (taskSpeedCount * 10);
+                        totalSpeedCnt++;
+                        //最高速度の判断
+                        if ((taskSpeedCount * 10) > maxSpeed) {
+                            maxSpeed = (taskSpeedCount * 10);
+                        }
+                    }
+                }
+            });
+        }
+    }
     /*戻るキーを無効にする*/
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

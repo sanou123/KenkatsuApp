@@ -442,13 +442,14 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
                 mSocket.close();
             }catch(Exception ee){}
             isRunning = false;
+            /*
             //通信が確立するまで通信しようとする↓
             if (!connectFlg) {
                 mThread = new Thread(this);
                 // Threadを起動し、Bluetooth接続
                 isRunning = true;
                 mThread.start();
-            }
+            }*/
         }
     }
 
