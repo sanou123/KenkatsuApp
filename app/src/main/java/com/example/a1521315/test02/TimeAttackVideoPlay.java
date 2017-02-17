@@ -790,6 +790,7 @@ public class TimeAttackVideoPlay extends Activity implements SurfaceHolder.Callb
         return true;
     }
 
+
     /*トレーニング開始できるようになったら表示されるダイアログ*/
     private void startDialog() {
         // ポップアップメニュー表示
