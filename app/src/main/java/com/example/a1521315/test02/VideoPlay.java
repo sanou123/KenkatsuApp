@@ -1099,6 +1099,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
         int minutes = Integer.parseInt(time.substring(3, 5));
         double seconds = Double.parseDouble(time.substring(6));
         double totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+        globals.totalSeconds = totalSeconds;
         return totalSeconds;
     }
 
