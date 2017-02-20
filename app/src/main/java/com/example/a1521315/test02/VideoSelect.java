@@ -42,6 +42,7 @@ public class VideoSelect extends Activity {
         //横画面に固定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+
         dbAdapter = new DBAdapter(this);
 
         Button btnDisp0 = (Button)findViewById(R.id.course0);
