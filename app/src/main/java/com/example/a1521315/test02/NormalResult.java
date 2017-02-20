@@ -151,26 +151,6 @@ public class NormalResult extends Activity {
                             globals.times_of_day, globals.maxheartbeat, globals.cal, globals.total_time,
                             globals.total_mileage, globals.coursename, globals.time, globals.avg,
                             globals.max, globals.mileage,globals.training_name, globals.graph_time );   // DBに登録
-        switch(globals.coursename) {
-            case course0:
-                dbAdapter.saveDB_GHOST(globals.now_user, globals.coursename, globals.totalSeconds);
-                break;
-            case course1:
-                dbAdapter.saveDB_GHOST(globals.now_user, globals.coursename, globals.totalSeconds);
-                break;
-            case course2:
-                dbAdapter.saveDB_GHOST(globals.now_user, globals.coursename, globals.totalSeconds);
-                break;
-            case course3:
-                dbAdapter.saveDB_GHOST(globals.now_user, globals.coursename, globals.totalSeconds);
-                break;
-            case course6:
-                dbAdapter.saveDB_GHOST(globals.now_user, globals.coursename, globals.totalSeconds);
-                break;
-            case course7:
-                dbAdapter.saveDB_GHOST(globals.now_user, globals.coursename, globals.totalSeconds);
-                break;
-        }
         dbAdapter.closeDB();                                        // DBを閉じる
 
     }

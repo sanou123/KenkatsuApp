@@ -84,7 +84,7 @@ public class VideoSelect extends Activity {
                 alertDialog.setPositiveButton("始める", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        globals.coursename = COURSE0;
+                        globals.coursename = COURSE1;
                         ghost();
                         Intent intent = new Intent(getApplication(),VideoPlay.class);
                         intent.putExtra("course","1");//VideoPlayにコース番号を渡す
@@ -223,7 +223,7 @@ public class VideoSelect extends Activity {
     }
 
     private void ghost(){
-
+/*
         dbAdapter.readDB();                         // DBの読み込み(読み込みの方)
         String column = "course_name";
         String column1 = "ghost_time";
@@ -240,22 +240,22 @@ public class VideoSelect extends Activity {
             do {
                 switch(globals.coursename) {
                     case COURSE0:
-                        globals.bestrecord_time0 = String.valueOf(changeSeconds(c.getString(2)));     // TextViewのカスタマイズ処理
+                        globals.bestrecord_time0 = changeSeconds(c.getDouble(3));     // TextViewのカスタマイズ処理
                         break;
                     case COURSE1:
-                        globals.bestrecord_time1 = String.valueOf(changeSeconds(c.getString(2)));     // TextViewのカスタマイズ処理
+                        globals.bestrecord_time1 = changeSeconds(c.getDouble(3));     // TextViewのカスタマイズ処理
                         break;
                     case COURSE2:
-                        globals.bestrecord_time2 = String.valueOf(changeSeconds(c.getString(2)));     // TextViewのカスタマイズ処理
+                        globals.bestrecord_time2 = changeSeconds(c.getDouble(3));     // TextViewのカスタマイズ処理
                         break;
                     case COURSE3:
-                        globals.bestrecord_time3 = String.valueOf(changeSeconds(c.getString(2)));     // TextViewのカスタマイズ処理
+                        globals.bestrecord_time3 = changeSeconds(c.getDouble(3));     // TextViewのカスタマイズ処理
                         break;
                     case COURSE6:
-                        globals.bestrecord_time6 = String.valueOf(changeSeconds(c.getString(2)));     // TextViewのカスタマイズ処理
+                        globals.bestrecord_time6 = changeSeconds(c.getDouble(3));     // TextViewのカスタマイズ処理
                         break;
                     case COURSE7:
-                        globals.bestrecord_time7 = String.valueOf(changeSeconds(c.getString(2)));     // TextViewのカスタマイズ処理
+                        globals.bestrecord_time7 = changeSeconds(c.getDouble(3));     // TextViewのカスタマイズ処理
                         break;
                     default:
                         break;
@@ -289,16 +289,16 @@ public class VideoSelect extends Activity {
         }
         c.close();
         dbAdapter.closeDB();        // DBを閉じる
-
+*/
     }
 
     /*時分秒を秒に変換*/
-    private double  changeSeconds(String time){
-        double hours = globals.totalSeconds / 3600;
-        double minutes = globals.totalSeconds - (3600 * hours) / 60;
-        double seconds = globals.totalSeconds - (3600 * hours) - (60 * minutes);
+    private String  changeSeconds(double time){
+        int hours = (int)time / 3600;
+        int minutes = (int)time - (3600 * hours) / 60;
+        double seconds = time - (3600 * hours) - (60 * minutes);
 
-        return hours + minutes + seconds;
+        return hours + ":" + minutes + ":" + seconds;
     }
 
     @Override

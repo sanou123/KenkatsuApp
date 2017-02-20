@@ -210,7 +210,7 @@ public class DBAdapter {
         }
     }
 
-    public void saveDB_GHOST(String name, String course_name, double ghost_time) {
+    public void saveDB_GHOST(String name, String course_name, String ghost_time) {
 
         db.beginTransaction();          // トランザクション開始
 
@@ -392,6 +392,32 @@ public class DBAdapter {
             String whereClause = "name = ?";
             String whereArgs[] = new String[]{name};
             db.update(DB_TABLE_USER, values, whereClause, whereArgs);
+
+            db.setTransactionSuccessful();      // トランザクションへコミット
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();                // トランザクションの終了
+        }
+    }
+
+    public void updateDB_GHOST(String name, String course_name, String ghost_time) {
+        db.beginTransaction();          // トランザクション開始
+
+        try {
+            ContentValues values = new ContentValues();     // ContentValuesでデータを設定していく
+            values.put(COL_NAME, name);
+            values.put(COL_COURSE_NAME, course_name);
+            values.put(COL_GHOST_TIME, ghost_time);
+
+            // insertメソッド データ登録
+            // 第1引数：DBのテーブル名
+            // 第2引数：更新する条件式
+            // 第3引数：ContentValues
+
+            String whereClause = "name = ?";
+            String whereArgs[] = new String[]{name};
+            db.update(DB_TABLE_GHOST, values, whereClause, whereArgs);
 
             db.setTransactionSuccessful();      // トランザクションへコミット
         } catch (Exception e) {

@@ -1569,7 +1569,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             });
         }
     }
-
+/*
     //ボリュームキーの操作(完成版はここで速度変更はできなくする)//菅原mp!=nullいれた
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -1607,7 +1607,7 @@ public class VideoPlay extends Activity implements SurfaceHolder.Callback, Runna
             }
         }
         return super.dispatchKeyEvent(event);
-    }
+    }*/
     //スピードメータータスク
     public class SpeedMeterTask implements Runnable {
         private float taskSpeedCount = (float) 0.0;
